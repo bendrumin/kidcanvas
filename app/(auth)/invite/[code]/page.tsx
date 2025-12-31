@@ -4,6 +4,7 @@ import { AcceptInviteForm } from '@/components/family/accept-invite-form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Palette, Users } from 'lucide-react'
 import Link from 'next/link'
+import type { FamilyInviteWithFamily } from '@/lib/supabase/types'
 
 interface InvitePageProps {
   params: Promise<{ code: string }>
@@ -20,7 +21,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
     .eq('code', code)
     .is('used_at', null)
     .gt('expires_at', new Date().toISOString())
-    .single()
+    .single() as { data: FamilyInviteWithFamily | null }
 
   if (!invite) {
     return (

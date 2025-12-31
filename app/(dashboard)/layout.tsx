@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { DashboardNav } from '@/components/dashboard/nav'
 import { DashboardHeader } from '@/components/dashboard/header'
+import type { FamilyMemberWithFamily } from '@/lib/supabase/types'
 
 export default async function DashboardLayout({
   children,
@@ -21,10 +22,10 @@ export default async function DashboardLayout({
     .from('family_members')
     .select('*, families(*)')
     .eq('user_id', user.id)
-    .single()
+    .single() as { data: FamilyMemberWithFamily | null }
 
-  const family = membership?.families
-  const role = membership?.role
+  const family = membership?.families ?? null
+  const role = membership?.role ?? null
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50/50 via-white to-rose-50/50">

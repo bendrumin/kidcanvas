@@ -67,8 +67,8 @@ export function ChildrenList({ children, canManage, familyId }: ChildrenListProp
     setIsLoading(true)
 
     try {
-      const { error } = await supabase
-        .from('children')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from('children') as any)
         .update({
           name: editForm.name,
           birth_date: editForm.birthDate,

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Palette, Download, Calendar, User, Heart } from 'lucide-react'
 import { formatDate, calculateAge } from '@/lib/utils'
+import type { ShareLink, ArtworkWithChild } from '@/lib/supabase/types'
 
 interface SharePageProps {
   params: Promise<{ code: string }>
@@ -21,7 +22,7 @@ export default async function SharePage({ params }: SharePageProps) {
     .from('share_links')
     .select('*')
     .eq('code', code)
-    .single()
+    .single() as { data: ShareLink | null }
 
   if (!shareLink) {
     notFound()
@@ -51,7 +52,7 @@ export default async function SharePage({ params }: SharePageProps) {
     .from('artworks')
     .select('*, child:children(*)')
     .eq('id', shareLink.resource_id)
-    .single()
+    .single() as { data: ArtworkWithChild | null }
 
   if (!artwork) {
     notFound()

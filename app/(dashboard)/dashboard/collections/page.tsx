@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { FolderHeart, Plus } from 'lucide-react'
+import type { FamilyMember, CollectionWithCover } from '@/lib/supabase/types'
 
 export default async function CollectionsPage() {
   const supabase = await createClient()
@@ -18,7 +19,7 @@ export default async function CollectionsPage() {
     .from('family_members')
     .select('family_id')
     .eq('user_id', user.id)
-    .single()
+    .single() as { data: Pick<FamilyMember, 'family_id'> | null }
 
   if (!membership) {
     redirect('/dashboard')
@@ -29,7 +30,7 @@ export default async function CollectionsPage() {
     .from('collections')
     .select('*, cover_artwork:artworks(thumbnail_url)')
     .eq('family_id', membership.family_id)
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending: false }) as { data: CollectionWithCover[] | null }
 
   return (
     <div className="space-y-6">

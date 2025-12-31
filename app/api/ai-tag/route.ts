@@ -92,7 +92,7 @@ Be encouraging and focus on what makes this artwork special. Keep it family-frie
       .update({
         ai_description: description,
         ai_tags: tags,
-      })
+      } as { ai_description: string; ai_tags: string[] })
       .eq('id', artworkId)
 
     if (error) {

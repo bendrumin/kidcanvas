@@ -6,6 +6,7 @@ import { EmptyGallery } from '@/components/gallery/empty-gallery'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
+import type { FamilyMember, ArtworkWithChild, Child } from '@/lib/supabase/types'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -21,7 +22,7 @@ export default async function DashboardPage() {
     .from('family_members')
     .select('family_id')
     .eq('user_id', user.id)
-    .single()
+    .single() as { data: Pick<FamilyMember, 'family_id'> | null }
 
   if (!membership) {
     return (
@@ -42,14 +43,14 @@ export default async function DashboardPage() {
     .from('artworks')
     .select('*, child:children(*)')
     .eq('family_id', membership.family_id)
-    .order('created_date', { ascending: false })
+    .order('created_date', { ascending: false }) as { data: ArtworkWithChild[] | null }
 
   // Fetch children for filters
   const { data: children } = await supabase
     .from('children')
     .select('*')
     .eq('family_id', membership.family_id)
-    .order('name')
+    .order('name') as { data: Child[] | null }
 
   return (
     <div className="space-y-6">

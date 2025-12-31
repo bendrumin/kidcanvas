@@ -39,8 +39,8 @@ export function AddChildButton({ familyId }: AddChildButtonProps) {
     setIsLoading(true)
 
     try {
-      const { error } = await supabase
-        .from('children')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from('children') as any)
         .insert({
           family_id: familyId,
           name: formData.name,

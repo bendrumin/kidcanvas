@@ -28,6 +28,7 @@ export interface Database {
           created_at?: string
           created_by?: string
         }
+        Relationships: []
       }
       family_members: {
         Row: {
@@ -54,6 +55,7 @@ export interface Database {
           nickname?: string | null
           joined_at?: string
         }
+        Relationships: []
       }
       family_invites: {
         Row: {
@@ -92,6 +94,7 @@ export interface Database {
           created_by?: string
           created_at?: string
         }
+        Relationships: []
       }
       children: {
         Row: {
@@ -118,6 +121,7 @@ export interface Database {
           avatar_url?: string | null
           created_at?: string
         }
+        Relationships: []
       }
       artworks: {
         Row: {
@@ -128,7 +132,7 @@ export interface Database {
           thumbnail_url: string
           title: string
           created_date: string
-          child_age_months: number
+          child_age_months: number | null
           tags: string[]
           ai_tags: string[]
           ai_description: string | null
@@ -144,7 +148,7 @@ export interface Database {
           thumbnail_url: string
           title: string
           created_date: string
-          child_age_months: number
+          child_age_months?: number | null
           tags?: string[]
           ai_tags?: string[]
           ai_description?: string | null
@@ -160,7 +164,7 @@ export interface Database {
           thumbnail_url?: string
           title?: string
           created_date?: string
-          child_age_months?: number
+          child_age_months?: number | null
           tags?: string[]
           ai_tags?: string[]
           ai_description?: string | null
@@ -168,6 +172,7 @@ export interface Database {
           uploaded_by?: string
           uploaded_at?: string
         }
+        Relationships: []
       }
       collections: {
         Row: {
@@ -191,6 +196,7 @@ export interface Database {
           cover_artwork_id?: string | null
           created_at?: string
         }
+        Relationships: []
       }
       collection_artworks: {
         Row: {
@@ -205,6 +211,7 @@ export interface Database {
           collection_id?: string
           artwork_id?: string
         }
+        Relationships: []
       }
       share_links: {
         Row: {
@@ -240,15 +247,43 @@ export interface Database {
           created_by?: string
           created_at?: string
         }
+        Relationships: []
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_family_for_user: {
+        Args: {
+          family_name: string
+        }
+        Returns: string
+      }
+      accept_family_invite: {
+        Args: {
+          invite_code: string
+          member_nickname?: string | null
+        }
+        Returns: string
+      }
+      is_family_member: {
+        Args: {
+          family_uuid: string
+        }
+        Returns: boolean
+      }
+      get_family_role: {
+        Args: {
+          family_uuid: string
+        }
+        Returns: string
+      }
     }
     Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
       [_ in never]: never
     }
   }
@@ -265,7 +300,7 @@ export type ShareLink = Database['public']['Tables']['share_links']['Row']
 
 // Extended types with relations
 export type ArtworkWithChild = Artwork & {
-  child: Child
+  child: Child | null
 }
 
 export type FamilyMemberWithUser = FamilyMember & {
@@ -278,3 +313,19 @@ export type FamilyMemberWithUser = FamilyMember & {
   }
 }
 
+// Collection with cover artwork
+export type CollectionWithCover = Collection & {
+  cover_artwork: {
+    thumbnail_url: string
+  } | null
+}
+
+// Family invite with family
+export type FamilyInviteWithFamily = FamilyInvite & {
+  families: Family | null
+}
+
+// Family member with family
+export type FamilyMemberWithFamily = FamilyMember & {
+  families: Family | null
+}

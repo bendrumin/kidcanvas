@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { UploadForm } from '@/components/upload/upload-form'
+import type { FamilyMember, Child } from '@/lib/supabase/types'
 
 export default async function UploadPage() {
   const supabase = await createClient()
@@ -16,7 +17,7 @@ export default async function UploadPage() {
     .from('family_members')
     .select('family_id, role')
     .eq('user_id', user.id)
-    .single()
+    .single() as { data: Pick<FamilyMember, 'family_id' | 'role'> | null }
 
   if (!membership) {
     redirect('/dashboard')
@@ -32,7 +33,7 @@ export default async function UploadPage() {
     .from('children')
     .select('*')
     .eq('family_id', membership.family_id)
-    .order('name')
+    .order('name') as { data: Child[] | null }
 
   return (
     <div className="max-w-3xl mx-auto">

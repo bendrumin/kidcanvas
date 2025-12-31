@@ -74,8 +74,8 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
 
       const code = generateInviteCode()
       
-      const { error } = await supabase
-        .from('family_invites')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from('family_invites') as any)
         .insert({
           family_id: familyId,
           code,

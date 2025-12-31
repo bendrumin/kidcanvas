@@ -45,7 +45,8 @@ export default function SignupPage() {
 
       if (authData.user) {
         // Create the family
-        const { error: familyError } = await supabase.rpc('create_family_for_user', {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { error: familyError } = await (supabase as any).rpc('create_family_for_user', {
           family_name: formData.familyName || `${formData.fullName.split(' ')[0]}'s Family`,
         })
 

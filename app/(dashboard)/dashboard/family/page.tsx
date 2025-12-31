@@ -5,6 +5,7 @@ import { InviteButton } from '@/components/family/invite-button'
 import { PendingInvites } from '@/components/family/pending-invites'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users } from 'lucide-react'
+import type { FamilyMemberWithFamily, FamilyMember, FamilyInvite } from '@/lib/supabase/types'
 
 export default async function FamilyPage() {
   const supabase = await createClient()
@@ -20,7 +21,7 @@ export default async function FamilyPage() {
     .from('family_members')
     .select('family_id, role, families(*)')
     .eq('user_id', user.id)
-    .single()
+    .single() as { data: FamilyMemberWithFamily | null }
 
   if (!membership) {
     redirect('/dashboard')
@@ -35,7 +36,7 @@ export default async function FamilyPage() {
     .from('family_members')
     .select('*')
     .eq('family_id', membership.family_id)
-    .order('joined_at')
+    .order('joined_at') as { data: FamilyMember[] | null }
 
   // Get pending invites (for owners/parents)
   const { data: invites } = canInvite ? await supabase
@@ -44,7 +45,7 @@ export default async function FamilyPage() {
     .eq('family_id', membership.family_id)
     .is('used_at', null)
     .gt('expires_at', new Date().toISOString())
-    .order('created_at', { ascending: false }) : { data: null }
+    .order('created_at', { ascending: false }) as { data: FamilyInvite[] | null } : { data: null }
 
   // Get member emails from auth
   const memberEmails: Record<string, string> = {}

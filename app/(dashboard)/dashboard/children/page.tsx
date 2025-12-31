@@ -2,6 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { ChildrenList } from '@/components/children/children-list'
 import { AddChildButton } from '@/components/children/add-child-button'
+import type { FamilyMember, Child } from '@/lib/supabase/types'
+
+type ChildWithCount = Child & { artworks: { count: number }[] }
 
 export default async function ChildrenPage() {
   const supabase = await createClient()
@@ -17,7 +20,7 @@ export default async function ChildrenPage() {
     .from('family_members')
     .select('family_id, role')
     .eq('user_id', user.id)
-    .single()
+    .single() as { data: Pick<FamilyMember, 'family_id' | 'role'> | null }
 
   if (!membership) {
     redirect('/dashboard')
@@ -28,7 +31,7 @@ export default async function ChildrenPage() {
     .from('children')
     .select('*, artworks(count)')
     .eq('family_id', membership.family_id)
-    .order('name')
+    .order('name') as { data: ChildWithCount[] | null }
 
   const canManage = membership.role === 'owner' || membership.role === 'parent'
 

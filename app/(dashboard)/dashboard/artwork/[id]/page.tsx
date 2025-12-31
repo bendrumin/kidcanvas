@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import { ArtworkDetail } from '@/components/artwork/artwork-detail'
+import type { FamilyMember, ArtworkWithChild, Child } from '@/lib/supabase/types'
 
 interface ArtworkPageProps {
   params: Promise<{ id: string }>
@@ -21,7 +22,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
     .from('family_members')
     .select('family_id, role')
     .eq('user_id', user.id)
-    .single()
+    .single() as { data: Pick<FamilyMember, 'family_id' | 'role'> | null }
 
   if (!membership) {
     redirect('/dashboard')
@@ -33,7 +34,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
     .select('*, child:children(*)')
     .eq('id', id)
     .eq('family_id', membership.family_id)
-    .single()
+    .single() as { data: ArtworkWithChild | null, error: unknown }
 
   if (error || !artwork) {
     notFound()
@@ -44,7 +45,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
     .from('children')
     .select('*')
     .eq('family_id', membership.family_id)
-    .order('name')
+    .order('name') as { data: Child[] | null }
 
   const canEdit = membership.role === 'owner' || membership.role === 'parent'
 

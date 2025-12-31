@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { GalleryGrid } from '@/components/gallery/gallery-grid'
 import { Heart } from 'lucide-react'
+import type { FamilyMember, ArtworkWithChild } from '@/lib/supabase/types'
 
 export default async function FavoritesPage() {
   const supabase = await createClient()
@@ -17,7 +18,7 @@ export default async function FavoritesPage() {
     .from('family_members')
     .select('family_id')
     .eq('user_id', user.id)
-    .single()
+    .single() as { data: Pick<FamilyMember, 'family_id'> | null }
 
   if (!membership) {
     redirect('/dashboard')
@@ -29,7 +30,7 @@ export default async function FavoritesPage() {
     .select('*, child:children(*)')
     .eq('family_id', membership.family_id)
     .eq('is_favorite', true)
-    .order('created_date', { ascending: false })
+    .order('created_date', { ascending: false }) as { data: ArtworkWithChild[] | null }
 
   return (
     <div className="space-y-6">

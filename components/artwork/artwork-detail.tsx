@@ -72,8 +72,8 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
     setIsFavorite(newValue)
     
     try {
-      const { error } = await supabase
-        .from('artworks')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from('artworks') as any)
         .update({ is_favorite: newValue })
         .eq('id', artwork.id)
 
@@ -91,13 +91,13 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
     setIsLoading(true)
     
     try {
-      const { error } = await supabase
-        .from('artworks')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from('artworks') as any)
         .update({
           title: editForm.title,
           child_id: editForm.childId,
           created_date: editForm.createdDate,
-          tags: editForm.tags.split(',').map(t => t.trim()).filter(Boolean),
+          tags: editForm.tags.split(',').map((t: string) => t.trim()).filter(Boolean),
         })
         .eq('id', artwork.id)
 

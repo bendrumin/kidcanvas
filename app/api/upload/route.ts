@@ -87,9 +87,9 @@ export async function POST(request: NextRequest) {
         title,
         created_date: createdDate,
         uploaded_by: userId,
-      })
+      } as { family_id: string; child_id: string; image_url: string; thumbnail_url: string; title: string; created_date: string; uploaded_by: string })
       .select()
-      .single()
+      .single() as { data: { id: string } | null; error: unknown }
 
     if (error) {
       console.error('Database error:', error)
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Trigger AI tagging in background (optional)
-    if (process.env.ANTHROPIC_API_KEY) {
+    if (process.env.ANTHROPIC_API_KEY && data) {
       fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/ai-tag`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
