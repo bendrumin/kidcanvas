@@ -146,23 +146,23 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="parent">
-                        <div className="flex flex-col items-start">
-                          <span>Parent</span>
-                          <span className="text-xs text-muted-foreground">Can manage children, artwork, and invite others</span>
+                    <SelectContent position="popper" sideOffset={4} className="w-[var(--radix-select-trigger-width)]">
+                      <SelectItem value="parent" className="py-3">
+                        <div className="flex flex-col items-start gap-0.5">
+                          <span className="font-medium">Parent</span>
+                          <span className="text-xs text-muted-foreground whitespace-normal">Can manage children, artwork, and invite others</span>
                         </div>
                       </SelectItem>
-                      <SelectItem value="member">
-                        <div className="flex flex-col items-start">
-                          <span>Member</span>
-                          <span className="text-xs text-muted-foreground">Can view and add artwork</span>
+                      <SelectItem value="member" className="py-3">
+                        <div className="flex flex-col items-start gap-0.5">
+                          <span className="font-medium">Member</span>
+                          <span className="text-xs text-muted-foreground whitespace-normal">Can view and add artwork</span>
                         </div>
                       </SelectItem>
-                      <SelectItem value="viewer">
-                        <div className="flex flex-col items-start">
-                          <span>Viewer</span>
-                          <span className="text-xs text-muted-foreground">Can only view artwork</span>
+                      <SelectItem value="viewer" className="py-3">
+                        <div className="flex flex-col items-start gap-0.5">
+                          <span className="font-medium">Viewer</span>
+                          <span className="text-xs text-muted-foreground whitespace-normal">Can only view artwork</span>
                         </div>
                       </SelectItem>
                     </SelectContent>

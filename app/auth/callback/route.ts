@@ -11,6 +11,29 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     
     if (!error) {
+      // Check if user has a family, if not create one
+      const { data: { user } } = await supabase.auth.getUser()
+      
+      if (user) {
+        // Check for existing family membership
+        const { data: membership } = await supabase
+          .from('family_members')
+          .select('id')
+          .eq('user_id', user.id)
+          .single()
+        
+        // If no family, create one
+        if (!membership) {
+          const familyName = user.user_metadata?.family_name || 
+                            `${user.user_metadata?.full_name?.split(' ')[0] || 'My'}'s Family`
+          
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await (supabase as any).rpc('create_family_for_user', {
+            family_name: familyName,
+          })
+        }
+      }
+      
       return NextResponse.redirect(`${origin}${redirect}`)
     }
   }

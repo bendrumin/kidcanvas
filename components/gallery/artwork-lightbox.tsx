@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
@@ -36,6 +36,9 @@ export function ArtworkLightbox({
   hasNext,
   hasPrev 
 }: ArtworkLightboxProps) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
+
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (!artwork) return
     
@@ -60,6 +63,8 @@ export function ArtworkLightbox({
   useEffect(() => {
     if (artwork) {
       document.body.style.overflow = 'hidden'
+      // Focus the close button when dialog opens
+      closeButtonRef.current?.focus()
     } else {
       document.body.style.overflow = ''
     }
@@ -80,15 +85,22 @@ export function ArtworkLightbox({
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center"
         onClick={onClose}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="artwork-dialog-title"
+        aria-describedby="artwork-dialog-description"
+        ref={dialogRef}
       >
         {/* Close Button */}
         <Button
+          ref={closeButtonRef}
           variant="ghost"
           size="icon"
-          className="absolute top-4 right-4 text-white hover:bg-white/10 z-50"
+          className="absolute top-4 right-4 text-white hover:bg-white/10 z-50 focus:ring-2 focus:ring-white"
           onClick={onClose}
+          aria-label="Close artwork viewer"
         >
-          <X className="w-6 h-6" />
+          <X className="w-6 h-6" aria-hidden="true" />
         </Button>
 
         {/* Navigation */}
@@ -96,20 +108,22 @@ export function ArtworkLightbox({
           <Button
             variant="ghost"
             size="icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/10 z-50"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/10 z-50 focus:ring-2 focus:ring-white"
             onClick={(e) => { e.stopPropagation(); onNavigate('prev') }}
+            aria-label="View previous artwork"
           >
-            <ChevronLeft className="w-8 h-8" />
+            <ChevronLeft className="w-8 h-8" aria-hidden="true" />
           </Button>
         )}
         {hasNext && (
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/10 z-50"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/10 z-50 focus:ring-2 focus:ring-white"
             onClick={(e) => { e.stopPropagation(); onNavigate('next') }}
+            aria-label="View next artwork"
           >
-            <ChevronRight className="w-8 h-8" />
+            <ChevronRight className="w-8 h-8" aria-hidden="true" />
           </Button>
         )}
 
@@ -122,37 +136,41 @@ export function ArtworkLightbox({
           onClick={(e) => e.stopPropagation()}
         >
           {/* Image */}
-          <div className="relative flex-1 min-h-[300px] lg:min-h-[500px] bg-gray-100">
+          <figure className="relative flex-1 min-h-[300px] lg:min-h-[500px] bg-gray-100">
             <Image
               src={artwork.image_url}
-              alt={artwork.title}
+              alt={`Artwork titled "${artwork.title}" by ${artwork.child?.name || 'Unknown'}`}
               fill
               className="object-contain"
               sizes="(max-width: 1024px) 100vw, 60vw"
               priority
             />
-          </div>
+          </figure>
 
           {/* Info Panel */}
-          <div className="w-full lg:w-80 p-6 overflow-y-auto">
+          <div className="w-full lg:w-80 p-6 overflow-y-auto" role="region" aria-label="Artwork details">
             <div className="space-y-6">
               {/* Title & Actions */}
               <div>
-                <h2 className="text-2xl font-display font-bold mb-2">
+                <h2 id="artwork-dialog-title" className="text-2xl font-display font-bold mb-2">
                   {artwork.title}
                 </h2>
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm">
-                    <Heart className="w-4 h-4 mr-1" />
+                <p id="artwork-dialog-description" className="sr-only">
+                  Artwork by {artwork.child?.name}, created on {formatDate(artwork.created_date)}
+                </p>
+                <div className="flex items-center gap-2" role="group" aria-label="Artwork actions">
+                  <Button variant="outline" size="sm" aria-label="Add to favorites">
+                    <Heart className="w-4 h-4 mr-1" aria-hidden="true" />
                     Favorite
                   </Button>
-                  <Button variant="outline" size="sm">
-                    <Share2 className="w-4 h-4 mr-1" />
+                  <Button variant="outline" size="sm" aria-label="Share artwork">
+                    <Share2 className="w-4 h-4 mr-1" aria-hidden="true" />
                     Share
                   </Button>
                   <Button variant="outline" size="sm" asChild>
-                    <Link href={`/dashboard/artwork/${artwork.id}`}>
-                      <Edit className="w-4 h-4" />
+                    <Link href={`/dashboard/artwork/${artwork.id}`} aria-label="Edit artwork details">
+                      <Edit className="w-4 h-4" aria-hidden="true" />
+                      <span className="sr-only">Edit</span>
                     </Link>
                   </Button>
                 </div>
@@ -160,41 +178,46 @@ export function ArtworkLightbox({
 
               {/* Artist Info */}
               <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-crayon-purple/10 to-crayon-pink/10">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center text-white font-bold">
+                <div 
+                  className="w-12 h-12 rounded-full bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center text-white font-bold"
+                  aria-hidden="true"
+                >
                   {artwork.child?.name?.[0] || '?'}
                 </div>
                 <div>
                   <p className="font-semibold">{artwork.child?.name}</p>
                   {artwork.child && artwork.child_age_months && (
                     <p className="text-sm text-muted-foreground">
-                      {calculateAge(artwork.child.birth_date, artwork.created_date)}
+                      Age: {calculateAge(artwork.child.birth_date, artwork.created_date)}
                     </p>
                   )}
                 </div>
               </div>
 
               {/* Details */}
-              <div className="space-y-3">
+              <dl className="space-y-3">
                 <div className="flex items-center gap-2 text-sm">
-                  <Calendar className="w-4 h-4 text-muted-foreground" />
-                  <span>Created: {formatDate(artwork.created_date)}</span>
+                  <Calendar className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
+                  <dt className="sr-only">Created date</dt>
+                  <dd>Created: {formatDate(artwork.created_date)}</dd>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <User className="w-4 h-4 text-muted-foreground" />
-                  <span>Uploaded: {formatDate(artwork.uploaded_at)}</span>
+                  <User className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
+                  <dt className="sr-only">Upload date</dt>
+                  <dd>Uploaded: {formatDate(artwork.uploaded_at)}</dd>
                 </div>
-              </div>
+              </dl>
 
               {/* Tags */}
               {allTags.length > 0 && (
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <Tag className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Tags</span>
+                    <Tag className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
+                    <span className="text-sm font-medium" id="tags-heading">Tags</span>
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2" role="list" aria-labelledby="tags-heading">
                     {allTags.map((tag, i) => (
-                      <Badge key={i} variant="secondary">
+                      <Badge key={i} variant="secondary" role="listitem">
                         {tag}
                       </Badge>
                     ))}
@@ -206,7 +229,7 @@ export function ArtworkLightbox({
               {artwork.ai_description && (
                 <div className="p-3 rounded-xl bg-gradient-to-r from-crayon-blue/10 to-crayon-green/10">
                   <p className="text-xs font-medium text-muted-foreground mb-1">
-                    ✨ AI Description
+                    <span aria-hidden="true">✨</span> AI Description
                   </p>
                   <p className="text-sm">{artwork.ai_description}</p>
                 </div>
@@ -214,8 +237,14 @@ export function ArtworkLightbox({
 
               {/* Download Button */}
               <Button className="w-full" variant="outline" asChild>
-                <a href={artwork.image_url} download target="_blank" rel="noopener noreferrer">
-                  <Download className="w-4 h-4 mr-2" />
+                <a 
+                  href={artwork.image_url} 
+                  download 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label={`Download original image of ${artwork.title}`}
+                >
+                  <Download className="w-4 h-4 mr-2" aria-hidden="true" />
                   Download Original
                 </a>
               </Button>
@@ -226,4 +255,3 @@ export function ArtworkLightbox({
     </AnimatePresence>
   )
 }
-

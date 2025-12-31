@@ -36,6 +36,7 @@ export default function SignupPage() {
         options: {
           data: {
             full_name: formData.fullName,
+            family_name: formData.familyName || `${formData.fullName.split(' ')[0]}'s Family`,
           },
           emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
@@ -44,15 +45,26 @@ export default function SignupPage() {
       if (signUpError) throw signUpError
 
       if (authData.user) {
-        // Create the family
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { error: familyError } = await (supabase as any).rpc('create_family_for_user', {
-          family_name: formData.familyName || `${formData.fullName.split(' ')[0]}'s Family`,
-        })
+        // Check if user session exists (auto-confirm is enabled)
+        if (authData.session) {
+          // User is already logged in, create family immediately
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const { error: familyError } = await (supabase as any).rpc('create_family_for_user', {
+            family_name: formData.familyName || `${formData.fullName.split(' ')[0]}'s Family`,
+          })
 
-        if (familyError) {
-          console.error('Failed to create family:', familyError)
-          // Don't throw - user is created, family can be created later
+          if (familyError) {
+            console.error('Failed to create family:', familyError)
+          }
+
+          toast({
+            title: 'Welcome to KidCanvas!',
+            description: 'Your account is ready.',
+          })
+
+          router.push('/dashboard')
+          router.refresh()
+          return
         }
       }
 

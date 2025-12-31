@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
+import confetti from 'canvas-confetti'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -26,6 +27,29 @@ import {
 } from 'lucide-react'
 import { formatFileSize } from '@/lib/utils'
 import type { Child } from '@/lib/supabase/types'
+
+// Celebration confetti effect
+const celebrate = () => {
+  const count = 200
+  const defaults = {
+    origin: { y: 0.7 },
+    zIndex: 9999,
+  }
+
+  function fire(particleRatio: number, opts: confetti.Options) {
+    confetti({
+      ...defaults,
+      ...opts,
+      particleCount: Math.floor(count * particleRatio),
+    })
+  }
+
+  fire(0.25, { spread: 26, startVelocity: 55, colors: ['#E91E63', '#9B59B6', '#3498DB'] })
+  fire(0.2, { spread: 60, colors: ['#F39C12', '#F1C40F', '#2ECC71'] })
+  fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8, colors: ['#E74C3C', '#3498DB'] })
+  fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 })
+  fire(0.1, { spread: 120, startVelocity: 45, colors: ['#9B59B6', '#E91E63'] })
+}
 
 interface UploadFormProps {
   familyId: string
@@ -109,17 +133,23 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         }
       }
 
+      // Celebrate with confetti!
+      celebrate()
+
       toast({
-        title: 'Success!',
-        description: `${files.length} artwork${files.length > 1 ? 's' : ''} uploaded successfully.`,
+        title: '🎉 Success!',
+        description: `${files.length} artwork${files.length > 1 ? 's' : ''} uploaded successfully!`,
       })
 
       // Cleanup
       files.forEach(f => URL.revokeObjectURL(f.preview))
       setFiles([])
       
-      router.push('/dashboard')
-      router.refresh()
+      // Small delay to let confetti be seen
+      setTimeout(() => {
+        router.push('/dashboard')
+        router.refresh()
+      }, 1500)
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to upload'
       toast({
@@ -150,19 +180,34 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" role="form" aria-label="Upload artwork form">
+      {/* Status announcer for screen readers */}
+      <div 
+        role="status" 
+        aria-live="polite" 
+        aria-atomic="true" 
+        className="sr-only"
+      >
+        {isUploading ? `Uploading ${files.length} artwork${files.length > 1 ? 's' : ''}...` : ''}
+        {files.length > 0 && !isUploading ? `${files.length} artwork${files.length > 1 ? 's' : ''} ready to upload` : ''}
+      </div>
+
       {/* Dropzone */}
       <div
         {...getRootProps()}
         className={`
           relative border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all
+          focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2
           ${isDragActive 
             ? 'border-primary bg-primary/5 scale-[1.02]' 
             : 'border-muted-foreground/25 hover:border-primary/50 hover:bg-muted/50'
           }
         `}
+        role="button"
+        aria-label="Upload artwork. Drag and drop files here or click to browse. Accepts JPEG, PNG, GIF, and HEIC files up to 20 megabytes."
+        tabIndex={0}
       >
-        <input {...getInputProps()} />
+        <input {...getInputProps()} aria-label="Choose artwork files to upload" />
         <div className="flex flex-col items-center gap-4">
           <div className={`
             w-20 h-20 rounded-2xl flex items-center justify-center transition-all
@@ -170,7 +215,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
               ? 'bg-gradient-to-br from-crayon-pink to-crayon-purple' 
               : 'bg-gradient-to-br from-gray-100 to-gray-50'
             }
-          `}>
+          `} aria-hidden="true">
             <ImagePlus className={`w-10 h-10 ${isDragActive ? 'text-white' : 'text-gray-400'}`} />
           </div>
           <div>
@@ -204,15 +249,17 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                   <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-muted flex-shrink-0">
                     <Image
                       src={file.preview}
-                      alt={file.title}
+                      alt={`Preview of ${file.title}`}
                       fill
                       className="object-cover"
                     />
                     <button
                       onClick={() => removeFile(index)}
-                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors focus:ring-2 focus:ring-white focus:ring-offset-1"
+                      aria-label={`Remove ${file.title} from upload queue`}
+                      type="button"
                     >
-                      <X className="w-4 h-4" />
+                      <X className="w-4 h-4" aria-hidden="true" />
                     </button>
                   </div>
 
@@ -250,15 +297,19 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                     <div className="space-y-1.5">
                       <Label htmlFor={`date-${index}`}>Created Date</Label>
                       <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
                         <Input
                           id={`date-${index}`}
                           type="date"
                           value={file.createdDate}
                           onChange={(e) => updateFile(index, { createdDate: e.target.value })}
                           className="pl-9"
+                          aria-describedby={`date-help-${index}`}
                         />
                       </div>
+                      <span id={`date-help-${index}`} className="sr-only">
+                        Select the date when this artwork was created
+                      </span>
                     </div>
                   </div>
                 </div>

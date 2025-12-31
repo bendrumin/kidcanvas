@@ -32,7 +32,12 @@ export default async function DashboardLayout({
       <DashboardHeader user={user} family={family} role={role} />
       <div className="flex">
         <DashboardNav role={role} />
-        <main className="flex-1 p-6 lg:p-8 ml-0 lg:ml-64 mt-16">
+        <main 
+          id="main-content" 
+          className="flex-1 p-6 lg:p-8 ml-0 lg:ml-64 mt-16"
+          role="main"
+          aria-label="Main content"
+        >
           <div className="max-w-7xl mx-auto">
             {children}
           </div>

@@ -14,12 +14,12 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { createClient } from '@/lib/supabase/client'
 import { getInitials } from '@/lib/utils'
+import { MobileNav } from './mobile-nav'
 import { 
   Palette, 
   Settings, 
   LogOut, 
   User,
-  Menu,
   Bell
 } from 'lucide-react'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
@@ -44,13 +44,14 @@ export function DashboardHeader({ user, family, role }: DashboardHeaderProps) {
   const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User'
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 h-16 bg-white/80 backdrop-blur-md border-b">
+    <header 
+      className="fixed top-0 left-0 right-0 z-40 h-16 bg-white/80 backdrop-blur-md border-b"
+      role="banner"
+    >
       <div className="h-full px-4 lg:px-6 flex items-center justify-between">
         {/* Logo & Family */}
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="lg:hidden">
-            <Menu className="w-5 h-5" />
-          </Button>
+          <MobileNav role={role} familyName={family?.name} />
           
           <Link href="/dashboard" className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center">

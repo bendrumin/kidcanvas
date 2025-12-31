@@ -6,33 +6,34 @@
 
 @layer base {
   :root {
+    /* WCAG 2.1 AA compliant color palette */
     --background: 45 30% 98%;
-    --foreground: 20 14% 20%;
+    --foreground: 20 14% 15%; /* Darker for better contrast */
 
     --card: 0 0% 100%;
-    --card-foreground: 20 14% 20%;
+    --card-foreground: 20 14% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 20 14% 20%;
+    --popover-foreground: 20 14% 15%;
 
-    --primary: 340 82% 52%;
+    --primary: 340 82% 45%; /* Slightly darker for AA on white */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 45 100% 96%;
-    --secondary-foreground: 20 14% 20%;
+    --secondary-foreground: 20 14% 15%;
 
     --muted: 45 20% 92%;
-    --muted-foreground: 20 8% 45%;
+    --muted-foreground: 20 12% 38%; /* Darker for 4.5:1 contrast */
 
-    --accent: 199 89% 48%;
+    --accent: 199 89% 38%; /* Darker blue for better contrast */
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 84% 50%; /* Darker red for better contrast */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 20 10% 88%;
-    --input: 20 10% 88%;
-    --ring: 340 82% 52%;
+    --border: 20 10% 85%;
+    --input: 20 10% 85%;
+    --ring: 340 82% 45%;
 
     --radius: 1rem;
 
@@ -41,33 +42,33 @@
   }
 
   .dark {
-    --background: 20 14% 10%;
-    --foreground: 45 30% 98%;
+    --background: 20 14% 8%;
+    --foreground: 45 30% 95%;
 
-    --card: 20 14% 14%;
-    --card-foreground: 45 30% 98%;
+    --card: 20 14% 12%;
+    --card-foreground: 45 30% 95%;
 
-    --popover: 20 14% 14%;
-    --popover-foreground: 45 30% 98%;
+    --popover: 20 14% 12%;
+    --popover-foreground: 45 30% 95%;
 
-    --primary: 340 82% 60%;
+    --primary: 340 82% 65%; /* Brighter for dark mode contrast */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 20 14% 18%;
-    --secondary-foreground: 45 30% 98%;
+    --secondary: 20 14% 16%;
+    --secondary-foreground: 45 30% 95%;
 
-    --muted: 20 14% 22%;
-    --muted-foreground: 45 15% 60%;
+    --muted: 20 14% 20%;
+    --muted-foreground: 45 15% 70%; /* Lighter for dark mode contrast */
 
-    --accent: 199 89% 55%;
+    --accent: 199 89% 60%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 55%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 20 10% 25%;
     --input: 20 10% 25%;
-    --ring: 340 82% 60%;
+    --ring: 340 82% 65%;
   }
 }
 
@@ -147,5 +148,130 @@
     #9B59B6 100%
   );
   border-radius: 2px;
+}
+
+/* Enhanced animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-wiggle {
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Better focus states - WCAG 2.4.7 */
+*:focus-visible {
+  outline: 3px solid hsl(var(--primary));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* High contrast focus for buttons and links */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid hsl(var(--primary));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px hsl(var(--primary) / 0.2);
+}
+
+/* Respect reduced motion preferences - WCAG 2.3.3 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-float,
+  .animate-wiggle,
+  .animate-gradient,
+  .animate-bounce,
+  .animate-pulse,
+  .animate-spin {
+    animation: none !important;
+  }
+}
+
+/* Skip link styles */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only:focus,
+.sr-only:focus-visible,
+.focus\:not-sr-only:focus {
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Smooth page transitions */
+.page-transition {
+  animation: fade-in 0.3s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Selection styling */
+::selection {
+  background: hsl(var(--primary) / 0.2);
+  color: hsl(var(--primary));
 }
 

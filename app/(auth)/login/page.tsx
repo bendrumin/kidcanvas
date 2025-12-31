@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useToast } from '@/components/ui/use-toast'
 import { createClient } from '@/lib/supabase/client'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Palette, Mail, Lock, Loader2, Sparkles } from 'lucide-react'
 
 export default function LoginPage() {
@@ -21,6 +22,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(true)
   const [magicLinkSent, setMagicLinkSent] = useState(false)
 
   const redirect = searchParams.get('redirect') || '/dashboard'
@@ -83,17 +85,22 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-4">
-      {/* Decorative elements */}
-      <div className="absolute top-20 left-10 w-32 h-32 bg-crayon-yellow/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-40 h-40 bg-crayon-pink/20 rounded-full blur-3xl" />
-      <div className="absolute top-1/3 right-1/4 w-24 h-24 bg-crayon-blue/20 rounded-full blur-3xl" />
+    <main 
+      id="main-content" 
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-4"
+      role="main"
+      aria-labelledby="login-heading"
+    >
+      {/* Decorative elements - hidden from screen readers */}
+      <div className="absolute top-20 left-10 w-32 h-32 bg-crayon-yellow/20 rounded-full blur-3xl" aria-hidden="true" />
+      <div className="absolute bottom-20 right-10 w-40 h-40 bg-crayon-pink/20 rounded-full blur-3xl" aria-hidden="true" />
+      <div className="absolute top-1/3 right-1/4 w-24 h-24 bg-crayon-blue/20 rounded-full blur-3xl" aria-hidden="true" />
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center">
+          <Link href="/" className="inline-flex items-center gap-2" aria-label="KidCanvas home">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center" aria-hidden="true">
               <Palette className="w-7 h-7 text-white" />
             </div>
             <span className="text-3xl font-display font-bold bg-gradient-to-r from-crayon-pink to-crayon-purple bg-clip-text text-transparent">
@@ -104,7 +111,7 @@ export default function LoginPage() {
 
         <Card className="border-2 shadow-xl">
           <CardHeader className="text-center pb-2">
-            <CardTitle className="text-2xl font-display">Welcome Back!</CardTitle>
+            <CardTitle id="login-heading" className="text-2xl font-display">Welcome Back!</CardTitle>
             <CardDescription>Sign in to access your family's artwork gallery</CardDescription>
           </CardHeader>
           <CardContent>
@@ -119,7 +126,7 @@ export default function LoginPage() {
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" aria-hidden="true" />
                       <Input
                         id="email"
                         type="email"
@@ -128,6 +135,8 @@ export default function LoginPage() {
                         onChange={(e) => setEmail(e.target.value)}
                         className="pl-10"
                         required
+                        autoComplete="email"
+                        aria-required="true"
                       />
                     </div>
                   </div>
@@ -139,17 +148,29 @@ export default function LoginPage() {
                       </Link>
                     </div>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" aria-hidden="true" />
                       <Input
                         id="password"
                         type="password"
                         placeholder="••••••••"
                         value={password}
+                        autoComplete="current-password"
+                        aria-required="true"
                         onChange={(e) => setPassword(e.target.value)}
                         className="pl-10"
                         required
                       />
                     </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Checkbox 
+                      id="remember" 
+                      checked={rememberMe}
+                      onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                    />
+                    <Label htmlFor="remember" className="text-sm font-normal cursor-pointer">
+                      Remember me
+                    </Label>
                   </div>
                   <Button type="submit" className="w-full bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90" disabled={isLoading}>
                     {isLoading ? (
