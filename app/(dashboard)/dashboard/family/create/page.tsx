@@ -31,7 +31,7 @@ export default function CreateFamilyPage() {
       const supabase = createClient()
       
       // Call RPC to create family
-      const { error: rpcError } = await supabase.rpc('create_family_for_user', {
+      const { error: rpcError } = await (supabase.rpc as any)('create_family_for_user', {
         family_name: familyName.trim()
       })
 
@@ -44,7 +44,7 @@ export default function CreateFamilyPage() {
         .from('family_members')
         .select('family_id')
         .order('joined_at', { ascending: false })
-        .limit(1)
+        .limit(1) as { data: { family_id: string }[] | null }
       
       if (memberships && memberships[0]) {
         document.cookie = `selected_family=${memberships[0].family_id};path=/;max-age=${60 * 60 * 24 * 365}`
