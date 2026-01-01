@@ -1,9 +1,9 @@
 -- Subscriptions table (synced from Stripe)
 CREATE TABLE IF NOT EXISTS subscriptions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  stripe_customer_id TEXT UNIQUE,
-  stripe_subscription_id TEXT UNIQUE,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL UNIQUE,
+  stripe_customer_id TEXT,
+  stripe_subscription_id TEXT,
   plan_id TEXT NOT NULL DEFAULT 'free' CHECK (plan_id IN ('free', 'family', 'pro')),
   status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'canceled', 'past_due', 'trialing', 'incomplete')),
   billing_interval TEXT CHECK (billing_interval IN ('month', 'year')),
