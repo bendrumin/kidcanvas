@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -12,6 +13,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { createClient } from '@/lib/supabase/client'
 import { getInitials } from '@/lib/utils'
 import { MobileNav } from './mobile-nav'
@@ -22,7 +28,8 @@ import {
   LogOut, 
   User,
   Bell,
-  CreditCard
+  CreditCard,
+  Sparkles
 } from 'lucide-react'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 import type { Family } from '@/lib/supabase/types'
@@ -37,6 +44,7 @@ interface DashboardHeaderProps {
 export function DashboardHeader({ user, family, families, role }: DashboardHeaderProps) {
   const router = useRouter()
   const supabase = createClient()
+  const [notificationsOpen, setNotificationsOpen] = useState(false)
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -76,10 +84,24 @@ export function DashboardHeader({ user, family, families, role }: DashboardHeade
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
-            <Bell className="w-5 h-5" aria-hidden="true" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-crayon-red rounded-full" />
-          </Button>
+          <Popover open={notificationsOpen} onOpenChange={setNotificationsOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
+                <Bell className="w-5 h-5" aria-hidden="true" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-80">
+              <div className="text-center py-6 px-4">
+                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-orange-500" />
+                </div>
+                <h3 className="font-semibold text-lg mb-2">Notifications Coming Soon!</h3>
+                <p className="text-sm text-muted-foreground">
+                  We're working on notifications to let you know when new artwork is added or shared.
+                </p>
+              </div>
+            </PopoverContent>
+          </Popover>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
