@@ -76,7 +76,7 @@ export function DashboardNav({ role }: DashboardNavProps) {
 
   return (
     <nav 
-      className="fixed left-0 top-16 bottom-0 w-64 bg-white/90 backdrop-blur-md border-r hidden lg:block overflow-y-auto"
+      className="fixed left-0 top-16 bottom-0 w-64 bg-background/90 backdrop-blur-md border-r hidden lg:block overflow-y-auto"
       role="navigation"
       aria-label="Main navigation"
     >
@@ -111,14 +111,14 @@ export function DashboardNav({ role }: DashboardNavProps) {
 
       {/* Quick Stats Card */}
       <div className="p-4 mt-4 border-t">
-        <div className="relative bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 rounded-2xl p-4 border border-orange-100 overflow-hidden">
+        <div className="relative bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-amber-950/30 dark:via-orange-950/20 dark:to-rose-950/30 rounded-2xl p-4 border border-orange-100 dark:border-orange-900/30 overflow-hidden">
           {/* Decorative background */}
           <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-crayon-yellow/20 to-crayon-orange/20 rounded-full blur-2xl" />
           
           <div className="relative">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="w-4 h-4 text-crayon-orange" />
-              <p className="text-sm font-semibold text-gray-800">Free Plan</p>
+              <p className="text-sm font-semibold text-foreground">Free Plan</p>
             </div>
             
             <div className="space-y-3">
@@ -127,7 +127,7 @@ export function DashboardNav({ role }: DashboardNavProps) {
                   <span>Artworks</span>
                   <span className="font-medium">0 / 100</span>
                 </div>
-                <div className="h-2.5 bg-white/70 rounded-full overflow-hidden shadow-inner">
+                <div className="h-2.5 bg-white/70 dark:bg-white/10 rounded-full overflow-hidden shadow-inner">
                   <div 
                     className="h-full w-0 bg-gradient-to-r from-crayon-orange to-crayon-pink rounded-full transition-all duration-500" 
                     style={{ width: '0%' }}

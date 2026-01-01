@@ -30,7 +30,7 @@ export default async function ProfilePage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-3xl font-display font-bold text-gray-900">Profile</h1>
+        <h1 className="text-3xl font-display font-bold text-foreground">Profile</h1>
         <p className="text-muted-foreground mt-1">
           Manage your account settings and preferences
         </p>

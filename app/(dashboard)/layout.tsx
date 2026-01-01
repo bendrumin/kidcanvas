@@ -58,7 +58,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50/50 via-white to-rose-50/50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50/50 via-background to-rose-50/50 dark:from-background dark:via-background dark:to-background">
       <DashboardHeader 
         user={user} 
         family={family} 

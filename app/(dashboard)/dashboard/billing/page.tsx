@@ -136,7 +136,7 @@ export default async function BillingPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-display font-bold text-gray-900">Billing & Plans</h1>
+        <h1 className="text-3xl font-display font-bold text-foreground">Billing & Plans</h1>
         <p className="text-muted-foreground mt-1">
           Manage your subscription and billing information
         </p>

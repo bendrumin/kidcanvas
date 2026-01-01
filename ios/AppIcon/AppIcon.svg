@@ -1,0 +1,72 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gradient Background -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EC4899"/>
+      <stop offset="100%" style="stop-color:#A855F7"/>
+    </linearGradient>
+    <linearGradient id="paletteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF"/>
+      <stop offset="100%" style="stop-color:#F3F4F6"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Square (rounded corners added by iOS) -->
+  <rect width="1024" height="1024" fill="url(#bgGradient)"/>
+  
+  <!-- Paint Palette -->
+  <g transform="translate(512, 512)">
+    <!-- Main palette shape -->
+    <ellipse cx="0" cy="0" rx="280" ry="240" fill="url(#paletteGradient)" 
+             transform="rotate(-15)"
+             style="filter: drop-shadow(0 8px 24px rgba(0,0,0,0.15))"/>
+    
+    <!-- Thumb hole -->
+    <ellipse cx="140" cy="100" rx="60" ry="50" fill="url(#bgGradient)" 
+             transform="rotate(-15)"/>
+    
+    <!-- Paint blobs -->
+    <!-- Red -->
+    <circle cx="-120" cy="-100" r="45" fill="#EF4444"/>
+    <ellipse cx="-115" cy="-95" rx="15" ry="10" fill="#FCA5A5" opacity="0.6"/>
+    
+    <!-- Orange -->
+    <circle cx="-20" cy="-140" r="40" fill="#F97316"/>
+    <ellipse cx="-15" cy="-135" rx="12" ry="8" fill="#FDBA74" opacity="0.6"/>
+    
+    <!-- Yellow -->
+    <circle cx="100" cy="-100" r="42" fill="#FACC15"/>
+    <ellipse cx="105" cy="-95" rx="14" ry="9" fill="#FEF08A" opacity="0.6"/>
+    
+    <!-- Green -->
+    <circle cx="-150" cy="20" r="38" fill="#22C55E"/>
+    <ellipse cx="-145" cy="25" rx="12" ry="8" fill="#86EFAC" opacity="0.6"/>
+    
+    <!-- Blue -->
+    <circle cx="-80" cy="80" r="40" fill="#3B82F6"/>
+    <ellipse cx="-75" cy="85" rx="13" ry="8" fill="#93C5FD" opacity="0.6"/>
+    
+    <!-- Purple -->
+    <circle cx="40" cy="60" r="35" fill="#8B5CF6"/>
+    <ellipse cx="45" cy="65" rx="11" ry="7" fill="#C4B5FD" opacity="0.6"/>
+  </g>
+  
+  <!-- Paintbrush -->
+  <g transform="translate(680, 750) rotate(-45)">
+    <!-- Brush handle -->
+    <rect x="-15" y="-180" width="30" height="140" rx="8" fill="#D97706"/>
+    <rect x="-12" y="-175" width="6" height="130" fill="#F59E0B" opacity="0.4"/>
+    
+    <!-- Ferrule (metal part) -->
+    <rect x="-18" y="-45" width="36" height="30" rx="4" fill="#9CA3AF"/>
+    <rect x="-18" y="-45" width="36" height="8" fill="#D1D5DB"/>
+    
+    <!-- Brush bristles -->
+    <ellipse cx="0" cy="25" rx="22" ry="45" fill="#1F2937"/>
+    <ellipse cx="-8" cy="20" rx="6" ry="30" fill="#374151" opacity="0.5"/>
+    
+    <!-- Paint on brush tip -->
+    <ellipse cx="0" cy="55" rx="18" ry="15" fill="#EC4899"/>
+    <ellipse cx="5" cy="50" rx="6" ry="8" fill="#F472B6" opacity="0.6"/>
+  </g>
+</svg>

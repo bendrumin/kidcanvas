@@ -22,6 +22,7 @@ import { createClient } from '@/lib/supabase/client'
 import { getInitials } from '@/lib/utils'
 import { MobileNav } from './mobile-nav'
 import { FamilySwitcher } from './family-switcher'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { 
   Palette, 
   Settings, 
@@ -56,7 +57,7 @@ export function DashboardHeader({ user, family, families, role }: DashboardHeade
 
   return (
     <header 
-      className="fixed top-0 left-0 right-0 z-40 h-16 bg-white/80 backdrop-blur-md border-b"
+      className="fixed top-0 left-0 right-0 z-40 h-16 bg-background/80 backdrop-blur-md border-b"
       role="banner"
     >
       <div className="h-full px-4 lg:px-6 flex items-center justify-between">
@@ -84,6 +85,8 @@ export function DashboardHeader({ user, family, families, role }: DashboardHeade
 
         {/* Actions */}
         <div className="flex items-center gap-2">
+          <ThemeToggle />
+          
           <Popover open={notificationsOpen} onOpenChange={setNotificationsOpen}>
             <PopoverTrigger asChild>
               <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">

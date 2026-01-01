@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as SonnerToaster } from 'sonner'
 import { SkipLink } from '@/components/ui/skip-link'
@@ -23,12 +24,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen antialiased">
-        <SkipLink />
-        {children}
-        <Toaster />
-        <SonnerToaster richColors position="top-center" />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SkipLink />
+          {children}
+          <Toaster />
+          <SonnerToaster richColors position="top-center" />
+        </ThemeProvider>
       </body>
     </html>
   )
 }
-

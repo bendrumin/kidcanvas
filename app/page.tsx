@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { 
   Sparkles, 
   Camera, 
@@ -30,13 +31,13 @@ const staggerContainer = {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-rose-50 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background overflow-hidden">
       {/* Navigation */}
       <motion.nav 
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b"
+        className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b"
         role="navigation"
         aria-label="Main navigation"
       >
@@ -46,21 +47,22 @@ export default function LandingPage() {
               className="flex items-center gap-2"
               whileHover={{ scale: 1.02 }}
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center shadow-lg shadow-pink-200">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center shadow-lg shadow-pink-200/50 dark:shadow-pink-900/30">
                 <Palette className="w-6 h-6 text-white" />
               </div>
               <span className="text-2xl font-display font-bold bg-gradient-to-r from-crayon-pink to-crayon-purple bg-clip-text text-transparent">
                 KidCanvas
               </span>
             </motion.div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <ThemeToggle />
               <Link href="/login">
                 <Button variant="ghost" className="font-semibold">
                   Log in
                 </Button>
               </Link>
               <Link href="/signup">
-                <Button className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90 shadow-lg shadow-pink-200/50">
+                <Button className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90 shadow-lg shadow-pink-200/50 dark:shadow-pink-900/30">
                   Get Started
                 </Button>
               </Link>
@@ -130,10 +132,10 @@ export default function LandingPage() {
             <motion.div 
               variants={fadeInUp}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 bg-white/80 backdrop-blur rounded-full px-4 py-2 mb-8 border shadow-lg shadow-orange-100"
+              className="inline-flex items-center gap-2 bg-white/80 dark:bg-card/80 backdrop-blur rounded-full px-4 py-2 mb-8 border shadow-lg shadow-orange-100 dark:shadow-none"
             >
               <Sparkles className="w-4 h-4 text-crayon-yellow" />
-              <span className="text-sm font-medium">Every scribble tells a story</span>
+              <span className="text-sm font-medium text-foreground">Every scribble tells a story</span>
               <Star className="w-4 h-4 text-crayon-yellow fill-crayon-yellow" />
             </motion.div>
             
@@ -141,7 +143,7 @@ export default function LandingPage() {
               id="hero-heading"
               variants={fadeInUp}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-gray-900 mb-6 leading-tight"
+              className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-foreground mb-6 leading-tight"
             >
               Preserve Your Children's{' '}
               <span className="relative inline-block">
@@ -186,7 +188,7 @@ export default function LandingPage() {
             <motion.p 
               variants={fadeInUp}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto"
+              className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
             >
               Scan, organize, and share your kids' artwork with the whole family. 
               From finger paintings to first portraits — keep every precious creation safe forever.
@@ -218,16 +220,16 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
           >
-            <div className="bg-gradient-to-br from-white to-amber-50 rounded-3xl shadow-2xl p-8 max-w-5xl mx-auto border-2 relative overflow-hidden">
+            <div className="bg-gradient-to-br from-white to-amber-50 dark:from-card dark:to-card rounded-3xl shadow-2xl p-8 max-w-5xl mx-auto border-2 relative overflow-hidden">
               {/* Cork board texture effect */}
-              <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNjUiIG51bU9jdGF2ZXM9IjMiIHN0aXRjaFRpbGVzPSJzdGl0Y2giLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIi8+PC9zdmc+')]" />
+              <div className="absolute inset-0 opacity-5 dark:opacity-[0.02] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNjUiIG51bU9jdGF2ZXM9IjMiIHN0aXRjaFRpbGVzPSJzdGl0Y2giLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIi8+PC9zdmc+')]" />
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 relative">
                 {[
-                  { emoji: '🌸', color: 'from-pink-100 to-pink-200', rotate: -3, label: 'Emma, 5' },
-                  { emoji: '🚀', color: 'from-blue-100 to-blue-200', rotate: 2, label: 'Lucas, 7' },
-                  { emoji: '🌈', color: 'from-purple-100 to-purple-200', rotate: -1, label: 'Sofia, 4' },
-                  { emoji: '🦋', color: 'from-yellow-100 to-yellow-200', rotate: 3, label: 'Oliver, 6' },
+                  { emoji: '🌸', color: 'from-pink-100 to-pink-200 dark:from-pink-900/40 dark:to-pink-800/40', rotate: -3, label: 'Emma, 5' },
+                  { emoji: '🚀', color: 'from-blue-100 to-blue-200 dark:from-blue-900/40 dark:to-blue-800/40', rotate: 2, label: 'Lucas, 7' },
+                  { emoji: '🌈', color: 'from-purple-100 to-purple-200 dark:from-purple-900/40 dark:to-purple-800/40', rotate: -1, label: 'Sofia, 4' },
+                  { emoji: '🦋', color: 'from-yellow-100 to-yellow-200 dark:from-yellow-900/40 dark:to-yellow-800/40', rotate: 3, label: 'Oliver, 6' },
                 ].map((item, i) => (
                   <motion.div
                     key={i}
@@ -238,13 +240,13 @@ export default function LandingPage() {
                     whileHover={{ scale: 1.05, rotate: 0, zIndex: 10 }}
                   >
                     {/* Tape decoration */}
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-5 bg-gradient-to-r from-yellow-200 to-yellow-300 rounded-sm transform -rotate-2 shadow-sm z-10" />
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-5 bg-gradient-to-r from-yellow-200 to-yellow-300 dark:from-yellow-600 dark:to-yellow-500 rounded-sm transform -rotate-2 shadow-sm z-10" />
                     
-                    <div className={`bg-white p-2 rounded-sm shadow-lg`}>
+                    <div className={`bg-white dark:bg-secondary p-2 rounded-sm shadow-lg`}>
                       <div className={`aspect-square rounded-sm bg-gradient-to-br ${item.color} flex items-center justify-center text-5xl`}>
                         {item.emoji}
                       </div>
-                      <p className="text-center text-sm text-gray-500 mt-2 font-medium">{item.label}</p>
+                      <p className="text-center text-sm text-muted-foreground mt-2 font-medium">{item.label}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -267,7 +269,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-white relative" aria-labelledby="features-heading">
+      <section id="features" className="py-20 bg-white dark:bg-card relative" aria-labelledby="features-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center mb-16"
@@ -276,10 +278,10 @@ export default function LandingPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 id="features-heading" className="text-4xl font-display font-bold text-gray-900 mb-4">
+            <h2 id="features-heading" className="text-4xl font-display font-bold text-foreground mb-4">
               Everything You Need to Preserve Memories
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Simple tools designed for busy parents and loving grandparents
             </p>
           </motion.div>
@@ -307,7 +309,7 @@ export default function LandingPage() {
             ].map((feature, i) => (
               <motion.div 
                 key={i} 
-                className="group p-8 rounded-3xl bg-gradient-to-br from-gray-50 to-white border-2 hover:border-primary/20 transition-all hover:shadow-xl"
+                className="group p-8 rounded-3xl bg-gradient-to-br from-gray-50 to-white dark:from-secondary dark:to-card border-2 hover:border-primary/20 transition-all hover:shadow-xl"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -320,10 +322,10 @@ export default function LandingPage() {
                 >
                   <feature.icon className="w-7 h-7 text-white" />
                 </motion.div>
-                <h3 className="text-xl font-display font-bold text-gray-900 mb-3">
+                <h3 className="text-xl font-display font-bold text-foreground mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   {feature.description}
                 </p>
               </motion.div>
@@ -333,7 +335,7 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 bg-gradient-to-br from-purple-50 to-pink-50 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute top-10 left-10 text-8xl opacity-10">🖌️</div>
         <div className="absolute bottom-10 right-10 text-8xl opacity-10">🎨</div>
@@ -345,10 +347,10 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-display font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-display font-bold text-foreground mb-4">
               How It Works
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-muted-foreground">
               Three simple steps to preserve artwork forever
             </p>
           </motion.div>
@@ -368,15 +370,15 @@ export default function LandingPage() {
                 transition={{ delay: i * 0.2 }}
               >
                 <motion.div 
-                  className="w-20 h-20 rounded-full bg-gradient-to-br from-crayon-pink to-crayon-purple text-white text-3xl font-display font-bold flex items-center justify-center mx-auto mb-6 shadow-xl shadow-pink-200/50"
+                  className="w-20 h-20 rounded-full bg-gradient-to-br from-crayon-pink to-crayon-purple text-white text-3xl font-display font-bold flex items-center justify-center mx-auto mb-6 shadow-xl shadow-pink-200/50 dark:shadow-pink-900/30"
                   whileHover={{ scale: 1.1 }}
                 >
                   {item.emoji}
                 </motion.div>
-                <h3 className="text-xl font-display font-bold text-gray-900 mb-2">
+                <h3 className="text-xl font-display font-bold text-foreground mb-2">
                   <span className="text-primary">{item.step}.</span> {item.title}
                 </h3>
-                <p className="text-gray-600">{item.desc}</p>
+                <p className="text-muted-foreground">{item.desc}</p>
                 {i < 2 && (
                   <div className="hidden md:block absolute top-10 left-[60%] w-[80%] border-t-2 border-dashed border-primary/30" />
                 )}
@@ -387,7 +389,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center mb-16"
@@ -395,10 +397,10 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-display font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-display font-bold text-foreground mb-4">
               Simple Pricing
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-muted-foreground">
               Start free, upgrade when you're ready
             </p>
           </motion.div>
@@ -406,19 +408,19 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {/* Free Plan */}
             <motion.div 
-              className="p-8 rounded-3xl border-2 bg-white hover:shadow-lg transition-shadow"
+              className="p-8 rounded-3xl border-2 bg-white dark:bg-card hover:shadow-lg transition-shadow"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <h3 className="text-2xl font-display font-bold mb-2">Free</h3>
-              <p className="text-gray-600 mb-6">Perfect for getting started</p>
-              <div className="text-4xl font-display font-bold mb-6">
-                $0<span className="text-lg font-normal text-gray-500">/month</span>
+              <h3 className="text-2xl font-display font-bold text-foreground mb-2">Free</h3>
+              <p className="text-muted-foreground mb-6">Perfect for getting started</p>
+              <div className="text-4xl font-display font-bold text-foreground mb-6">
+                $0<span className="text-lg font-normal text-muted-foreground">/month</span>
               </div>
               <ul className="space-y-3 mb-8">
                 {['1 family', '2 children profiles', '100 artworks', 'Basic gallery', 'Web upload'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3">
+                  <li key={i} className="flex items-center gap-3 text-foreground">
                     <Check className="w-5 h-5 text-crayon-green" />
                     <span>{feature}</span>
                   </li>
@@ -433,7 +435,7 @@ export default function LandingPage() {
             
             {/* Family Plan */}
             <motion.div 
-              className="p-8 rounded-3xl border-2 border-primary bg-gradient-to-br from-pink-50 to-purple-50 relative hover:shadow-xl transition-shadow"
+              className="p-8 rounded-3xl border-2 border-primary bg-gradient-to-br from-pink-50 to-purple-50 dark:from-pink-950/40 dark:to-purple-950/40 relative hover:shadow-xl transition-shadow"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -441,14 +443,14 @@ export default function LandingPage() {
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-crayon-pink to-crayon-purple text-white px-4 py-1 rounded-full text-sm font-semibold shadow-lg">
                 Most Popular ⭐
               </div>
-              <h3 className="text-2xl font-display font-bold mb-2">Family</h3>
-              <p className="text-gray-600 mb-6">For growing families</p>
-              <div className="text-4xl font-display font-bold mb-6">
-                $4.99<span className="text-lg font-normal text-gray-500">/month</span>
+              <h3 className="text-2xl font-display font-bold text-foreground mb-2">Family</h3>
+              <p className="text-muted-foreground mb-6">For growing families</p>
+              <div className="text-4xl font-display font-bold text-foreground mb-6">
+                $4.99<span className="text-lg font-normal text-muted-foreground">/month</span>
               </div>
               <ul className="space-y-3 mb-8">
                 {['Unlimited children', 'Unlimited artworks', 'AI auto-tagging', 'Collections', 'Public gallery links', 'Priority support'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3">
+                  <li key={i} className="flex items-center gap-3 text-foreground">
                     <Check className="w-5 h-5 text-crayon-green" />
                     <span>{feature}</span>
                   </li>
@@ -459,7 +461,7 @@ export default function LandingPage() {
                   Start 14-Day Trial
                 </Button>
               </Link>
-              <p className="text-center text-sm text-gray-500 mt-4">
+              <p className="text-center text-sm text-muted-foreground mt-4">
                 or $49.99/year (save 17%)
               </p>
             </motion.div>
@@ -468,7 +470,7 @@ export default function LandingPage() {
       </section>
 
       {/* Trust Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-green-50">
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-green-50 dark:from-blue-950/30 dark:to-green-950/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8 text-center">
             {[
@@ -486,8 +488,8 @@ export default function LandingPage() {
                 <motion.div whileHover={{ scale: 1.1 }}>
                   <item.icon className="w-12 h-12 text-primary mx-auto mb-4" />
                 </motion.div>
-                <h3 className="text-xl font-display font-bold mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
+                <h3 className="text-xl font-display font-bold text-foreground mb-2">{item.title}</h3>
+                <p className="text-muted-foreground">{item.desc}</p>
               </motion.div>
             ))}
           </div>
