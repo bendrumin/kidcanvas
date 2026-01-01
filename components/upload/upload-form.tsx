@@ -10,6 +10,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -23,7 +30,9 @@ import {
   Loader2, 
   ImagePlus,
   Calendar,
-  Sparkles
+  Sparkles,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react'
 import { formatFileSize } from '@/lib/utils'
 import type { Child } from '@/lib/supabase/types'
@@ -70,6 +79,8 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
   const { toast } = useToast()
   const [files, setFiles] = useState<FilePreview[]>([])
   const [isUploading, setIsUploading] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [currentFileIndex, setCurrentFileIndex] = useState(0)
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.map(file => ({
@@ -79,7 +90,9 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
       childId: children[0]?.id || '',
       createdDate: new Date().toISOString().split('T')[0],
     }))
-    setFiles(prev => [...prev, ...newFiles])
+    setFiles(newFiles)
+    setCurrentFileIndex(0)
+    setShowModal(true)
   }, [children])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -97,6 +110,11 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
       newFiles.splice(index, 1)
       return newFiles
     })
+    if (files.length <= 1) {
+      setShowModal(false)
+    } else if (currentFileIndex >= files.length - 1) {
+      setCurrentFileIndex(Math.max(0, currentFileIndex - 1))
+    }
   }
 
   const updateFile = (index: number, updates: Partial<FilePreview>) => {
@@ -105,6 +123,12 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
       newFiles[index] = { ...newFiles[index], ...updates }
       return newFiles
     })
+  }
+
+  const handleCancel = () => {
+    files.forEach(f => URL.revokeObjectURL(f.preview))
+    setFiles([])
+    setShowModal(false)
   }
 
   const handleUpload = async () => {
@@ -128,12 +152,14 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         })
 
         if (!response.ok) {
-          const error = await response.json()
-          throw new Error(error.message || 'Upload failed')
+          const errorData = await response.json()
+          const errorMessage = errorData.details || errorData.error || 'Upload failed'
+          throw new Error(errorMessage)
         }
       }
 
       // Celebrate with confetti!
+      setShowModal(false)
       celebrate()
 
       toast({
@@ -179,174 +205,189 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
     )
   }
 
-  return (
-    <div className="space-y-8" role="form" aria-label="Upload artwork form">
-      {/* Status announcer for screen readers */}
-      <div 
-        role="status" 
-        aria-live="polite" 
-        aria-atomic="true" 
-        className="sr-only"
-      >
-        {isUploading ? `Uploading ${files.length} artwork${files.length > 1 ? 's' : ''}...` : ''}
-        {files.length > 0 && !isUploading ? `${files.length} artwork${files.length > 1 ? 's' : ''} ready to upload` : ''}
-      </div>
+  const currentFile = files[currentFileIndex]
 
-      {/* Dropzone */}
-      <div
-        {...getRootProps()}
-        className={`
-          relative border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all
-          focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2
-          ${isDragActive 
-            ? 'border-primary bg-primary/5 scale-[1.02]' 
-            : 'border-muted-foreground/25 hover:border-primary/50 hover:bg-muted/50'
-          }
-        `}
-        role="button"
-        aria-label="Upload artwork. Drag and drop files here or click to browse. Accepts JPEG, PNG, GIF, and HEIC files up to 20 megabytes."
-        tabIndex={0}
-      >
-        <input {...getInputProps()} aria-label="Choose artwork files to upload" />
-        <div className="flex flex-col items-center gap-4">
-          <div className={`
-            w-20 h-20 rounded-2xl flex items-center justify-center transition-all
+  return (
+    <>
+      <div className="space-y-8" role="form" aria-label="Upload artwork form">
+        {/* Status announcer for screen readers */}
+        <div 
+          role="status" 
+          aria-live="polite" 
+          aria-atomic="true" 
+          className="sr-only"
+        >
+          {isUploading ? `Uploading ${files.length} artwork${files.length > 1 ? 's' : ''}...` : ''}
+        </div>
+
+        {/* Dropzone */}
+        <div
+          {...getRootProps()}
+          className={`
+            relative border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all
+            focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2
             ${isDragActive 
-              ? 'bg-gradient-to-br from-crayon-pink to-crayon-purple' 
-              : 'bg-gradient-to-br from-gray-100 to-gray-50'
+              ? 'border-primary bg-primary/5 scale-[1.02]' 
+              : 'border-muted-foreground/25 hover:border-primary/50 hover:bg-muted/50'
             }
-          `} aria-hidden="true">
-            <ImagePlus className={`w-10 h-10 ${isDragActive ? 'text-white' : 'text-gray-400'}`} />
-          </div>
-          <div>
-            <p className="text-lg font-semibold">
-              {isDragActive ? 'Drop your artwork here!' : 'Drag & drop artwork here'}
-            </p>
-            <p className="text-sm text-muted-foreground mt-1">
-              or click to browse • JPEG, PNG, GIF, HEIC up to 20MB
-            </p>
+          `}
+          aria-label="Upload artwork. Drag and drop files here or click to browse."
+        >
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center gap-4">
+            <div className={`
+              w-20 h-20 rounded-2xl flex items-center justify-center transition-all
+              ${isDragActive 
+                ? 'bg-gradient-to-br from-crayon-pink to-crayon-purple' 
+                : 'bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-900'
+              }
+            `} aria-hidden="true">
+              <ImagePlus className={`w-10 h-10 ${isDragActive ? 'text-white' : 'text-gray-400'}`} />
+            </div>
+            <div>
+              <p className="text-lg font-semibold">
+                {isDragActive ? 'Drop your artwork here!' : 'Drag & drop artwork here'}
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                or click to browse • JPEG, PNG, GIF, HEIC up to 20MB
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* File Previews */}
-      {files.length > 0 && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-display font-semibold">
-              {files.length} artwork{files.length > 1 ? 's' : ''} ready to upload
-            </h3>
-            <Button variant="outline" size="sm" onClick={() => setFiles([])}>
-              Clear All
-            </Button>
-          </div>
+      {/* Artwork Details Modal */}
+      <Dialog open={showModal} onOpenChange={(open) => !open && handleCancel()}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-display">
+              {files.length === 1 ? 'Add Artwork Details' : `Artwork ${currentFileIndex + 1} of ${files.length}`}
+            </DialogTitle>
+          </DialogHeader>
 
-          <div className="space-y-4">
-            {files.map((file, index) => (
-              <Card key={index} className="p-4">
-                <div className="flex gap-4">
-                  {/* Preview */}
-                  <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-muted flex-shrink-0">
-                    <Image
-                      src={file.preview}
-                      alt={`Preview of ${file.title}`}
-                      fill
-                      className="object-cover"
-                    />
-                    <button
-                      onClick={() => removeFile(index)}
-                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors focus:ring-2 focus:ring-white focus:ring-offset-1"
-                      aria-label={`Remove ${file.title} from upload queue`}
-                      type="button"
+          {currentFile && (
+            <div className="flex flex-col sm:flex-row gap-6">
+              {/* Image Preview - Left Side */}
+              <div className="sm:w-1/2 flex-shrink-0">
+                <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-muted">
+                  <Image
+                    src={currentFile.preview}
+                    alt={`Preview of ${currentFile.title}`}
+                    fill
+                    className="object-contain"
+                  />
+                  <button
+                    onClick={() => removeFile(currentFileIndex)}
+                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+                    aria-label="Remove this artwork"
+                    type="button"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                <p className="text-xs text-muted-foreground text-center mt-2">
+                  {currentFile.file.name} • {formatFileSize(currentFile.file.size)}
+                </p>
+                
+                {/* Navigation for multiple files */}
+                {files.length > 1 && (
+                  <div className="flex items-center justify-center gap-4 mt-3">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setCurrentFileIndex(i => Math.max(0, i - 1))}
+                      disabled={currentFileIndex === 0}
                     >
-                      <X className="w-4 h-4" aria-hidden="true" />
-                    </button>
+                      <ChevronLeft className="w-4 h-4" />
+                    </Button>
+                    <span className="text-sm text-muted-foreground">
+                      {currentFileIndex + 1} / {files.length}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setCurrentFileIndex(i => Math.min(files.length - 1, i + 1))}
+                      disabled={currentFileIndex === files.length - 1}
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
                   </div>
+                )}
+              </div>
 
-                  {/* Details */}
-                  <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="space-y-1.5">
-                      <Label htmlFor={`title-${index}`}>Title</Label>
-                      <Input
-                        id={`title-${index}`}
-                        value={file.title}
-                        onChange={(e) => updateFile(index, { title: e.target.value })}
-                        placeholder="Artwork title"
-                      />
-                    </div>
+              {/* Form Fields - Right Side */}
+              <div className="sm:w-1/2 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Title</Label>
+                  <Input
+                    id="title"
+                    value={currentFile.title}
+                    onChange={(e) => updateFile(currentFileIndex, { title: e.target.value })}
+                    placeholder="Give this artwork a name"
+                  />
+                </div>
 
-                    <div className="space-y-1.5">
-                      <Label htmlFor={`child-${index}`}>Artist</Label>
-                      <Select
-                        value={file.childId}
-                        onValueChange={(value) => updateFile(index, { childId: value })}
-                      >
-                        <SelectTrigger id={`child-${index}`}>
-                          <SelectValue placeholder="Select child" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {children.map((child) => (
-                            <SelectItem key={child.id} value={child.id}>
-                              {child.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                <div className="space-y-2">
+                  <Label htmlFor="artist">Artist</Label>
+                  <Select
+                    value={currentFile.childId}
+                    onValueChange={(value) => updateFile(currentFileIndex, { childId: value })}
+                  >
+                    <SelectTrigger id="artist">
+                      <SelectValue placeholder="Who made this?" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {children.map((child) => (
+                        <SelectItem key={child.id} value={child.id}>
+                          {child.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-                    <div className="space-y-1.5">
-                      <Label htmlFor={`date-${index}`}>Created Date</Label>
-                      <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
-                        <Input
-                          id={`date-${index}`}
-                          type="date"
-                          value={file.createdDate}
-                          onChange={(e) => updateFile(index, { createdDate: e.target.value })}
-                          className="pl-9"
-                          aria-describedby={`date-help-${index}`}
-                        />
-                      </div>
-                      <span id={`date-help-${index}`} className="sr-only">
-                        Select the date when this artwork was created
-                      </span>
-                    </div>
+                <div className="space-y-2">
+                  <Label htmlFor="date">Date Created</Label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="date"
+                      type="date"
+                      value={currentFile.createdDate}
+                      onChange={(e) => updateFile(currentFileIndex, { createdDate: e.target.value })}
+                      className="pl-9"
+                    />
                   </div>
                 </div>
 
-                <p className="text-xs text-muted-foreground mt-2">
-                  {file.file.name} • {formatFileSize(file.file.size)}
-                </p>
-              </Card>
-            ))}
-          </div>
-
-          {/* Upload Button */}
-          <div className="flex justify-end gap-4">
-            <Button variant="outline" onClick={() => router.back()}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={handleUpload} 
-              disabled={isUploading || files.some(f => !f.childId)}
-              className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90"
-            >
-              {isUploading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Uploading...
-                </>
-              ) : (
-                <>
-                  <Upload className="w-4 h-4 mr-2" />
-                  Upload {files.length} Artwork{files.length > 1 ? 's' : ''}
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
-      )}
-    </div>
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-4">
+                  <Button variant="outline" onClick={handleCancel} disabled={isUploading} className="flex-1">
+                    Cancel
+                  </Button>
+                  <Button 
+                    onClick={handleUpload} 
+                    disabled={isUploading || files.some(f => !f.childId || !f.title)}
+                    className="flex-1 bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90"
+                  >
+                    {isUploading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4 mr-2" />
+                        {files.length === 1 ? 'Save' : `Save All (${files.length})`}
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
-

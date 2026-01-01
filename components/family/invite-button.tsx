@@ -143,26 +143,30 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
                       setFormData({ ...formData, role: value })
                     }
                   >
-                    <SelectTrigger>
-                      <SelectValue />
+                    <SelectTrigger className="w-full">
+                      <SelectValue>
+                        {formData.role === 'parent' && 'Parent'}
+                        {formData.role === 'member' && 'Member'}
+                        {formData.role === 'viewer' && 'Viewer'}
+                      </SelectValue>
                     </SelectTrigger>
-                    <SelectContent position="popper" sideOffset={4} className="w-[var(--radix-select-trigger-width)]">
+                    <SelectContent position="popper" sideOffset={4} className="min-w-[300px]">
                       <SelectItem value="parent" className="py-3">
                         <div className="flex flex-col items-start gap-0.5">
                           <span className="font-medium">Parent</span>
-                          <span className="text-xs text-muted-foreground whitespace-normal">Can manage children, artwork, and invite others</span>
+                          <span className="text-xs text-muted-foreground">Can manage children, artwork, and invite others</span>
                         </div>
                       </SelectItem>
                       <SelectItem value="member" className="py-3">
                         <div className="flex flex-col items-start gap-0.5">
                           <span className="font-medium">Member</span>
-                          <span className="text-xs text-muted-foreground whitespace-normal">Can view and add artwork</span>
+                          <span className="text-xs text-muted-foreground">Can view and add artwork</span>
                         </div>
                       </SelectItem>
                       <SelectItem value="viewer" className="py-3">
                         <div className="flex flex-col items-start gap-0.5">
                           <span className="font-medium">Viewer</span>
-                          <span className="text-xs text-muted-foreground whitespace-normal">Can only view artwork</span>
+                          <span className="text-xs text-muted-foreground">Can only view artwork</span>
                         </div>
                       </SelectItem>
                     </SelectContent>

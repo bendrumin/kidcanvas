@@ -90,9 +90,15 @@ export default async function InvitePage({ params }: InvitePageProps) {
               <Users className="w-8 h-8 text-white" />
             </div>
             <CardTitle className="text-2xl font-display">You're Invited!</CardTitle>
-            <CardDescription>
-              Join <strong>{family?.name}</strong> on KidCanvas
+            <CardDescription className="text-base">
+              You've been invited to join the
             </CardDescription>
+            <div className="mt-2 px-4 py-3 bg-gradient-to-r from-crayon-pink/10 to-crayon-purple/10 rounded-xl">
+              <p className="text-xl font-display font-bold text-foreground">
+                {family?.name}
+              </p>
+              <p className="text-sm text-muted-foreground">Family Gallery</p>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="mb-6 p-4 bg-gradient-to-r from-crayon-purple/10 to-crayon-pink/10 rounded-xl text-center">

@@ -44,11 +44,11 @@ chmod +x generate-icons.sh
 4. **12.9" iPad Pro**: 2048 x 2732 px
 
 ### Suggested Screenshots
-1. Gallery view with artwork displayed
-2. Scanning artwork with VisionKit
-3. Artwork detail page
-4. Add child flow
-5. Share artwork feature
+1. Gallery view with artwork displayed (cork board design)
+2. Scanning artwork with VisionKit camera
+3. Artwork detail page with age tracking
+4. Favorites view
+5. Profile/Family settings
 
 ---
 
@@ -65,45 +65,41 @@ chmod +x generate-icons.sh
 Preserve your children's precious artwork forever with KidCanvas – the family art gallery app designed for parents and grandparents.
 
 📸 SCAN & DIGITIZE
-Use your iPhone's camera with advanced edge detection to perfectly capture artwork. Our VisionKit-powered scanner automatically detects paper edges and removes backgrounds.
+Use your iPhone's camera with advanced edge detection to perfectly capture artwork. Our VisionKit-powered scanner automatically detects paper edges for clean, professional scans.
 
 👨‍👩‍👧‍👦 FAMILY GALLERY
 Organize artwork by child and see their artistic growth over time. Track their age at each creation for a beautiful timeline of their development.
 
-❤️ FAVORITES & COLLECTIONS
-Star your favorite pieces and create themed collections – "Holiday Art," "School Projects," "Gifts for Grandma."
+❤️ FAVORITES
+Star your favorite pieces to quickly find your most treasured artwork.
 
-🔗 SHARE WITH FAMILY
-Generate shareable links so grandparents can view and download artwork without needing an account.
-
-☁️ CLOUD BACKUP
+☁️ SECURE CLOUD STORAGE
 Your artwork is securely stored in the cloud. Access your gallery from any device, anytime.
 
 FEATURES:
 • VisionKit document scanning with edge detection
 • Organize by child with age tracking
-• Favorites and collections
-• Public sharing links
-• Multi-family support
+• Favorites collection
 • Beautiful post-it note gallery design
-• iCloud sync across devices
+• Multi-family support
+• Dark mode
+• Works on iPhone and iPad
 
 SUBSCRIPTION PLANS:
-• Free: Up to 50 artworks, 3 children
+• Free: Up to 100 artworks, 3 children
 • Family ($4.99/mo): Unlimited artworks & children
-• Pro ($9.99/mo): Multiple families, bulk upload
 
 Every scribble tells a story. Start preserving them today.
 ```
 
 ### Keywords (100 chars max)
 ```
-kids art,artwork,scanner,family,gallery,children,photos,keepsake,memories,craft
+kids art,artwork,scanner,family,gallery,children,photos,keepsake,memories,organize
 ```
 
 ### Promotional Text (170 chars, can update anytime)
 ```
-🎨 New! Share artwork with grandparents using shareable links – no account needed!
+🎨 Scan and preserve your children's artwork with VisionKit edge detection. Beautiful cork board gallery design!
 ```
 
 ### What's New (Release Notes)
@@ -111,10 +107,12 @@ kids art,artwork,scanner,family,gallery,children,photos,keepsake,memories,craft
 Welcome to KidCanvas 1.0! 🎉
 
 • Scan artwork with VisionKit edge detection
-• Beautiful post-it note gallery design
-• Share artwork with shareable links
+• Beautiful post-it note cork board gallery
+• Organize artwork by child with age tracking
+• Favorites to save your best pieces
 • Multi-family support
-• Stripe payment integration
+• Dark mode
+• Works on iPhone and iPad
 ```
 
 ---
@@ -122,7 +120,7 @@ Welcome to KidCanvas 1.0! 🎉
 ## 4. Privacy Policy & Support URLs
 
 ### Privacy Policy (Required)
-Host at: `https://kidcanvas-jet.vercel.app/privacy`
+Host at: `https://kidcanvas.app/privacy`
 
 Create a privacy policy page covering:
 - Data collected (email, photos, children's names)
@@ -132,27 +130,26 @@ Create a privacy policy page covering:
 - Contact information
 
 ### Support URL (Required)
-`https://kidcanvas-jet.vercel.app/support`
+`https://kidcanvas.app/support`
 
 ### Marketing URL (Optional)
-`https://kidcanvas-jet.vercel.app`
+`https://kidcanvas.app`
 
 ---
 
 ## 5. In-App Purchases Setup
 
-### Products to Create in App Store Connect
-1. **KidCanvas Family** (Auto-Renewable Subscription)
-   - Monthly: $4.99
-   - Yearly: $49.99
-   - Group: KidCanvas Premium
+### Current Implementation
+The iOS app currently uses **web checkout via Stripe**. Users are directed to the web app for subscription management.
 
-2. **KidCanvas Pro** (Auto-Renewable Subscription)
-   - Monthly: $9.99
-   - Yearly: $99.99
-   - Group: KidCanvas Premium
+### If You Want Native IAP (Optional)
+To add native Apple In-App Purchases, you would need to:
+1. Integrate StoreKit 2
+2. Create products in App Store Connect:
+   - **KidCanvas Family Monthly**: $4.99
+   - **KidCanvas Family Yearly**: $49.99
 
-> Note: iOS app currently uses web checkout via Stripe. For native IAP, you'll need to integrate StoreKit 2.
+> Note: Apple takes 15-30% commission on IAP. Web checkout via Stripe has lower fees but requires users to leave the app.
 
 ---
 
@@ -216,7 +213,7 @@ Create a privacy policy page covering:
 ### Code
 - [ ] All API keys removed from source (use Config.swift)
 - [ ] Debug logs removed
-- [ ] Minimum iOS version set (16.0)
+- [ ] Minimum iOS version set (17.0)
 - [ ] All entitlements correct
 
 ### Assets

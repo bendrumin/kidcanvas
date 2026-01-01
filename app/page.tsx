@@ -1,559 +1,274 @@
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { 
-  Sparkles, 
-  Camera, 
-  Users, 
-  Heart, 
-  Shield, 
   Palette,
   ArrowRight,
   Check,
-  Star
 } from 'lucide-react'
-
-const fadeInUp = {
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0 },
-}
-
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-}
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background overflow-hidden">
-      {/* Navigation */}
-      <motion.nav 
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b"
+    <div className="min-h-screen bg-[#FFFBF5] dark:bg-background overflow-hidden">
+      {/* Simple Navigation */}
+      <nav 
+        className="fixed top-0 left-0 right-0 z-50 bg-[#FFFBF5]/90 dark:bg-background/90 backdrop-blur-sm border-b border-amber-100 dark:border-border"
         role="navigation"
         aria-label="Main navigation"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <motion.div 
-              className="flex items-center gap-2"
-              whileHover={{ scale: 1.02 }}
-            >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center shadow-lg shadow-pink-200/50 dark:shadow-pink-900/30">
-                <Palette className="w-6 h-6 text-white" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-14">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#E91E63] to-[#9B59B6] flex items-center justify-center">
+                <Palette className="w-4 h-4 text-white" />
               </div>
-              <span className="text-2xl font-display font-bold bg-gradient-to-r from-crayon-pink to-crayon-purple bg-clip-text text-transparent">
+              <span className="text-xl font-bold text-foreground">
                 KidCanvas
               </span>
-            </motion.div>
-            <div className="flex items-center gap-2 sm:gap-4">
+            </div>
+            <div className="flex items-center gap-2">
               <ThemeToggle />
               <Link href="/login">
-                <Button variant="ghost" className="font-semibold">
-                  Log in
-                </Button>
+                <Button variant="ghost" size="sm">Log in</Button>
               </Link>
               <Link href="/signup">
-                <Button className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90 shadow-lg shadow-pink-200/50 dark:shadow-pink-900/30">
+                <Button size="sm" className="bg-[#E91E63] hover:bg-[#C2185B]">
                   Get Started
                 </Button>
               </Link>
             </div>
           </div>
         </div>
-      </motion.nav>
+      </nav>
 
-      {/* Hero Section */}
-      <section 
-        className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative" 
-        id="main-content"
-        aria-labelledby="hero-heading"
-      >
-        {/* Floating decorative elements - hidden from screen readers */}
-        <motion.div 
-          className="absolute top-40 left-[10%] text-6xl"
-          animate={{ 
-            y: [0, -15, 0],
-            rotate: [-5, 5, -5]
-          }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          aria-hidden="true"
-        >
-          🎨
-        </motion.div>
-        <motion.div 
-          className="absolute top-60 right-[15%] text-5xl"
-          animate={{ 
-            y: [0, 15, 0],
-            rotate: [5, -5, 5]
-          }}
-          transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-          aria-hidden="true"
-        >
-          ✏️
-        </motion.div>
-        <motion.div 
-          className="absolute bottom-40 left-[20%] text-4xl hidden lg:block"
-          animate={{ 
-            y: [0, -10, 0],
-            x: [0, 5, 0]
-          }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          aria-hidden="true"
-        >
-          🖍️
-        </motion.div>
-        <motion.div 
-          className="absolute top-80 right-[25%] text-4xl hidden lg:block"
-          animate={{ 
-            y: [0, 10, 0],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          aria-hidden="true"
-        >
-          🌈
-        </motion.div>
-
-        <div className="max-w-7xl mx-auto">
-          <motion.div 
-            className="text-center max-w-4xl mx-auto"
-            initial="initial"
-            animate="animate"
-            variants={staggerContainer}
-          >
-            <motion.div 
-              variants={fadeInUp}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 bg-white/80 dark:bg-card/80 backdrop-blur rounded-full px-4 py-2 mb-8 border shadow-lg shadow-orange-100 dark:shadow-none"
-            >
-              <Sparkles className="w-4 h-4 text-crayon-yellow" />
-              <span className="text-sm font-medium text-foreground">Every scribble tells a story</span>
-              <Star className="w-4 h-4 text-crayon-yellow fill-crayon-yellow" />
-            </motion.div>
-            
-            <motion.h1 
-              id="hero-heading"
-              variants={fadeInUp}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-foreground mb-6 leading-tight"
-            >
-              Preserve Your Children's{' '}
-              <span className="relative inline-block">
-                <motion.span 
-                  className="relative z-10 bg-gradient-to-r from-crayon-pink via-crayon-purple to-crayon-blue bg-clip-text text-transparent"
-                  animate={{ 
-                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                  }}
-                  transition={{ duration: 5, repeat: Infinity }}
-                  style={{ backgroundSize: '200% 200%' }}
-                >
-                  Masterpieces
-                </motion.span>
-                <motion.svg 
-                  className="absolute -bottom-2 left-0 w-full" 
-                  viewBox="0 0 300 12" 
-                  fill="none"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 1 }}
-                  transition={{ duration: 1, delay: 0.5 }}
-                >
-                  <motion.path 
-                    d="M2 8C50 3 100 3 150 6C200 9 250 5 298 8" 
-                    stroke="url(#gradient)" 
-                    strokeWidth="4" 
-                    strokeLinecap="round"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 1.5, delay: 0.8 }}
-                  />
-                  <defs>
-                    <linearGradient id="gradient" x1="0" y1="0" x2="300" y2="0">
-                      <stop offset="0%" stopColor="#E91E63"/>
-                      <stop offset="50%" stopColor="#9B59B6"/>
-                      <stop offset="100%" stopColor="#3498DB"/>
-                    </linearGradient>
-                  </defs>
-                </motion.svg>
-              </span>
-            </motion.h1>
-            
-            <motion.p 
-              variants={fadeInUp}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
-            >
-              Scan, organize, and share your kids' artwork with the whole family. 
-              From finger paintings to first portraits — keep every precious creation safe forever.
-            </motion.p>
-            
-            <motion.div 
-              variants={fadeInUp}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4"
-            >
-              <Link href="/signup">
-                <Button size="lg" className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90 text-lg px-8 shadow-xl shadow-pink-200/50 group">
-                  Start Your Gallery
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <Link href="#features">
-                <Button size="lg" variant="outline" className="text-lg px-8 border-2">
-                  See How It Works
-                </Button>
-              </Link>
-            </motion.div>
-          </motion.div>
+      {/* Hero - Simple, Personal */}
+      <section className="pt-24 pb-12 px-4 sm:px-6" id="main-content">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-[#E91E63] font-medium mb-4 text-sm uppercase tracking-wide">
+            For parents drowning in artwork
+          </p>
           
-          {/* Hero Gallery Preview */}
-          <motion.div 
-            className="mt-16 relative"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          >
-            <div className="bg-gradient-to-br from-white to-amber-50 dark:from-card dark:to-card rounded-3xl shadow-2xl p-8 max-w-5xl mx-auto border-2 relative overflow-hidden">
-              {/* Cork board texture effect */}
-              <div className="absolute inset-0 opacity-5 dark:opacity-[0.02] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNjUiIG51bU9jdGF2ZXM9IjMiIHN0aXRjaFRpbGVzPSJzdGl0Y2giLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIi8+PC9zdmc+')]" />
-              
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 relative">
-                {[
-                  { emoji: '🌸', color: 'from-pink-100 to-pink-200 dark:from-pink-900/40 dark:to-pink-800/40', rotate: -3, label: 'Emma, 5' },
-                  { emoji: '🚀', color: 'from-blue-100 to-blue-200 dark:from-blue-900/40 dark:to-blue-800/40', rotate: 2, label: 'Lucas, 7' },
-                  { emoji: '🌈', color: 'from-purple-100 to-purple-200 dark:from-purple-900/40 dark:to-purple-800/40', rotate: -1, label: 'Sofia, 4' },
-                  { emoji: '🦋', color: 'from-yellow-100 to-yellow-200 dark:from-yellow-900/40 dark:to-yellow-800/40', rotate: 3, label: 'Oliver, 6' },
-                ].map((item, i) => (
-                  <motion.div
-                    key={i}
-                    className="relative"
-                    initial={{ opacity: 0, scale: 0.8, rotate: item.rotate - 10 }}
-                    animate={{ opacity: 1, scale: 1, rotate: item.rotate }}
-                    transition={{ duration: 0.5, delay: 0.7 + i * 0.15 }}
-                    whileHover={{ scale: 1.05, rotate: 0, zIndex: 10 }}
-                  >
-                    {/* Tape decoration */}
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-5 bg-gradient-to-r from-yellow-200 to-yellow-300 dark:from-yellow-600 dark:to-yellow-500 rounded-sm transform -rotate-2 shadow-sm z-10" />
-                    
-                    <div className={`bg-white dark:bg-secondary p-2 rounded-sm shadow-lg`}>
-                      <div className={`aspect-square rounded-sm bg-gradient-to-br ${item.color} flex items-center justify-center text-5xl`}>
-                        {item.emoji}
-                      </div>
-                      <p className="text-center text-sm text-muted-foreground mt-2 font-medium">{item.label}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-              
-              {/* Floating heart badge */}
-              <motion.div 
-                className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-to-br from-crayon-red to-crayon-pink rounded-full flex items-center justify-center shadow-lg"
-                animate={{ 
-                  scale: [1, 1.1, 1],
-                  rotate: [0, 5, -5, 0]
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <Heart className="w-8 h-8 text-white" fill="white" />
-              </motion.div>
-            </div>
-          </motion.div>
+          <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight">
+            Stop throwing away your kids' masterpieces
+          </h1>
+          
+          <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
+            Upload photos of artwork. Tag the artist. Share with grandparents. 
+            Find "that rainbow drawing from last summer" in seconds.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link href="/signup">
+              <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8">
+                Start free — 100 artworks included
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+          
+          <p className="mt-4 text-sm text-muted-foreground">
+            📱 iOS app coming soon to the App Store
+          </p>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 bg-white dark:bg-card relative" aria-labelledby="features-heading">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 id="features-heading" className="text-4xl font-display font-bold text-foreground mb-4">
-              Everything You Need to Preserve Memories
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Simple tools designed for busy parents and loving grandparents
+      {/* The Problem - Relatable Story */}
+      <section className="py-12 px-4 sm:px-6">
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-white dark:bg-card rounded-2xl p-8 shadow-sm border border-amber-100 dark:border-border">
+            <p className="text-lg text-foreground leading-relaxed">
+              <span className="text-2xl">🎨</span> Your kid comes home with a painting. 
+              It goes on the fridge. Then another. And another. 
             </p>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Camera,
-                color: 'from-crayon-blue to-crayon-purple',
-                title: 'Smart Scanning',
-                description: 'Use our iOS app with VisionKit to automatically detect edges, correct perspective, and remove glare. Stack scanning made fast.'
-              },
-              {
-                icon: Users,
-                color: 'from-crayon-green to-crayon-blue',
-                title: 'Family Sharing',
-                description: 'Invite grandparents, aunts, uncles — everyone can view and contribute. Role-based permissions keep you in control.'
-              },
-              {
-                icon: Sparkles,
-                color: 'from-crayon-orange to-crayon-pink',
-                title: 'AI Auto-Tagging',
-                description: 'Our AI automatically describes and tags artwork. "Colorful butterfly drawing with rainbow" — searchable and organized.'
-              },
-            ].map((feature, i) => (
-              <motion.div 
-                key={i} 
-                className="group p-8 rounded-3xl bg-gradient-to-br from-gray-50 to-white dark:from-secondary dark:to-card border-2 hover:border-primary/20 transition-all hover:shadow-xl"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{ y: -5 }}
-              >
-                <motion.div 
-                  className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6 shadow-lg`}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                >
-                  <feature.icon className="w-7 h-7 text-white" />
-                </motion.div>
-                <h3 className="text-xl font-display font-bold text-foreground mb-3">
-                  {feature.title}
-                </h3>
-                <p className="text-muted-foreground">
-                  {feature.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-20 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute top-10 left-10 text-8xl opacity-10">🖌️</div>
-        <div className="absolute bottom-10 right-10 text-8xl opacity-10">🎨</div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <motion.div 
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-4xl font-display font-bold text-foreground mb-4">
-              How It Works
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Three simple steps to preserve artwork forever
+            <p className="text-lg text-foreground leading-relaxed mt-4">
+              Soon you have a <span className="font-semibold">pile</span>. 
+              You feel <span className="font-semibold">guilty</span> throwing any away. 
+              The good ones get <span className="font-semibold">damaged</span> in a drawer.
             </p>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { step: '1', title: 'Scan or Upload', desc: 'Use the iOS app to scan artwork or drag & drop photos on the web.', emoji: '📸' },
-              { step: '2', title: 'Add Details', desc: 'Tag the artist, add a title, and let AI suggest descriptions.', emoji: '✨' },
-              { step: '3', title: 'Share & Enjoy', desc: 'Family members can browse, favorite, and download anytime.', emoji: '💝' },
-            ].map((item, i) => (
-              <motion.div 
-                key={i} 
-                className="relative text-center"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.2 }}
-              >
-                <motion.div 
-                  className="w-20 h-20 rounded-full bg-gradient-to-br from-crayon-pink to-crayon-purple text-white text-3xl font-display font-bold flex items-center justify-center mx-auto mb-6 shadow-xl shadow-pink-200/50 dark:shadow-pink-900/30"
-                  whileHover={{ scale: 1.1 }}
-                >
-                  {item.emoji}
-                </motion.div>
-                <h3 className="text-xl font-display font-bold text-foreground mb-2">
-                  <span className="text-primary">{item.step}.</span> {item.title}
-                </h3>
-                <p className="text-muted-foreground">{item.desc}</p>
-                {i < 2 && (
-                  <div className="hidden md:block absolute top-10 left-[60%] w-[80%] border-t-2 border-dashed border-primary/30" />
-                )}
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section className="py-20 bg-white dark:bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-4xl font-display font-bold text-foreground mb-4">
-              Simple Pricing
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Start free, upgrade when you're ready
+            <p className="text-lg text-foreground leading-relaxed mt-4">
+              <span className="text-2xl">📸</span> <span className="font-semibold">KidCanvas fixes this.</span> 
+              {" "}Snap a photo, tag the artist, done. Grandma can see it instantly. 
+              You can find it years later.
             </p>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Free Plan */}
-            <motion.div 
-              className="p-8 rounded-3xl border-2 bg-white dark:bg-card hover:shadow-lg transition-shadow"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-2xl font-display font-bold text-foreground mb-2">Free</h3>
-              <p className="text-muted-foreground mb-6">Perfect for getting started</p>
-              <div className="text-4xl font-display font-bold text-foreground mb-6">
-                $0<span className="text-lg font-normal text-muted-foreground">/month</span>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {['1 family', '2 children profiles', '100 artworks', 'Basic gallery', 'Web upload'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-foreground">
-                    <Check className="w-5 h-5 text-crayon-green" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link href="/signup">
-                <Button variant="outline" className="w-full" size="lg">
-                  Get Started Free
-                </Button>
-              </Link>
-            </motion.div>
-            
-            {/* Family Plan */}
-            <motion.div 
-              className="p-8 rounded-3xl border-2 border-primary bg-gradient-to-br from-pink-50 to-purple-50 dark:from-pink-950/40 dark:to-purple-950/40 relative hover:shadow-xl transition-shadow"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-crayon-pink to-crayon-purple text-white px-4 py-1 rounded-full text-sm font-semibold shadow-lg">
-                Most Popular ⭐
-              </div>
-              <h3 className="text-2xl font-display font-bold text-foreground mb-2">Family</h3>
-              <p className="text-muted-foreground mb-6">For growing families</p>
-              <div className="text-4xl font-display font-bold text-foreground mb-6">
-                $4.99<span className="text-lg font-normal text-muted-foreground">/month</span>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {['Unlimited children', 'Unlimited artworks', 'AI auto-tagging', 'Collections', 'Public gallery links', 'Priority support'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-foreground">
-                    <Check className="w-5 h-5 text-crayon-green" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link href="/signup">
-                <Button className="w-full bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90 shadow-lg" size="lg">
-                  Start 14-Day Trial
-                </Button>
-              </Link>
-              <p className="text-center text-sm text-muted-foreground mt-4">
-                or $49.99/year (save 17%)
-              </p>
-            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Trust Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-green-50 dark:from-blue-950/30 dark:to-green-950/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            {[
-              { icon: Shield, title: 'Your Data is Safe', desc: 'End-to-end encryption and secure cloud storage' },
-              { icon: Heart, title: 'Export Anytime', desc: 'Download your originals whenever you want — no lock-in' },
-              { icon: Users, title: 'Family First', desc: 'Designed by parents, for parents and grandparents' },
-            ].map((item, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <motion.div whileHover={{ scale: 1.1 }}>
-                  <item.icon className="w-12 h-12 text-primary mx-auto mb-4" />
-                </motion.div>
-                <h3 className="text-xl font-display font-bold text-foreground mb-2">{item.title}</h3>
-                <p className="text-muted-foreground">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-crayon-pink via-crayon-purple to-crayon-blue relative overflow-hidden">
-        {/* Floating elements */}
-        <motion.div 
-          className="absolute top-10 left-10 text-6xl opacity-20"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        >
-          ⭐
-        </motion.div>
-        <motion.div 
-          className="absolute bottom-10 right-20 text-5xl opacity-20"
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        >
-          🎨
-        </motion.div>
-        
-        <motion.div 
-          className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-4xl font-display font-bold text-white mb-6">
-            Start Preserving Memories Today
+      {/* Simple Demo - Show, Don't Tell */}
+      <section className="py-12 px-4 sm:px-6 bg-gradient-to-b from-transparent to-amber-50/50 dark:to-transparent">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold text-center text-foreground mb-8">
+            Here's what your gallery looks like
           </h2>
-          <p className="text-xl text-white/90 mb-8">
-            Join thousands of families keeping their children's creativity safe forever
+          
+          {/* Fake Gallery Preview */}
+          <div className="bg-white dark:bg-card rounded-2xl shadow-lg border border-amber-100 dark:border-border p-6 sm:p-8">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <p className="font-semibold text-foreground">The Johnson Family</p>
+                <p className="text-sm text-muted-foreground">47 artworks</p>
+              </div>
+              <div className="flex gap-2">
+                <span className="text-xs bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 px-2 py-1 rounded-full">Emma, 5</span>
+                <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">Lucas, 7</span>
+              </div>
+            </div>
+            
+            {/* Artwork Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+              {[
+                { bg: 'from-pink-200 to-rose-200 dark:from-pink-900/40 dark:to-rose-900/40', emoji: '🌸', title: 'Spring Flowers', artist: 'Emma' },
+                { bg: 'from-blue-200 to-indigo-200 dark:from-blue-900/40 dark:to-indigo-900/40', emoji: '🚀', title: 'Space Ship', artist: 'Lucas' },
+                { bg: 'from-green-200 to-emerald-200 dark:from-green-900/40 dark:to-emerald-900/40', emoji: '🦖', title: 'Dinosaur', artist: 'Lucas' },
+                { bg: 'from-purple-200 to-violet-200 dark:from-purple-900/40 dark:to-violet-900/40', emoji: '🌈', title: 'Rainbow Sky', artist: 'Emma' },
+              ].map((item, i) => (
+                <div key={i} className="group">
+                  <div className={`aspect-square rounded-lg bg-gradient-to-br ${item.bg} flex items-center justify-center text-4xl sm:text-5xl mb-2`}>
+                    {item.emoji}
+                  </div>
+                  <p className="text-sm font-medium text-foreground truncate">{item.title}</p>
+                  <p className="text-xs text-muted-foreground">{item.artist}</p>
+                </div>
+              ))}
+            </div>
+            
+            {/* Search demo */}
+            <div className="mt-6 pt-6 border-t border-amber-100 dark:border-border">
+              <p className="text-sm text-muted-foreground mb-2">Try searching:</p>
+              <div className="flex flex-wrap gap-2">
+                {['rainbow', 'Emma 2024', 'dinosaur', 'birthday'].map((term) => (
+                  <span key={term} className="text-xs bg-gray-100 dark:bg-secondary px-3 py-1.5 rounded-full text-foreground">
+                    {term}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Who It's For - Personal */}
+      <section className="py-12 px-4 sm:px-6">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-center text-foreground mb-8">
+            Built for real families
+          </h2>
+          
+          <div className="space-y-4">
+            {[
+              { 
+                emoji: '👨‍👩‍👧', 
+                title: 'Busy parents',
+                desc: 'Upload from your phone in 30 seconds. No filing, no organizing, no guilt.'
+              },
+              { 
+                emoji: '👵', 
+                title: 'Long-distance grandparents',
+                desc: 'See every new creation the moment it\'s uploaded. No texting needed.'
+              },
+              { 
+                emoji: '👨‍👧‍👦', 
+                title: 'Multi-kid households',
+                desc: 'Tag each artist. Filter by child. Never mix up whose is whose.'
+              },
+            ].map((item, i) => (
+              <div 
+                key={i} 
+                className="flex gap-4 p-4 bg-white dark:bg-card rounded-xl border border-amber-100 dark:border-border"
+              >
+                <span className="text-3xl">{item.emoji}</span>
+                <div>
+                  <p className="font-semibold text-foreground">{item.title}</p>
+                  <p className="text-muted-foreground text-sm">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing - Clean */}
+      <section className="py-12 px-4 sm:px-6 bg-white dark:bg-card border-y border-amber-100 dark:border-border">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-center text-foreground mb-2">
+            Simple pricing
+          </h2>
+          <p className="text-center text-muted-foreground mb-8">
+            Free for most families. Upgrade if you need more.
+          </p>
+          
+          <div className="grid sm:grid-cols-2 gap-4">
+            {/* Free */}
+            <div className="p-6 rounded-xl border-2 border-gray-200 dark:border-border bg-gray-50 dark:bg-secondary">
+              <p className="font-bold text-foreground text-lg">Free</p>
+              <p className="text-3xl font-bold text-foreground mt-1">$0</p>
+              <p className="text-muted-foreground text-sm mb-4">Forever</p>
+              <ul className="space-y-2 text-sm">
+                {['100 artworks', '2 children', '1 family', 'Web upload'].map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-foreground">
+                    <Check className="w-4 h-4 text-green-600" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            {/* Family */}
+            <div className="p-6 rounded-xl border-2 border-[#E91E63] bg-gradient-to-br from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30">
+              <p className="font-bold text-foreground text-lg">Family</p>
+              <p className="text-3xl font-bold text-foreground mt-1">$4.99<span className="text-sm font-normal text-muted-foreground">/mo</span></p>
+              <p className="text-muted-foreground text-sm mb-4">or $49/year</p>
+              <ul className="space-y-2 text-sm">
+                {['Unlimited artworks', 'Unlimited children', 'AI auto-tagging', 'Share with anyone', 'Priority support'].map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-foreground">
+                    <Check className="w-4 h-4 text-green-600" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA - Personal */}
+      <section className="py-16 px-4 sm:px-6">
+        <div className="max-w-xl mx-auto text-center">
+          <p className="text-4xl mb-4">🎨</p>
+          <h2 className="text-2xl font-bold text-foreground mb-4">
+            Stop losing artwork to the recycling bin
+          </h2>
+          <p className="text-muted-foreground mb-6">
+            Takes 2 minutes to set up. Free for up to 100 artworks.
           </p>
           <Link href="/signup">
-            <Button size="lg" className="bg-white text-primary hover:bg-white/90 text-lg px-8 shadow-xl group">
-              Create Your Free Gallery
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8">
+              Create your family gallery
+              <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </Link>
-        </motion.div>
+        </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 bg-gray-900 text-white" role="contentinfo">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center" aria-hidden="true">
-                <Palette className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-display font-bold">KidCanvas</span>
+      {/* Footer - Minimal */}
+      <footer className="py-8 px-4 sm:px-6 border-t border-amber-100 dark:border-border" role="contentinfo">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded bg-gradient-to-br from-[#E91E63] to-[#9B59B6] flex items-center justify-center">
+              <Palette className="w-3 h-3 text-white" />
             </div>
-            <nav className="flex items-center gap-8 text-sm text-gray-400" aria-label="Footer navigation">
-              <Link href="/privacy" className="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded">Privacy</Link>
-              <Link href="/terms" className="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded">Terms</Link>
-              <Link href="/contact" className="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded">Contact</Link>
-            </nav>
-            <p className="text-sm text-gray-400">
-              © {new Date().getFullYear()} KidCanvas. Made with <span aria-label="love">❤️</span> for families.
-            </p>
+            <span className="font-semibold text-foreground">KidCanvas</span>
           </div>
+          <nav className="flex items-center gap-6 text-sm text-muted-foreground" aria-label="Footer navigation">
+            <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
+            <Link href="/terms" className="hover:text-foreground">Terms</Link>
+            <Link href="/support" className="hover:text-foreground">Support</Link>
+          </nav>
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} KidCanvas
+          </p>
         </div>
       </footer>
     </div>

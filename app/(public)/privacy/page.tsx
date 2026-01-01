@@ -147,8 +147,7 @@ export default function PrivacyPage() {
               If you have questions about this Privacy Policy or your data, contact us at:
             </p>
             <p className="text-gray-600 mt-4">
-              <strong>Email:</strong> privacy@kidcanvas.app<br />
-              <strong>Support:</strong> <Link href="/support" className="text-primary hover:underline">kidcanvas.app/support</Link>
+              <strong>Support:</strong> <Link href="/support" className="text-primary hover:underline">Visit our Support Page</Link>
             </p>
           </section>
 

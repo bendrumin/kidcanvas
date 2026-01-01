@@ -4,12 +4,17 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 
+// Trim credentials to remove any accidental whitespace/newlines
+const r2Endpoint = process.env.R2_ENDPOINT?.trim()
+const r2AccessKeyId = process.env.R2_ACCESS_KEY_ID?.trim()
+const r2SecretAccessKey = process.env.R2_SECRET_ACCESS_KEY?.trim()
+
 const s3Client = new S3Client({
   region: 'auto',
-  endpoint: process.env.R2_ENDPOINT,
+  endpoint: r2Endpoint,
   credentials: {
-    accessKeyId: process.env.R2_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+    accessKeyId: r2AccessKeyId || '',
+    secretAccessKey: r2SecretAccessKey || '',
   },
   forcePathStyle: true, // Required for R2 compatibility
 })
@@ -57,20 +62,33 @@ export async function POST(request: NextRequest) {
     const thumbnailKey = `artwork/${familyId}/${imageId}_thumb.jpg`
 
     // Upload to R2
-    await Promise.all([
-      s3Client.send(new PutObjectCommand({
-        Bucket: process.env.R2_BUCKET,
-        Key: originalKey,
-        Body: originalBuffer,
-        ContentType: 'image/jpeg',
-      })),
-      s3Client.send(new PutObjectCommand({
-        Bucket: process.env.R2_BUCKET,
-        Key: thumbnailKey,
-        Body: thumbnailBuffer,
-        ContentType: 'image/jpeg',
-      })),
-    ])
+    console.log('Uploading to R2...', { 
+      bucket: process.env.R2_BUCKET, 
+      endpoint: process.env.R2_ENDPOINT,
+      originalKey,
+      thumbnailKey 
+    })
+    
+    try {
+      await Promise.all([
+        s3Client.send(new PutObjectCommand({
+          Bucket: process.env.R2_BUCKET,
+          Key: originalKey,
+          Body: originalBuffer,
+          ContentType: 'image/jpeg',
+        })),
+        s3Client.send(new PutObjectCommand({
+          Bucket: process.env.R2_BUCKET,
+          Key: thumbnailKey,
+          Body: thumbnailBuffer,
+          ContentType: 'image/jpeg',
+        })),
+      ])
+      console.log('R2 upload successful')
+    } catch (r2Error) {
+      console.error('R2 upload failed:', r2Error)
+      throw r2Error
+    }
 
     const imageUrl = `${process.env.R2_PUBLIC_URL}/${originalKey}`
     const thumbnailUrl = `${process.env.R2_PUBLIC_URL}/${thumbnailKey}`
@@ -112,8 +130,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, artwork: data })
   } catch (error) {
     console.error('Upload error:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json(
-      { error: 'Upload failed' },
+      { error: 'Upload failed', details: errorMessage },
       { status: 500 }
     )
   }

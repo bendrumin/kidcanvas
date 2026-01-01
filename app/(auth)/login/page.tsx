@@ -87,16 +87,11 @@ function LoginContent() {
   return (
     <main 
       id="main-content" 
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background p-4"
+      className="min-h-screen flex items-center justify-center bg-[#FFFBF5] dark:bg-background p-4"
       role="main"
       aria-labelledby="login-heading"
     >
-      {/* Decorative elements - hidden from screen readers */}
-      <div className="absolute top-20 left-10 w-32 h-32 bg-crayon-yellow/20 dark:bg-crayon-yellow/10 rounded-full blur-3xl" aria-hidden="true" />
-      <div className="absolute bottom-20 right-10 w-40 h-40 bg-crayon-pink/20 dark:bg-crayon-pink/10 rounded-full blur-3xl" aria-hidden="true" />
-      <div className="absolute top-1/3 right-1/4 w-24 h-24 bg-crayon-blue/20 dark:bg-crayon-blue/10 rounded-full blur-3xl" aria-hidden="true" />
-
-      <div className="w-full max-w-md relative z-10">
+      <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2" aria-label="KidCanvas home">
@@ -253,7 +248,7 @@ function LoginContent() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFBF5] dark:bg-background">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     }>
