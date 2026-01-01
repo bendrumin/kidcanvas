@@ -1,17 +1,17 @@
+import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Check, Sparkles, Crown, Zap } from 'lucide-react'
-import Link from 'next/link'
+import { Check, Sparkles, Crown, Zap, AlertCircle } from 'lucide-react'
+import { BillingActions } from '@/components/billing/billing-actions'
+import { cookies } from 'next/headers'
 
 const plans = [
   {
     id: 'free',
     name: 'Free',
     description: 'Perfect for getting started',
-    price: 0,
-    interval: 'month',
+    price: { month: 0, year: 0 },
     features: [
       'Up to 50 artworks',
       '1 family',
@@ -31,8 +31,11 @@ const plans = [
     id: 'family',
     name: 'Family',
     description: 'Everything your family needs',
-    price: 4.99,
-    interval: 'month',
+    price: { month: 4.99, year: 49.99 },
+    priceId: {
+      month: process.env.STRIPE_FAMILY_PRICE_ID,
+      year: process.env.STRIPE_FAMILY_YEARLY_PRICE_ID,
+    },
     features: [
       'Unlimited artworks',
       '1 family',
@@ -50,8 +53,11 @@ const plans = [
     id: 'pro',
     name: 'Pro',
     description: 'For extended families & schools',
-    price: 9.99,
-    interval: 'month',
+    price: { month: 9.99, year: 99.99 },
+    priceId: {
+      month: process.env.STRIPE_PRO_PRICE_ID,
+      year: process.env.STRIPE_PRO_YEARLY_PRICE_ID,
+    },
     features: [
       'Everything in Family',
       'Multiple families',
@@ -67,12 +73,65 @@ const plans = [
   },
 ]
 
+async function getSubscriptionData(userId: string, supabase: any) {
+  // Get subscription
+  const { data: subscription } = await supabase
+    .from('subscriptions')
+    .select('*')
+    .eq('user_id', userId)
+    .single()
+
+  // Get usage stats
+  const cookieStore = await cookies()
+  const selectedFamilyId = cookieStore.get('selected_family')?.value
+
+  let artworkCount = 0
+  let childrenCount = 0
+
+  if (selectedFamilyId) {
+    const [artworksResult, childrenResult] = await Promise.all([
+      supabase.from('artworks').select('id', { count: 'exact' }).eq('family_id', selectedFamilyId),
+      supabase.from('children').select('id', { count: 'exact' }).eq('family_id', selectedFamilyId),
+    ])
+    artworkCount = artworksResult.count || 0
+    childrenCount = childrenResult.count || 0
+  }
+
+  // Get family count
+  const { count: familyCount } = await supabase
+    .from('family_members')
+    .select('id', { count: 'exact' })
+    .eq('user_id', userId)
+
+  return {
+    subscription: subscription || { plan_id: 'free', status: 'active' },
+    usage: {
+      artworks: artworkCount,
+      children: childrenCount,
+      families: familyCount || 0,
+    },
+  }
+}
+
 export default async function BillingPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  // In a real app, you'd fetch the user's current subscription from Stripe
-  const currentPlan = 'free' // Placeholder
+  if (!user) {
+    return null
+  }
+
+  const { subscription, usage } = await getSubscriptionData(user.id, supabase)
+  const currentPlan = subscription.plan_id || 'free'
+  const isActive = subscription.status === 'active' || subscription.status === 'trialing'
+
+  // Plan limits based on current plan
+  const planLimits: Record<string, { artworks: number; children: number; families: number }> = {
+    free: { artworks: 50, children: 3, families: 1 },
+    family: { artworks: -1, children: -1, families: 1 },
+    pro: { artworks: -1, children: -1, families: -1 },
+  }
+  const limits = planLimits[currentPlan] || planLimits.free
 
   return (
     <div className="space-y-8">
@@ -83,113 +142,160 @@ export default async function BillingPage() {
         </p>
       </div>
 
+      {/* Success/Cancel Messages */}
+      <Suspense fallback={null}>
+        <BillingMessages />
+      </Suspense>
+
       {/* Current Plan */}
-      <Card className="border-2 border-primary/20 bg-primary/5">
+      <Card className={`border-2 ${subscription.status === 'past_due' ? 'border-destructive/50 bg-destructive/5' : 'border-primary/20 bg-primary/5'}`}>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-lg">Current Plan</CardTitle>
-              <CardDescription>You're currently on the Free plan</CardDescription>
+              <CardDescription>
+                You're currently on the {plans.find(p => p.id === currentPlan)?.name || 'Free'} plan
+                {subscription.cancel_at_period_end && ' (cancels at period end)'}
+              </CardDescription>
             </div>
-            <Badge variant="secondary" className="text-lg px-4 py-1">
-              Free
-            </Badge>
+            <div className="flex items-center gap-2">
+              {subscription.status === 'past_due' && (
+                <Badge variant="destructive" className="gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  Payment Failed
+                </Badge>
+              )}
+              <Badge variant="secondary" className="text-lg px-4 py-1 capitalize">
+                {plans.find(p => p.id === currentPlan)?.name || 'Free'}
+              </Badge>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
               <p className="text-muted-foreground">Artworks Used</p>
-              <p className="text-2xl font-bold">12 / 50</p>
+              <p className="text-2xl font-bold">
+                {usage.artworks} {limits.artworks > 0 ? `/ ${limits.artworks}` : ''}
+              </p>
             </div>
             <div>
               <p className="text-muted-foreground">Children</p>
-              <p className="text-2xl font-bold">2 / 3</p>
+              <p className="text-2xl font-bold">
+                {usage.children} {limits.children > 0 ? `/ ${limits.children}` : ''}
+              </p>
             </div>
             <div>
-              <p className="text-muted-foreground">Storage</p>
-              <p className="text-2xl font-bold">124 MB</p>
+              <p className="text-muted-foreground">Families</p>
+              <p className="text-2xl font-bold">
+                {usage.families} {limits.families > 0 ? `/ ${limits.families}` : ''}
+              </p>
             </div>
             <div>
-              <p className="text-muted-foreground">This Month</p>
-              <p className="text-2xl font-bold">5 uploads</p>
+              <p className="text-muted-foreground">Next Billing</p>
+              <p className="text-2xl font-bold">
+                {subscription.current_period_end
+                  ? new Date(subscription.current_period_end).toLocaleDateString()
+                  : '—'}
+              </p>
             </div>
           </div>
+          
+          {/* Manage Subscription Button */}
+          {subscription.stripe_customer_id && (
+            <div className="mt-6 pt-4 border-t">
+              <BillingActions 
+                hasSubscription={!!subscription.stripe_subscription_id}
+                currentPlan={currentPlan}
+              />
+            </div>
+          )}
         </CardContent>
       </Card>
 
       {/* Plan Cards */}
-      <div className="grid md:grid-cols-3 gap-6">
-        {plans.map((plan) => {
-          const Icon = plan.icon
-          const isCurrent = plan.id === currentPlan
-          
-          return (
-            <Card 
-              key={plan.id} 
-              className={`relative ${plan.popular ? 'border-2 border-primary shadow-lg' : ''}`}
-            >
-              {plan.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-gradient-to-r from-crayon-pink to-crayon-purple">
-                    Most Popular
-                  </Badge>
-                </div>
-              )}
-              
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <div className={`p-2 rounded-lg ${plan.popular ? 'bg-primary/10' : 'bg-muted'}`}>
-                    <Icon className={`w-5 h-5 ${plan.popular ? 'text-primary' : 'text-muted-foreground'}`} />
+      <div>
+        <h2 className="text-xl font-semibold mb-4">Available Plans</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {plans.map((plan) => {
+            const Icon = plan.icon
+            const isCurrent = plan.id === currentPlan
+            
+            return (
+              <Card 
+                key={plan.id} 
+                className={`relative ${plan.popular ? 'border-2 border-primary shadow-lg' : ''} ${isCurrent ? 'ring-2 ring-primary ring-offset-2' : ''}`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <Badge className="bg-gradient-to-r from-crayon-pink to-crayon-purple">
+                      Most Popular
+                    </Badge>
                   </div>
-                  <CardTitle>{plan.name}</CardTitle>
-                </div>
-                <CardDescription>{plan.description}</CardDescription>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold">${plan.price}</span>
-                  <span className="text-muted-foreground">/{plan.interval}</span>
-                </div>
-              </CardHeader>
-              
-              <CardContent className="space-y-4">
-                <ul className="space-y-2">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                      <span className="text-sm">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                )}
                 
-                {plan.limitations.length > 0 && (
-                  <ul className="space-y-2 pt-2 border-t">
-                    {plan.limitations.map((limitation) => (
-                      <li key={limitation} className="flex items-start gap-2 text-muted-foreground">
-                        <span className="w-5 h-5 flex items-center justify-center shrink-0">—</span>
-                        <span className="text-sm">{limitation}</span>
+                {isCurrent && (
+                  <div className="absolute -top-3 right-4">
+                    <Badge variant="secondary">Current</Badge>
+                  </div>
+                )}
+                
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <div className={`p-2 rounded-lg ${plan.popular ? 'bg-primary/10' : 'bg-muted'}`}>
+                      <Icon className={`w-5 h-5 ${plan.popular ? 'text-primary' : 'text-muted-foreground'}`} />
+                    </div>
+                    <CardTitle>{plan.name}</CardTitle>
+                  </div>
+                  <CardDescription>{plan.description}</CardDescription>
+                  <div className="mt-4">
+                    <span className="text-4xl font-bold">${plan.price.month}</span>
+                    <span className="text-muted-foreground">/month</span>
+                    {plan.price.year > 0 && (
+                      <p className="text-sm text-green-600 mt-1">
+                        or ${plan.price.year}/year (save ~17%)
+                      </p>
+                    )}
+                  </div>
+                </CardHeader>
+                
+                <CardContent className="space-y-4">
+                  <ul className="space-y-2">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2">
+                        <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+                        <span className="text-sm">{feature}</span>
                       </li>
                     ))}
                   </ul>
-                )}
-              </CardContent>
-              
-              <CardFooter>
-                {isCurrent ? (
-                  <Button className="w-full" variant="outline" disabled>
-                    Current Plan
-                  </Button>
-                ) : (
-                  <Button 
-                    className={`w-full ${plan.popular ? 'bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90' : ''}`}
-                    variant={plan.popular ? 'default' : 'outline'}
-                  >
-                    {plan.price === 0 ? 'Downgrade' : 'Upgrade'}
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
-          )
-        })}
+                  
+                  {plan.limitations.length > 0 && (
+                    <ul className="space-y-2 pt-2 border-t">
+                      {plan.limitations.map((limitation) => (
+                        <li key={limitation} className="flex items-start gap-2 text-muted-foreground">
+                          <span className="w-5 h-5 flex items-center justify-center shrink-0">—</span>
+                          <span className="text-sm">{limitation}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </CardContent>
+                
+                <CardFooter>
+                  <BillingActions
+                    planId={plan.id}
+                    priceId={plan.priceId?.month}
+                    yearlyPriceId={plan.priceId?.year}
+                    currentPlan={currentPlan}
+                    isCurrent={isCurrent}
+                    isPopular={plan.popular}
+                    hasSubscription={!!subscription.stripe_subscription_id}
+                  />
+                </CardFooter>
+              </Card>
+            )
+          })}
+        </div>
       </div>
 
       {/* Billing History */}
@@ -199,10 +305,20 @@ export default async function BillingPage() {
           <CardDescription>View your past invoices and payments</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8 text-muted-foreground">
-            <p>No billing history yet</p>
-            <p className="text-sm">Upgrade to a paid plan to see your invoices here</p>
-          </div>
+          {subscription.stripe_customer_id ? (
+            <div className="text-center py-4">
+              <BillingActions 
+                hasSubscription={!!subscription.stripe_subscription_id}
+                currentPlan={currentPlan}
+                showPortalOnly
+              />
+            </div>
+          ) : (
+            <div className="text-center py-8 text-muted-foreground">
+              <p>No billing history yet</p>
+              <p className="text-sm">Upgrade to a paid plan to see your invoices here</p>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -230,9 +346,20 @@ export default async function BillingPage() {
               We offer a 14-day money-back guarantee for all new subscriptions.
             </p>
           </div>
+          <div>
+            <h4 className="font-medium">What payment methods do you accept?</h4>
+            <p className="text-sm text-muted-foreground">
+              We accept all major credit cards (Visa, Mastercard, American Express) through Stripe.
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>
   )
+}
+
+// Separate client component for handling URL params
+function BillingMessages() {
+  return null // Will be handled by BillingActions client component
 }
 

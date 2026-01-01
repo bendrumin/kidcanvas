@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
+import { Toaster as SonnerToaster } from 'sonner'
 import { SkipLink } from '@/components/ui/skip-link'
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ export default function RootLayout({
         <SkipLink />
         {children}
         <Toaster />
+        <SonnerToaster richColors position="top-center" />
       </body>
     </html>
   )

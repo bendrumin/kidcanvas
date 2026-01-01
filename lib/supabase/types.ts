@@ -249,6 +249,51 @@ export interface Database {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          id: string
+          user_id: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          plan_id: 'free' | 'family' | 'pro'
+          status: 'active' | 'canceled' | 'past_due' | 'trialing' | 'incomplete'
+          billing_interval: 'month' | 'year' | null
+          current_period_start: string | null
+          current_period_end: string | null
+          cancel_at_period_end: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          plan_id?: 'free' | 'family' | 'pro'
+          status?: 'active' | 'canceled' | 'past_due' | 'trialing' | 'incomplete'
+          billing_interval?: 'month' | 'year' | null
+          current_period_start?: string | null
+          current_period_end?: string | null
+          cancel_at_period_end?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          plan_id?: 'free' | 'family' | 'pro'
+          status?: 'active' | 'canceled' | 'past_due' | 'trialing' | 'incomplete'
+          billing_interval?: 'month' | 'year' | null
+          current_period_start?: string | null
+          current_period_end?: string | null
+          cancel_at_period_end?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -297,6 +342,7 @@ export type Child = Database['public']['Tables']['children']['Row']
 export type Artwork = Database['public']['Tables']['artworks']['Row']
 export type Collection = Database['public']['Tables']['collections']['Row']
 export type ShareLink = Database['public']['Tables']['share_links']['Row']
+export type Subscription = Database['public']['Tables']['subscriptions']['Row']
 
 // Extended types with relations
 export type ArtworkWithChild = Artwork & {
