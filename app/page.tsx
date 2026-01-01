@@ -460,7 +460,7 @@ export default function LandingPage() {
                 </Button>
               </Link>
               <p className="text-center text-sm text-gray-500 mt-4">
-                or $49/year (save 32%)
+                or $49.99/year (save 17%)
               </p>
             </motion.div>
           </div>
