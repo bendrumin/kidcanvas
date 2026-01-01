@@ -3,6 +3,8 @@ import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { DashboardNav } from '@/components/dashboard/nav'
 import { DashboardHeader } from '@/components/dashboard/header'
+import { WhatsNewModal } from '@/components/changelog/whats-new-modal'
+import { OnboardingModal } from '@/components/onboarding/onboarding-modal'
 import type { FamilyMemberWithFamily, Family } from '@/lib/supabase/types'
 
 export default async function DashboardLayout({
@@ -40,6 +42,20 @@ export default async function DashboardLayout({
   
   const family = currentMembership?.families ?? null
   const role = currentMembership?.role ?? null
+  const familyId = family?.id ?? null
+
+  // Check if user has children (for onboarding)
+  let hasChildren = false
+  let hasArtwork = false
+  
+  if (familyId) {
+    const [childrenResult, artworkResult] = await Promise.all([
+      supabase.from('children').select('id').eq('family_id', familyId).limit(1),
+      supabase.from('artworks').select('id').eq('family_id', familyId).limit(1),
+    ])
+    hasChildren = (childrenResult.data?.length ?? 0) > 0
+    hasArtwork = (artworkResult.data?.length ?? 0) > 0
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50/50 via-white to-rose-50/50">
@@ -62,6 +78,14 @@ export default async function DashboardLayout({
           </div>
         </main>
       </div>
+      
+      {/* Modals */}
+      <WhatsNewModal />
+      <OnboardingModal 
+        hasChildren={hasChildren} 
+        hasArtwork={hasArtwork} 
+        familyId={familyId}
+      />
     </div>
   )
 }

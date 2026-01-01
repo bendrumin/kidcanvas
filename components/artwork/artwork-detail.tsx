@@ -57,8 +57,10 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
   
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isSharing, setIsSharing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isFavorite, setIsFavorite] = useState(artwork.is_favorite)
+  const [shareUrl, setShareUrl] = useState<string | null>(null)
   
   const [editForm, setEditForm] = useState({
     title: artwork.title,
@@ -66,6 +68,35 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
     createdDate: artwork.created_date,
     tags: artwork.tags?.join(', ') || '',
   })
+
+  const handleShare = async () => {
+    setIsSharing(true)
+    try {
+      const response = await fetch('/api/share', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ artworkId: artwork.id }),
+      })
+      
+      const data = await response.json()
+      
+      if (data.error) throw new Error(data.error)
+      
+      setShareUrl(data.url)
+      
+      // Copy to clipboard
+      await navigator.clipboard.writeText(data.url)
+      toast({ 
+        title: 'Link copied!', 
+        description: 'Share this link with family and friends' 
+      })
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create share link'
+      toast({ title: 'Error', description: errorMessage, variant: 'destructive' })
+    } finally {
+      setIsSharing(false)
+    }
+  }
 
   const handleFavorite = async () => {
     const newValue = !isFavorite
@@ -207,9 +238,13 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
                 Download
               </a>
             </Button>
-            <Button variant="outline">
-              <Share2 className="w-4 h-4 mr-2" />
-              Share
+            <Button variant="outline" onClick={handleShare} disabled={isSharing}>
+              {isSharing ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Share2 className="w-4 h-4 mr-2" />
+              )}
+              {shareUrl ? 'Link Copied!' : 'Share'}
             </Button>
           </div>
         </div>
