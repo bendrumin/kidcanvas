@@ -137,7 +137,7 @@ export function DashboardNav({ role }: DashboardNavProps) {
             </div>
             
             <Link 
-              href="/dashboard/settings/billing" 
+              href="/dashboard/billing" 
               className="mt-4 flex items-center gap-1 text-xs font-semibold text-primary hover:underline group"
             >
               Upgrade to Family Plan

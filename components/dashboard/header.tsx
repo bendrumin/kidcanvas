@@ -15,12 +15,14 @@ import {
 import { createClient } from '@/lib/supabase/client'
 import { getInitials } from '@/lib/utils'
 import { MobileNav } from './mobile-nav'
+import { FamilySwitcher } from './family-switcher'
 import { 
   Palette, 
   Settings, 
   LogOut, 
   User,
-  Bell
+  Bell,
+  CreditCard
 } from 'lucide-react'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 import type { Family } from '@/lib/supabase/types'
@@ -28,10 +30,11 @@ import type { Family } from '@/lib/supabase/types'
 interface DashboardHeaderProps {
   user: SupabaseUser
   family: Family | null
+  families: Family[]
   role: string | null
 }
 
-export function DashboardHeader({ user, family, role }: DashboardHeaderProps) {
+export function DashboardHeader({ user, family, families, role }: DashboardHeaderProps) {
   const router = useRouter()
   const supabase = createClient()
 
@@ -55,25 +58,26 @@ export function DashboardHeader({ user, family, role }: DashboardHeaderProps) {
           
           <Link href="/dashboard" className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center">
-              <Palette className="w-5 h-5 text-white" />
+              <Palette className="w-5 h-5 text-white" aria-hidden="true" />
             </div>
-            <div className="hidden sm:block">
-              <span className="text-lg font-display font-bold bg-gradient-to-r from-crayon-pink to-crayon-purple bg-clip-text text-transparent">
-                KidCanvas
-              </span>
-              {family && (
-                <span className="text-sm text-muted-foreground ml-2">
-                  · {family.name}
-                </span>
-              )}
-            </div>
+            <span className="hidden sm:block text-lg font-display font-bold bg-gradient-to-r from-crayon-pink to-crayon-purple bg-clip-text text-transparent">
+              KidCanvas
+            </span>
           </Link>
+          
+          {/* Family Switcher */}
+          <div className="hidden md:block">
+            <FamilySwitcher 
+              families={families} 
+              currentFamilyId={family?.id ?? null} 
+            />
+          </div>
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="w-5 h-5" />
+          <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
+            <Bell className="w-5 h-5" aria-hidden="true" />
             <span className="absolute top-1 right-1 w-2 h-2 bg-crayon-red rounded-full" />
           </Button>
 
@@ -106,6 +110,29 @@ export function DashboardHeader({ user, family, role }: DashboardHeaderProps) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
+              
+              {/* Mobile Family Switcher */}
+              {families.length > 1 && (
+                <>
+                  <DropdownMenuLabel className="text-xs text-muted-foreground">
+                    Switch Family
+                  </DropdownMenuLabel>
+                  {families.map((f) => (
+                    <DropdownMenuItem 
+                      key={f.id}
+                      onClick={() => {
+                        document.cookie = `selected_family=${f.id};path=/;max-age=${60 * 60 * 24 * 365}`
+                        router.refresh()
+                      }}
+                      className="cursor-pointer"
+                    >
+                      {f.id === family?.id ? '✓ ' : '  '}{f.name}
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuSeparator />
+                </>
+              )}
+              
               <DropdownMenuItem asChild>
                 <Link href="/dashboard/profile" className="cursor-pointer">
                   <User className="mr-2 h-4 w-4" />
@@ -116,6 +143,12 @@ export function DashboardHeader({ user, family, role }: DashboardHeaderProps) {
                 <Link href="/dashboard/family" className="cursor-pointer">
                   <Settings className="mr-2 h-4 w-4" />
                   Family Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/billing" className="cursor-pointer">
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Billing & Plans
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -130,4 +163,3 @@ export function DashboardHeader({ user, family, role }: DashboardHeaderProps) {
     </header>
   )
 }
-

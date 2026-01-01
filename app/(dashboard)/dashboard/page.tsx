@@ -8,8 +8,19 @@ import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import type { FamilyMember, ArtworkWithChild, Child } from '@/lib/supabase/types'
 
-export default async function DashboardPage() {
+interface DashboardPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const supabase = await createClient()
+  const params = await searchParams
+  
+  // Get filter params
+  const childFilter = typeof params.child === 'string' ? params.child : undefined
+  const sortParam = typeof params.sort === 'string' ? params.sort : 'newest'
+  const searchQuery = typeof params.search === 'string' ? params.search : undefined
+  const showFavorites = params.favorites === 'true'
   
   const { data: { user } } = await supabase.auth.getUser()
   
@@ -38,12 +49,37 @@ export default async function DashboardPage() {
     )
   }
 
-  // Fetch artworks
-  const { data: artworks } = await supabase
+  // Build artwork query with filters
+  let artworkQuery = supabase
     .from('artworks')
     .select('*, child:children(*)')
     .eq('family_id', membership.family_id)
-    .order('created_date', { ascending: false }) as { data: ArtworkWithChild[] | null }
+  
+  // Apply child filter
+  if (childFilter && childFilter !== 'all') {
+    artworkQuery = artworkQuery.eq('child_id', childFilter)
+  }
+  
+  // Apply favorites filter
+  if (showFavorites) {
+    artworkQuery = artworkQuery.eq('is_favorite', true)
+  }
+  
+  // Apply search filter
+  if (searchQuery) {
+    artworkQuery = artworkQuery.ilike('title', `%${searchQuery}%`)
+  }
+  
+  // Apply sort
+  if (sortParam === 'oldest') {
+    artworkQuery = artworkQuery.order('created_date', { ascending: true })
+  } else if (sortParam === 'title') {
+    artworkQuery = artworkQuery.order('title', { ascending: true })
+  } else {
+    artworkQuery = artworkQuery.order('created_date', { ascending: false })
+  }
+  
+  const { data: artworks } = await artworkQuery as { data: ArtworkWithChild[] | null }
 
   // Fetch children for filters
   const { data: children } = await supabase
