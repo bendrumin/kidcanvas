@@ -46,7 +46,7 @@ export default async function SettingsPage() {
               </p>
             </div>
             <Button className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90">
-              Upgrade — $5.99/mo
+              Upgrade — $4.99/mo
             </Button>
           </div>
           

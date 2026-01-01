@@ -444,7 +444,7 @@ export default function LandingPage() {
               <h3 className="text-2xl font-display font-bold mb-2">Family</h3>
               <p className="text-gray-600 mb-6">For growing families</p>
               <div className="text-4xl font-display font-bold mb-6">
-                $5.99<span className="text-lg font-normal text-gray-500">/month</span>
+                $4.99<span className="text-lg font-normal text-gray-500">/month</span>
               </div>
               <ul className="space-y-3 mb-8">
                 {['Unlimited children', 'Unlimited artworks', 'AI auto-tagging', 'Collections', 'Public gallery links', 'Priority support'].map((feature, i) => (
