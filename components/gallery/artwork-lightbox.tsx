@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useCallback, useRef } from 'react'
+import { useEffect, useCallback, useRef, useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
@@ -13,13 +13,25 @@ import {
   Download, 
   Share2, 
   Edit,
+  Trash2,
   Calendar,
   User,
-  Tag
+  Tag,
+  Loader2
 } from 'lucide-react'
 import { formatDate, calculateAge } from '@/lib/utils'
 import type { ArtworkWithChild } from '@/lib/supabase/types'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
+import { useToast } from '@/components/ui/use-toast'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 
 interface ArtworkLightboxProps {
   artwork: ArtworkWithChild | null
@@ -27,6 +39,8 @@ interface ArtworkLightboxProps {
   onNavigate: (direction: 'prev' | 'next') => void
   hasNext: boolean
   hasPrev: boolean
+  canEdit?: boolean
+  onDelete?: () => void
 }
 
 export function ArtworkLightbox({ 
@@ -34,8 +48,14 @@ export function ArtworkLightbox({
   onClose, 
   onNavigate,
   hasNext,
-  hasPrev 
+  hasPrev,
+  canEdit = false,
+  onDelete
 }: ArtworkLightboxProps) {
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const supabase = createClient()
+  const { toast } = useToast()
   const closeButtonRef = useRef<HTMLButtonElement>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
 
@@ -72,6 +92,34 @@ export function ArtworkLightbox({
       document.body.style.overflow = ''
     }
   }, [artwork])
+
+  const handleDelete = async () => {
+    if (!artwork) return
+    
+    setIsDeleting(true)
+    try {
+      const { error } = await supabase
+        .from('artworks')
+        .delete()
+        .eq('id', artwork.id)
+
+      if (error) throw error
+
+      toast({ title: 'Artwork deleted' })
+      setShowDeleteConfirm(false)
+      onClose()
+      if (onDelete) {
+        onDelete()
+      } else {
+        // Fallback: reload the page
+        window.location.reload()
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to delete'
+      toast({ title: 'Error', description: errorMessage, variant: 'destructive' })
+      setIsDeleting(false)
+    }
+  }
 
   if (!artwork) return null
 
@@ -158,7 +206,7 @@ export function ArtworkLightbox({
                 <p id="artwork-dialog-description" className="sr-only">
                   Artwork by {artwork.child?.name}, created on {formatDate(artwork.created_date)}
                 </p>
-                <div className="flex items-center gap-2" role="group" aria-label="Artwork actions">
+                <div className="flex items-center gap-2 flex-wrap" role="group" aria-label="Artwork actions">
                   <Button variant="outline" size="sm" aria-label="Add to favorites">
                     <Heart className="w-4 h-4 mr-1" aria-hidden="true" />
                     Favorite
@@ -167,12 +215,26 @@ export function ArtworkLightbox({
                     <Share2 className="w-4 h-4 mr-1" aria-hidden="true" />
                     Share
                   </Button>
-                  <Button variant="outline" size="sm" asChild>
-                    <Link href={`/dashboard/artwork/${artwork.id}`} aria-label="Edit artwork details">
-                      <Edit className="w-4 h-4" aria-hidden="true" />
-                      <span className="sr-only">Edit</span>
-                    </Link>
-                  </Button>
+                  {canEdit && (
+                    <>
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href={`/dashboard/artwork/${artwork.id}`} aria-label="Edit artwork details">
+                          <Edit className="w-4 h-4" aria-hidden="true" />
+                          <span className="sr-only">Edit</span>
+                        </Link>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setShowDeleteConfirm(true)}
+                        className="text-destructive hover:text-destructive"
+                        aria-label="Delete artwork"
+                      >
+                        <Trash2 className="w-4 h-4" aria-hidden="true" />
+                        <span className="sr-only">Delete</span>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -252,6 +314,27 @@ export function ArtworkLightbox({
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <DialogContent className="z-[100]">
+          <DialogHeader>
+            <DialogTitle>Delete Artwork?</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete "{artwork.title}"? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteConfirm(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
+              {isDeleting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AnimatePresence>
   )
 }

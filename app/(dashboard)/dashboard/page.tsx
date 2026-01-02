@@ -1,12 +1,15 @@
 import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
-import { GalleryGrid } from '@/components/gallery/gallery-grid'
+import { GalleryGridWithCounter } from '@/components/gallery/gallery-grid-with-counter'
 import { GalleryFilters } from '@/components/gallery/gallery-filters'
 import { EmptyGallery } from '@/components/gallery/empty-gallery'
+import { GalleryHeader } from '@/components/gallery/gallery-header'
+import { UsageWarning } from '@/components/gallery/usage-warning'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import type { FamilyMember, ArtworkWithChild, Child } from '@/lib/supabase/types'
+import { getUserSubscriptionLimits } from '@/lib/subscription'
 
 interface DashboardPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -28,12 +31,12 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     return null
   }
 
-  // Get user's family
+  // Get user's family and role
   const { data: membership } = await supabase
     .from('family_members')
-    .select('family_id')
+    .select('family_id, role')
     .eq('user_id', user.id)
-    .single() as { data: Pick<FamilyMember, 'family_id'> | null }
+    .single() as { data: Pick<FamilyMember, 'family_id' | 'role'> | null }
 
   if (!membership) {
     return (
@@ -88,23 +91,22 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     .eq('family_id', membership.family_id)
     .order('name') as { data: Child[] | null }
 
+  // Get subscription limits for usage warnings
+  const limits = await getUserSubscriptionLimits(user.id)
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-display font-bold text-foreground">Gallery</h1>
-          <p className="text-muted-foreground mt-1">
-            {artworks?.length || 0} artwork{artworks?.length !== 1 ? 's' : ''} in your collection
-          </p>
-        </div>
-        <Link href="/dashboard/upload">
-          <Button className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90">
-            <Plus className="w-5 h-5 mr-2" />
-            Add Artwork
-          </Button>
-        </Link>
-      </div>
+      <GalleryHeader initialCount={artworks?.length || 0} />
+
+      {/* Usage Warnings */}
+      {limits.artworkLimit !== -1 && (
+        <UsageWarning
+          current={limits.currentArtworks}
+          limit={limits.artworkLimit}
+          type="artwork"
+        />
+      )}
 
       {/* Filters */}
       <Suspense fallback={<div className="h-12 bg-muted animate-pulse rounded-xl" />}>
@@ -113,7 +115,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
       {/* Gallery */}
       {artworks && artworks.length > 0 ? (
-        <GalleryGrid artworks={artworks} />
+        <GalleryGridWithCounter 
+          artworks={artworks} 
+          canEdit={membership.role === 'owner' || membership.role === 'parent'} 
+        />
       ) : (
         <EmptyGallery />
       )}

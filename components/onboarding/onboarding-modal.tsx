@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { createClient } from '@/lib/supabase/client'
 import { Baby, Upload, Sparkles, ArrowRight, Loader2, Check } from 'lucide-react'
+import { LimitReachedDialog } from '@/components/paywall/limit-reached-dialog'
 
 const ONBOARDING_KEY = 'kidcanvas_onboarding_complete'
 
@@ -30,6 +31,8 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
   const [isLoading, setIsLoading] = useState(false)
   const [childName, setChildName] = useState('')
   const [birthDate, setBirthDate] = useState('')
+  const [showLimitDialog, setShowLimitDialog] = useState(false)
+  const [limitInfo, setLimitInfo] = useState<{ current: number; limit: number } | null>(null)
 
   useEffect(() => {
     // Check if user needs onboarding
@@ -49,6 +52,22 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
     
     setIsLoading(true)
     try {
+      // Check limit first
+      const limitResponse = await fetch('/api/limits/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'children', familyId }),
+      })
+
+      const limitCheck = await limitResponse.json()
+
+      if (!limitCheck.allowed) {
+        setLimitInfo({ current: limitCheck.current, limit: limitCheck.limit })
+        setShowLimitDialog(true)
+        setIsLoading(false)
+        return
+      }
+
       const supabase = createClient()
       
       const { error } = await (supabase.from('children') as any).insert({
@@ -191,6 +210,16 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
           </>
         )}
       </DialogContent>
+      
+      {limitInfo && (
+        <LimitReachedDialog
+          open={showLimitDialog}
+          onOpenChange={setShowLimitDialog}
+          limitType="children"
+          current={limitInfo.current}
+          limit={limitInfo.limit}
+        />
+      )}
     </Dialog>
   )
 }

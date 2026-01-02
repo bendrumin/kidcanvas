@@ -2,8 +2,10 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { FolderHeart, Plus } from 'lucide-react'
+import { FolderHeart, Plus, Sparkles } from 'lucide-react'
+import Link from 'next/link'
 import type { FamilyMember, CollectionWithCover } from '@/lib/supabase/types'
+import { getUserSubscriptionLimits } from '@/lib/subscription'
 
 export default async function CollectionsPage() {
   const supabase = await createClient()
@@ -25,12 +27,48 @@ export default async function CollectionsPage() {
     redirect('/dashboard')
   }
 
-  // Fetch collections
-  const { data: collections } = await supabase
-    .from('collections')
-    .select('*, cover_artwork:artworks(thumbnail_url)')
-    .eq('family_id', membership.family_id)
-    .order('created_at', { ascending: false }) as { data: CollectionWithCover[] | null }
+  // Check subscription - Collections are only available for Family/Pro plans
+  const limits = await getUserSubscriptionLimits(user.id)
+  const hasCollectionsAccess = limits.planId === 'family' || limits.planId === 'pro'
+
+  // Fetch collections (only if they have access)
+  const { data: collections } = hasCollectionsAccess
+    ? await supabase
+        .from('collections')
+        .select('*, cover_artwork:artworks(thumbnail_url)')
+        .eq('family_id', membership.family_id)
+        .order('created_at', { ascending: false }) as { data: CollectionWithCover[] | null }
+    : { data: null }
+
+  // Show upgrade prompt if on free plan
+  if (!hasCollectionsAccess) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-display font-bold text-foreground">Collections</h1>
+          <p className="text-muted-foreground mt-1">
+            Organize artwork into themed collections
+          </p>
+        </div>
+        
+        <Card className="p-12 text-center">
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-crayon-purple/20 to-crayon-pink/20 flex items-center justify-center mx-auto mb-4">
+            <Sparkles className="w-10 h-10 text-crayon-purple" />
+          </div>
+          <h3 className="text-xl font-display font-bold mb-2">Collections Available in Family Plan</h3>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            Upgrade to Family or Pro plan to organize your artwork into themed collections and albums.
+          </p>
+          <Button asChild className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90">
+            <Link href="/dashboard/billing">
+              <Plus className="w-5 h-5 mr-2" />
+              View Plans
+            </Link>
+          </Button>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">

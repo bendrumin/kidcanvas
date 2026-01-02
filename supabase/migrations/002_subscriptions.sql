@@ -48,7 +48,7 @@ BEGIN
     COALESCE(s.plan_id, 'free') as plan_id,
     COALESCE(s.status, 'active') as status,
     CASE 
-      WHEN COALESCE(s.plan_id, 'free') = 'free' THEN 50
+      WHEN COALESCE(s.plan_id, 'free') = 'free' THEN 100
       ELSE -1 -- unlimited
     END as artwork_limit,
     CASE 
@@ -70,7 +70,7 @@ BEGIN
     RETURN QUERY SELECT 
       'free'::TEXT,
       'active'::TEXT,
-      50,
+      100,
       1,
       3,
       NULL::TIMESTAMPTZ;

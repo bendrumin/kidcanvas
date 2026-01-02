@@ -194,12 +194,12 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
         )}
         
         {isEditing && (
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={() => setIsEditing(false)}>
+          <div className="flex gap-2 relative z-50">
+            <Button variant="outline" onClick={() => setIsEditing(false)} className="relative z-50">
               <X className="w-4 h-4 mr-2" />
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={isLoading}>
+            <Button onClick={handleSave} disabled={isLoading} className="relative z-50">
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
               Save
             </Button>

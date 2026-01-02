@@ -151,7 +151,7 @@ The iOS app uses SwiftUI and VisionKit for:
 
 **Free:**
 - 1 family
-- 2 children profiles
+- 3 children profiles
 - 100 artworks
 
 **Family Plan ($4.99/mo or $49.99/year):**

@@ -9,12 +9,15 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, ArrowLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { LimitReachedDialog } from '@/components/paywall/limit-reached-dialog'
 
 export default function CreateFamilyPage() {
   const router = useRouter()
   const [familyName, setFamilyName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showLimitDialog, setShowLimitDialog] = useState(false)
+  const [limitInfo, setLimitInfo] = useState<{ current: number; limit: number } | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,6 +32,29 @@ export default function CreateFamilyPage() {
 
     try {
       const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      
+      if (!user) {
+        setError('You must be logged in to create a family')
+        setIsLoading(false)
+        return
+      }
+
+      // Check limit first
+      const limitResponse = await fetch('/api/limits/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'family' }),
+      })
+
+      const limitCheck = await limitResponse.json()
+
+      if (!limitCheck.allowed) {
+        setLimitInfo({ current: limitCheck.current, limit: limitCheck.limit })
+        setShowLimitDialog(true)
+        setIsLoading(false)
+        return
+      }
       
       // Call RPC to create family
       const { error: rpcError } = await (supabase.rpc as any)('create_family_for_user', {
@@ -119,6 +145,16 @@ export default function CreateFamilyPage() {
           </form>
         </CardContent>
       </Card>
+      
+      {limitInfo && (
+        <LimitReachedDialog
+          open={showLimitDialog}
+          onOpenChange={setShowLimitDialog}
+          limitType="family"
+          current={limitInfo.current}
+          limit={limitInfo.limit}
+        />
+      )}
     </div>
   )
 }

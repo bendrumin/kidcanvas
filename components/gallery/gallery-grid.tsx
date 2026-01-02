@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArtworkLightbox } from './artwork-lightbox'
@@ -12,6 +12,8 @@ import Link from 'next/link'
 
 interface GalleryGridProps {
   artworks: ArtworkWithChild[]
+  onCountChange?: (count: number) => void
+  canEdit?: boolean
 }
 
 // Decorative tape colors for variety
@@ -27,9 +29,16 @@ const tapeColors = [
 // Subtle rotation for organic feel
 const rotations = [-2, 1, -1, 2, 0, -1.5, 1.5, -0.5]
 
-export function GalleryGrid({ artworks }: GalleryGridProps) {
+export function GalleryGrid({ artworks, onCountChange, canEdit = false }: GalleryGridProps) {
   const [selectedArtwork, setSelectedArtwork] = useState<ArtworkWithChild | null>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
+
+  // Update count when artworks change
+  useEffect(() => {
+    if (onCountChange) {
+      onCountChange(artworks.length)
+    }
+  }, [artworks.length, onCountChange])
 
   const openLightbox = (artwork: ArtworkWithChild, index: number) => {
     setSelectedArtwork(artwork)
@@ -46,6 +55,20 @@ export function GalleryGrid({ artworks }: GalleryGridProps) {
       : (selectedIndex - 1 + artworks.length) % artworks.length
     setSelectedIndex(newIndex)
     setSelectedArtwork(artworks[newIndex])
+  }
+
+  const handleDelete = () => {
+    closeLightbox()
+    // Dispatch event to update counter
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('artwork-deleted'))
+    }
+    // Update count immediately
+    if (onCountChange) {
+      onCountChange(artworks.length - 1)
+    }
+    // Refresh the page to update the gallery
+    window.location.reload()
   }
 
   return (
@@ -179,6 +202,8 @@ export function GalleryGrid({ artworks }: GalleryGridProps) {
         onNavigate={navigateLightbox}
         hasNext={selectedIndex < artworks.length - 1}
         hasPrev={selectedIndex > 0}
+        canEdit={canEdit}
+        onDelete={handleDelete}
       />
     </>
   )

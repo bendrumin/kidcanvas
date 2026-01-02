@@ -50,14 +50,14 @@ export const PLANS: Record<PlanId, {
     name: 'Free',
     description: 'Perfect for getting started',
     features: [
-      'Up to 50 artworks',
+      'Up to 100 artworks',
       '1 family',
       '3 children profiles',
       'Basic gallery view',
       'Public sharing links',
     ],
     limits: {
-      artworks: 50,
+      artworks: 100,
       families: 1,
       children: 3,
     },

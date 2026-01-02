@@ -3,6 +3,7 @@ import { createServiceClient } from '@/lib/supabase/server'
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
+import { checkArtworkLimit } from '@/lib/subscription'
 
 // Create S3 client function - reads env vars at request time (not module load time)
 function createS3Client() {
@@ -72,6 +73,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Missing required fields', details: 'One or more required fields are missing' },
         { status: 400 }
+      )
+    }
+
+    // Check artwork limit before processing
+    const limitCheck = await checkArtworkLimit(userId, familyId)
+    if (!limitCheck.allowed) {
+      return NextResponse.json(
+        { 
+          error: 'Artwork limit reached', 
+          details: limitCheck.message || `You've reached the limit of ${limitCheck.limit} artworks. Upgrade to upload more!`,
+          limitReached: true,
+          limit: limitCheck.limit,
+          current: limitCheck.current
+        },
+        { status: 403 }
       )
     }
 

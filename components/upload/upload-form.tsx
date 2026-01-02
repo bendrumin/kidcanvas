@@ -36,6 +36,7 @@ import {
 } from 'lucide-react'
 import { formatFileSize } from '@/lib/utils'
 import type { Child } from '@/lib/supabase/types'
+import { LimitReachedDialog } from '@/components/paywall/limit-reached-dialog'
 
 // Celebration confetti effect
 const celebrate = () => {
@@ -81,6 +82,8 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [currentFileIndex, setCurrentFileIndex] = useState(0)
+  const [showLimitDialog, setShowLimitDialog] = useState(false)
+  const [limitInfo, setLimitInfo] = useState<{ current: number; limit: number } | null>(null)
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.map(file => ({
@@ -153,6 +156,15 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
 
         if (!response.ok) {
           const errorData = await response.json()
+          
+          // Check if it's a limit error
+          if (errorData.limitReached) {
+            setLimitInfo({ current: errorData.current, limit: errorData.limit })
+            setShowLimitDialog(true)
+            setIsUploading(false)
+            return
+          }
+          
           const errorMessage = errorData.details || errorData.error || 'Upload failed'
           throw new Error(errorMessage)
         }
@@ -388,6 +400,16 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
           )}
         </DialogContent>
       </Dialog>
+      
+      {limitInfo && (
+        <LimitReachedDialog
+          open={showLimitDialog}
+          onOpenChange={setShowLimitDialog}
+          limitType="artwork"
+          current={limitInfo.current}
+          limit={limitInfo.limit}
+        />
+      )}
     </>
   )
 }

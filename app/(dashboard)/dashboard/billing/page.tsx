@@ -13,7 +13,7 @@ const plans = [
     description: 'Perfect for getting started',
     price: { month: 0, year: 0 },
     features: [
-      'Up to 50 artworks',
+      'Up to 100 artworks',
       '1 family',
       '3 children profiles',
       'Basic gallery view',
@@ -127,7 +127,7 @@ export default async function BillingPage() {
 
   // Plan limits based on current plan
   const planLimits: Record<string, { artworks: number; children: number; families: number }> = {
-    free: { artworks: 50, children: 3, families: 1 },
+    free: { artworks: 100, children: 3, families: 1 },
     family: { artworks: -1, children: -1, families: 1 },
     pro: { artworks: -1, children: -1, families: -1 },
   }

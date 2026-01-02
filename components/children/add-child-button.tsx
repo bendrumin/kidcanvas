@@ -17,6 +17,7 @@ import {
 import { useToast } from '@/components/ui/use-toast'
 import { createClient } from '@/lib/supabase/client'
 import { Plus, Loader2, Baby } from 'lucide-react'
+import { LimitReachedDialog } from '@/components/paywall/limit-reached-dialog'
 
 interface AddChildButtonProps {
   familyId: string
@@ -29,6 +30,8 @@ export function AddChildButton({ familyId }: AddChildButtonProps) {
   
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [showLimitDialog, setShowLimitDialog] = useState(false)
+  const [limitInfo, setLimitInfo] = useState<{ current: number; limit: number } | null>(null)
   const [formData, setFormData] = useState({
     name: '',
     birthDate: '',
@@ -39,6 +42,22 @@ export function AddChildButton({ familyId }: AddChildButtonProps) {
     setIsLoading(true)
 
     try {
+      // Check limit first
+      const limitResponse = await fetch('/api/limits/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'children', familyId }),
+      })
+
+      const limitCheck = await limitResponse.json()
+
+      if (!limitCheck.allowed) {
+        setLimitInfo({ current: limitCheck.current, limit: limitCheck.limit })
+        setShowLimitDialog(true)
+        setIsLoading(false)
+        return
+      }
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { error } = await (supabase.from('children') as any)
         .insert({
@@ -126,6 +145,16 @@ export function AddChildButton({ familyId }: AddChildButtonProps) {
           </DialogFooter>
         </form>
       </DialogContent>
+      
+      {limitInfo && (
+        <LimitReachedDialog
+          open={showLimitDialog}
+          onOpenChange={setShowLimitDialog}
+          limitType="children"
+          current={limitInfo.current}
+          limit={limitInfo.limit}
+        />
+      )}
     </Dialog>
   )
 }
