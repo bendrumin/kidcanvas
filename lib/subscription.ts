@@ -27,7 +27,8 @@ export async function getUserSubscriptionLimits(userId: string): Promise<Subscri
   const supabase = await createClient()
   
   // Get subscription using the database function
-  const { data: subscriptionData } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: subscriptionData } = await (supabase as any)
     .rpc('get_user_subscription', { target_user_id: userId })
     .single() as { data: {
       plan_id: PlanId
@@ -48,7 +49,7 @@ export async function getUserSubscriptionLimits(userId: string): Promise<Subscri
   const { data: memberships } = await supabase
     .from('family_members')
     .select('family_id')
-    .eq('user_id', userId)
+    .eq('user_id', userId) as { data: { family_id: string }[] | null }
   
   const familyIds = memberships?.map(m => m.family_id) || []
   
