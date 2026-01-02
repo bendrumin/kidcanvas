@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
@@ -11,10 +11,15 @@ interface GalleryHeaderProps {
 }
 
 export function GalleryHeader({ initialCount }: GalleryHeaderProps) {
-  const [count, setCount] = useState(initialCount)
+  // Use initialCount directly to avoid hydration mismatch
+  const [count, setCount] = useState(() => initialCount)
+  const isMountedRef = useRef(false)
+  const lastInitialCountRef = useRef(initialCount)
 
-  // Listen for custom events to update count
+  // Listen for custom events to update count (only on client)
   useEffect(() => {
+    isMountedRef.current = true
+    
     const handleDeleted = () => {
       setCount((prev) => Math.max(0, prev - 1))
     }
@@ -39,22 +44,11 @@ export function GalleryHeader({ initialCount }: GalleryHeaderProps) {
     }
   }, [])
 
-  // Update count when initialCount changes (e.g., from server refresh)
-  // Use a ref to track if this is the initial mount to prevent flicker
-  const isInitialMount = React.useRef(true)
-  const lastInitialCount = React.useRef(initialCount)
-  
+  // Update count when initialCount changes (only after mount to avoid hydration issues)
   useEffect(() => {
-    if (isInitialMount.current) {
-      // On initial mount, set the count immediately and mark as mounted
+    if (isMountedRef.current && initialCount !== lastInitialCountRef.current && initialCount >= 0) {
       setCount(initialCount)
-      lastInitialCount.current = initialCount
-      isInitialMount.current = false
-    } else if (initialCount !== lastInitialCount.current && initialCount >= 0) {
-      // Only update if initialCount actually changed (not just a re-render)
-      // This prevents flicker from hydration mismatches
-      setCount(initialCount)
-      lastInitialCount.current = initialCount
+      lastInitialCountRef.current = initialCount
     }
   }, [initialCount])
 

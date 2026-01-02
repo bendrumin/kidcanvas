@@ -36,11 +36,16 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
   // Update count when artworks change
   // Use a ref to prevent calling onCountChange on initial mount if count is already correct
   const prevLengthRef = useRef(artworks.length)
+  const isMountedRef = useRef(false)
   
   useEffect(() => {
-    // Only call onCountChange if the length actually changed
-    // This prevents unnecessary updates that could cause flicker
-    if (onCountChange && artworks.length !== prevLengthRef.current) {
+    isMountedRef.current = true
+  }, [])
+  
+  useEffect(() => {
+    // Only call onCountChange if the length actually changed and component is mounted
+    // This prevents unnecessary updates that could cause flicker or hydration issues
+    if (isMountedRef.current && onCountChange && artworks.length !== prevLengthRef.current) {
       onCountChange(artworks.length)
       prevLengthRef.current = artworks.length
     }
