@@ -70,9 +70,14 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     artworkQuery = artworkQuery.eq('is_favorite', true)
   }
   
-  // Apply search filter
+  // Apply search filter - search across title, tags, and AI description
+  // Note: We'll filter by child name in JavaScript after fetching since it's a joined table
   if (searchQuery) {
-    artworkQuery = artworkQuery.ilike('title', `%${searchQuery}%`)
+    // Search in title and AI description using OR
+    artworkQuery = artworkQuery.or(`title.ilike.%${searchQuery}%,ai_description.ilike.%${searchQuery}%`)
+    
+    // For tags, we need to check if any tag contains the search term
+    // Since Supabase doesn't easily support array contains with ilike, we'll filter in JS
   }
   
   // Apply sort
@@ -84,7 +89,26 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     artworkQuery = artworkQuery.order('created_date', { ascending: false })
   }
   
-  const { data: artworks } = await artworkQuery as { data: ArtworkWithChild[] | null }
+  let { data: artworks } = await artworkQuery as { data: ArtworkWithChild[] | null }
+
+  // If searching, also filter by child name, tags, and AI tags (since array searches are complex in Supabase)
+  if (searchQuery && artworks) {
+    const searchLower = searchQuery.toLowerCase()
+    artworks = artworks.filter(artwork => {
+      // Check if title matches (already filtered by query, but keep for consistency)
+      const titleMatch = artwork.title?.toLowerCase().includes(searchLower)
+      // Check if child name matches
+      const childNameMatch = artwork.child?.name?.toLowerCase().includes(searchLower)
+      // Check if any tag matches (manual tags)
+      const tagsMatch = artwork.tags?.some(tag => tag.toLowerCase().includes(searchLower)) || false
+      // Check if any AI tag matches
+      const aiTagsMatch = artwork.ai_tags?.some(tag => tag.toLowerCase().includes(searchLower)) || false
+      // Check if AI description matches (already filtered by query, but keep for consistency)
+      const aiDescMatch = artwork.ai_description?.toLowerCase().includes(searchLower)
+      
+      return titleMatch || childNameMatch || tagsMatch || aiTagsMatch || aiDescMatch
+    })
+  }
 
   // Fetch children for filters
   const { data: children } = await supabase

@@ -74,6 +74,7 @@ interface FilePreview {
   title: string
   childId: string
   createdDate: string
+  tags: string
 }
 
 export function UploadForm({ familyId, children, userId }: UploadFormProps) {
@@ -96,6 +97,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
       title: file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '),
       childId: children[0]?.id || '',
       createdDate: new Date().toISOString().split('T')[0],
+      tags: '',
     }))
     setFiles(newFiles)
     setCurrentFileIndex(0)
@@ -182,6 +184,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         title: `Artwork ${new Date().toLocaleDateString()}`,
         childId: children[0]?.id || '',
         createdDate: new Date().toISOString().split('T')[0],
+        tags: '',
       }
       
       setFiles(prev => [...prev, newFile])
@@ -233,6 +236,9 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         formData.append('title', fileData.title)
         formData.append('createdDate', fileData.createdDate)
         formData.append('userId', userId)
+        if (fileData.tags && fileData.tags.trim()) {
+          formData.append('tags', fileData.tags)
+        }
 
         const response = await fetch('/api/upload', {
           method: 'POST',
@@ -474,6 +480,17 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="tags">Tags (optional)</Label>
+                  <Input
+                    id="tags"
+                    value={currentFile.tags}
+                    onChange={(e) => updateFile(currentFileIndex, { tags: e.target.value })}
+                    placeholder="rainbow, butterfly, colorful"
+                  />
+                  <p className="text-xs text-muted-foreground">Separate tags with commas</p>
                 </div>
 
                 <div className="space-y-2">

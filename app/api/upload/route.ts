@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
     const createdDate = formData.get('createdDate') as string
     const userId = formData.get('userId') as string
     const description = formData.get('description') as string | null
+    const tagsString = formData.get('tags') as string | null
 
     console.log('Upload request received:', {
       hasFile: !!file,
@@ -185,6 +186,7 @@ export async function POST(request: NextRequest) {
       created_date: string
       uploaded_by: string
       description?: string
+      tags?: string[]
     } = {
       family_id: familyId,
       child_id: childId,
@@ -198,6 +200,11 @@ export async function POST(request: NextRequest) {
     // Add description if provided (requires migration 003_add_description_to_artworks.sql)
     if (description && description.trim()) {
       insertData.description = description.trim()
+    }
+    
+    // Add tags if provided
+    if (tagsString && tagsString.trim()) {
+      insertData.tags = tagsString.split(',').map(t => t.trim()).filter(Boolean)
     }
     
     console.log('Inserting artwork to database:', {

@@ -31,6 +31,7 @@ const tapeColors = [
 const rotations = [-2, 1, -1, 2, 0, -1.5, 1.5, -0.5]
 
 export function GalleryGrid({ artworks, onCountChange, canEdit = false }: GalleryGridProps) {
+  const { shouldReduceMotion } = useMobile()
   const [selectedArtwork, setSelectedArtwork] = useState<ArtworkWithChild | null>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
 
