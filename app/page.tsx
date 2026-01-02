@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { ArtworkScribble } from '@/components/artwork-scribble'
 import { 
   Palette,
   ArrowRight,
@@ -78,19 +79,25 @@ export default function LandingPage() {
       <section className="py-12 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white dark:bg-card rounded-2xl p-8 shadow-sm border border-amber-100 dark:border-border">
-            <p className="text-lg text-foreground leading-relaxed">
-              <span className="text-2xl">🎨</span> Your kid comes home with a painting. 
-              It goes on the fridge. Then another. And another. 
+            <p className="text-lg text-foreground leading-relaxed flex items-start gap-3">
+              <span className="flex-shrink-0 mt-1">
+                <ArtworkScribble variant="palette" size={32} />
+              </span>
+              <span>Your kid comes home with a painting. 
+              It goes on the fridge. Then another. And another.</span>
             </p>
             <p className="text-lg text-foreground leading-relaxed mt-4">
               Soon you have a <span className="font-semibold">pile</span>. 
               You feel <span className="font-semibold">guilty</span> throwing any away. 
               The good ones get <span className="font-semibold">damaged</span> in a drawer.
             </p>
-            <p className="text-lg text-foreground leading-relaxed mt-4">
-              <span className="text-2xl">📸</span> <span className="font-semibold">KidCanvas fixes this.</span> 
+            <p className="text-lg text-foreground leading-relaxed mt-4 flex items-start gap-3">
+              <span className="flex-shrink-0 mt-1">
+                <ArtworkScribble variant="camera" size={32} />
+              </span>
+              <span><span className="font-semibold">KidCanvas fixes this.</span> 
               {" "}Snap a photo, tag the artist, done. Grandma can see it instantly. 
-              You can find it years later.
+              You can find it years later.</span>
             </p>
           </div>
         </div>
@@ -119,14 +126,14 @@ export default function LandingPage() {
             {/* Artwork Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
               {[
-                { bg: 'from-pink-200 to-rose-200 dark:from-pink-900/40 dark:to-rose-900/40', emoji: '🌸', title: 'Spring Flowers', artist: 'Emma' },
-                { bg: 'from-blue-200 to-indigo-200 dark:from-blue-900/40 dark:to-indigo-900/40', emoji: '🚀', title: 'Space Ship', artist: 'Lucas' },
-                { bg: 'from-green-200 to-emerald-200 dark:from-green-900/40 dark:to-emerald-900/40', emoji: '🦖', title: 'Dinosaur', artist: 'Lucas' },
-                { bg: 'from-purple-200 to-violet-200 dark:from-purple-900/40 dark:to-violet-900/40', emoji: '🌈', title: 'Rainbow Sky', artist: 'Emma' },
+                { bg: 'from-pink-200 to-rose-200 dark:from-pink-900/40 dark:to-rose-900/40', variant: 'flower' as const, title: 'Spring Flowers', artist: 'Emma' },
+                { bg: 'from-blue-200 to-indigo-200 dark:from-blue-900/40 dark:to-indigo-900/40', variant: 'rocket' as const, title: 'Space Ship', artist: 'Lucas' },
+                { bg: 'from-green-200 to-emerald-200 dark:from-green-900/40 dark:to-emerald-900/40', variant: 'dinosaur' as const, title: 'Dinosaur', artist: 'Lucas' },
+                { bg: 'from-purple-200 to-violet-200 dark:from-purple-900/40 dark:to-violet-900/40', variant: 'rainbow' as const, title: 'Rainbow Sky', artist: 'Emma' },
               ].map((item, i) => (
                 <div key={i} className="group">
-                  <div className={`aspect-square rounded-lg bg-gradient-to-br ${item.bg} flex items-center justify-center text-4xl sm:text-5xl mb-2`}>
-                    {item.emoji}
+                  <div className={`aspect-square rounded-lg bg-gradient-to-br ${item.bg} flex items-center justify-center mb-2`}>
+                    <ArtworkScribble variant={item.variant} size={48} />
                   </div>
                   <p className="text-sm font-medium text-foreground truncate">{item.title}</p>
                   <p className="text-xs text-muted-foreground">{item.artist}</p>
@@ -159,17 +166,17 @@ export default function LandingPage() {
           <div className="space-y-4">
             {[
               { 
-                emoji: '👨‍👩‍👧', 
+                variant: 'family' as const,
                 title: 'Busy parents',
                 desc: 'Upload from your phone in 30 seconds. No filing, no organizing, no guilt.'
               },
               { 
-                emoji: '👵', 
+                variant: 'grandma' as const,
                 title: 'Long-distance grandparents',
                 desc: 'See every new creation the moment it\'s uploaded. No texting needed.'
               },
               { 
-                emoji: '👨‍👧‍👦', 
+                variant: 'multi-kid' as const,
                 title: 'Multi-kid households',
                 desc: 'Tag each artist. Filter by child. Never mix up whose is whose.'
               },
@@ -178,7 +185,9 @@ export default function LandingPage() {
                 key={i} 
                 className="flex gap-4 p-4 bg-white dark:bg-card rounded-xl border border-amber-100 dark:border-border"
               >
-                <span className="text-3xl">{item.emoji}</span>
+                <span className="flex-shrink-0">
+                  <ArtworkScribble variant={item.variant} size={40} />
+                </span>
                 <div>
                   <p className="font-semibold text-foreground">{item.title}</p>
                   <p className="text-muted-foreground text-sm">{item.desc}</p>
@@ -236,7 +245,9 @@ export default function LandingPage() {
       {/* Final CTA - Personal */}
       <section className="py-16 px-4 sm:px-6">
         <div className="max-w-xl mx-auto text-center">
-          <p className="text-4xl mb-4">🎨</p>
+          <div className="flex justify-center mb-4">
+            <ArtworkScribble variant="palette" size={64} />
+          </div>
           <h2 className="text-2xl font-bold text-foreground mb-4">
             Stop losing artwork to the recycling bin
           </h2>

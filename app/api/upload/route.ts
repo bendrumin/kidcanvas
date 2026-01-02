@@ -4,20 +4,37 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 
-// Trim credentials to remove any accidental whitespace/newlines
-const r2Endpoint = process.env.R2_ENDPOINT?.trim()
-const r2AccessKeyId = process.env.R2_ACCESS_KEY_ID?.trim()
-const r2SecretAccessKey = process.env.R2_SECRET_ACCESS_KEY?.trim()
+// Create S3 client function - reads env vars at request time (not module load time)
+function createS3Client() {
+  // Trim credentials to remove any accidental whitespace/newlines
+  const r2Bucket = process.env.R2_BUCKET?.trim()
+  const r2Endpoint = process.env.R2_ENDPOINT?.trim()
+  const r2AccessKeyId = process.env.R2_ACCESS_KEY_ID?.trim()
+  const r2SecretAccessKey = process.env.R2_SECRET_ACCESS_KEY?.trim()
 
-const s3Client = new S3Client({
-  region: 'auto',
-  endpoint: r2Endpoint,
-  credentials: {
-    accessKeyId: r2AccessKeyId || '',
-    secretAccessKey: r2SecretAccessKey || '',
-  },
-  forcePathStyle: true, // Required for R2 compatibility
-})
+  if (!r2Bucket || !r2Endpoint || !r2AccessKeyId || !r2SecretAccessKey) {
+    console.error('Missing R2 configuration:', {
+      hasBucket: !!r2Bucket,
+      hasEndpoint: !!r2Endpoint,
+      hasAccessKey: !!r2AccessKeyId,
+      hasSecretKey: !!r2SecretAccessKey
+    })
+  }
+
+  return {
+    client: new S3Client({
+      region: 'auto',
+      endpoint: r2Endpoint,
+      credentials: {
+        accessKeyId: r2AccessKeyId || '',
+        secretAccessKey: r2SecretAccessKey || '',
+      },
+      forcePathStyle: true, // Required for R2 compatibility
+    }),
+    bucket: r2Bucket,
+    publicUrl: process.env.R2_PUBLIC_URL?.trim()
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,10 +46,31 @@ export async function POST(request: NextRequest) {
     const title = formData.get('title') as string
     const createdDate = formData.get('createdDate') as string
     const userId = formData.get('userId') as string
+    const description = formData.get('description') as string | null
+
+    console.log('Upload request received:', {
+      hasFile: !!file,
+      fileSize: file?.size,
+      fileType: file?.type,
+      familyId,
+      childId,
+      title,
+      createdDate,
+      userId,
+      hasDescription: !!description
+    })
 
     if (!file || !familyId || !childId || !title || !createdDate || !userId) {
+      console.error('Missing required fields:', {
+        file: !!file,
+        familyId: !!familyId,
+        childId: !!childId,
+        title: !!title,
+        createdDate: !!createdDate,
+        userId: !!userId
+      })
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Missing required fields', details: 'One or more required fields are missing' },
         { status: 400 }
       )
     }
@@ -61,10 +99,28 @@ export async function POST(request: NextRequest) {
     const originalKey = `artwork/${familyId}/${imageId}.${extension}`
     const thumbnailKey = `artwork/${familyId}/${imageId}_thumb.jpg`
 
+    // Create S3 client and get R2 config (read env vars at request time)
+    const { client: s3Client, bucket: r2Bucket, publicUrl: r2PublicUrl } = createS3Client()
+    
     // Upload to R2
+    if (!r2Bucket) {
+      console.error('R2_BUCKET environment variable is not set')
+      return NextResponse.json(
+        { error: 'Storage configuration error', details: 'R2 bucket not configured' },
+        { status: 500 }
+      )
+    }
+    
+    if (!r2PublicUrl) {
+      console.error('R2_PUBLIC_URL environment variable is not set')
+      return NextResponse.json(
+        { error: 'Storage configuration error', details: 'R2 public URL not configured' },
+        { status: 500 }
+      )
+    }
+    
     console.log('Uploading to R2...', { 
-      bucket: process.env.R2_BUCKET, 
-      endpoint: process.env.R2_ENDPOINT,
+      bucket: r2Bucket, 
       originalKey,
       thumbnailKey 
     })
@@ -72,13 +128,13 @@ export async function POST(request: NextRequest) {
     try {
       await Promise.all([
         s3Client.send(new PutObjectCommand({
-          Bucket: process.env.R2_BUCKET,
+          Bucket: r2Bucket,
           Key: originalKey,
           Body: originalBuffer,
           ContentType: 'image/jpeg',
         })),
         s3Client.send(new PutObjectCommand({
-          Bucket: process.env.R2_BUCKET,
+          Bucket: r2Bucket,
           Key: thumbnailKey,
           Body: thumbnailBuffer,
           ContentType: 'image/jpeg',
@@ -87,33 +143,65 @@ export async function POST(request: NextRequest) {
       console.log('R2 upload successful')
     } catch (r2Error) {
       console.error('R2 upload failed:', r2Error)
-      throw r2Error
+      const errorDetails = r2Error instanceof Error ? r2Error.message : String(r2Error)
+      console.error('R2 error details:', {
+        bucket: r2Bucket,
+        error: errorDetails
+      })
+      return NextResponse.json(
+        { error: 'Storage upload failed', details: errorDetails },
+        { status: 500 }
+      )
     }
 
-    const imageUrl = `${process.env.R2_PUBLIC_URL}/${originalKey}`
-    const thumbnailUrl = `${process.env.R2_PUBLIC_URL}/${thumbnailKey}`
+    const imageUrl = `${r2PublicUrl}/${originalKey}`
+    const thumbnailUrl = `${r2PublicUrl}/${thumbnailKey}`
 
     // Save to database
     const supabase = await createServiceClient()
     
+    const insertData: {
+      family_id: string
+      child_id: string
+      image_url: string
+      thumbnail_url: string
+      title: string
+      created_date: string
+      uploaded_by: string
+      description?: string
+    } = {
+      family_id: familyId,
+      child_id: childId,
+      image_url: imageUrl,
+      thumbnail_url: thumbnailUrl,
+      title,
+      created_date: createdDate,
+      uploaded_by: userId,
+    }
+    
+    // Add description if provided (requires migration 003_add_description_to_artworks.sql)
+    if (description && description.trim()) {
+      insertData.description = description.trim()
+    }
+    
+    console.log('Inserting artwork to database:', {
+      family_id: insertData.family_id,
+      child_id: insertData.child_id,
+      title: insertData.title,
+      hasDescription: !!insertData.description
+    })
+    
     const { data, error } = await supabase
       .from('artworks')
-      .insert({
-        family_id: familyId,
-        child_id: childId,
-        image_url: imageUrl,
-        thumbnail_url: thumbnailUrl,
-        title,
-        created_date: createdDate,
-        uploaded_by: userId,
-      } as { family_id: string; child_id: string; image_url: string; thumbnail_url: string; title: string; created_date: string; uploaded_by: string })
+      .insert(insertData)
       .select()
       .single() as { data: { id: string } | null; error: unknown }
 
     if (error) {
       console.error('Database error:', error)
+      console.error('Failed insert data:', insertData)
       return NextResponse.json(
-        { error: 'Failed to save artwork' },
+        { error: 'Failed to save artwork', details: error instanceof Error ? error.message : String(error) },
         { status: 500 }
       )
     }
@@ -131,6 +219,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Upload error:', error)
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorStack = error instanceof Error ? error.stack : undefined
+    console.error('Error stack:', errorStack)
     return NextResponse.json(
       { error: 'Upload failed', details: errorMessage },
       { status: 500 }
