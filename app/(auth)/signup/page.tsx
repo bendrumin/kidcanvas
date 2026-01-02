@@ -9,7 +9,8 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useToast } from '@/components/ui/use-toast'
 import { createClient } from '@/lib/supabase/client'
-import { Palette, Mail, Lock, User, Users, Loader2 } from 'lucide-react'
+import { Mail, Lock, User, Users, Loader2 } from 'lucide-react'
+import { Logo } from '@/components/logo'
 
 export default function SignupPage() {
   const router = useRouter()
@@ -113,14 +114,7 @@ export default function SignupPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center shadow-[0_4px_12px_rgba(233,30,99,0.25)]">
-              <Palette className="w-7 h-7 text-white" />
-            </div>
-            <span className="text-3xl font-display font-bold bg-gradient-to-r from-crayon-pink to-crayon-purple bg-clip-text text-transparent">
-              KidCanvas
-            </span>
-          </Link>
+          <Logo size="lg" />
         </div>
 
         <Card className="border-2 shadow-xl">

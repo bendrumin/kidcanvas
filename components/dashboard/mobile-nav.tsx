@@ -15,9 +15,9 @@ import {
   Settings,
   Heart,
   Menu,
-  Palette,
   X
 } from 'lucide-react'
+import { Logo } from '@/components/logo'
 
 interface MobileNavProps {
   role: string | null
@@ -91,13 +91,8 @@ export function MobileNav({ role, familyName }: MobileNavProps) {
       <SheetContent side="left" className="w-72 p-0">
         <SheetHeader className="p-4 border-b bg-gradient-to-r from-crayon-pink/10 to-crayon-purple/10">
           <SheetTitle className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center shadow-[0_2px_8px_rgba(233,30,99,0.2)]">
-              <Palette className="w-5 h-5 text-white" />
-            </div>
+            <Logo size="sm" showText={true} />
             <div className="text-left">
-              <span className="text-lg font-display font-bold bg-gradient-to-r from-crayon-pink to-crayon-purple bg-clip-text text-transparent">
-                KidCanvas
-              </span>
               {familyName && (
                 <p className="text-xs text-muted-foreground font-normal">{familyName}</p>
               )}

@@ -1,13 +1,14 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Palette, Home, ArrowLeft } from 'lucide-react'
+import { Home, ArrowLeft } from 'lucide-react'
+import { Logo } from '@/components/logo'
 
 export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-4">
       <div className="text-center max-w-md">
-        <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center mx-auto mb-6">
-          <Palette className="w-12 h-12 text-white" />
+        <div className="flex justify-center mb-6">
+          <Logo size="lg" showText={false} className="scale-150" />
         </div>
         
         <h1 className="text-6xl font-display font-bold text-gray-900 mb-4">404</h1>

@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Palette, Calendar, Heart, Download } from 'lucide-react'
+import { Calendar, Heart, Download } from 'lucide-react'
+import { Logo } from '@/components/logo'
 import { formatDate } from '@/lib/utils'
 
 interface SharePageProps {
@@ -33,7 +34,7 @@ export default async function SharePage({ params }: SharePageProps) {
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 flex items-center justify-center p-4">
         <Card className="max-w-md p-8 text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-            <Palette className="w-8 h-8 text-gray-400" />
+            <Logo size="sm" showText={false} className="opacity-50" />
           </div>
           <h1 className="text-2xl font-display font-bold mb-2">Link Expired</h1>
           <p className="text-muted-foreground mb-6">
@@ -65,14 +66,7 @@ export default async function SharePage({ params }: SharePageProps) {
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md border-b sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center">
-              <Palette className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-lg font-display font-bold bg-gradient-to-r from-crayon-pink to-crayon-purple bg-clip-text text-transparent">
-              KidCanvas
-            </span>
-          </Link>
+          <Logo size="md" />
           <Link href="/signup">
             <Button size="sm">Start Your Gallery</Button>
           </Link>
