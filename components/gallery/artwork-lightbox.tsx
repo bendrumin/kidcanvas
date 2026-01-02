@@ -184,12 +184,12 @@ export function ArtworkLightbox({
           onClick={(e) => e.stopPropagation()}
         >
           {/* Image */}
-          <figure className="relative flex-1 min-h-[300px] lg:min-h-[500px] bg-gray-100">
+          <figure className="relative flex-1 min-h-[300px] lg:min-h-[500px] bg-gray-100 dark:bg-gray-900">
             <Image
               src={artwork.image_url}
               alt={`${artwork.title} by ${artwork.child?.name || 'Unknown artist'}${artwork.ai_description ? `. ${artwork.ai_description}` : ''}`}
               fill
-              className="object-contain"
+              className="object-contain transition-opacity duration-300"
               sizes="(max-width: 1024px) 100vw, 60vw"
               priority
             />

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Palette, Upload, Sparkles, ArrowRight } from 'lucide-react'
+import { useMobile } from '@/lib/use-mobile'
 
 const floatingAnimation = {
   initial: { y: 0 },
@@ -18,18 +19,20 @@ const floatingAnimation = {
 }
 
 export function EmptyGallery() {
+  const { shouldReduceMotion } = useMobile()
+  
   return (
     <motion.div 
       className="flex flex-col items-center justify-center py-20 text-center"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+      animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
+      transition={shouldReduceMotion ? {} : { duration: 0.6 }}
     >
       <motion.div 
         className="relative mb-8"
-        variants={floatingAnimation}
+        variants={shouldReduceMotion ? {} : floatingAnimation}
         initial="initial"
-        animate="animate"
+        animate={shouldReduceMotion ? "initial" : "animate"}
       >
         {/* Main icon */}
         <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-crayon-yellow/30 via-crayon-orange/20 to-crayon-pink/30 flex items-center justify-center shadow-lg shadow-orange-100">
@@ -39,11 +42,11 @@ export function EmptyGallery() {
         {/* Floating sparkle */}
         <motion.div 
           className="absolute -top-3 -right-3 w-14 h-14 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center shadow-lg"
-          animate={{ 
+          animate={shouldReduceMotion ? {} : { 
             scale: [1, 1.1, 1],
             rotate: [0, 10, 0]
           }}
-          transition={{ duration: 2, repeat: Infinity }}
+          transition={shouldReduceMotion ? {} : { duration: 2, repeat: Infinity }}
         >
           <Sparkles className="w-7 h-7 text-white" />
         </motion.div>
@@ -51,30 +54,30 @@ export function EmptyGallery() {
         {/* Decorative dots */}
         <motion.div 
           className="absolute -bottom-2 -left-4 w-8 h-8 rounded-full bg-crayon-blue/30"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+          animate={shouldReduceMotion ? {} : { scale: [1, 1.2, 1] }}
+          transition={shouldReduceMotion ? {} : { duration: 1.5, repeat: Infinity, delay: 0.2 }}
         />
         <motion.div 
           className="absolute top-1/2 -right-6 w-5 h-5 rounded-full bg-crayon-green/40"
-          animate={{ scale: [1, 1.3, 1] }}
-          transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 }}
+          animate={shouldReduceMotion ? {} : { scale: [1, 1.3, 1] }}
+          transition={shouldReduceMotion ? {} : { duration: 1.5, repeat: Infinity, delay: 0.5 }}
         />
       </motion.div>
 
       <motion.h2 
         className="text-3xl font-display font-bold text-gray-900 mb-3"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+        animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
+        transition={shouldReduceMotion ? {} : { delay: 0.2 }}
       >
         Your Gallery Awaits! ✨
       </motion.h2>
       
       <motion.p 
         className="text-muted-foreground max-w-md mb-8 text-lg"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+        animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
+        transition={shouldReduceMotion ? {} : { delay: 0.3 }}
       >
         Start building your family's art collection. Upload your children's masterpieces 
         and watch your gallery come to life.
@@ -82,9 +85,9 @@ export function EmptyGallery() {
 
       <motion.div 
         className="flex flex-col sm:flex-row gap-4"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+        animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
+        transition={shouldReduceMotion ? {} : { delay: 0.4 }}
       >
         <Link href="/dashboard/upload">
           <Button size="lg" className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90 shadow-lg shadow-pink-200/50 group">
@@ -103,18 +106,18 @@ export function EmptyGallery() {
       {/* Placeholder art grid */}
       <motion.div 
         className="mt-16 grid grid-cols-4 gap-4 max-w-lg"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6 }}
+        initial={shouldReduceMotion ? false : { opacity: 0 }}
+        animate={shouldReduceMotion ? {} : { opacity: 1 }}
+        transition={shouldReduceMotion ? {} : { delay: 0.6 }}
       >
         {['🎨', '🖍️', '✏️', '🖌️'].map((emoji, i) => (
           <motion.div 
             key={i}
             className="relative"
-            initial={{ opacity: 0, scale: 0.8, rotate: (i - 1.5) * 3 }}
-            animate={{ opacity: 0.6, scale: 1, rotate: (i - 1.5) * 3 }}
-            transition={{ delay: 0.7 + i * 0.1 }}
-            whileHover={{ scale: 1.05, opacity: 0.8, rotate: 0 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.8, rotate: (i - 1.5) * 3 }}
+            animate={shouldReduceMotion ? {} : { opacity: 0.6, scale: 1, rotate: (i - 1.5) * 3 }}
+            transition={shouldReduceMotion ? {} : { delay: 0.7 + i * 0.1 }}
+            whileHover={shouldReduceMotion ? {} : { scale: 1.05, opacity: 0.8, rotate: 0 }}
           >
             {/* Tape */}
             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-4 bg-yellow-200/70 rounded-sm transform -rotate-2 z-10" />

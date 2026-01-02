@@ -46,13 +46,22 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
     <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
       {/* Search */}
       <div className="relative flex-1 max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
         <Input
           placeholder="Search artwork..."
           value={currentSearch}
           onChange={(e) => updateParams('search', e.target.value)}
-          className="pl-9"
+          className="pl-9 transition-all focus:ring-2 focus:ring-primary"
         />
+        {currentSearch && (
+          <button
+            onClick={() => updateParams('search', '')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Clear search"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* Child Filter */}
@@ -87,9 +96,9 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
         variant={showFavorites ? 'default' : 'outline'}
         size="sm"
         onClick={() => updateParams('favorites', showFavorites ? '' : 'true')}
-        className={showFavorites ? 'bg-crayon-red hover:bg-crayon-red/90' : ''}
+        className={showFavorites ? 'bg-crayon-red hover:bg-crayon-red/90 shadow-md hover:shadow-lg transition-all' : 'transition-all'}
       >
-        ❤️ Favorites
+        <span className={showFavorites ? '' : 'opacity-60'}>❤️</span> Favorites
       </Button>
 
       {/* Clear Filters */}

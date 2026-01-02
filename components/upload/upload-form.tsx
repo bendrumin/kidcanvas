@@ -262,7 +262,13 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
       toast({
         title: '🎉 Success!',
         description: `${files.length} artwork${files.length > 1 ? 's' : ''} uploaded successfully!`,
+        duration: 3000,
       })
+      
+      // Dispatch event to update gallery counter
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('artwork-added'))
+      }
 
       // Cleanup
       files.forEach(f => URL.revokeObjectURL(f.preview))

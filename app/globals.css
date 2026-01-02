@@ -227,6 +227,30 @@ button:focus-visible,
   }
 }
 
+/* Reduce animations on mobile devices for better performance */
+@media (max-width: 768px) {
+  * {
+    transition-duration: 0.15s !important;
+  }
+  
+  /* Disable hover effects on mobile (they don't work well anyway) */
+  @media (hover: none) {
+    .hover\:shadow-2xl:hover,
+    .hover\:-translate-y-1:hover,
+    .group-hover\:scale-105:hover {
+      transform: none !important;
+      box-shadow: inherit !important;
+    }
+  }
+  
+  /* Reduce animation complexity on mobile */
+  .animate-float,
+  .animate-wiggle,
+  .animate-gradient {
+    animation: none !important;
+  }
+}
+
 /* Skip link styles */
 .sr-only {
   position: absolute;

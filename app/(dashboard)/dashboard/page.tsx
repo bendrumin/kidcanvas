@@ -4,6 +4,8 @@ import { GalleryGridWithCounter } from '@/components/gallery/gallery-grid-with-c
 import { GalleryFilters } from '@/components/gallery/gallery-filters'
 import { EmptyGallery } from '@/components/gallery/empty-gallery'
 import { GalleryHeader } from '@/components/gallery/gallery-header'
+import { GallerySkeleton } from '@/components/gallery/gallery-skeleton'
+import { NoResults } from '@/components/gallery/no-results'
 import { UsageWarning } from '@/components/gallery/usage-warning'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
@@ -114,14 +116,22 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       </Suspense>
 
       {/* Gallery */}
-      {artworks && artworks.length > 0 ? (
-        <GalleryGridWithCounter 
-          artworks={artworks} 
-          canEdit={membership.role === 'owner' || membership.role === 'parent'} 
-        />
-      ) : (
-        <EmptyGallery />
-      )}
+      <Suspense fallback={<GallerySkeleton count={8} />}>
+        {artworks && artworks.length > 0 ? (
+          <GalleryGridWithCounter 
+            artworks={artworks} 
+            canEdit={membership.role === 'owner' || membership.role === 'parent'} 
+          />
+        ) : searchQuery || (childFilter && childFilter !== 'all') || showFavorites ? (
+          <NoResults 
+            searchQuery={searchQuery}
+            hasFilters={!!(searchQuery || (childFilter && childFilter !== 'all') || showFavorites)}
+            onClearFilters={() => {}}
+          />
+        ) : (
+          <EmptyGallery />
+        )}
+      </Suspense>
     </div>
   )
 }

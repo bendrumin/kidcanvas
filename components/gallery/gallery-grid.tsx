@@ -7,6 +7,7 @@ import { ArtworkLightbox } from './artwork-lightbox'
 import { Badge } from '@/components/ui/badge'
 import { Heart, ExternalLink } from 'lucide-react'
 import { formatDate, calculateAge, cn } from '@/lib/utils'
+import { useMobile } from '@/lib/use-mobile'
 import type { ArtworkWithChild } from '@/lib/supabase/types'
 import Link from 'next/link'
 
@@ -97,17 +98,17 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
             return (
               <motion.div
                 key={artwork.id}
-                layout
-                initial={{ opacity: 0, y: 20, rotate: rotation }}
-                animate={{ opacity: 1, y: 0, rotate: rotation }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ 
+                layout={!shouldReduceMotion}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 20, rotate: rotation }}
+                animate={shouldReduceMotion ? {} : { opacity: 1, y: 0, rotate: rotation }}
+                exit={shouldReduceMotion ? {} : { opacity: 0, scale: 0.9 }}
+                transition={shouldReduceMotion ? {} : { 
                   delay: index * 0.05, 
                   duration: 0.4,
                   type: "spring",
                   stiffness: 100
                 }}
-                whileHover={{ 
+                whileHover={shouldReduceMotion ? {} : { 
                   scale: 1.03, 
                   rotate: 0,
                   zIndex: 10,
@@ -117,7 +118,12 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
               >
                 {/* Paper card with shadow */}
                 <div 
-                  className="relative bg-white rounded-sm shadow-md hover:shadow-2xl transition-shadow duration-300 cursor-pointer overflow-visible focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2"
+                  className={cn(
+                    "relative bg-white rounded-sm shadow-md active:shadow-lg cursor-pointer overflow-visible focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2",
+                    shouldReduceMotion 
+                      ? "transition-shadow duration-150" 
+                      : "hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0"
+                  )}
                   onClick={() => openLightbox(artwork, index)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -148,15 +154,21 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                         src={artwork.thumbnail_url || artwork.image_url}
                         alt={`${artwork.title} by ${artwork.child?.name || 'Unknown artist'}`}
                         fill
-                        className="object-cover"
+                        className={cn(
+                          "object-cover",
+                          shouldReduceMotion 
+                            ? "" 
+                            : "transition-transform duration-500 group-hover:scale-105"
+                        )}
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        loading={index < 8 ? "eager" : "lazy"}
                       />
 
                       {/* Hover overlay */}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
-                            <ExternalLink className="w-5 h-5 text-gray-700" />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 group-active:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                        <div className="opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-all duration-300 transform group-hover:scale-110 group-active:scale-95">
+                          <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
+                            <ExternalLink className="w-5 h-5 text-gray-700 group-hover:text-primary transition-colors" />
                           </div>
                         </div>
                       </div>
