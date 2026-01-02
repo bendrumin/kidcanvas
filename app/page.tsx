@@ -79,9 +79,9 @@ export default function LandingPage() {
       <section className="py-12 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white dark:bg-card rounded-2xl p-8 shadow-sm border border-amber-100 dark:border-border">
-            <p className="text-lg text-foreground leading-relaxed flex items-start gap-3">
+            <p className="text-lg text-foreground leading-relaxed flex items-start gap-4">
               <span className="flex-shrink-0 mt-1">
-                <ArtworkScribble variant="palette" size={32} />
+                <ArtworkScribble variant="palette" size={56} />
               </span>
               <span>Your kid comes home with a painting. 
               It goes on the fridge. Then another. And another.</span>
@@ -91,9 +91,9 @@ export default function LandingPage() {
               You feel <span className="font-semibold">guilty</span> throwing any away. 
               The good ones get <span className="font-semibold">damaged</span> in a drawer.
             </p>
-            <p className="text-lg text-foreground leading-relaxed mt-4 flex items-start gap-3">
+            <p className="text-lg text-foreground leading-relaxed mt-4 flex items-start gap-4">
               <span className="flex-shrink-0 mt-1">
-                <ArtworkScribble variant="camera" size={32} />
+                <ArtworkScribble variant="camera" size={56} />
               </span>
               <span><span className="font-semibold">KidCanvas fixes this.</span> 
               {" "}Snap a photo, tag the artist, done. Grandma can see it instantly. 
@@ -132,8 +132,8 @@ export default function LandingPage() {
                 { bg: 'from-purple-200 to-violet-200 dark:from-purple-900/40 dark:to-violet-900/40', variant: 'rainbow' as const, title: 'Rainbow Sky', artist: 'Emma' },
               ].map((item, i) => (
                 <div key={i} className="group">
-                  <div className={`aspect-square rounded-lg bg-gradient-to-br ${item.bg} flex items-center justify-center mb-2`}>
-                    <ArtworkScribble variant={item.variant} size={48} />
+                  <div className={`aspect-square rounded-lg bg-gradient-to-br ${item.bg} flex items-center justify-center mb-2 p-2`}>
+                    <ArtworkScribble variant={item.variant} size={72} />
                   </div>
                   <p className="text-sm font-medium text-foreground truncate">{item.title}</p>
                   <p className="text-xs text-muted-foreground">{item.artist}</p>
@@ -186,7 +186,7 @@ export default function LandingPage() {
                 className="flex gap-4 p-4 bg-white dark:bg-card rounded-xl border border-amber-100 dark:border-border"
               >
                 <span className="flex-shrink-0">
-                  <ArtworkScribble variant={item.variant} size={40} />
+                  <ArtworkScribble variant={item.variant} size={64} />
                 </span>
                 <div>
                   <p className="font-semibold text-foreground">{item.title}</p>
@@ -246,7 +246,7 @@ export default function LandingPage() {
       <section className="py-16 px-4 sm:px-6">
         <div className="max-w-xl mx-auto text-center">
           <div className="flex justify-center mb-4">
-            <ArtworkScribble variant="palette" size={64} />
+            <ArtworkScribble variant="palette" size={96} />
           </div>
           <h2 className="text-2xl font-bold text-foreground mb-4">
             Stop losing artwork to the recycling bin

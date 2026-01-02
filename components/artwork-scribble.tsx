@@ -95,6 +95,9 @@ export function ArtworkScribble({ variant = 'default', className = '', size = 60
   const variantHash = variant.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
   const baseColor = colors[variantHash % colors.length]
   
+  // Scale stroke width with size (base 3px at 60px, scales proportionally)
+  const baseStrokeWidth = (size / 60) * 3
+  
   // Add slight rotation and position variation for more organic look
   const rotation = (variantHash % 20) - 10 // -10 to +10 degrees
   const translateX = (variantHash % 6) - 3 // -3 to +3 pixels
@@ -108,12 +111,14 @@ export function ArtworkScribble({ variant = 'default', className = '', size = 60
       className={className}
       style={{ 
         filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))',
+        maxWidth: '100%',
+        height: 'auto',
       }}
     >
       <g transform={`translate(${30 + translateX}, ${30 + translateY}) rotate(${rotation}) translate(-30, -30)`}>
         {paths.map((path, i) => {
-          // Vary stroke width and color slightly for each path
-          const strokeWidth = 2.5 + (i % 2) * 0.5 + (i % 3) * 0.3
+          // Vary stroke width and color slightly for each path (scaled with size)
+          const strokeWidth = baseStrokeWidth + (i % 2) * (baseStrokeWidth * 0.2) + (i % 3) * (baseStrokeWidth * 0.15)
           const colorIndex = (variantHash + i) % colors.length
           const colorVariation = colors[colorIndex]
           
