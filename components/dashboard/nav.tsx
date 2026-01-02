@@ -16,9 +16,11 @@ import {
 
 interface DashboardNavProps {
   role: string | null
+  currentArtworks?: number
+  artworkLimit?: number
 }
 
-export function DashboardNav({ role }: DashboardNavProps) {
+export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100 }: DashboardNavProps) {
   const pathname = usePathname()
   const userRole = (role || 'viewer') as Role
 
@@ -125,12 +127,16 @@ export function DashboardNav({ role }: DashboardNavProps) {
               <div>
                 <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
                   <span>Artworks</span>
-                  <span className="font-medium">0 / 100</span>
+                  <span className="font-medium">{currentArtworks} / {artworkLimit === -1 ? '∞' : artworkLimit}</span>
                 </div>
                 <div className="h-2.5 bg-white/70 dark:bg-white/10 rounded-full overflow-hidden shadow-inner">
                   <div 
-                    className="h-full w-0 bg-gradient-to-r from-crayon-orange to-crayon-pink rounded-full transition-all duration-500" 
-                    style={{ width: '0%' }}
+                    className="h-full bg-gradient-to-r from-crayon-orange to-crayon-pink rounded-full transition-all duration-500" 
+                    style={{ 
+                      width: artworkLimit === -1 
+                        ? '0%' 
+                        : `${Math.min(100, (currentArtworks / artworkLimit) * 100)}%` 
+                    }}
                   />
                 </div>
               </div>

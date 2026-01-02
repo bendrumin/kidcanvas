@@ -109,53 +109,103 @@ export function ArtworkScribble({ variant = 'default', className = '', size = 60
           const res = await fetch(path)
           if (res.ok) {
             const content = await res.text()
-            if (!cancelled && content) {
+            if (!cancelled && content && content.trim().length > 0) {
               setSvgContent(content)
               setUseSvgFile(true)
               return
             }
           }
-        } catch {
+        } catch (error) {
           // Try next path
+          if (process.env.NODE_ENV === 'development') {
+            console.debug(`Failed to load SVG from ${path}:`, error)
+          }
           continue
         }
       }
       // If none worked, use programmatic paths
       if (!cancelled) {
         setUseSvgFile(false)
+        setSvgContent(null)
       }
     }
     
+    // Reset state before trying to load
+    setUseSvgFile(false)
+    setSvgContent(null)
     tryLoadSvg(svgPaths)
     
     return () => {
       cancelled = true
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [variant]) // Re-run when variant changes
   
   // If SVG file exists, render it
   if (useSvgFile && svgContent) {
-    // Extract viewBox from SVG or use default
-    const viewBoxMatch = svgContent.match(/viewBox=["']([^"']+)["']/)
-    const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 60 60'
+    // Extract viewBox from SVG to maintain aspect ratio
+    const viewBoxMatch = svgContent.match(/viewBox=["']([^"']+)["']/i)
+    const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 400 300'
+    
+    // Parse viewBox to calculate aspect ratio
+    const viewBoxValues = viewBox.split(/\s+/).map(Number).filter(n => !isNaN(n))
+    const viewBoxWidth = viewBoxValues[2] || 400
+    const viewBoxHeight = viewBoxValues[3] || 300
+    const aspectRatio = viewBoxWidth / viewBoxHeight
+    
+    // Calculate height based on width and aspect ratio
+    const calculatedHeight = size / aspectRatio
     
     // Extract inner content (everything between <svg> tags)
-    const innerMatch = svgContent.match(/<svg[^>]*>([\s\S]*?)<\/svg>/)
+    const innerMatch = svgContent.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i)
     const innerContent = innerMatch ? innerMatch[1] : svgContent
     
+    // If we couldn't extract inner content, try to modify the SVG directly
+    if (!innerContent || innerContent.trim() === '') {
+      // Fallback: modify the SVG string to adjust width/height
+      const modifiedSvg = svgContent
+        .replace(/width=["'][^"']*["']/i, `width="${size}"`)
+        .replace(/height=["'][^"']*["']/i, `height="${calculatedHeight}"`)
+        .replace(/style=["'][^"']*["']/i, `style="width: ${size}px; height: ${calculatedHeight}px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));"`)
+      
+      return (
+        <div
+          className={className}
+          style={{
+            width: size,
+            height: calculatedHeight,
+            maxWidth: '100%',
+            display: 'inline-block',
+          }}
+          dangerouslySetInnerHTML={{ __html: modifiedSvg }}
+        />
+      )
+    }
+    
     return (
-      <svg
-        width={size}
-        height={size}
-        viewBox={viewBox}
+      <div
         className={className}
         style={{
+          width: size,
+          height: calculatedHeight,
           filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))',
           maxWidth: '100%',
-          height: 'auto',
+          display: 'inline-block',
         }}
-        dangerouslySetInnerHTML={{ __html: innerContent }}
-      />
+      >
+        <svg
+          width={size}
+          height={calculatedHeight}
+          viewBox={viewBox}
+          preserveAspectRatio="xMidYMid meet"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+          dangerouslySetInnerHTML={{ __html: innerContent }}
+        />
+      </div>
     )
   }
   

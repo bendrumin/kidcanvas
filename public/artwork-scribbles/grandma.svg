@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background - cozy indoor -->
+  <rect width="400" height="300" fill="#fff5e6"/>
+  
+  <!-- Wallpaper pattern - little flowers -->
+  <circle cx="30" cy="30" r="5" fill="#ffcccc"/>
+  <circle cx="90" cy="50" r="5" fill="#ccffcc"/>
+  <circle cx="150" cy="25" r="5" fill="#ffcccc"/>
+  <circle cx="210" cy="45" r="5" fill="#ccccff"/>
+  <circle cx="270" cy="30" r="5" fill="#ffcccc"/>
+  <circle cx="330" cy="50" r="5" fill="#ccffcc"/>
+  <circle cx="390" cy="28" r="5" fill="#ccccff"/>
+  <circle cx="60" cy="80" r="5" fill="#ccccff"/>
+  <circle cx="120" cy="70" r="5" fill="#ffcccc"/>
+  <circle cx="300" cy="75" r="5" fill="#ffcccc"/>
+  <circle cx="360" cy="85" r="5" fill="#ccffcc"/>
+  
+  <!-- Floor -->
+  <rect x="0" y="250" width="400" height="50" fill="#deb887"/>
+  <path d="M0 250 L400 250" stroke="#c4a574" stroke-width="3"/>
+  
+  <!-- ROCKING CHAIR - simplified wonky -->
+  <path d="M80 280 Q200 295 320 280" stroke="#8b4513" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M100 250 L95 280" stroke="#8b4513" stroke-width="6"/>
+  <path d="M300 250 L305 280" stroke="#8b4513" stroke-width="6"/>
+  <!-- Chair back -->
+  <path d="M90 140 Q85 190 95 240" stroke="#8b4513" stroke-width="8" fill="none"/>
+  <path d="M310 140 Q315 190 305 240" stroke="#8b4513" stroke-width="8" fill="none"/>
+  <path d="M90 140 Q200 125 310 140" stroke="#8b4513" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M95 170 Q200 158 305 170" stroke="#8b4513" stroke-width="5" fill="none"/>
+  <path d="M98 200 Q200 190 302 200" stroke="#8b4513" stroke-width="5" fill="none"/>
+  <!-- Chair seat -->
+  <path d="M95 240 Q200 250 305 240" stroke="#8b4513" stroke-width="8" fill="none"/>
+  <!-- Arm rests -->
+  <path d="M95 200 L70 205 L70 245 L95 240" fill="#8b4513"/>
+  <path d="M305 200 L330 205 L330 245 L305 240" fill="#8b4513"/>
+  
+  <!-- GRANDMA -->
+  <!-- Hair - gray bun on top -->
+  <ellipse cx="200" cy="75" rx="45" ry="40" fill="#cccccc" stroke="#aaaaaa" stroke-width="3"/>
+  <ellipse cx="200" cy="55" rx="25" ry="20" fill="#bbbbbb" stroke="#999999" stroke-width="3"/>
+  <!-- Curly hair details -->
+  <path d="M160 65 Q155 55 165 50" stroke="#aaa" stroke-width="4" fill="none"/>
+  <path d="M240 65 Q245 55 235 50" stroke="#aaa" stroke-width="4" fill="none"/>
+  <path d="M175 85 Q168 80 172 72" stroke="#aaa" stroke-width="3" fill="none"/>
+  <path d="M225 85 Q232 80 228 72" stroke="#aaa" stroke-width="3" fill="none"/>
+  
+  <!-- Face -->
+  <ellipse cx="200" cy="100" rx="38" ry="35" fill="#ffddcc" stroke="#eeccbb" stroke-width="3"/>
+  
+  <!-- Glasses -->
+  <ellipse cx="182" cy="95" rx="18" ry="15" fill="none" stroke="#666" stroke-width="3"/>
+  <ellipse cx="218" cy="95" rx="18" ry="15" fill="none" stroke="#666" stroke-width="3"/>
+  <path d="M200 95 L200 95" stroke="#666" stroke-width="3"/>
+  <path d="M165 92 L155 88" stroke="#666" stroke-width="3"/>
+  <path d="M235 92 L245 88" stroke="#666" stroke-width="3"/>
+  <!-- Lens shine -->
+  <ellipse cx="177" cy="90" rx="5" ry="4" fill="#fff" opacity="0.5"/>
+  <ellipse cx="213" cy="90" rx="5" ry="4" fill="#fff" opacity="0.5"/>
+  
+  <!-- Eyes behind glasses -->
+  <circle cx="182" cy="95" r="4" fill="#6b4423"/>
+  <circle cx="218" cy="95" r="4" fill="#6b4423"/>
+  <circle cx="183" cy="94" r="2" fill="#fff"/>
+  <circle cx="219" cy="94" r="2" fill="#fff"/>
+  
+  <!-- Rosy cheeks -->
+  <ellipse cx="165" cy="108" rx="10" ry="6" fill="#ffaaaa" opacity="0.5"/>
+  <ellipse cx="235" cy="108" rx="10" ry="6" fill="#ffaaaa" opacity="0.5"/>
+  
+  <!-- Sweet smile with wrinkles -->
+  <path d="M182 118 Q200 132 218 118" stroke="#cc9988" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Smile wrinkles -->
+  <path d="M165 115 Q162 118 165 122" stroke="#eeccbb" stroke-width="2" fill="none"/>
+  <path d="M235 115 Q238 118 235 122" stroke="#eeccbb" stroke-width="2" fill="none"/>
+  
+  <!-- Body - sitting -->
+  <ellipse cx="200" cy="190" rx="55" ry="50" fill="#9966cc" stroke="#7744aa" stroke-width="4"/>
+  
+  <!-- Cardigan/shawl -->
+  <path d="M150 155 Q145 190 150 230" stroke="#cc99cc" stroke-width="15" fill="none" stroke-linecap="round"/>
+  <path d="M250 155 Q255 190 250 230" stroke="#cc99cc" stroke-width="15" fill="none" stroke-linecap="round"/>
+  <path d="M155 160 Q200 150 245 160" stroke="#cc99cc" stroke-width="12" fill="none"/>
+  
+  <!-- Pearl necklace -->
+  <circle cx="175" cy="145" r="4" fill="#fff" stroke="#eee" stroke-width="1"/>
+  <circle cx="188" cy="148" r="4" fill="#fff" stroke="#eee" stroke-width="1"/>
+  <circle cx="200" cy="150" r="5" fill="#fff" stroke="#eee" stroke-width="1"/>
+  <circle cx="212" cy="148" r="4" fill="#fff" stroke="#eee" stroke-width="1"/>
+  <circle cx="225" cy="145" r="4" fill="#fff" stroke="#eee" stroke-width="1"/>
+  
+  <!-- Arms holding knitting -->
+  <path d="M145 190 Q120 200 110 220" stroke="#ffddcc" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <path d="M255 190 Q280 200 290 220" stroke="#ffddcc" stroke-width="12" fill="none" stroke-linecap="round"/>
+  
+  <!-- Hands -->
+  <ellipse cx="108" cy="225" rx="12" ry="15" fill="#ffddcc" stroke="#eeccbb" stroke-width="2"/>
+  <ellipse cx="292" cy="225" rx="12" ry="15" fill="#ffddcc" stroke="#eeccbb" stroke-width="2"/>
+  
+  <!-- KNITTING! -->
+  <!-- Yarn ball -->
+  <circle cx="330" cy="250" r="25" fill="#ff6699"/>
+  <path d="M315 245 Q330 240 345 248 Q335 255 320 252 Q332 260 342 255" stroke="#ff4477" stroke-width="2" fill="none"/>
+  <!-- Yarn string -->
+  <path d="M305 250 Q250 230 200 240 Q150 250 110 225" stroke="#ff6699" stroke-width="3" fill="none"/>
+  <!-- Knitting needles -->
+  <path d="M100 210 L140 250" stroke="#888" stroke-width="4" stroke-linecap="round"/>
+  <path d="M120 210 L80 250" stroke="#888" stroke-width="4" stroke-linecap="round"/>
+  <!-- Knitted fabric -->
+  <path d="M100 230 Q120 235 140 230 Q130 240 110 245 Q125 250 135 245" fill="#ff6699" stroke="#ff4477" stroke-width="2"/>
+  
+  <!-- Legs/feet peeking out -->
+  <ellipse cx="180" cy="255" rx="20" ry="10" fill="#9966cc"/>
+  <ellipse cx="220" cy="255" rx="20" ry="10" fill="#9966cc"/>
+  <!-- Slippers -->
+  <ellipse cx="175" cy="265" rx="18" ry="10" fill="#ff9999"/>
+  <ellipse cx="225" cy="265" rx="18" ry="10" fill="#ff9999"/>
+  <ellipse cx="175" cy="262" rx="8" ry="5" fill="#ffcccc"/>
+  <ellipse cx="225" cy="262" rx="8" ry="5" fill="#ffcccc"/>
+  
+  <!-- Cat at feet! -->
+  <ellipse cx="60" cy="265" rx="25" ry="18" fill="#ff9944" stroke="#cc7722" stroke-width="3"/>
+  <circle cx="50" cy="250" r="15" fill="#ff9944" stroke="#cc7722" stroke-width="3"/>
+  <path d="M38 240 L42 228 L50 238" fill="#ff9944" stroke="#cc7722" stroke-width="2"/>
+  <path d="M58 238 L62 228 L68 240" fill="#ff9944" stroke="#cc7722" stroke-width="2"/>
+  <circle cx="45" cy="248" r="3" fill="#333"/>
+  <circle cx="55" cy="248" r="3" fill="#333"/>
+  <ellipse cx="50" cy="255" rx="4" ry="2" fill="#ffaaaa"/>
+  <path d="M38 255 L28 252" stroke="#cc7722" stroke-width="2"/>
+  <path d="M38 258 L28 260" stroke="#cc7722" stroke-width="2"/>
+  <path d="M62 255 L72 252" stroke="#cc7722" stroke-width="2"/>
+  <path d="M62 258 L72 260" stroke="#cc7722" stroke-width="2"/>
+  <!-- Cat tail -->
+  <path d="M85 265 Q100 250 95 235" stroke="#ff9944" stroke-width="8" fill="none" stroke-linecap="round"/>
+  
+  <!-- Hearts floating -->
+  <path d="M50 180 Q50 170 60 170 Q70 170 70 180 Q70 192 60 202 Q50 192 50 180" fill="#ff9999" opacity="0.6"/>
+  <path d="M340 150 Q340 142 348 142 Q355 142 355 150 Q355 160 348 168 Q340 160 340 150" fill="#ff9999" opacity="0.6"/>
+</svg>

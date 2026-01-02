@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background - like paper -->
+  <rect width="400" height="300" fill="#f5f5dc"/>
+  
+  <!-- Paint splatters in background -->
+  <ellipse cx="50" cy="40" rx="25" ry="18" fill="#ff6b6b" opacity="0.4" transform="rotate(20 50 40)"/>
+  <ellipse cx="370" cy="60" rx="20" ry="28" fill="#4ecdc4" opacity="0.4" transform="rotate(-15 370 60)"/>
+  <ellipse cx="30" cy="250" rx="22" ry="15" fill="#ffe66d" opacity="0.4" transform="rotate(10 30 250)"/>
+  <ellipse cx="380" cy="240" rx="18" ry="25" fill="#9b59b6" opacity="0.4"/>
+  
+  <!-- PALETTE - wobbly bean/kidney shape -->
+  <path d="M80 150 
+           Q60 100 100 70 
+           Q150 45 220 50 
+           Q300 55 340 90 
+           Q375 130 360 180 
+           Q345 230 280 250 
+           Q200 265 140 250 
+           Q80 230 70 190
+           Q65 170 80 150" 
+        fill="#d4a574" stroke="#8b6914" stroke-width="6"/>
+  
+  <!-- Wood grain scribbles -->
+  <path d="M100 80 Q150 85 200 78 Q250 82 300 75" stroke="#c49a6c" stroke-width="3" fill="none"/>
+  <path d="M90 120 Q140 125 190 118 Q240 122 290 115 Q330 120 350 130" stroke="#c49a6c" stroke-width="2" fill="none"/>
+  <path d="M85 180 Q130 178 180 185 Q230 180 280 188 Q320 182 350 175" stroke="#c49a6c" stroke-width="2" fill="none"/>
+  
+  <!-- Thumb hole - wobbly -->
+  <ellipse cx="130" cy="190" rx="32" ry="38" fill="#f5f5dc" stroke="#8b6914" stroke-width="5"/>
+  
+  <!-- PAINT BLOBS - all messy and different -->
+  <!-- Red blob -->
+  <ellipse cx="120" cy="90" rx="28" ry="24" fill="#ff4444" stroke="#cc0000" stroke-width="3" transform="rotate(-10 120 90)"/>
+  <ellipse cx="115" cy="85" rx="10" ry="8" fill="#ff7777" opacity="0.7"/>
+  
+  <!-- Orange blob -->
+  <ellipse cx="190" cy="70" rx="25" ry="22" fill="#ff9933" stroke="#cc6600" stroke-width="3" transform="rotate(15 190 70)"/>
+  <ellipse cx="185" cy="65" rx="9" ry="7" fill="#ffbb66" opacity="0.7"/>
+  
+  <!-- Yellow blob -->
+  <ellipse cx="260" cy="80" rx="30" ry="25" fill="#ffdd00" stroke="#ccaa00" stroke-width="3" transform="rotate(-5 260 80)"/>
+  <ellipse cx="255" cy="72" rx="12" ry="9" fill="#ffee66" opacity="0.7"/>
+  
+  <!-- Green blob -->
+  <ellipse cx="320" cy="120" rx="26" ry="28" fill="#44cc44" stroke="#228822" stroke-width="3" transform="rotate(20 320 120)"/>
+  <ellipse cx="315" cy="112" rx="10" ry="8" fill="#77dd77" opacity="0.7"/>
+  
+  <!-- Blue blob -->
+  <ellipse cx="330" cy="180" rx="24" ry="26" fill="#4488ff" stroke="#2255cc" stroke-width="3" transform="rotate(-15 330 180)"/>
+  <ellipse cx="325" cy="172" rx="9" ry="7" fill="#77aaff" opacity="0.7"/>
+  
+  <!-- Purple blob -->
+  <ellipse cx="290" cy="230" rx="27" ry="23" fill="#9944cc" stroke="#6622aa" stroke-width="3" transform="rotate(10 290 230)"/>
+  <ellipse cx="285" cy="222" rx="10" ry="8" fill="#bb77dd" opacity="0.7"/>
+  
+  <!-- Pink blob -->
+  <ellipse cx="200" cy="235" rx="25" ry="22" fill="#ff66aa" stroke="#cc3388" stroke-width="3" transform="rotate(-8 200 235)"/>
+  <ellipse cx="195" cy="228" rx="9" ry="7" fill="#ff99cc" opacity="0.7"/>
+  
+  <!-- White blob (for mixing) -->
+  <ellipse cx="200" cy="150" rx="30" ry="28" fill="#fff" stroke="#ccc" stroke-width="3"/>
+  <ellipse cx="195" cy="142" rx="12" ry="10" fill="#fff" opacity="0.9"/>
+  <!-- Mixed paint swirls in white -->
+  <path d="M185 150 Q195 145 205 152 Q215 158 210 165" stroke="#ffaa66" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M190 155 Q200 162 215 155" stroke="#88ccff" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- PAINTBRUSH - wonky -->
+  <path d="M30 280 Q50 260 180 120" stroke="#8b6914" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <path d="M30 280 Q50 260 180 120" stroke="#d4a574" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!-- Metal part -->
+  <ellipse cx="175" cy="125" rx="12" ry="18" fill="#aaa" stroke="#888" stroke-width="2" transform="rotate(-55 175 125)"/>
+  <!-- Brush bristles -->
+  <path d="M185 110 Q200 95 210 85 Q225 92 218 108 Q210 120 190 118 Q182 115 185 110" 
+        fill="#ff6633" stroke="#cc4411" stroke-width="2"/>
+  <path d="M192 108 Q202 98 208 95" stroke="#ff8855" stroke-width="3" fill="none"/>
+  <path d="M188 112 Q195 105 200 102" stroke="#ff8855" stroke-width="2" fill="none"/>
+  
+  <!-- Paint drips from brush -->
+  <ellipse cx="215" cy="92" rx="5" ry="8" fill="#ff6633"/>
+  <ellipse cx="225" cy="100" rx="4" ry="6" fill="#ff6633"/>
+</svg>

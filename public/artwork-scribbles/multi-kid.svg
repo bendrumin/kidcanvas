@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background - playground vibes -->
+  <rect width="400" height="300" fill="#87ceeb"/>
+  
+  <!-- Clouds -->
+  <ellipse cx="60" cy="40" rx="30" ry="18" fill="#fff"/>
+  <ellipse cx="85" cy="35" rx="25" ry="20" fill="#fff"/>
+  <ellipse cx="110" cy="42" rx="22" ry="15" fill="#fff"/>
+  
+  <ellipse cx="320" cy="50" rx="28" ry="16" fill="#fff"/>
+  <ellipse cx="350" cy="45" rx="25" ry="18" fill="#fff"/>
+  <ellipse cx="375" cy="52" rx="20" ry="14" fill="#fff"/>
+  
+  <!-- Sun -->
+  <circle cx="200" cy="35" r="28" fill="#ffdd00"/>
+  <path d="M200 0 L200 -8" stroke="#ff9900" stroke-width="5" stroke-linecap="round"/>
+  <path d="M230 15 L240 5" stroke="#ff9900" stroke-width="5" stroke-linecap="round"/>
+  <path d="M235 40 L248 42" stroke="#ff9900" stroke-width="5" stroke-linecap="round"/>
+  <path d="M225 62 L235 75" stroke="#ff9900" stroke-width="5" stroke-linecap="round"/>
+  <path d="M175 62 L165 75" stroke="#ff9900" stroke-width="5" stroke-linecap="round"/>
+  <path d="M165 40 L152 42" stroke="#ff9900" stroke-width="5" stroke-linecap="round"/>
+  <path d="M170 15 L160 5" stroke="#ff9900" stroke-width="5" stroke-linecap="round"/>
+  <!-- Sun face -->
+  <circle cx="192" cy="32" r="4" fill="#ff9900"/>
+  <circle cx="208" cy="32" r="4" fill="#ff9900"/>
+  <path d="M190 45 Q200 55 210 45" stroke="#ff9900" stroke-width="3" fill="none"/>
+  
+  <!-- Ground - grassy -->
+  <path d="M0 245 Q50 240 100 250 Q150 242 200 252 Q250 244 300 254 Q350 246 400 250 L400 300 L0 300 Z" fill="#66bb66"/>
+  
+  <!-- KID 1 - jumping kid with dark skin, curly hair -->
+  <circle cx="55" cy="120" r="22" fill="#8d6e4c" stroke="#6b5340" stroke-width="3"/>
+  <!-- Curly hair puffs -->
+  <circle cx="45" cy="105" r="12" fill="#222"/>
+  <circle cx="65" cy="105" r="12" fill="#222"/>
+  <circle cx="55" cy="98" r="10" fill="#222"/>
+  <circle cx="40" cy="115" r="8" fill="#222"/>
+  <circle cx="70" cy="115" r="8" fill="#222"/>
+  <!-- Face -->
+  <circle cx="48" cy="118" r="4" fill="#222"/>
+  <circle cx="62" cy="118" r="4" fill="#222"/>
+  <path d="M48 132 Q55 142 62 132" stroke="#222" stroke-width="3" fill="none"/>
+  <!-- Body - jumping pose -->
+  <path d="M55 142 L55 185" stroke="#ff4444" stroke-width="14" stroke-linecap="round"/>
+  <!-- Arms up! -->
+  <path d="M55 155 L30 130" stroke="#8d6e4c" stroke-width="8" stroke-linecap="round"/>
+  <path d="M55 155 L80 130" stroke="#8d6e4c" stroke-width="8" stroke-linecap="round"/>
+  <!-- Legs spread - jumping -->
+  <path d="M55 185 L35 220" stroke="#4444ff" stroke-width="9" stroke-linecap="round"/>
+  <path d="M55 185 L75 220" stroke="#4444ff" stroke-width="9" stroke-linecap="round"/>
+  <!-- Shoes -->
+  <ellipse cx="32" cy="225" rx="10" ry="7" fill="#ff9900"/>
+  <ellipse cx="78" cy="225" rx="10" ry="7" fill="#ff9900"/>
+  
+  <!-- KID 2 - girl with pigtails, light skin -->
+  <circle cx="130" cy="145" r="20" fill="#ffe0c0" stroke="#ddc0a0" stroke-width="3"/>
+  <!-- Pigtails -->
+  <ellipse cx="105" cy="140" rx="14" ry="18" fill="#aa4400"/>
+  <ellipse cx="155" cy="140" rx="14" ry="18" fill="#aa4400"/>
+  <!-- Hair on top -->
+  <path d="M115 135 Q125 125 130 128 Q135 125 145 135" stroke="#aa4400" stroke-width="10" fill="none"/>
+  <!-- Hair ties -->
+  <circle cx="105" cy="125" r="5" fill="#ff66ff"/>
+  <circle cx="155" cy="125" r="5" fill="#ff66ff"/>
+  <!-- Face -->
+  <circle cx="123" cy="142" r="3" fill="#222"/>
+  <circle cx="137" cy="142" r="3" fill="#222"/>
+  <path d="M123 155 Q130 162 137 155" stroke="#222" stroke-width="2" fill="none"/>
+  <!-- Dress body -->
+  <path d="M130 165 L115 230 L145 230 Z" fill="#ff66cc" stroke="#dd44aa" stroke-width="3"/>
+  <!-- Polka dots on dress -->
+  <circle cx="125" cy="190" r="4" fill="#fff"/>
+  <circle cx="135" cy="200" r="4" fill="#fff"/>
+  <circle cx="128" cy="215" r="4" fill="#fff"/>
+  <!-- Arms -->
+  <path d="M120 175 L100 195" stroke="#ffe0c0" stroke-width="6" stroke-linecap="round"/>
+  <path d="M140 175 L160 190" stroke="#ffe0c0" stroke-width="6" stroke-linecap="round"/>
+  <!-- Legs -->
+  <path d="M122 230 L120 255" stroke="#ffe0c0" stroke-width="6" stroke-linecap="round"/>
+  <path d="M138 230 L140 255" stroke="#ffe0c0" stroke-width="6" stroke-linecap="round"/>
+  <!-- Shoes -->
+  <ellipse cx="118" cy="260" rx="9" ry="6" fill="#222"/>
+  <ellipse cx="142" cy="260" rx="9" ry="6" fill="#222"/>
+  
+  <!-- KID 3 - boy with spiky hair, medium skin -->
+  <circle cx="205" cy="150" r="20" fill="#d4a574" stroke="#b8936a" stroke-width="3"/>
+  <!-- Spiky hair -->
+  <path d="M188 140 L185 120" stroke="#333" stroke-width="6" stroke-linecap="round"/>
+  <path d="M198 138 L195 115" stroke="#333" stroke-width="6" stroke-linecap="round"/>
+  <path d="M208 136 L210 112" stroke="#333" stroke-width="6" stroke-linecap="round"/>
+  <path d="M218 138 L225 118" stroke="#333" stroke-width="6" stroke-linecap="round"/>
+  <!-- Face -->
+  <circle cx="198" cy="148" r="3" fill="#222"/>
+  <circle cx="212" cy="148" r="3" fill="#222"/>
+  <path d="M198 160 Q205 168 212 160" stroke="#222" stroke-width="2" fill="none"/>
+  <!-- Striped shirt -->
+  <path d="M205 170 L205 215" stroke="#44aa44" stroke-width="16" stroke-linecap="round"/>
+  <path d="M197 180 L213 180" stroke="#fff" stroke-width="3"/>
+  <path d="M197 190 L213 190" stroke="#fff" stroke-width="3"/>
+  <path d="M197 200 L213 200" stroke="#fff" stroke-width="3"/>
+  <!-- Arms waving -->
+  <path d="M195 178 L170 165" stroke="#d4a574" stroke-width="7" stroke-linecap="round"/>
+  <path d="M215 178 L240 160" stroke="#d4a574" stroke-width="7" stroke-linecap="round"/>
+  <!-- Legs -->
+  <path d="M205 215 L195 255" stroke="#4466aa" stroke-width="8" stroke-linecap="round"/>
+  <path d="M205 215 L215 255" stroke="#4466aa" stroke-width="8" stroke-linecap="round"/>
+  <!-- Shoes -->
+  <ellipse cx="193" cy="260" rx="10" ry="6" fill="#aa4444"/>
+  <ellipse cx="218" cy="260" rx="10" ry="6" fill="#aa4444"/>
+  
+  <!-- KID 4 - small kid, Asian features -->
+  <circle cx="275" cy="160" r="18" fill="#ffe4c4" stroke="#ddc4a4" stroke-width="3"/>
+  <!-- Straight black hair with bangs -->
+  <path d="M258 155 Q265 140 275 142 Q285 140 292 155" fill="#111" stroke="#000" stroke-width="2"/>
+  <path d="M260 158 L260 175" stroke="#111" stroke-width="6"/>
+  <path d="M290 158 L290 175" stroke="#111" stroke-width="6"/>
+  <!-- Bangs -->
+  <path d="M262 152 L268 158 L274 152 L280 158 L286 152" stroke="#111" stroke-width="5" fill="none"/>
+  <!-- Face -->
+  <ellipse cx="268" cy="158" rx="4" ry="3" fill="#222"/>
+  <ellipse cx="282" cy="158" rx="4" ry="3" fill="#222"/>
+  <path d="M270 170 Q275 176 280 170" stroke="#222" stroke-width="2" fill="none"/>
+  <!-- Overalls -->
+  <rect x="262" y="178" width="26" height="50" rx="5" fill="#5588dd"/>
+  <path d="M265 178 L265 165 L268 165" stroke="#5588dd" stroke-width="5"/>
+  <path d="M285 178 L285 165 L282 165" stroke="#5588dd" stroke-width="5"/>
+  <!-- Shirt under -->
+  <rect x="265" y="178" width="20" height="15" fill="#ffff66"/>
+  <!-- Arms -->
+  <path d="M262 190 L245 205" stroke="#ffe4c4" stroke-width="6" stroke-linecap="round"/>
+  <path d="M288 190 L305 200" stroke="#ffe4c4" stroke-width="6" stroke-linecap="round"/>
+  <!-- Legs -->
+  <path d="M270 228 L268 255" stroke="#5588dd" stroke-width="7" stroke-linecap="round"/>
+  <path d="M282 228 L284 255" stroke="#5588dd" stroke-width="7" stroke-linecap="round"/>
+  <!-- Shoes -->
+  <ellipse cx="266" cy="260" rx="9" ry="6" fill="#44aa44"/>
+  <ellipse cx="286" cy="260" rx="9" ry="6" fill="#44aa44"/>
+  
+  <!-- KID 5 - kid in wheelchair -->
+  <!-- Wheelchair -->
+  <circle cx="355" cy="225" r="28" fill="none" stroke="#666" stroke-width="5"/>
+  <circle cx="355" cy="225" r="20" fill="none" stroke="#888" stroke-width="3"/>
+  <circle cx="355" cy="225" r="5" fill="#666"/>
+  <!-- Small front wheel -->
+  <circle cx="320" cy="240" r="10" fill="none" stroke="#666" stroke-width="4"/>
+  <circle cx="320" cy="240" r="3" fill="#666"/>
+  <!-- Frame -->
+  <path d="M330 195 L320 240" stroke="#4488ff" stroke-width="5"/>
+  <path d="M330 195 L355 195 L370 225" stroke="#4488ff" stroke-width="5" fill="none"/>
+  <path d="M330 195 L330 170" stroke="#4488ff" stroke-width="4"/>
+  <!-- Seat -->
+  <path d="M328 195 L368 195" stroke="#333" stroke-width="8" stroke-linecap="round"/>
+  <!-- Backrest -->
+  <path d="M330 195 L330 155" stroke="#333" stroke-width="6"/>
+  
+  <!-- Kid in wheelchair - red hair -->
+  <circle cx="350" cy="135" r="20" fill="#ffe0c0" stroke="#ddc0a0" stroke-width="3"/>
+  <!-- Curly red hair -->
+  <ellipse cx="350" cy="120" rx="22" ry="15" fill="#ff6633"/>
+  <circle cx="335" cy="128" r="8" fill="#ff6633"/>
+  <circle cx="365" cy="128" r="8" fill="#ff6633"/>
+  <!-- Freckles -->
+  <circle cx="340" cy="138" r="2" fill="#cc9966"/>
+  <circle cx="345" cy="142" r="2" fill="#cc9966"/>
+  <circle cx="355" cy="140" r="2" fill="#cc9966"/>
+  <circle cx="360" cy="136" r="2" fill="#cc9966"/>
+  <!-- Face -->
+  <circle cx="342" cy="132" r="3" fill="#222"/>
+  <circle cx="358" cy="132" r="3" fill="#222"/>
+  <path d="M343 148 Q350 158 358 148" stroke="#222" stroke-width="3" fill="none"/>
+  <!-- Body -->
+  <path d="M350 155 L350 195" stroke="#9933cc" stroke-width="14" stroke-linecap="round"/>
+  <!-- Arms raised happy -->
+  <path d="M350 165 L325 145" stroke="#ffe0c0" stroke-width="7" stroke-linecap="round"/>
+  <path d="M350 165 L375 140" stroke="#ffe0c0" stroke-width="7" stroke-linecap="round"/>
+  <!-- Legs on footrest -->
+  <path d="M345 195 L340 225" stroke="#4466aa" stroke-width="7" stroke-linecap="round"/>
+  <path d="M355 195 L360 225" stroke="#4466aa" stroke-width="7" stroke-linecap="round"/>
+  <!-- Footrest -->
+  <path d="M335 230 L365 230" stroke="#666" stroke-width="4"/>
+  <!-- Shoes -->
+  <ellipse cx="338" cy="232" rx="8" ry="5" fill="#ffcc00"/>
+  <ellipse cx="362" cy="232" rx="8" ry="5" fill="#ffcc00"/>
+  
+  <!-- Ball between kids -->
+  <circle cx="165" cy="245" r="15" fill="#ff4444" stroke="#cc2222" stroke-width="3"/>
+  <path d="M155 240 Q165 235 175 242" stroke="#fff" stroke-width="2" fill="none"/>
+  <path d="M158 250 Q165 255 172 250" stroke="#fff" stroke-width="2" fill="none"/>
+  
+  <!-- Rainbow in background -->
+  <path d="M0 120 Q100 70 200 75 Q300 80 400 130" stroke="#ff6666" stroke-width="8" fill="none" opacity="0.4"/>
+  <path d="M0 128 Q100 80 200 85 Q300 90 400 138" stroke="#ffcc66" stroke-width="8" fill="none" opacity="0.4"/>
+  <path d="M0 136 Q100 90 200 95 Q300 100 400 146" stroke="#66cc66" stroke-width="8" fill="none" opacity="0.4"/>
+  <path d="M0 144 Q100 100 200 105 Q300 110 400 154" stroke="#6666ff" stroke-width="8" fill="none" opacity="0.4"/>
+  
+  <!-- Floating stars/sparkles -->
+  <path d="M95 90 L98 100 L90 95 L100 95 L92 100 Z" fill="#ffcc00"/>
+  <path d="M300 100 L303 108 L297 104 L305 104 L299 108 Z" fill="#ffcc00"/>
+  <path d="M180 95 L182 102 L177 99 L185 99 L180 102 Z" fill="#ffcc00"/>
+</svg>

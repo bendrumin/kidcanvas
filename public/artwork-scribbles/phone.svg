@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#e0f7fa"/>
+  
+  <!-- PHONE BODY - wonky rectangle with rounded corners -->
+  <path d="M125 25 
+           Q130 20 180 18 
+           Q200 16 220 18 
+           Q270 20 278 28 
+           Q285 38 283 150 
+           Q284 260 280 272 
+           Q275 282 220 285 
+           Q200 287 180 285 
+           Q130 282 122 272 
+           Q118 260 120 150 
+           Q118 40 125 25" 
+        fill="#333" stroke="#111" stroke-width="5"/>
+  
+  <!-- Phone shine edge -->
+  <path d="M128 35 Q132 30 175 28 Q190 27 195 28" stroke="#555" stroke-width="4" fill="none" stroke-linecap="round"/>
+  
+  <!-- SCREEN - wobbly rectangle -->
+  <path d="M138 55 
+           Q142 50 195 48 
+           Q205 48 260 52 
+           Q268 58 266 140 
+           Q267 220 264 235 
+           Q260 242 200 245 
+           Q145 242 140 235 
+           Q136 225 138 140 
+           Q136 60 138 55" 
+        fill="#88ddff" stroke="#44aacc" stroke-width="3"/>
+  
+  <!-- Screen content - kid drawing on screen! -->
+  <!-- Little house -->
+  <path d="M155 180 L155 210 L185 210 L185 180 Z" fill="#ff9966" stroke="#cc6633" stroke-width="2"/>
+  <path d="M150 180 L170 160 L190 180" fill="#884422" stroke="#663311" stroke-width="2"/>
+  <rect x="165" y="192" width="12" height="18" fill="#663311"/>
+  <rect x="158" y="185" width="8" height="8" fill="#88ddff" stroke="#44aacc" stroke-width="1"/>
+  
+  <!-- Little sun on screen -->
+  <circle cx="240" cy="90" r="18" fill="#ffdd00"/>
+  <path d="M240 65 L240 58" stroke="#ff9900" stroke-width="4" stroke-linecap="round"/>
+  <path d="M260 75 L268 68" stroke="#ff9900" stroke-width="4" stroke-linecap="round"/>
+  <path d="M265 90 L273 90" stroke="#ff9900" stroke-width="4" stroke-linecap="round"/>
+  <path d="M260 105 L268 112" stroke="#ff9900" stroke-width="4" stroke-linecap="round"/>
+  <path d="M240 115 L240 122" stroke="#ff9900" stroke-width="4" stroke-linecap="round"/>
+  <path d="M220 105 L212 112" stroke="#ff9900" stroke-width="4" stroke-linecap="round"/>
+  <path d="M215 90 L207 90" stroke="#ff9900" stroke-width="4" stroke-linecap="round"/>
+  <path d="M220 75 L212 68" stroke="#ff9900" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Cloud on screen -->
+  <ellipse cx="175" cy="85" rx="18" ry="12" fill="#fff"/>
+  <ellipse cx="190" cy="80" rx="15" ry="14" fill="#fff"/>
+  <ellipse cx="205" cy="88" rx="14" ry="10" fill="#fff"/>
+  
+  <!-- Little stick figure on screen -->
+  <circle cx="230" cy="175" r="10" fill="#ffcc99" stroke="#cc9966" stroke-width="2"/>
+  <path d="M230 185 L230 210" stroke="#cc9966" stroke-width="3"/>
+  <path d="M230 192 L218 200" stroke="#cc9966" stroke-width="3"/>
+  <path d="M230 192 L242 200" stroke="#cc9966" stroke-width="3"/>
+  <path d="M230 210 L220 228" stroke="#cc9966" stroke-width="3"/>
+  <path d="M230 210 L240 228" stroke="#cc9966" stroke-width="3"/>
+  <!-- Face -->
+  <circle cx="226" cy="173" r="2" fill="#333"/>
+  <circle cx="234" cy="173" r="2" fill="#333"/>
+  <path d="M226 180 Q230 184 234 180" stroke="#333" stroke-width="2" fill="none"/>
+  
+  <!-- Tree on screen -->
+  <path d="M260 205 L260 235" stroke="#885522" stroke-width="5"/>
+  <ellipse cx="260" cy="190" rx="18" ry="22" fill="#44aa44"/>
+  <ellipse cx="250" cy="200" rx="12" ry="15" fill="#55bb55"/>
+  <ellipse cx="272" cy="198" rx="14" ry="16" fill="#44aa44"/>
+  
+  <!-- Speaker at top -->
+  <ellipse cx="200" cy="38" rx="25" ry="5" fill="#222" stroke="#111" stroke-width="2"/>
+  
+  <!-- Camera dot -->
+  <circle cx="165" cy="38" r="5" fill="#222" stroke="#444" stroke-width="2"/>
+  <circle cx="165" cy="38" r="2" fill="#2244aa"/>
+  
+  <!-- Home button at bottom - wobbly circle -->
+  <ellipse cx="200" cy="262" rx="18" ry="16" fill="#222" stroke="#444" stroke-width="3"/>
+  <ellipse cx="200" cy="262" rx="10" ry="9" fill="none" stroke="#555" stroke-width="2"/>
+  
+  <!-- Signal waves coming from phone -->
+  <path d="M290 80 Q310 75 315 90" stroke="#44cc44" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M300 65 Q330 58 340 85" stroke="#44cc44" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M310 50 Q350 40 365 80" stroke="#44cc44" stroke-width="4" fill="none" stroke-linecap="round"/>
+  
+  <!-- Little notification hearts -->
+  <path d="M100 60 Q100 50 110 50 Q120 50 120 60 Q120 72 110 82 Q100 72 100 60" fill="#ff6688"/>
+  <path d="M85 90 Q85 82 93 82 Q100 82 100 90 Q100 100 93 108 Q85 100 85 90" fill="#ff6688"/>
+  
+  <!-- Finger touching screen - blobby -->
+  <ellipse cx="170" cy="140" rx="30" ry="45" fill="#ffcc99" stroke="#cc9966" stroke-width="3" transform="rotate(25 170 140)"/>
+  <path d="M148 105 Q142 95 150 88" stroke="#cc9966" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>

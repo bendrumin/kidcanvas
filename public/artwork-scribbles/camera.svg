@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#ffe4b5"/>
+  
+  <!-- Camera body - wonky rectangle -->
+  <path d="M60 100 Q65 95 180 92 Q200 90 220 93 Q340 98 345 105 Q350 110 348 200 Q345 210 340 215 Q200 222 180 220 Q60 218 55 210 Q50 200 55 110 Z" 
+        fill="#444" stroke="#222" stroke-width="5"/>
+  
+  <!-- Shiny part on body -->
+  <path d="M70 110 Q180 105 200 108 Q320 112 330 115 Q335 120 332 145 Q200 150 180 148 Q70 145 68 140 Q65 130 70 110" 
+        fill="#555"/>
+  
+  <!-- Flash bump - wobbly -->
+  <path d="M280 70 Q275 65 290 62 Q330 60 338 65 Q345 70 342 90 Q340 98 280 95 Q275 90 280 70" 
+        fill="#444" stroke="#222" stroke-width="4"/>
+  <rect x="295" y="68" width="30" height="18" rx="3" fill="#ffff99" stroke="#cccc00" stroke-width="2"/>
+  
+  <!-- Viewfinder bump -->
+  <path d="M90 68 Q88 62 100 60 Q140 58 150 62 Q158 68 155 88 Q152 95 95 92 Q88 88 90 68" 
+        fill="#444" stroke="#222" stroke-width="4"/>
+  <ellipse cx="122" cy="75" rx="18" ry="12" fill="#333" stroke="#222" stroke-width="2"/>
+  <ellipse cx="122" cy="75" rx="10" ry="7" fill="#4488aa"/>
+  
+  <!-- BIG LENS - wobbly circles -->
+  <ellipse cx="200" cy="155" rx="62" ry="58" fill="#222" stroke="#111" stroke-width="5"/>
+  <ellipse cx="200" cy="155" rx="50" ry="48" fill="#334" stroke="#223" stroke-width="4"/>
+  <ellipse cx="200" cy="155" rx="38" ry="36" fill="#66aacc" stroke="#4488aa" stroke-width="3"/>
+  <ellipse cx="200" cy="155" rx="22" ry="20" fill="#222"/>
+  <!-- Lens shine -->
+  <ellipse cx="185" cy="142" rx="12" ry="10" fill="#aaddff" opacity="0.6"/>
+  
+  <!-- Shutter button - blobby -->
+  <ellipse cx="320" cy="85" rx="18" ry="12" fill="#cc3333" stroke="#aa2222" stroke-width="3"/>
+  <ellipse cx="318" cy="82" rx="6" ry="4" fill="#ff6666"/>
+  
+  <!-- Random buttons and dials -->
+  <circle cx="85" cy="130" r="8" fill="#666" stroke="#444" stroke-width="2"/>
+  <circle cx="85" cy="155" r="6" fill="#666" stroke="#444" stroke-width="2"/>
+  <ellipse cx="315" cy="130" rx="15" ry="10" fill="#555" stroke="#333" stroke-width="2"/>
+  <path d="M305 128 L310 125 L315 130 L320 127 L325 130" stroke="#777" stroke-width="2" fill="none"/>
+  
+  <!-- Strap hooks -->
+  <ellipse cx="50" cy="150" rx="8" ry="15" fill="none" stroke="#222" stroke-width="5"/>
+  <ellipse cx="355" cy="150" rx="8" ry="15" fill="none" stroke="#222" stroke-width="5"/>
+  
+  <!-- Camera strap - scribbly -->
+  <path d="M45 135 Q30 120 25 100 Q22 60 40 40 Q100 15 200 12 Q300 15 360 40 Q378 60 375 100 Q372 120 358 135" 
+        stroke="#ff6633" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <path d="M45 135 Q30 120 25 100 Q22 60 40 40 Q100 15 200 12 Q300 15 360 40 Q378 60 375 100 Q372 120 358 135" 
+        stroke="#ff9966" stroke-width="6" fill="none" stroke-linecap="round"/>
+  
+  <!-- Little stars/sparkles - camera magic! -->
+  <path d="M50 250 L55 262 L45 256 L58 256 L48 262 Z" fill="#ffcc00"/>
+  <path d="M350 240 L354 250 L346 246 L356 246 L348 250 Z" fill="#ffcc00"/>
+  <path d="M150 260 L153 268 L147 264 L156 264 L150 268 Z" fill="#ffcc00"/>
+  
+  <!-- "CLICK" text - wobbly kid writing -->
+  <text x="200" y="275" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="28" fill="#ff6633" transform="rotate(-3 200 275)">CLICK!</text>
+</svg>

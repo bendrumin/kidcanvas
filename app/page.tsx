@@ -120,13 +120,13 @@ export default function LandingPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
               {[
                 { bg: 'from-pink-200 to-rose-200 dark:from-pink-900/40 dark:to-rose-900/40', variant: 'flower' as const, title: 'Spring Flowers', artist: 'Emma' },
-                { bg: 'from-blue-200 to-indigo-200 dark:from-blue-900/40 dark:to-indigo-900/40', variant: 'rocket' as const, title: 'Space Ship', artist: 'Lucas' },
+                { bg: 'from-blue-200 to-indigo-200 dark:from-blue-900/40 dark:to-indigo-900/40', variant: 'rocketship' as const, title: 'Space Ship', artist: 'Lucas' },
                 { bg: 'from-green-200 to-emerald-200 dark:from-green-900/40 dark:to-emerald-900/40', variant: 'dinosaur' as const, title: 'Dinosaur', artist: 'Lucas' },
                 { bg: 'from-purple-200 to-violet-200 dark:from-purple-900/40 dark:to-violet-900/40', variant: 'rainbow' as const, title: 'Rainbow Sky', artist: 'Emma' },
               ].map((item, i) => (
                 <div key={i} className="group">
-                  <div className={`aspect-square rounded-lg bg-gradient-to-br ${item.bg} flex items-center justify-center mb-2 p-2`}>
-                    <ArtworkScribble variant={item.variant} size={72} />
+                  <div className={`aspect-square rounded-lg bg-gradient-to-br ${item.bg} flex items-center justify-center mb-2 p-4`}>
+                    <ArtworkScribble variant={item.variant} size={180} />
                   </div>
                   <p className="text-sm font-medium text-foreground truncate">{item.title}</p>
                   <p className="text-xs text-muted-foreground">{item.artist}</p>

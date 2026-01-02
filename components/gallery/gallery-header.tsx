@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
@@ -11,15 +11,11 @@ interface GalleryHeaderProps {
 }
 
 export function GalleryHeader({ initialCount }: GalleryHeaderProps) {
-  // Use initialCount directly to avoid hydration mismatch
-  const [count, setCount] = useState(() => initialCount)
-  const isMountedRef = useRef(false)
-  const lastInitialCountRef = useRef(initialCount)
+  // Use initialCount directly - this will be correct on server render
+  const [count, setCount] = useState(initialCount)
 
   // Listen for custom events to update count (only on client)
   useEffect(() => {
-    isMountedRef.current = true
-    
     const handleDeleted = () => {
       setCount((prev) => Math.max(0, prev - 1))
     }
@@ -44,11 +40,10 @@ export function GalleryHeader({ initialCount }: GalleryHeaderProps) {
     }
   }, [])
 
-  // Update count when initialCount changes (only after mount to avoid hydration issues)
+  // Sync with initialCount when it changes (e.g., after page refresh or navigation)
   useEffect(() => {
-    if (isMountedRef.current && initialCount !== lastInitialCountRef.current && initialCount >= 0) {
+    if (initialCount >= 0) {
       setCount(initialCount)
-      lastInitialCountRef.current = initialCount
     }
   }, [initialCount])
 

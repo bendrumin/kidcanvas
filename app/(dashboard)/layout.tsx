@@ -5,6 +5,7 @@ import { DashboardNav } from '@/components/dashboard/nav'
 import { DashboardHeader } from '@/components/dashboard/header'
 import { WhatsNewModal } from '@/components/changelog/whats-new-modal'
 import { OnboardingModal } from '@/components/onboarding/onboarding-modal'
+import { getUserSubscriptionLimits } from '@/lib/subscription'
 import type { FamilyMemberWithFamily, Family } from '@/lib/supabase/types'
 
 export default async function DashboardLayout({
@@ -48,6 +49,9 @@ export default async function DashboardLayout({
   let hasChildren = false
   let hasArtwork = false
   
+  // Get subscription limits for sidebar counter
+  const limits = await getUserSubscriptionLimits(user.id)
+  
   if (familyId) {
     const [childrenResult, artworkResult] = await Promise.all([
       supabase.from('children').select('id').eq('family_id', familyId).limit(1),
@@ -66,7 +70,11 @@ export default async function DashboardLayout({
         role={role} 
       />
       <div className="flex">
-        <DashboardNav role={role} />
+        <DashboardNav 
+          role={role} 
+          currentArtworks={limits.currentArtworks}
+          artworkLimit={limits.artworkLimit}
+        />
         <main 
           id="main-content" 
           className="flex-1 p-6 lg:p-8 ml-0 lg:ml-64 mt-16"
