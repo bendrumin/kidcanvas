@@ -53,7 +53,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning itemScope itemType="https://schema.org/WebSite">
-      <head>
+      <body className="min-h-screen antialiased">
+        {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-DCH53W5VJT"
           strategy="afterInteractive"
@@ -66,8 +67,6 @@ export default function RootLayout({
             gtag('config', 'G-DCH53W5VJT');
           `}
         </Script>
-      </head>
-      <body className="min-h-screen antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
