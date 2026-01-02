@@ -24,8 +24,25 @@ export async function GET(request: Request) {
         
         // If no family, create one
         if (!membership) {
+          // Extract name from OAuth providers or user metadata
+          const fullName = user.user_metadata?.full_name || 
+                          user.user_metadata?.name ||
+                          user.user_metadata?.display_name ||
+                          user.email?.split('@')[0] || 
+                          'My'
+          
           const familyName = user.user_metadata?.family_name || 
-                            `${user.user_metadata?.full_name?.split(' ')[0] || 'My'}'s Family`
+                            `${fullName.split(' ')[0]}'s Family`
+          
+          // Update user metadata if we got name from OAuth
+          if (!user.user_metadata?.full_name && fullName !== 'My') {
+            await supabase.auth.updateUser({
+              data: {
+                full_name: fullName,
+                family_name: familyName,
+              },
+            })
+          }
           
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (supabase as any).rpc('create_family_for_user', {
