@@ -66,7 +66,7 @@ export function DashboardHeader({ user, family, families, role }: DashboardHeade
           <MobileNav role={role} familyName={family?.name} />
           
           <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center shadow-[0_2px_8px_rgba(233,30,99,0.2)]">
               <Palette className="w-5 h-5 text-white" aria-hidden="true" />
             </div>
             <span className="hidden sm:block text-lg font-display font-bold bg-gradient-to-r from-crayon-pink to-crayon-purple bg-clip-text text-transparent">

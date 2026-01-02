@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>KidCanvas Logo Export</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .logo-icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #E91E63 0%, #9B59B6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(233, 30, 99, 0.3);
+      flex-shrink: 0;
+    }
+    .logo-icon svg {
+      width: 60px;
+      height: 60px;
+      color: white;
+    }
+    .logo-text {
+      font-size: 96px;
+      font-weight: bold;
+      background: linear-gradient(135deg, #E91E63 0%, #9B59B6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    
+    /* Variants for different sizes */
+    .variant-small .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+    }
+    .variant-small .logo-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+    .variant-small .logo-text {
+      font-size: 32px;
+    }
+    .variant-small .logo-container {
+      gap: 8px;
+    }
+    
+    .variant-medium .logo-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+    }
+    .variant-medium .logo-icon svg {
+      width: 36px;
+      height: 36px;
+    }
+    .variant-medium .logo-text {
+      font-size: 48px;
+    }
+    .variant-medium .logo-container {
+      gap: 12px;
+    }
+    
+    .variants {
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+      align-items: center;
+    }
+    
+    .variant-label {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="variants">
+    <!-- Large (default) -->
+    <div>
+      <div class="variant-label">Large (512x512px recommended)</div>
+      <div class="logo-container">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+        </div>
+        <span class="logo-text">KidCanvas</span>
+      </div>
+    </div>
+    
+    <!-- Medium -->
+    <div class="variant-medium">
+      <div class="variant-label">Medium (256x256px recommended)</div>
+      <div class="logo-container">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+        </div>
+        <span class="logo-text">KidCanvas</span>
+      </div>
+    </div>
+    
+    <!-- Small -->
+    <div class="variant-small">
+      <div class="variant-label">Small (128x128px recommended)</div>
+      <div class="logo-container">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+        </div>
+        <span class="logo-text">KidCanvas</span>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Instructions
+    console.log('To export as PNG:');
+    console.log('1. Right-click on the logo variant you want');
+    console.log('2. Select "Inspect" or "Inspect Element"');
+    console.log('3. In DevTools, right-click the element and select "Capture node screenshot"');
+    console.log('Or use a browser extension like "Full Page Screen Capture"');
+  </script>
+</body>
+</html>
+

@@ -91,7 +91,7 @@ export function MobileNav({ role, familyName }: MobileNavProps) {
       <SheetContent side="left" className="w-72 p-0">
         <SheetHeader className="p-4 border-b bg-gradient-to-r from-crayon-pink/10 to-crayon-purple/10">
           <SheetTitle className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center shadow-[0_2px_8px_rgba(233,30,99,0.2)]">
               <Palette className="w-5 h-5 text-white" />
             </div>
             <div className="text-left">

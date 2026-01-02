@@ -22,10 +22,10 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#E91E63] to-[#9B59B6] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#E91E63] to-[#9B59B6] flex items-center justify-center shadow-[0_4px_12px_rgba(233,30,99,0.25)]">
                 <Palette className="w-4 h-4 text-white" />
               </div>
-              <span className="text-xl font-bold text-foreground">
+              <span className="text-xl font-bold bg-gradient-to-r from-[#E91E63] to-[#9B59B6] bg-clip-text text-transparent">
                 KidCanvas
               </span>
             </div>
@@ -267,10 +267,10 @@ export default function LandingPage() {
       <footer className="py-8 px-4 sm:px-6 border-t border-amber-100 dark:border-border" role="contentinfo">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-gradient-to-br from-[#E91E63] to-[#9B59B6] flex items-center justify-center">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#E91E63] to-[#9B59B6] flex items-center justify-center">
               <Palette className="w-3 h-3 text-white" />
             </div>
-            <span className="font-semibold text-foreground">KidCanvas</span>
+            <span className="font-semibold bg-gradient-to-r from-[#E91E63] to-[#9B59B6] bg-clip-text text-transparent">KidCanvas</span>
           </div>
           <nav className="flex items-center gap-6 text-sm text-muted-foreground" aria-label="Footer navigation">
             <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
