@@ -187,12 +187,16 @@ export function ArtworkLightbox({
           <figure className="relative flex-1 min-h-[300px] lg:min-h-[500px] bg-gray-100">
             <Image
               src={artwork.image_url}
-              alt={`Artwork titled "${artwork.title}" by ${artwork.child?.name || 'Unknown'}`}
+              alt={`${artwork.title} by ${artwork.child?.name || 'Unknown artist'}${artwork.ai_description ? `. ${artwork.ai_description}` : ''}`}
               fill
               className="object-contain"
               sizes="(max-width: 1024px) 100vw, 60vw"
               priority
             />
+            <figcaption className="sr-only">
+              Artwork: {artwork.title} by {artwork.child?.name || 'Unknown artist'}
+              {artwork.created_date && `, created ${new Date(artwork.created_date).toLocaleDateString()}`}
+            </figcaption>
           </figure>
 
           {/* Info Panel */}

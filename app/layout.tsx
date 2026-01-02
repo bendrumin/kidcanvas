@@ -52,7 +52,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning itemScope itemType="https://schema.org/WebSite">
       <head>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-DCH53W5VJT"

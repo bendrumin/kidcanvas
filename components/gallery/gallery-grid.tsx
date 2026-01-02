@@ -146,7 +146,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                     <div className="relative aspect-square overflow-hidden bg-gray-50">
                       <Image
                         src={artwork.thumbnail_url || artwork.image_url}
-                        alt={artwork.title}
+                        alt={`${artwork.title} by ${artwork.child?.name || 'Unknown artist'}`}
                         fill
                         className="object-cover"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

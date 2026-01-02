@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { ArtworkScribble } from '@/components/artwork-scribble'
 import { Logo } from '@/components/logo'
+import { OrganizationSchema, SoftwareApplicationSchema, WebSiteSchema } from '@/components/seo/structured-data'
 import { 
   ArrowRight,
   Check,
@@ -12,7 +13,11 @@ import {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#FFFBF5] dark:bg-background overflow-hidden">
+    <>
+      <OrganizationSchema />
+      <SoftwareApplicationSchema />
+      <WebSiteSchema />
+      <div className="min-h-screen bg-[#FFFBF5] dark:bg-background overflow-hidden">
       {/* Simple Navigation */}
       <nav 
         className="fixed top-0 left-0 right-0 z-50 bg-[#FFFBF5]/90 dark:bg-background/90 backdrop-blur-sm border-b border-amber-100 dark:border-border"
@@ -47,6 +52,9 @@ export default function LandingPage() {
           <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight">
             Stop throwing away your kids' masterpieces
           </h1>
+          <p className="sr-only">
+            KidCanvas helps you digitally preserve your children's artwork. Upload photos, tag the artist, and share with family. Free for up to 100 artworks.
+          </p>
           
           <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
             Upload photos of artwork. Tag the artist. Share with grandparents. 
@@ -125,11 +133,11 @@ export default function LandingPage() {
                 { bg: 'from-purple-200 to-violet-200 dark:from-purple-900/40 dark:to-violet-900/40', variant: 'rainbow' as const, title: 'Rainbow Sky', artist: 'Emma' },
               ].map((item, i) => (
                 <div key={i} className="group">
-                  <div className={`aspect-square rounded-lg bg-gradient-to-br ${item.bg} flex items-center justify-center mb-2 p-4`}>
+                  <div className={`aspect-square rounded-lg bg-gradient-to-br ${item.bg} flex items-center justify-center mb-2 p-4`} aria-hidden="true">
                     <ArtworkScribble variant={item.variant} size={180} />
                   </div>
                   <p className="text-sm font-medium text-foreground truncate">{item.title}</p>
-                  <p className="text-xs text-muted-foreground">{item.artist}</p>
+                  <p className="text-xs text-muted-foreground">by {item.artist}</p>
                 </div>
               ))}
             </div>
@@ -271,5 +279,6 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
+    </>
   )
 }

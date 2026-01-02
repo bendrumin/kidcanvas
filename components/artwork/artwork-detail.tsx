@@ -214,7 +214,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
             <div className="relative aspect-[4/3] bg-muted">
               <Image
                 src={artwork.image_url}
-                alt={artwork.title}
+                alt={`${artwork.title} by ${artwork.child?.name || 'Unknown artist'}${artwork.ai_description ? ` - ${artwork.ai_description}` : ''}`}
                 fill
                 className="object-contain"
                 priority
