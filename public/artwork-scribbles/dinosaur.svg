@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Messy ground -->
+  <rect width="400" height="300" fill="#87ceeb"/>
+  <path d="M0 255 Q30 248 60 260 Q100 250 140 262 Q180 252 220 258 Q260 248 300 260 Q340 252 380 262 Q400 255 400 260 L400 300 L0 300 Z" fill="#8B4513"/>
+  <path d="M0 260 Q50 255 100 265 Q150 258 200 268 Q250 260 300 270 Q350 262 400 268" stroke="#654321" stroke-width="4" fill="none"/>
+  
+  <!-- DINO BODY - big wobbly blob -->
+  <ellipse cx="200" cy="180" rx="100" ry="65" fill="#44cc44" stroke="#228822" stroke-width="5" transform="rotate(-5 200 180)"/>
+  
+  <!-- Tummy blob -->
+  <ellipse cx="190" cy="195" rx="55" ry="40" fill="#77dd77" transform="rotate(-8 190 195)"/>
+  
+  <!-- Tail - wiggly -->
+  <path d="M290 175 Q330 160 360 180 Q390 210 380 250 Q360 245 340 250" 
+        fill="#44cc44" stroke="#228822" stroke-width="5"/>
+  
+  <!-- NECK - wobbly tube -->
+  <path d="M115 160 Q90 130 75 95 Q70 70 85 55" 
+        fill="#44cc44" stroke="#228822" stroke-width="5"/>
+  <path d="M130 175 Q110 145 100 110 Q95 85 105 65" 
+        fill="#44cc44" stroke="#228822" stroke-width="0"/>
+  
+  <!-- HEAD - lumpy oval -->
+  <ellipse cx="75" cy="55" rx="45" ry="32" fill="#44cc44" stroke="#228822" stroke-width="5" transform="rotate(-10 75 55)"/>
+  
+  <!-- Snout bump -->
+  <ellipse cx="35" cy="62" rx="28" ry="22" fill="#44cc44" stroke="#228822" stroke-width="5" transform="rotate(-5 35 62)"/>
+  
+  <!-- Big googly eye -->
+  <ellipse cx="72" cy="42" rx="16" ry="18" fill="#fff" stroke="#228822" stroke-width="3"/>
+  <circle cx="76" cy="44" r="10" fill="#222"/>
+  <circle cx="80" cy="40" r="5" fill="#fff"/>
+  
+  <!-- Nostril - just a blob -->
+  <ellipse cx="18" cy="55" rx="5" ry="4" fill="#228822"/>
+  
+  <!-- Big goofy smile -->
+  <path d="M25 72 Q50 95 80 78" stroke="#228822" stroke-width="5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Silly teeth -->
+  <path d="M35 74 L38 84 L42 74" fill="#fff" stroke="#ddd" stroke-width="2"/>
+  <path d="M50 78 L54 88 L58 78" fill="#fff" stroke="#ddd" stroke-width="2"/>
+  <path d="M65 78 L68 86 L72 78" fill="#fff" stroke="#ddd" stroke-width="2"/>
+  
+  <!-- Tiny T-Rex arms - hilariously small -->
+  <path d="M140 165 Q125 175 115 168 Q110 160 118 155 Q130 152 140 160" 
+        fill="#44cc44" stroke="#228822" stroke-width="4"/>
+  <!-- Little claw scribbles -->
+  <path d="M115 162 L105 158" stroke="#228822" stroke-width="3" stroke-linecap="round"/>
+  <path d="M116 168 L106 168" stroke="#228822" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Chunky legs -->
+  <path d="M160 230 Q155 250 165 270 Q160 278 150 275 Q145 265 150 250 Q148 235 155 225" 
+        fill="#44cc44" stroke="#228822" stroke-width="4"/>
+  <ellipse cx="155" cy="278" rx="18" ry="10" fill="#44cc44" stroke="#228822" stroke-width="4"/>
+  
+  <path d="M230 225 Q235 248 228 268 Q232 278 245 275 Q252 268 248 252 Q252 238 245 225" 
+        fill="#44cc44" stroke="#228822" stroke-width="4"/>
+  <ellipse cx="240" cy="278" rx="18" ry="10" fill="#44cc44" stroke="#228822" stroke-width="4"/>
+  
+  <!-- Back spikes - all wonky and different -->
+  <path d="M280 145 L298 115 L310 150" fill="#ff9900" stroke="#cc6600" stroke-width="3"/>
+  <path d="M250 135 L262 100 L278 142" fill="#ffaa22" stroke="#cc6600" stroke-width="3"/>
+  <path d="M218 132 L228 102 L242 138" fill="#ff9900" stroke="#cc6600" stroke-width="3"/>
+  <path d="M188 135 L195 110 L208 140" fill="#ffaa22" stroke="#cc6600" stroke-width="3"/>
+  <path d="M158 145 L162 125 L175 150" fill="#ff9900" stroke="#cc6600" stroke-width="3"/>
+  <path d="M130 155 L132 138 L145 158" fill="#ffaa22" stroke="#cc6600" stroke-width="3"/>
+  
+  <!-- Tail spikes -->
+  <path d="M358 185 L380 170 L372 200" fill="#ff9900" stroke="#cc6600" stroke-width="3"/>
+  <path d="M370 210 L395 200 L382 230" fill="#ffaa22" stroke="#cc6600" stroke-width="3"/>
+  
+  <!-- Random spots - very childish -->
+  <circle cx="170" cy="170" r="12" fill="#66dd66"/>
+  <circle cx="215" cy="165" r="15" fill="#66dd66"/>
+  <circle cx="255" cy="180" r="10" fill="#66dd66"/>
+  <circle cx="195" cy="200" r="9" fill="#66dd66"/>
+  
+  <!-- Ground scribbles -->
+  <path d="M30 262 Q25 248 35 235" stroke="#654321" stroke-width="3" fill="none"/>
+  <path d="M320 265 Q328 250 318 238" stroke="#654321" stroke-width="3" fill="none"/>
+  <ellipse cx="380" cy="275" rx="15" ry="8" fill="#999" stroke="#777" stroke-width="2"/>
+  <ellipse cx="50" cy="278" rx="12" ry="6" fill="#999" stroke="#777" stroke-width="2"/>
+  
+  <!-- Little volcano in back - bonus dino scenery -->
+  <path d="M360 255 L375 200 L395 252" fill="#8B4513" stroke="#654321" stroke-width="3"/>
+  <path d="M372 205 Q375 195 378 205" stroke="#ff4400" stroke-width="4" fill="none"/>
+</svg>

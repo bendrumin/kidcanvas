@@ -23,7 +23,17 @@ A SwiftUI iOS app for scanning and managing children's artwork.
 In Xcode: File → Add Package Dependencies
 
 Add these packages:
-- `https://github.com/supabase-community/supabase-swift.git` (2.0.0+)
+- `https://github.com/supabase/supabase-swift` (2.5.1+)
+
+**Important**: Add these products to your **KidCanvas** target:
+- ✅ Supabase
+- ✅ Auth
+- ✅ PostgREST
+- ✅ Storage
+- ✅ Realtime
+- ✅ Functions
+
+**If you see package errors**, see `FIX_PACKAGE_DEPENDENCIES.md` for troubleshooting steps.
 
 ### 3. Copy Source Files
 

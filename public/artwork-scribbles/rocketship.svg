@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Scribbled dark space -->
+  <rect width="400" height="300" fill="#1a1a3a"/>
+  <!-- Messy crayon-style space scribbles -->
+  <path d="M0 0 Q50 20 100 5 Q150 25 200 8 Q250 22 300 3 Q350 18 400 0" stroke="#252550" stroke-width="30" fill="none"/>
+  <path d="M0 50 Q60 70 120 55 Q180 75 240 52 Q300 68 360 48 Q400 62 400 50" stroke="#202045" stroke-width="25" fill="none"/>
+  
+  <!-- Wonky stars - all different, messy -->
+  <path d="M30 40 L38 55 L22 48 L40 48 L25 55 Z" fill="#ffff00" stroke="#ffff00" stroke-width="2"/>
+  <path d="M350 30 L360 52 L340 42 L362 42 L342 52 Z" fill="#fff" stroke="#fff" stroke-width="2"/>
+  <circle cx="100" cy="70" r="4" fill="#ffff66"/>
+  <circle cx="380" cy="100" r="3" fill="#fff"/>
+  <path d="M50 150 L55 162 L45 156 L58 156 L48 162 Z" fill="#ffff00"/>
+  <circle cx="20" cy="220" r="5" fill="#ffff66"/>
+  <circle cx="380" cy="250" r="4" fill="#fff"/>
+  <path d="M150 30 L155 42 L145 36 L158 36 L148 42 Z" fill="#fff"/>
+  <circle cx="250" cy="20" r="3" fill="#ffff66"/>
+  <circle cx="320" cy="180" r="4" fill="#fff"/>
+  <circle cx="90" cy="250" r="3" fill="#ffff00"/>
+  
+  <!-- Blobby planet - like a kid drew it -->
+  <ellipse cx="340" cy="200" rx="40" ry="35" fill="#ff6b35" stroke="#cc4400" stroke-width="4"/>
+  <path d="M310 195 Q340 180 370 198" stroke="#ffaa77" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <ellipse cx="340" cy="200" rx="58" ry="14" fill="none" stroke="#ffcc00" stroke-width="5" stroke-dasharray="12 8"/>
+  
+  <!-- ROCKET - chunky and wonky -->
+  <!-- Main body - not symmetrical -->
+  <path d="M160 240 Q152 200 158 150 Q165 110 190 75 Q220 108 228 148 Q238 195 232 240 Z" 
+        fill="#dddddd" stroke="#888" stroke-width="5" stroke-linejoin="round"/>
+  
+  <!-- Wonky red tip -->
+  <path d="M170 95 Q188 45 212 92 Q195 85 170 95" fill="#ff3333" stroke="#cc0000" stroke-width="4"/>
+  
+  <!-- Crooked window -->
+  <ellipse cx="194" cy="140" rx="22" ry="25" fill="#66ccff" stroke="#3399cc" stroke-width="5" transform="rotate(8 194 140)"/>
+  <ellipse cx="188" cy="132" rx="8" ry="10" fill="#aaeeff" opacity="0.7"/>
+  
+  <!-- Messy fins -->
+  <path d="M158 215 Q130 225 120 265 Q145 255 160 238" fill="#ff3333" stroke="#cc0000" stroke-width="4"/>
+  <path d="M232 218 Q258 228 272 262 Q248 250 230 235" fill="#ff3333" stroke="#cc0000" stroke-width="4"/>
+  
+  <!-- Scribbly stripes -->
+  <path d="M165 175 Q192 168 222 178" stroke="#aaa" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M162 200 Q190 192 225 202" stroke="#aaa" stroke-width="6" fill="none" stroke-linecap="round"/>
+  
+  <!-- FIRE!! Messy orange and yellow scribbles -->
+  <path d="M168 242 Q175 270 165 295 Q185 265 195 300 Q205 260 225 295 Q218 268 228 245" 
+        fill="#ff6600" stroke="#ff4400" stroke-width="3"/>
+  <path d="M175 248 Q182 272 175 288 Q192 262 195 285 Q200 258 218 282 Q212 265 220 250" 
+        fill="#ffcc00" stroke="#ff9900" stroke-width="2"/>
+  <path d="M182 252 Q188 270 185 280 Q195 262 195 275 Q198 260 210 275 Q205 262 212 255" 
+        fill="#ffff00"/>
+  
+  <!-- Moon - lumpy circle -->
+  <ellipse cx="70" cy="80" rx="32" ry="28" fill="#eeeedd" stroke="#ccccaa" stroke-width="4"/>
+  <circle cx="58" cy="72" r="8" fill="#ccccaa"/>
+  <circle cx="78" cy="88" r="10" fill="#ccccaa"/>
+  <circle cx="62" cy="92" r="6" fill="#ccccaa"/>
+  <circle cx="82" cy="70" r="5" fill="#ccccaa"/>
+  
+  <!-- Random space scribbles -->
+  <path d="M280 60 Q290 55 295 65 Q285 70 280 60" stroke="#ff69b4" stroke-width="3" fill="none"/>
+  <path d="M120 180 Q130 175 135 185 Q125 190 120 180" stroke="#66ffcc" stroke-width="3" fill="none"/>
+</svg>

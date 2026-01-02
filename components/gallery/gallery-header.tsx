@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
@@ -21,19 +21,41 @@ export function GalleryHeader({ initialCount }: GalleryHeaderProps) {
     const handleAdded = () => {
       setCount((prev) => prev + 1)
     }
+    const handleCountChanged = (e: Event) => {
+      const customEvent = e as CustomEvent<{ count: number }>
+      if (customEvent.detail?.count !== undefined) {
+        setCount(customEvent.detail.count)
+      }
+    }
 
     window.addEventListener('artwork-deleted', handleDeleted)
     window.addEventListener('artwork-added', handleAdded)
+    window.addEventListener('artwork-count-changed', handleCountChanged)
 
     return () => {
       window.removeEventListener('artwork-deleted', handleDeleted)
       window.removeEventListener('artwork-added', handleAdded)
+      window.removeEventListener('artwork-count-changed', handleCountChanged)
     }
   }, [])
 
   // Update count when initialCount changes (e.g., from server refresh)
+  // Use a ref to track if this is the initial mount to prevent flicker
+  const isInitialMount = React.useRef(true)
+  const lastInitialCount = React.useRef(initialCount)
+  
   useEffect(() => {
-    setCount(initialCount)
+    if (isInitialMount.current) {
+      // On initial mount, set the count immediately and mark as mounted
+      setCount(initialCount)
+      lastInitialCount.current = initialCount
+      isInitialMount.current = false
+    } else if (initialCount !== lastInitialCount.current && initialCount >= 0) {
+      // Only update if initialCount actually changed (not just a re-render)
+      // This prevents flicker from hydration mismatches
+      setCount(initialCount)
+      lastInitialCount.current = initialCount
+    }
   }, [initialCount])
 
   return (

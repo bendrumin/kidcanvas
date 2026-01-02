@@ -1,9 +1,9 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 interface ArtworkScribbleProps {
-  variant?: 'flower' | 'rocket' | 'dinosaur' | 'rainbow' | 'camera' | 'palette' | 'phone' | 'family' | 'grandma' | 'multi-kid' | 'default'
+  variant?: 'flower' | 'rocket' | 'rocketship' | 'dinosaur' | 'rainbow' | 'camera' | 'palette' | 'phone' | 'family' | 'grandma' | 'multi-kid' | 'default'
   className?: string
   size?: number
 }
@@ -90,7 +90,77 @@ const colors = [
 ]
 
 export function ArtworkScribble({ variant = 'default', className = '', size = 60 }: ArtworkScribbleProps) {
-  const paths = scribblePaths[variant] || scribblePaths.default
+  // Normalize variant name (rocketship -> rocket for file lookup, but also check rocketship.svg)
+  const fileVariant = variant === 'rocketship' ? 'rocket' : variant
+  const svgPaths = variant === 'rocketship' 
+    ? [`/artwork-scribbles/rocketship.svg`, `/artwork-scribbles/rocket.svg`] // Try both
+    : [`/artwork-scribbles/${fileVariant}.svg`]
+  const [useSvgFile, setUseSvgFile] = useState(false)
+  const [svgContent, setSvgContent] = useState<string | null>(null)
+  
+  // Try to load SVG file from public directory (try multiple paths for rocketship)
+  useEffect(() => {
+    let cancelled = false
+    
+    // Try each path until one works
+    const tryLoadSvg = async (paths: string[]) => {
+      for (const path of paths) {
+        try {
+          const res = await fetch(path)
+          if (res.ok) {
+            const content = await res.text()
+            if (!cancelled && content) {
+              setSvgContent(content)
+              setUseSvgFile(true)
+              return
+            }
+          }
+        } catch {
+          // Try next path
+          continue
+        }
+      }
+      // If none worked, use programmatic paths
+      if (!cancelled) {
+        setUseSvgFile(false)
+      }
+    }
+    
+    tryLoadSvg(svgPaths)
+    
+    return () => {
+      cancelled = true
+    }
+  }, [variant]) // Re-run when variant changes
+  
+  // If SVG file exists, render it
+  if (useSvgFile && svgContent) {
+    // Extract viewBox from SVG or use default
+    const viewBoxMatch = svgContent.match(/viewBox=["']([^"']+)["']/)
+    const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 60 60'
+    
+    // Extract inner content (everything between <svg> tags)
+    const innerMatch = svgContent.match(/<svg[^>]*>([\s\S]*?)<\/svg>/)
+    const innerContent = innerMatch ? innerMatch[1] : svgContent
+    
+    return (
+      <svg
+        width={size}
+        height={size}
+        viewBox={viewBox}
+        className={className}
+        style={{
+          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))',
+          maxWidth: '100%',
+          height: 'auto',
+        }}
+        dangerouslySetInnerHTML={{ __html: innerContent }}
+      />
+    )
+  }
+  
+  // Fall back to programmatic paths
+  const paths = scribblePaths[variant] || scribblePaths[fileVariant] || scribblePaths.default
   // Use a hash of variant to get consistent but varied colors
   const variantHash = variant.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
   const baseColor = colors[variantHash % colors.length]

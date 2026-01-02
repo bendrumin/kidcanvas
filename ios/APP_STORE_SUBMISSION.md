@@ -142,6 +142,8 @@ Create a privacy policy page covering:
 ### Current Implementation
 The iOS app currently uses **web checkout via Stripe**. Users are directed to the web app for subscription management.
 
+**Important:** When users hit subscription limits (e.g., artwork upload limit), the app shows an alert directing them to upgrade via the website at `kidcanvas.app/dashboard/billing`. The iOS app does not support in-app purchases - all subscription management happens on the web.
+
 ### If You Want Native IAP (Optional)
 To add native Apple In-App Purchases, you would need to:
 1. Integrate StoreKit 2

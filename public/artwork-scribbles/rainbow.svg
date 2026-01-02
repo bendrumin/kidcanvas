@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Messy blue sky -->
+  <rect width="400" height="300" fill="#66ccff"/>
+  
+  <!-- RAINBOW - wobbly uneven bands like crayon scribbles -->
+  <!-- Red - not smooth at all -->
+  <path d="M30 290 Q35 200 80 150 Q130 100 200 90 Q280 100 330 155 Q370 210 375 290" 
+        stroke="#ff3333" stroke-width="22" fill="none" stroke-linecap="round"/>
+  <!-- Orange - different wobble -->
+  <path d="M52 290 Q55 210 95 158 Q140 112 200 105 Q265 115 310 165 Q348 218 352 290" 
+        stroke="#ff9933" stroke-width="20" fill="none" stroke-linecap="round"/>
+  <!-- Yellow -->
+  <path d="M72 290 Q78 218 112 168 Q155 125 200 118 Q250 128 292 175 Q328 225 332 290" 
+        stroke="#ffff00" stroke-width="20" fill="none" stroke-linecap="round"/>
+  <!-- Green -->
+  <path d="M92 290 Q100 228 130 182 Q168 142 200 135 Q238 145 275 188 Q308 235 312 290" 
+        stroke="#33cc33" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <!-- Blue -->
+  <path d="M110 290 Q118 238 145 195 Q178 158 200 152 Q228 162 260 200 Q290 245 295 290" 
+        stroke="#3366ff" stroke-width="16" fill="none" stroke-linecap="round"/>
+  <!-- Purple -->
+  <path d="M128 290 Q138 248 160 210 Q185 178 200 172 Q220 182 242 215 Q270 255 278 290" 
+        stroke="#9933ff" stroke-width="14" fill="none" stroke-linecap="round"/>
+  
+  <!-- SCRIBBLY SUN with goofy face -->
+  <ellipse cx="340" cy="65" rx="48" ry="44" fill="#ffdd00"/>
+  <!-- Messy rays - all different -->
+  <path d="M340 10 Q335 -8 345 -12" stroke="#ff9900" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M395 45 Q415 38 422 30" stroke="#ff9900" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M398 75 Q420 78 428 72" stroke="#ff9900" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M388 105 Q408 118 415 128" stroke="#ff9900" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M340 120 Q342 142 338 152" stroke="#ff9900" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M292 102 Q275 115 268 125" stroke="#ff9900" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M288 65 Q268 62 258 68" stroke="#ff9900" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M295 30 Q280 18 272 8" stroke="#ff9900" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <!-- Derpy face -->
+  <ellipse cx="322" cy="55" rx="9" ry="11" fill="#222"/>
+  <ellipse cx="358" cy="52" rx="10" ry="12" fill="#222"/>
+  <circle cx="325" cy="50" r="4" fill="#fff"/>
+  <circle cx="362" cy="48" r="4" fill="#fff"/>
+  <path d="M315 82 Q340 105 365 78" stroke="#ff6600" stroke-width="6" fill="none" stroke-linecap="round"/>
+  
+  <!-- BLOBBY CLOUDS - lumpy shapes -->
+  <!-- Left cloud -->
+  <ellipse cx="45" cy="90" rx="35" ry="25" fill="#fff"/>
+  <ellipse cx="78" cy="78" rx="32" ry="28" fill="#fff"/>
+  <ellipse cx="108" cy="88" rx="28" ry="22" fill="#fff"/>
+  <ellipse cx="65" cy="105" rx="30" ry="20" fill="#fff"/>
+  
+  <!-- Right bottom cloud puff -->
+  <ellipse cx="340" cy="265" rx="40" ry="28" fill="#fff"/>
+  <ellipse cx="375" cy="252" rx="35" ry="30" fill="#fff"/>
+  <ellipse cx="400" cy="268" rx="30" ry="24" fill="#fff"/>
+  <ellipse cx="355" cy="282" rx="32" ry="22" fill="#fff"/>
+  
+  <!-- Left bottom cloud -->
+  <ellipse cx="25" cy="272" rx="38" ry="25" fill="#fff"/>
+  <ellipse cx="58" cy="258" rx="32" ry="28" fill="#fff"/>
+  <ellipse cx="88" cy="270" rx="30" ry="22" fill="#fff"/>
+  <ellipse cx="45" cy="285" rx="28" ry="18" fill="#fff"/>
+  
+  <!-- Little cloud top -->
+  <ellipse cx="180" cy="40" rx="28" ry="18" fill="#fff"/>
+  <ellipse cx="205" cy="32" rx="25" ry="20" fill="#fff"/>
+  <ellipse cx="228" cy="42" rx="22" ry="16" fill="#fff"/>
+  
+  <!-- BIRDS - simple V scribbles -->
+  <path d="M135 65 Q142 55 150 65 Q158 55 165 65" stroke="#333" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M260 50 Q266 42 272 50 Q278 42 284 50" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M155 95 Q160 88 165 95 Q170 88 175 95" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Random hearts floating -->
+  <path d="M95 145 Q95 132 108 132 Q120 132 120 145 Q120 158 108 172 Q95 158 95 145" fill="#ff66aa" stroke="#ff3388" stroke-width="3"/>
+  <path d="M295 120 Q295 110 305 110 Q315 110 315 120 Q315 130 305 142 Q295 130 295 120" fill="#ff99cc" stroke="#ff66aa" stroke-width="2"/>
+  <path d="M55 180 Q55 172 63 172 Q72 172 72 180 Q72 190 63 198 Q55 190 55 180" fill="#ff66aa" stroke="#ff3388" stroke-width="2"/>
+  
+  <!-- Stars/sparkles - messy -->
+  <path d="M200 65 L205 78 L192 70 L208 70 L195 78 Z" fill="#ffff66"/>
+  <path d="M145 120 L148 130 L140 125 L152 125 L144 130 Z" fill="#fff"/>
+  <path d="M265 95 L268 105 L260 100 L272 100 L264 105 Z" fill="#ffff66"/>
+  
+  <!-- Bonus: little airplane scribble -->
+  <ellipse cx="320" cy="145" rx="22" ry="8" fill="#fff" stroke="#ccc" stroke-width="2" transform="rotate(-15 320 145)"/>
+  <path d="M308 142 L295 135 L308 148" fill="#fff" stroke="#ccc" stroke-width="2"/>
+  <path d="M332 140 L345 132" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
+  <path d="M332 150 L342 158" stroke="#ccc" stroke-width="3" stroke-linecap="round"/>
+</svg>

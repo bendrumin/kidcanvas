@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArtworkLightbox } from './artwork-lightbox'
@@ -34,9 +34,15 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   // Update count when artworks change
+  // Use a ref to prevent calling onCountChange on initial mount if count is already correct
+  const prevLengthRef = useRef(artworks.length)
+  
   useEffect(() => {
-    if (onCountChange) {
+    // Only call onCountChange if the length actually changed
+    // This prevents unnecessary updates that could cause flicker
+    if (onCountChange && artworks.length !== prevLengthRef.current) {
       onCountChange(artworks.length)
+      prevLengthRef.current = artworks.length
     }
   }, [artworks.length, onCountChange])
 
