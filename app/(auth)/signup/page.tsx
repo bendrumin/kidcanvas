@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useToast } from '@/components/ui/use-toast'
 import { createClient } from '@/lib/supabase/client'
-import { Mail, Lock, User, Users, Loader2 } from 'lucide-react'
+import { Mail, Lock, User, Users, Loader2, Check } from 'lucide-react'
 import { Logo } from '@/components/logo'
 
 export default function SignupPage() {
