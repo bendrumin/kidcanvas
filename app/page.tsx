@@ -9,6 +9,11 @@ import { OrganizationSchema, SoftwareApplicationSchema, WebSiteSchema } from '@/
 import { 
   ArrowRight,
   Check,
+  Shield,
+  Lock,
+  Heart,
+  Star,
+  Users,
 } from 'lucide-react'
 
 export default function LandingPage() {
@@ -18,6 +23,18 @@ export default function LandingPage() {
       <SoftwareApplicationSchema />
       <WebSiteSchema />
       <div className="min-h-screen bg-[#FFFBF5] dark:bg-background overflow-hidden">
+      {/* Sticky Mobile CTA */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-card border-t border-amber-100 dark:border-border shadow-lg sm:hidden">
+        <div className="max-w-6xl mx-auto px-4 py-3">
+          <Link href="/signup" className="block w-full">
+            <Button size="lg" className="w-full bg-[#E91E63] hover:bg-[#C2185B]">
+              Start Free — No Credit Card
+              <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
+          </Link>
+        </div>
+      </div>
+      
       {/* Simple Navigation */}
       <nav 
         className="fixed top-0 left-0 right-0 z-50 bg-[#FFFBF5]/90 dark:bg-background/90 backdrop-blur-sm border-b border-amber-100 dark:border-border"
@@ -63,11 +80,26 @@ export default function LandingPage() {
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/signup">
-              <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8">
+              <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">
                 Start free — 100 artworks included
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
+          </div>
+          
+          <div className="mt-6 flex items-center justify-center gap-6 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-green-600" />
+              <span>No credit card required</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Lock className="w-4 h-4 text-green-600" />
+              <span>Secure & private</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Heart className="w-4 h-4 text-green-600" />
+              <span>Cancel anytime</span>
+            </div>
           </div>
           
           <p className="mt-4 text-sm text-muted-foreground">
@@ -157,6 +189,29 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Social Proof */}
+      <section className="py-12 px-4 sm:px-6 bg-gradient-to-b from-transparent to-amber-50/50 dark:to-transparent">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="flex -space-x-2">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-200 to-purple-200 dark:from-pink-800 dark:to-purple-800 border-2 border-white dark:border-background" />
+              ))}
+            </div>
+            <div className="text-left ml-2">
+              <p className="font-semibold text-foreground">Trusted by families</p>
+              <p className="text-sm text-muted-foreground">Preserving memories daily</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-1 mt-4">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+            ))}
+            <span className="ml-2 text-sm text-muted-foreground">5.0 from early users</span>
+          </div>
+        </div>
+      </section>
+
       {/* Who It's For - Personal */}
       <section className="py-12 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto">
@@ -205,13 +260,21 @@ export default function LandingPage() {
           <h2 className="text-2xl font-bold text-center text-foreground mb-2">
             Simple pricing
           </h2>
-          <p className="text-center text-muted-foreground mb-8">
+          <p className="text-center text-muted-foreground mb-2">
             Free for most families. Upgrade if you need more.
+          </p>
+          <p className="text-center text-sm text-green-600 dark:text-green-400 mb-8 font-medium">
+            ✓ No credit card required • ✓ Cancel anytime • ✓ 100 artworks free forever
           </p>
           
           <div className="grid sm:grid-cols-2 gap-4">
             {/* Free */}
-            <div className="p-6 rounded-xl border-2 border-gray-200 dark:border-border bg-gray-50 dark:bg-secondary">
+            <div className="p-6 rounded-xl border-2 border-gray-200 dark:border-border bg-gray-50 dark:bg-secondary relative">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-semibold px-3 py-1 rounded-full">
+                  Most Popular
+                </span>
+              </div>
               <p className="font-bold text-foreground text-lg">Free</p>
               <p className="text-3xl font-bold text-foreground mt-1">$0</p>
               <p className="text-muted-foreground text-sm mb-4">Forever</p>
@@ -229,7 +292,7 @@ export default function LandingPage() {
             <div className="p-6 rounded-xl border-2 border-[#E91E63] bg-gradient-to-br from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30">
               <p className="font-bold text-foreground text-lg">Family</p>
               <p className="text-3xl font-bold text-foreground mt-1">$4.99<span className="text-sm font-normal text-muted-foreground">/mo</span></p>
-              <p className="text-muted-foreground text-sm mb-4">or $49/year</p>
+              <p className="text-muted-foreground text-sm mb-4">or $49/year <span className="text-green-600 dark:text-green-400">(save 17%)</span></p>
               <ul className="space-y-2 text-sm">
                 {['Unlimited artworks', 'Unlimited children', 'AI auto-tagging', 'Share with anyone', 'Priority support'].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-foreground">
@@ -243,8 +306,46 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="py-12 px-4 sm:px-6 bg-white dark:bg-card border-y border-amber-100 dark:border-border">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-center text-foreground mb-8">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-4">
+            {[
+              {
+                q: "Is it really free?",
+                a: "Yes! The free plan includes 100 artworks, 2 children, and all core features. No credit card required. You only pay if you need unlimited storage."
+              },
+              {
+                q: "What happens to my photos?",
+                a: "Your artwork photos are stored securely in the cloud. You own your data and can export everything anytime. We never share your photos with anyone."
+              },
+              {
+                q: "Can grandparents access it?",
+                a: "Yes! Share a simple link with family members. They can view the gallery without creating an account. Perfect for long-distance grandparents."
+              },
+              {
+                q: "What if I want to cancel?",
+                a: "Cancel anytime, no questions asked. Your free plan continues with 100 artworks. You can export all your data before canceling."
+              },
+              {
+                q: "Do I need the iOS app?",
+                a: "No! The web app works perfectly on phones, tablets, and computers. The iOS app is just a bonus for easier uploading."
+              },
+            ].map((faq, i) => (
+              <div key={i} className="p-4 bg-gray-50 dark:bg-secondary rounded-lg">
+                <h3 className="font-semibold text-foreground mb-2">{faq.q}</h3>
+                <p className="text-sm text-muted-foreground">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA - Personal */}
-      <section className="py-16 px-4 sm:px-6">
+      <section className="py-16 px-4 sm:px-6 bg-gradient-to-b from-amber-50/50 to-transparent dark:from-transparent">
         <div className="max-w-xl mx-auto text-center">
           <div className="flex justify-center mb-4">
             <ArtworkScribble variant="palette" size={96} />
@@ -253,19 +354,22 @@ export default function LandingPage() {
             Stop losing artwork to the recycling bin
           </h2>
           <p className="text-muted-foreground mb-6">
-            Takes 2 minutes to set up. Free for up to 100 artworks.
+            Takes 2 minutes to set up. Free for up to 100 artworks. No credit card required.
           </p>
           <Link href="/signup">
-            <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8">
-              Create your family gallery
+            <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">
+              Create your family gallery — It's free!
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </Link>
+          <p className="mt-4 text-xs text-muted-foreground">
+            Join families already preserving their kids' masterpieces
+          </p>
         </div>
       </section>
 
       {/* Footer - Minimal */}
-      <footer className="py-8 px-4 sm:px-6 border-t border-amber-100 dark:border-border" role="contentinfo">
+      <footer className="py-8 px-4 sm:px-6 border-t border-amber-100 dark:border-border pb-20 sm:pb-8" role="contentinfo">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <Logo size="xs" />
           <nav className="flex items-center gap-6 text-sm text-muted-foreground" aria-label="Footer navigation">

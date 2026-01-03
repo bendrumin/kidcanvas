@@ -121,6 +121,16 @@ export default function SignupPage() {
           <CardHeader className="text-center pb-2">
             <CardTitle className="text-2xl font-display">Create Your Gallery</CardTitle>
             <CardDescription>Start preserving your children's artwork today</CardDescription>
+            <div className="mt-4 flex items-center justify-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Check className="w-4 h-4 text-green-600" />
+                <span>100 artworks free</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Check className="w-4 h-4 text-green-600" />
+                <span>No credit card</span>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             {/* OAuth Button */}
@@ -260,6 +270,11 @@ export default function SignupPage() {
                 {' '}and{' '}
                 <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
               </p>
+              <div className="mt-4 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-900">
+                <p className="text-xs text-green-800 dark:text-green-200 text-center">
+                  🔒 Your data is secure. Cancel anytime. No hidden fees.
+                </p>
+              </div>
             </form>
 
             <div className="mt-6 text-center text-sm">
