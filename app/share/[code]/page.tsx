@@ -3,11 +3,12 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Heart, Download } from 'lucide-react'
+import { Calendar, Heart, Download, Users } from 'lucide-react'
 import { Logo } from '@/components/logo'
 import { formatDate } from '@/lib/utils'
+import { redirect } from 'next/navigation'
 
 interface SharePageProps {
   params: Promise<{ code: string }>
@@ -48,7 +49,106 @@ export default async function SharePage({ params }: SharePageProps) {
     )
   }
 
-  // Get artwork
+  // Check if this is a gallery share (type is 'collection' and resource_id matches family_id)
+  const isGalleryShare = shareLink.type === 'collection' && shareLink.resource_id === shareLink.family_id
+  
+  if (isGalleryShare) {
+    // Get family info
+    const { data: family } = await (supabase
+      .from('families') as any)
+      .select('*')
+      .eq('id', shareLink.family_id)
+      .single()
+
+    if (!family) {
+      notFound()
+    }
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    // If logged in, check if already a member
+    if (user) {
+      const { data: membership } = await supabase
+        .from('family_members')
+        .select('id')
+        .eq('family_id', family.id)
+        .eq('user_id', user.id)
+        .single()
+
+      if (membership) {
+        redirect('/dashboard')
+      }
+    }
+
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background p-4">
+        {/* Decorative elements */}
+        <div className="absolute top-20 left-10 w-32 h-32 bg-crayon-green/20 dark:bg-crayon-green/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-crayon-blue/20 dark:bg-crayon-blue/10 rounded-full blur-3xl" />
+
+        <div className="w-full max-w-md relative z-10">
+          {/* Logo */}
+          <div className="text-center mb-8">
+            <Logo size="lg" />
+          </div>
+
+          <Card className="border-2 shadow-xl">
+            <CardHeader className="text-center pb-2">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-crayon-blue to-crayon-purple flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-white" />
+              </div>
+              <CardTitle className="text-2xl font-display">You're Invited!</CardTitle>
+              <CardDescription className="text-base">
+                You've been invited to view the
+              </CardDescription>
+              <div className="mt-2 px-4 py-3 bg-gradient-to-r from-crayon-pink/10 to-crayon-purple/10 rounded-xl">
+                <p className="text-xl font-display font-bold text-foreground">
+                  {family.name}
+                </p>
+                <p className="text-sm text-muted-foreground">Family Gallery</p>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-6 p-4 bg-gradient-to-r from-crayon-purple/10 to-crayon-pink/10 rounded-xl text-center">
+                <p className="text-sm text-muted-foreground mb-1">View their collection of</p>
+                <p className="text-lg font-semibold">Children's Artwork 🎨</p>
+              </div>
+
+              {!user ? (
+                <div className="space-y-4">
+                  <Link href={`/signup?redirect=/share/${code}`} className="block">
+                    <Button className="w-full bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90">
+                      Create Account to View Gallery
+                    </Button>
+                  </Link>
+                  <div className="text-center text-sm">
+                    <span className="text-muted-foreground">Already have an account? </span>
+                    <Link href={`/login?redirect=/share/${code}`} className="text-primary font-semibold hover:underline">
+                      Sign in
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <Link href={`/invite?family=${family.id}`} className="block">
+                    <Button className="w-full bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90">
+                      Join Family to View Gallery
+                    </Button>
+                  </Link>
+                  <Link href="/dashboard" className="block">
+                    <Button variant="outline" className="w-full">
+                      Go to My Gallery
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
+  }
+
+  // Get artwork (original behavior)
   const { data: artwork } = await (supabase
     .from('artworks') as any)
     .select('*, child:children(name, birth_date)')

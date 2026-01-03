@@ -12,41 +12,69 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { artworkId, type = 'artwork' } = body
+    const { artworkId, familyId, type = 'artwork' } = body
 
-    if (!artworkId) {
-      return NextResponse.json({ error: 'Artwork ID required' }, { status: 400 })
+    let targetFamilyId: string
+
+    if (type === 'gallery' || type === 'family') {
+      // Gallery/family share
+      if (!familyId) {
+        return NextResponse.json({ error: 'Family ID required for gallery share' }, { status: 400 })
+      }
+
+      // Check family membership
+      const { data: membership } = await (supabase
+        .from('family_members') as any)
+        .select('id')
+        .eq('family_id', familyId)
+        .eq('user_id', user.id)
+        .single()
+
+      if (!membership) {
+        return NextResponse.json({ error: 'Not authorized' }, { status: 403 })
+      }
+
+      targetFamilyId = familyId
+    } else {
+      // Artwork share
+      if (!artworkId) {
+        return NextResponse.json({ error: 'Artwork ID required' }, { status: 400 })
+      }
+
+      // Verify user has access to this artwork
+      const { data: artwork } = await (supabase
+        .from('artworks') as any)
+        .select('family_id')
+        .eq('id', artworkId)
+        .single() as { data: { family_id: string } | null }
+
+      if (!artwork) {
+        return NextResponse.json({ error: 'Artwork not found' }, { status: 404 })
+      }
+
+      // Check family membership
+      const { data: membership } = await (supabase
+        .from('family_members') as any)
+        .select('id')
+        .eq('family_id', artwork.family_id)
+        .eq('user_id', user.id)
+        .single()
+
+      if (!membership) {
+        return NextResponse.json({ error: 'Not authorized' }, { status: 403 })
+      }
+
+      targetFamilyId = artwork.family_id
     }
 
-    // Verify user has access to this artwork
-    const { data: artwork } = await (supabase
-      .from('artworks') as any)
-      .select('family_id')
-      .eq('id', artworkId)
-      .single() as { data: { family_id: string } | null }
-
-    if (!artwork) {
-      return NextResponse.json({ error: 'Artwork not found' }, { status: 404 })
-    }
-
-    // Check family membership
-    const { data: membership } = await (supabase
-      .from('family_members') as any)
-      .select('id')
-      .eq('family_id', artwork.family_id)
-      .eq('user_id', user.id)
-      .single()
-
-    if (!membership) {
-      return NextResponse.json({ error: 'Not authorized' }, { status: 403 })
-    }
+    const resourceId = type === 'gallery' || type === 'family' ? familyId : artworkId
 
     // Check if share link already exists
     const { data: existingLink } = await (supabase
       .from('share_links') as any)
       .select('code')
-      .eq('resource_id', artworkId)
-      .eq('type', type)
+      .eq('resource_id', resourceId)
+      .eq('type', type === 'gallery' ? 'collection' : type) // Use 'collection' type for gallery shares
       .single()
 
     if (existingLink) {
@@ -62,10 +90,10 @@ export async function POST(request: NextRequest) {
     const { error } = await (supabase
       .from('share_links') as any)
       .insert({
-        family_id: artwork.family_id,
+        family_id: targetFamilyId,
         code,
-        type,
-        resource_id: artworkId,
+        type: type === 'gallery' ? 'collection' : type, // Store as 'collection' type for gallery
+        resource_id: resourceId,
         created_by: user.id,
       })
 
