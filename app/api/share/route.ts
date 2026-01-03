@@ -4,8 +4,38 @@ import { nanoid } from 'nanoid'
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    // Check for Bearer token in Authorization header (for iOS/mobile clients)
+    const authHeader = request.headers.get('authorization')
+    let supabase = await createClient()
+    let user
+
+    if (authHeader?.startsWith('Bearer ')) {
+      // Mobile client - verify token from header
+      const token = authHeader.replace('Bearer ', '')
+      const { createClient: createSupabaseClient } = await import('@supabase/supabase-js')
+      const supabaseWithToken = createSupabaseClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          global: {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        }
+      )
+      // getUser() will use the token from the Authorization header
+      const { data: { user: tokenUser }, error: tokenError } = await supabaseWithToken.auth.getUser()
+      if (tokenError) {
+        console.error('Token verification error:', tokenError)
+        return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
+      }
+      user = tokenUser
+    } else {
+      // Web client - use cookies
+      const { data: { user: cookieUser } } = await supabase.auth.getUser()
+      user = cookieUser
+    }
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
