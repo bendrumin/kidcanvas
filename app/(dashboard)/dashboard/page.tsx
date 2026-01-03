@@ -123,7 +123,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   return (
     <div className="space-y-6">
       {/* Header */}
-      <GalleryHeader initialCount={artworks?.length || 0} />
+      <GalleryHeader 
+        initialCount={artworks?.length || 0} 
+        canEdit={membership.role === 'owner' || membership.role === 'parent'}
+      />
 
       {/* Usage Warnings */}
       {limits.artworkLimit !== -1 && (
