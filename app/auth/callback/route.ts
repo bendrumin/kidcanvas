@@ -4,16 +4,37 @@ import { NextResponse } from 'next/server'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const redirect = searchParams.get('redirect') || '/dashboard'
+  const redirect = searchParams.get('redirect')
+  const type = searchParams.get('type') // 'email' for email verification, 'recovery' for password reset, etc.
 
   if (code) {
     const supabase = await createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     
     if (!error) {
-      // Check if user has a family, if not create one
       const { data: { user } } = await supabase.auth.getUser()
       
+      // Check if this is an email verification (not OAuth)
+      // Email verification links from Supabase include type=signup or type=email
+      // OAuth flows typically have a redirect param pointing to dashboard
+      const isEmailVerification = type === 'signup' || type === 'email' || 
+                                 (redirect && redirect.includes('/invite/')) ||
+                                 (!redirect && !user?.app_metadata?.provider)
+      
+      if (isEmailVerification) {
+        // Redirect to email verification success page
+        // Check if there's an invite code in the redirect
+        const inviteMatch = redirect?.match(/\/invite\/([^/?]+)/)
+        const inviteCode = inviteMatch ? inviteMatch[1] : null
+        
+        if (inviteCode) {
+          return NextResponse.redirect(`${origin}/auth/verify-email?redirect=${redirect}&invite=${inviteCode}`)
+        } else {
+          return NextResponse.redirect(`${origin}/auth/verify-email`)
+        }
+      }
+      
+      // OAuth flow - check if user has a family, if not create one
       if (user) {
         // Check for existing family membership
         const { data: membership } = await supabase
@@ -51,7 +72,7 @@ export async function GET(request: Request) {
         }
       }
       
-      return NextResponse.redirect(`${origin}${redirect}`)
+      return NextResponse.redirect(`${origin}${redirect || '/dashboard'}`)
     }
   }
 

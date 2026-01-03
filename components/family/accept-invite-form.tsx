@@ -36,20 +36,32 @@ export function AcceptInviteForm({ inviteCode, isLoggedIn, defaultNickname, defa
     try {
       if (!isLoggedIn) {
         // Sign up the user first
-        const { error: signUpError } = await supabase.auth.signUp({
+        const { data: authData, error: signUpError } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
           options: {
             data: {
               full_name: formData.fullName,
             },
+            emailRedirectTo: `${window.location.origin}/auth/verify-email?invite=${inviteCode}&redirect=/invite/${inviteCode}`,
           },
         })
 
         if (signUpError) throw signUpError
+
+        // Check if user has a session (auto-confirm enabled)
+        if (!authData.session) {
+          // Email confirmation required
+          toast({
+            title: 'Check your email!',
+            description: 'Please confirm your email address, then return to this page to complete joining the family.',
+          })
+          setIsLoading(false)
+          return
+        }
       }
 
-      // Accept the invite
+      // Accept the invite (user is now authenticated)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { error: inviteError } = await (supabase as any).rpc('accept_family_invite', {
         invite_code: inviteCode,

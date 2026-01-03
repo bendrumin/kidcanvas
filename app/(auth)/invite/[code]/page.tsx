@@ -62,6 +62,24 @@ export default async function InvitePage({ params }: InvitePageProps) {
     if (membership) {
       redirect('/dashboard')
     }
+
+    // If user is logged in but not a member, they might have just confirmed their email
+    // Try to auto-accept the invite
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: acceptError } = await (supabase as any).rpc('accept_family_invite', {
+        invite_code: code,
+        member_nickname: invite.nickname || null,
+      })
+
+      if (!acceptError) {
+        // Successfully accepted, redirect to dashboard
+        redirect('/dashboard')
+      }
+      // If there's an error, continue to show the form
+    } catch {
+      // If auto-accept fails, continue to show the form
+    }
   }
 
   const family = invite.families

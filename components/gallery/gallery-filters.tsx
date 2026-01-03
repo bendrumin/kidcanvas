@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,7 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Search, SlidersHorizontal, X } from 'lucide-react'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { Search, SlidersHorizontal, X, Menu } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import type { Child } from '@/lib/supabase/types'
 
 interface GalleryFiltersProps {
@@ -20,6 +29,7 @@ interface GalleryFiltersProps {
 export function GalleryFilters({ children }: GalleryFiltersProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
 
   const currentChild = searchParams.get('child') || 'all'
   const currentSort = searchParams.get('sort') || 'newest'
@@ -38,20 +48,102 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
 
   const clearFilters = () => {
     router.push('/dashboard')
+    setIsSheetOpen(false)
   }
 
   const hasFilters = currentChild !== 'all' || currentSearch || showFavorites
 
+  // Filter controls component (reusable for both mobile and desktop)
+  const FilterControls = ({ onClose }: { onClose?: () => void }) => (
+    <div className="space-y-4">
+      {/* Child Filter */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Filter by Child</label>
+        <Select 
+          value={currentChild} 
+          onValueChange={(value) => {
+            updateParams('child', value)
+            onClose?.()
+          }}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="All children" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All children</SelectItem>
+            {children.map((child) => (
+              <SelectItem key={child.id} value={child.id}>
+                {child.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Sort */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Sort By</label>
+        <Select 
+          value={currentSort} 
+          onValueChange={(value) => {
+            updateParams('sort', value)
+            onClose?.()
+          }}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">Newest first</SelectItem>
+            <SelectItem value="oldest">Oldest first</SelectItem>
+            <SelectItem value="title">By title</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Favorites Toggle */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Show Only</label>
+        <Button
+          variant={showFavorites ? 'default' : 'outline'}
+          className={cn(
+            'w-full justify-start',
+            showFavorites && 'bg-crayon-red hover:bg-crayon-red/90'
+          )}
+          onClick={() => {
+            updateParams('favorites', showFavorites ? '' : 'true')
+            onClose?.()
+          }}
+        >
+          <span className={showFavorites ? '' : 'opacity-60'}>❤️</span>
+          <span className="ml-2">Favorites Only</span>
+        </Button>
+      </div>
+
+      {/* Clear Filters */}
+      {hasFilters && (
+        <Button 
+          variant="outline" 
+          className="w-full" 
+          onClick={clearFilters}
+        >
+          <X className="w-4 h-4 mr-2" />
+          Clear All Filters
+        </Button>
+      )}
+    </div>
+  )
+
   return (
-    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-      {/* Search */}
-      <div className="relative flex-1 max-w-md">
+    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
+      {/* Search - Always visible */}
+      <div className="relative flex-1 w-full sm:max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
         <Input
           placeholder="Search artwork..."
           value={currentSearch}
           onChange={(e) => updateParams('search', e.target.value)}
-          className="pl-9 transition-all focus:ring-2 focus:ring-primary"
+          className="pl-9 transition-all focus:ring-2 focus:ring-primary text-sm sm:text-base"
         />
         {currentSearch && (
           <button
@@ -64,50 +156,89 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
         )}
       </div>
 
-      {/* Child Filter */}
-      <Select value={currentChild} onValueChange={(value) => updateParams('child', value)}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="All children" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">All children</SelectItem>
-          {children.map((child) => (
-            <SelectItem key={child.id} value={child.id}>
-              {child.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      {/* Mobile: Hamburger Menu */}
+      <div className="sm:hidden">
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <SheetTrigger asChild>
+            <Button variant="outline" className="w-full sm:w-auto">
+              <Menu className="w-4 h-4 mr-2" />
+              Filters
+              {hasFilters && (
+                <span className="ml-2 px-1.5 py-0.5 text-xs bg-primary text-primary-foreground rounded-full">
+                  {[
+                    currentChild !== 'all' ? 1 : 0,
+                    showFavorites ? 1 : 0,
+                  ].reduce((a, b) => a + b, 0)}
+                </span>
+              )}
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[85vw] sm:max-w-sm">
+            <SheetHeader>
+              <SheetTitle>Filter & Sort</SheetTitle>
+            </SheetHeader>
+            <div className="mt-6">
+              <FilterControls onClose={() => setIsSheetOpen(false)} />
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
 
-      {/* Sort */}
-      <Select value={currentSort} onValueChange={(value) => updateParams('sort', value)}>
-        <SelectTrigger className="w-[140px]">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="newest">Newest first</SelectItem>
-          <SelectItem value="oldest">Oldest first</SelectItem>
-          <SelectItem value="title">By title</SelectItem>
-        </SelectContent>
-      </Select>
+      {/* Desktop: Inline Filters */}
+      <div className="hidden sm:flex items-center gap-3">
+        {/* Child Filter */}
+        <Select value={currentChild} onValueChange={(value) => updateParams('child', value)}>
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="All children" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All children</SelectItem>
+            {children.map((child) => (
+              <SelectItem key={child.id} value={child.id}>
+                {child.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-      {/* Favorites Toggle */}
-      <Button
-        variant={showFavorites ? 'default' : 'outline'}
-        size="sm"
-        onClick={() => updateParams('favorites', showFavorites ? '' : 'true')}
-        className={showFavorites ? 'bg-crayon-red hover:bg-crayon-red/90 shadow-md hover:shadow-lg transition-all' : 'transition-all'}
-      >
-        <span className={showFavorites ? '' : 'opacity-60'}>❤️</span> Favorites
-      </Button>
+        {/* Sort */}
+        <Select value={currentSort} onValueChange={(value) => updateParams('sort', value)}>
+          <SelectTrigger className="w-[140px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">Newest first</SelectItem>
+            <SelectItem value="oldest">Oldest first</SelectItem>
+            <SelectItem value="title">By title</SelectItem>
+          </SelectContent>
+        </Select>
 
-      {/* Clear Filters */}
-      {hasFilters && (
-        <Button variant="ghost" size="sm" onClick={clearFilters}>
-          <X className="w-4 h-4 mr-1" />
-          Clear
+        {/* Favorites Toggle */}
+        <Button
+          variant={showFavorites ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => updateParams('favorites', showFavorites ? '' : 'true')}
+          className={cn(
+            showFavorites && 'bg-crayon-red hover:bg-crayon-red/90 shadow-md hover:shadow-lg transition-all'
+          )}
+        >
+          <span className={showFavorites ? '' : 'opacity-60'}>❤️</span>
+          <span className="ml-1.5">Favorites</span>
         </Button>
-      )}
+
+        {/* Clear Filters */}
+        {hasFilters && (
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={clearFilters}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <X className="w-4 h-4 mr-1.5" />
+            Clear
+          </Button>
+        )}
+      </div>
     </div>
   )
 }

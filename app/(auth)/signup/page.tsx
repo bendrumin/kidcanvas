@@ -61,7 +61,7 @@ export default function SignupPage() {
             full_name: formData.fullName,
             family_name: formData.familyName || `${formData.fullName.split(' ')[0]}'s Family`,
           },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/auth/verify-email`,
         },
       })
 

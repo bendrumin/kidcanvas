@@ -89,8 +89,50 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
       const link = `${window.location.origin}/invite/${code}`
       setInviteLink(link)
       setInviteCode(code)
-      setStep('share')
       
+      // Send email if email address was provided
+      if (email) {
+        try {
+          const emailResponse = await fetch('/api/invite/send-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email,
+              inviteLink: link,
+              familyName,
+              nickname: nickname || null,
+            }),
+          })
+
+          if (!emailResponse.ok) {
+            const errorData = await emailResponse.json().catch(() => ({}))
+            console.error('Failed to send invite email:', errorData)
+            // Don't throw - invite was created successfully, just email failed
+            toast({
+              title: 'Invite created',
+              description: 'Invite link created, but email could not be sent. You can share the link manually.',
+              variant: 'default',
+            })
+          } else {
+            toast({
+              title: 'Invite sent!',
+              description: `Invitation email sent to ${email}`,
+            })
+          }
+        } catch (emailError) {
+          console.error('Error sending invite email:', emailError)
+          // Don't throw - invite was created successfully
+          toast({
+            title: 'Invite created',
+            description: 'Invite link created. You can share it manually.',
+            variant: 'default',
+          })
+        }
+      }
+      
+      setStep('share')
       router.refresh()
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to create invite'
@@ -292,7 +334,10 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
                 Invite Created!
               </DialogTitle>
               <DialogDescription>
-                Share this link with {formData.nickname || 'your family member'}
+                {formData.email 
+                  ? `Invitation email sent to ${formData.email}${formData.nickname ? ` (${formData.nickname})` : ''}`
+                  : `Share this link with ${formData.nickname || 'your family member'}`
+                }
               </DialogDescription>
             </DialogHeader>
             
@@ -321,22 +366,23 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" onClick={copyLink} className="w-full">
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={copyLink} className="flex-1">
                   <Copy className="w-4 h-4 mr-2" />
                   Copy Link
                 </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    window.open(`mailto:${formData.email}?subject=Join our family on KidCanvas&body=You've been invited to join ${familyName} on KidCanvas! Click here to join: ${inviteLink}`)
-                  }}
-                  className="w-full"
-                  disabled={!formData.email}
-                >
-                  <Mail className="w-4 h-4 mr-2" />
-                  Send Email
-                </Button>
+                {!formData.email && (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      window.open(`mailto:?subject=Join our family on KidCanvas&body=You've been invited to join ${familyName} on KidCanvas! Click here to join: ${inviteLink}`)
+                    }}
+                    className="flex-1"
+                  >
+                    <Mail className="w-4 h-4 mr-2" />
+                    Share via Email
+                  </Button>
+                )}
               </div>
             </div>
             

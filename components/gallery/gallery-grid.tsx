@@ -207,21 +207,20 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
     <>
       {/* Bulk selection toolbar */}
       {isSelectionMode && (
-        <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border p-4 mb-4 rounded-lg shadow-sm">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <span className="text-sm font-medium">
+        <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border p-3 sm:p-4 mb-4 rounded-lg shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-4">
+              <span className="text-xs sm:text-sm font-medium">
                 {selectedIds.size} of {artworks.length} selected
               </span>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={selectedIds.size === artworks.length ? deselectAll : selectAll}
-                >
-                  {selectedIds.size === artworks.length ? 'Deselect All' : 'Select All'}
-                </Button>
-              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={selectedIds.size === artworks.length ? deselectAll : selectAll}
+                className="text-xs sm:text-sm"
+              >
+                {selectedIds.size === artworks.length ? 'Deselect All' : 'Select All'}
+              </Button>
             </div>
             <div className="flex items-center gap-2">
               {selectedIds.size > 0 && (
@@ -229,9 +228,11 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                   variant="destructive"
                   size="sm"
                   onClick={() => setShowBulkDeleteDialog(true)}
+                  className="text-xs sm:text-sm"
                 >
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Delete ({selectedIds.size})
+                  <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Delete ({selectedIds.size})</span>
+                  <span className="sm:hidden">Delete</span>
                 </Button>
               )}
               <Button
@@ -244,9 +245,10 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                     detail: { enabled: false } 
                   }))
                 }}
+                className="text-xs sm:text-sm"
               >
-                <X className="w-4 h-4 mr-2" />
-                Cancel
+                <X className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Cancel</span>
               </Button>
             </div>
           </div>
@@ -254,7 +256,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
       )}
 
       <div 
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
         role="list"
         aria-label="Artwork gallery"
       >
@@ -322,24 +324,24 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                 >
                   {/* Selection checkbox */}
                   {isSelectionMode && (
-                    <div className="absolute top-2 left-2 z-30">
+                    <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-30">
                       <div
                         className={cn(
-                          "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
+                          "w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center transition-all",
                           selectedIds.has(artwork.id)
                             ? "bg-primary border-primary"
                             : "bg-white border-gray-300"
                         )}
                       >
                         {selectedIds.has(artwork.id) && (
-                          <Check className="w-4 h-4 text-white" />
+                          <Check className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                         )}
                       </div>
                     </div>
                   )}
                   {/* Decorative tape at top */}
                   <div className={cn(
-                    "absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 rounded-sm",
+                    "absolute -top-2 sm:-top-3 left-1/2 -translate-x-1/2 w-12 h-5 sm:w-16 sm:h-6 rounded-sm",
                     "bg-gradient-to-r shadow-sm z-10",
                     "transform -rotate-1",
                     tapeColor
@@ -350,28 +352,45 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                   />
                   
                   {/* Image container with paper padding */}
-                  <div className="p-3 pb-0">
-                    <div className="relative aspect-square overflow-hidden bg-gray-50">
-                      <Image
-                        src={artwork.thumbnail_url || artwork.image_url}
-                        alt={`${artwork.title} by ${artwork.child?.name || 'Unknown artist'}`}
-                        fill
-                        className={cn(
-                          "object-cover",
-                          shouldReduceMotion 
-                            ? "" 
-                            : "transition-transform duration-500 group-hover:scale-105"
-                        )}
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                        loading={index < 8 ? "eager" : "lazy"}
-                      />
+                  <div className="p-2 sm:p-3 pb-0">
+                    <div className="relative aspect-square overflow-hidden bg-gray-50 rounded-sm">
+                      {artwork.thumbnail_url || artwork.image_url ? (
+                        <Image
+                          src={artwork.thumbnail_url || artwork.image_url}
+                          alt={`${artwork.title} by ${artwork.child?.name || 'Unknown artist'}`}
+                          fill
+                          className={cn(
+                            "object-cover",
+                            shouldReduceMotion 
+                              ? "" 
+                              : "transition-transform duration-500 group-hover:scale-105"
+                          )}
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                          loading={index < 8 ? "eager" : "lazy"}
+                          priority={index < 4}
+                          onError={(e) => {
+                            console.error('Image failed to load:', artwork.thumbnail_url || artwork.image_url)
+                            // Fallback to the full image URL if thumbnail fails
+                            if (artwork.thumbnail_url && artwork.image_url) {
+                              const img = e.currentTarget as HTMLImageElement
+                              if (img.src !== artwork.image_url) {
+                                img.src = artwork.image_url
+                              }
+                            }
+                          }}
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                          <span className="text-gray-400 text-sm">No image</span>
+                        </div>
+                      )}
 
                       {/* Hover overlay (only show when not in selection mode) */}
                       {!isSelectionMode && (
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 group-active:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 group-active:bg-black/30 transition-all duration-300 flex items-center justify-center z-10 pointer-events-none">
                           <div className="opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-all duration-300 transform group-hover:scale-110 group-active:scale-95">
-                            <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-                              <ExternalLink className="w-5 h-5 text-gray-700 group-hover:text-primary transition-colors" />
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow pointer-events-auto">
+                              <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 group-hover:text-primary transition-colors" />
                             </div>
                           </div>
                         </div>
@@ -380,23 +399,23 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                   </div>
 
                   {/* Info section styled like caption */}
-                  <div className="p-3 pt-2">
-                    <h3 className="font-display font-semibold text-gray-900 truncate text-lg">
+                  <div className="p-2 sm:p-3 pt-2">
+                    <h3 className="font-display font-semibold text-gray-900 truncate text-base sm:text-lg">
                       {artwork.title}
                     </h3>
-                    <div className="flex items-center justify-between mt-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center">
-                          <span className="text-[10px] text-white font-bold">
+                    <div className="flex items-center justify-between mt-1 gap-2">
+                      <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center flex-shrink-0">
+                          <span className="text-[8px] sm:text-[10px] text-white font-bold">
                             {artwork.child?.name?.[0]}
                           </span>
                         </div>
-                        <span className="text-sm text-muted-foreground">
+                        <span className="text-xs sm:text-sm text-muted-foreground truncate">
                           {artwork.child?.name}
                         </span>
                       </div>
                       {artwork.child && artwork.child_age_months && (
-                        <span className="text-xs text-muted-foreground bg-gray-100 px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] sm:text-xs text-muted-foreground bg-gray-100 px-1.5 sm:px-2 py-0.5 rounded-full flex-shrink-0">
                           {calculateAge(artwork.child.birth_date, artwork.created_date)}
                         </span>
                       )}
@@ -406,8 +425,8 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                   {/* Favorite heart */}
                   {artwork.is_favorite && (
                     <div className="absolute top-1 right-1 z-20" aria-label="Favorited">
-                      <div className="w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center animate-pulse">
-                        <Heart className="w-4 h-4 text-crayon-red fill-crayon-red" aria-hidden="true" />
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white shadow-md flex items-center justify-center animate-pulse">
+                        <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-crayon-red fill-crayon-red" aria-hidden="true" />
                         <span className="sr-only">Favorited</span>
                       </div>
                     </div>

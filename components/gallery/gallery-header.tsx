@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Plus, CheckSquare, Square } from 'lucide-react'
 import Link from 'next/link'
 import { ArtworkCounter } from './artwork-counter'
+import { cn } from '@/lib/utils'
 
 interface GalleryHeaderProps {
   initialCount: number
@@ -63,35 +64,44 @@ export function GalleryHeader({ initialCount, canEdit = true }: GalleryHeaderPro
   }
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
       <div>
-        <h1 className="text-3xl font-display font-bold text-foreground">Gallery</h1>
+        <h1 className="text-2xl sm:text-3xl font-display font-bold text-foreground">Gallery</h1>
         <ArtworkCounter count={count} />
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
         {canEdit && (
           <Button
             variant={isSelectionMode ? 'default' : 'outline'}
             onClick={toggleSelectionMode}
-            className={isSelectionMode ? 'bg-primary' : ''}
+            className={cn(
+              isSelectionMode ? 'bg-primary' : '',
+              'text-xs sm:text-sm'
+            )}
+            size="sm"
           >
             {isSelectionMode ? (
               <>
-                <CheckSquare className="w-4 h-4 mr-2" />
-                Selection Mode
+                <CheckSquare className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Selection Mode</span>
+                <span className="sm:hidden">Selecting</span>
               </>
             ) : (
               <>
-                <Square className="w-4 h-4 mr-2" />
+                <Square className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
                 Select
               </>
             )}
           </Button>
         )}
-        <Link href="/dashboard/upload">
-          <Button className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90">
-            <Plus className="w-5 h-5 mr-2" />
-            Add Artwork
+        <Link href="/dashboard/upload" className="flex-1 sm:flex-initial">
+          <Button 
+            className="w-full sm:w-auto bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90 text-xs sm:text-sm"
+            size="sm"
+          >
+            <Plus className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+            <span className="hidden sm:inline">Add Artwork</span>
+            <span className="sm:hidden">Add</span>
           </Button>
         </Link>
       </div>

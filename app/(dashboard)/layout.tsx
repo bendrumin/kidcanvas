@@ -77,7 +77,7 @@ export default async function DashboardLayout({
         />
         <main 
           id="main-content" 
-          className="flex-1 p-6 lg:p-8 ml-0 lg:ml-64 mt-16"
+          className="flex-1 p-4 sm:p-6 lg:p-8 ml-0 lg:ml-64 mt-16"
           role="main"
           aria-label="Main content"
         >
