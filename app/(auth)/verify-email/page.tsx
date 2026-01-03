@@ -9,6 +9,10 @@ import { Logo } from '@/components/logo'
 import { CheckCircle, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 
+// Prevent caching of this page
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 function VerifyEmailContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -21,36 +25,43 @@ function VerifyEmailContent() {
   useEffect(() => {
     const verifyEmail = async () => {
       const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
       
-      if (user?.email_confirmed_at) {
-        setIsVerified(true)
-        setIsVerifying(false)
-      } else {
-        // Check if there's a code in the URL (from email link)
-        const code = searchParams.get('code')
-        if (code) {
-          try {
-            const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-            if (exchangeError) {
-              setError(exchangeError.message)
-              setIsVerifying(false)
-            } else {
-              setIsVerified(true)
-              setIsVerifying(false)
-            }
-          } catch (err) {
-            setError('Failed to verify email')
+      // Check if there's a code in the URL (from email link or callback)
+      const code = searchParams.get('code')
+      
+      if (code) {
+        // Exchange code for session
+        try {
+          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+          if (exchangeError) {
+            setError(exchangeError.message)
             setIsVerifying(false)
+            return
           }
-        } else {
-          // No code, but user might already be verified
-          setIsVerifying(false)
+          
+          // Code exchanged successfully, check if user is verified
+          const { data: { user } } = await supabase.auth.getUser()
           if (user?.email_confirmed_at) {
             setIsVerified(true)
+            setIsVerifying(false)
           } else {
-            setError('No verification code found')
+            setError('Email verification failed')
+            setIsVerifying(false)
           }
+        } catch (err) {
+          setError('Failed to verify email')
+          setIsVerifying(false)
+        }
+      } else {
+        // No code - check if user is already verified (came from callback)
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user?.email_confirmed_at) {
+          setIsVerified(true)
+          setIsVerifying(false)
+        } else {
+          // User not verified and no code - might be a stale page
+          setIsVerifying(false)
+          setError('No verification code found. Please check your email for the confirmation link.')
         }
       }
     }

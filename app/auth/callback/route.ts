@@ -5,7 +5,7 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   const redirect = searchParams.get('redirect')
-  const type = searchParams.get('type') // 'email' for email verification, 'recovery' for password reset, etc.
+  const type = searchParams.get('type') // 'signup', 'email', 'recovery', etc.
 
   if (code) {
     const supabase = await createClient()
@@ -15,11 +15,22 @@ export async function GET(request: Request) {
       const { data: { user } } = await supabase.auth.getUser()
       
       // Check if this is an email verification (not OAuth)
-      // Email verification links from Supabase include type=signup or type=email
-      // OAuth flows typically have a redirect param pointing to dashboard
-      const isEmailVerification = type === 'signup' || type === 'email' || 
-                                 (redirect && redirect.includes('/invite/')) ||
-                                 (!redirect && !user?.app_metadata?.provider)
+      // Email verification links from Supabase typically have:
+      // - type=signup (new user signup)
+      // - type=email (email change)  
+      // - redirect includes /invite/ (invite flow)
+      // - redirect includes /auth/verify-email (already going to verify page)
+      // - No OAuth provider (email signup, not Google/GitHub/etc)
+      const hasOAuthProvider = user?.app_metadata?.provider && 
+                              user.app_metadata.provider !== 'email' &&
+                              user.app_metadata.provider !== 'phone'
+      
+      // More aggressive detection: if it's not OAuth and not a password recovery, treat as email verification
+      const isPasswordRecovery = type === 'recovery'
+      const isEmailVerification = type === 'signup' || 
+                                 type === 'email' || 
+                                 (redirect && (redirect.includes('/invite/') || redirect.includes('/auth/verify-email'))) ||
+                                 (!hasOAuthProvider && !isPasswordRecovery)
       
       if (isEmailVerification) {
         // Redirect to email verification success page
@@ -27,11 +38,17 @@ export async function GET(request: Request) {
         const inviteMatch = redirect?.match(/\/invite\/([^/?]+)/)
         const inviteCode = inviteMatch ? inviteMatch[1] : null
         
-        if (inviteCode) {
-          return NextResponse.redirect(`${origin}/auth/verify-email?redirect=${redirect}&invite=${inviteCode}`)
-        } else {
-          return NextResponse.redirect(`${origin}/auth/verify-email`)
-        }
+        // Build redirect URL with no-cache headers
+        const verifyUrl = inviteCode 
+          ? `${origin}/auth/verify-email?redirect=${encodeURIComponent(redirect || '')}&invite=${inviteCode}`
+          : `${origin}/auth/verify-email`
+        
+        const response = NextResponse.redirect(verifyUrl)
+        // Prevent caching
+        response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+        response.headers.set('Pragma', 'no-cache')
+        response.headers.set('Expires', '0')
+        return response
       }
       
       // OAuth flow - check if user has a family, if not create one
@@ -72,11 +89,22 @@ export async function GET(request: Request) {
         }
       }
       
-      return NextResponse.redirect(`${origin}${redirect || '/dashboard'}`)
+      const dashboardUrl = `${origin}${redirect || '/dashboard'}`
+      const response = NextResponse.redirect(dashboardUrl)
+      // Prevent caching
+      response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+      response.headers.set('Pragma', 'no-cache')
+      response.headers.set('Expires', '0')
+      return response
     }
   }
 
   // Return to login with error
-  return NextResponse.redirect(`${origin}/login?error=auth`)
+  const loginUrl = `${origin}/login?error=auth`
+  const response = NextResponse.redirect(loginUrl)
+  response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+  response.headers.set('Pragma', 'no-cache')
+  response.headers.set('Expires', '0')
+  return response
 }
 
