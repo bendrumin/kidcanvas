@@ -73,7 +73,7 @@ function VerifyEmailContent() {
     if (inviteCode) {
       router.push(`/invite/${inviteCode}`)
     } else {
-      router.push('/login')
+      router.push('/dashboard')
     }
   }
 
@@ -134,22 +134,22 @@ function VerifyEmailContent() {
               <div className="space-y-4">
                 <div className="p-4 bg-gradient-to-r from-crayon-green/10 to-crayon-blue/10 rounded-xl text-center">
                   <p className="text-sm text-muted-foreground mb-2">
-                    {inviteCode 
+                    {inviteCode
                       ? "You can now complete joining the family!"
-                      : "You can now sign in to your account"
+                      : "You're all set! Redirecting to your dashboard..."
                     }
                   </p>
                 </div>
-                <Button 
+                <Button
                   onClick={handleContinue}
                   className="w-full bg-gradient-to-r from-crayon-green to-crayon-blue hover:opacity-90"
                 >
-                  {inviteCode ? 'Continue to Join Family' : 'Sign In'}
+                  {inviteCode ? 'Continue to Join Family' : 'Continue to Dashboard'}
                 </Button>
                 {!inviteCode && (
                   <div className="text-center">
-                    <Link href="/login" className="text-sm text-primary font-semibold hover:underline">
-                      Go to Login Page →
+                    <Link href="/dashboard" className="text-sm text-primary font-semibold hover:underline">
+                      Go to Dashboard →
                     </Link>
                   </div>
                 )}
