@@ -45,7 +45,7 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
   
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [step, setStep] = useState<'form' | 'share'>('form')
+  const [step, setStep] = useState<'options' | 'form' | 'share'>('options')
   const [copied, setCopied] = useState(false)
   const [inviteLink, setInviteLink] = useState('')
   const [inviteCode, setInviteCode] = useState('')
@@ -57,15 +57,14 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
   })
 
   const resetForm = () => {
-    setStep('form')
+    setStep('options')
     setFormData({ nickname: '', email: '', role: 'member' })
     setInviteLink('')
     setInviteCode('')
     setCopied(false)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const createInvite = async (email?: string, nickname?: string, role: 'parent' | 'member' | 'viewer' = 'member') => {
     setIsLoading(true)
 
     try {
@@ -79,9 +78,9 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
         .insert({
           family_id: familyId,
           code,
-          role: formData.role,
-          nickname: formData.nickname || null,
-          invited_email: formData.email || null,
+          role,
+          nickname: nickname || null,
+          invited_email: email || null,
           created_by: user.id,
         })
 
@@ -105,6 +104,11 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
     }
   }
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await createInvite(formData.email || undefined, formData.nickname || undefined, formData.role)
+  }
+
   const copyLink = async () => {
     await navigator.clipboard.writeText(inviteLink)
     setCopied(true)
@@ -121,7 +125,7 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
         </Button>
       </DialogTrigger>
       <DialogContent>
-        {step === 'form' ? (
+        {step === 'options' ? (
           <>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
@@ -129,7 +133,71 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
                 Invite to {familyName}
               </DialogTitle>
               <DialogDescription>
-                Create an invite link to share with family members
+                Choose how you'd like to invite a family member
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-3 py-4">
+              <Button
+                type="button"
+                onClick={() => createInvite()}
+                disabled={isLoading}
+                className="w-full bg-gradient-to-r from-crayon-blue to-crayon-purple hover:opacity-90"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <Link2 className="w-4 h-4 mr-2" />
+                    Get Invite Link
+                  </>
+                )}
+              </Button>
+              <p className="text-xs text-muted-foreground text-center">
+                Create a shareable link without entering details
+              </p>
+              
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">Or</span>
+                </div>
+              </div>
+              
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setStep('form')}
+                className="w-full"
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                Send Email Invite
+              </Button>
+              <p className="text-xs text-muted-foreground text-center">
+                Add email and optional details before creating invite
+              </p>
+            </div>
+            
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+                Cancel
+              </Button>
+            </DialogFooter>
+          </>
+        ) : step === 'form' ? (
+          <>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <UserPlus className="w-5 h-5 text-primary" />
+                Invite to {familyName}
+              </DialogTitle>
+              <DialogDescription>
+                Create an invite with email and optional details
               </DialogDescription>
             </DialogHeader>
             
@@ -206,8 +274,8 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
               </div>
               
               <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
-                  Cancel
+                <Button type="button" variant="outline" onClick={() => setStep('options')}>
+                  Back
                 </Button>
                 <Button type="submit" disabled={isLoading}>
                   {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}

@@ -1,19 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { nanoid } from 'nanoid'
+import type { Database } from '@/lib/supabase/types'
 
 export async function POST(request: NextRequest) {
   try {
     // Check for Bearer token in Authorization header (for iOS/mobile clients)
     const authHeader = request.headers.get('authorization')
-    let supabase = await createClient()
     let user
+    let supabase: Awaited<ReturnType<typeof createClient>>
 
     if (authHeader?.startsWith('Bearer ')) {
       // Mobile client - verify token from header
       const token = authHeader.replace('Bearer ', '')
+      console.log('Received Bearer token, length:', token.length)
+      
       const { createClient: createSupabaseClient } = await import('@supabase/supabase-js')
-      const supabaseWithToken = createSupabaseClient(
+      const supabaseWithToken = createSupabaseClient<Database>(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
+      // Pass token directly to getUser()
+      const { data: { user: tokenUser }, error: tokenError } = await supabaseWithToken.auth.getUser(token)
+      if (tokenError) {
+        console.error('Token verification error:', tokenError.message, tokenError.status)
+        return NextResponse.json({ error: 'Invalid token', details: tokenError.message }, { status: 401 })
+      }
+      if (!tokenUser) {
+        console.error('No user returned from token verification')
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
+      console.log('Token verified successfully, user ID:', tokenUser.id)
+      user = tokenUser
+      // For token-based auth, we need to use the service client or set auth header on each request
+      // Create a client that uses the token for all requests
+      supabase = createSupabaseClient<Database>(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {
@@ -23,16 +44,10 @@ export async function POST(request: NextRequest) {
             },
           },
         }
-      )
-      // getUser() will use the token from the Authorization header
-      const { data: { user: tokenUser }, error: tokenError } = await supabaseWithToken.auth.getUser()
-      if (tokenError) {
-        console.error('Token verification error:', tokenError)
-        return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
-      }
-      user = tokenUser
+      ) as any // Type assertion needed due to different client types
     } else {
       // Web client - use cookies
+      supabase = await createClient()
       const { data: { user: cookieUser } } = await supabase.auth.getUser()
       user = cookieUser
     }

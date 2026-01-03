@@ -13,16 +13,17 @@ interface AcceptInviteFormProps {
   inviteCode: string
   isLoggedIn: boolean
   defaultNickname: string | null
+  defaultEmail?: string | null
 }
 
-export function AcceptInviteForm({ inviteCode, isLoggedIn, defaultNickname }: AcceptInviteFormProps) {
+export function AcceptInviteForm({ inviteCode, isLoggedIn, defaultNickname, defaultEmail }: AcceptInviteFormProps) {
   const router = useRouter()
   const { toast } = useToast()
   const supabase = createClient()
   
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
-    email: '',
+    email: defaultEmail || '',
     password: '',
     fullName: '',
     nickname: defaultNickname || '',
@@ -143,8 +144,14 @@ export function AcceptInviteForm({ inviteCode, isLoggedIn, defaultNickname }: Ac
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             className="pl-10"
             required
+            disabled={!!defaultEmail}
           />
         </div>
+        {defaultEmail && (
+          <p className="text-xs text-muted-foreground">
+            Email address was provided with your invite
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">

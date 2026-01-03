@@ -109,6 +109,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
               inviteCode={code} 
               isLoggedIn={!!user}
               defaultNickname={invite.nickname}
+              defaultEmail={invite.invited_email}
             />
 
             {!user && (
