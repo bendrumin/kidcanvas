@@ -103,7 +103,7 @@ export default function LandingPage() {
           </div>
           
           <p className="mt-4 text-sm text-muted-foreground">
-            📱 iOS app available via request — <Link href="/support" className="text-[#E91E63] hover:underline">use our contact form</Link> to request a TestFlight invite
+            📱 iOS app (iPhone & iPad) available via request — <Link href="/support" className="text-[#E91E63] hover:underline">use our contact form</Link> to request a TestFlight invite
           </p>
         </div>
       </section>
@@ -332,7 +332,7 @@ export default function LandingPage() {
               },
               {
                 q: "Do I need the iOS app?",
-                a: "No! The web app works perfectly on phones, tablets, and computers. The iOS app is available via request — use our contact form (in Support) to request a TestFlight invite for easier uploading."
+                a: "No! The web app works perfectly on phones, tablets, and computers. The iOS app (iPhone & iPad) is available via request — use our contact form (in Support) to request a TestFlight invite for easier uploading."
               },
             ].map((faq, i) => (
               <div key={i} className="p-4 bg-gray-50 dark:bg-secondary rounded-lg">
