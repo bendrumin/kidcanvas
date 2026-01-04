@@ -287,9 +287,10 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
                   <Label htmlFor="nickname">Nickname (optional)</Label>
                   <Input
                     id="nickname"
-                    placeholder="Grandma Sue"
+                    placeholder="e.g., Grandma Sue"
                     value={formData.nickname}
                     onChange={(e) => setFormData({ ...formData, nickname: e.target.value })}
+                    className="placeholder:text-muted-foreground/50"
                   />
                   <p className="text-xs text-muted-foreground">
                     A friendly name to identify this person
@@ -303,10 +304,10 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="grandma@email.com"
+                      placeholder="e.g., grandma@email.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="pl-9"
+                      className="pl-9 placeholder:text-muted-foreground/50"
                     />
                   </div>
                   <p className="text-xs text-muted-foreground">

@@ -13,38 +13,41 @@ export async function POST(request: NextRequest) {
     if (authHeader?.startsWith('Bearer ')) {
       // Mobile client - verify token from header
       const token = authHeader.replace('Bearer ', '')
-      console.log('Received Bearer token, length:', token.length)
-      
+      console.log('🔍 [Share API] Received Bearer token, length:', token.length)
+      console.log('🔍 [Share API] Token preview:', token.substring(0, 50) + '...')
+
       const { createClient: createSupabaseClient } = await import('@supabase/supabase-js')
-      const supabaseWithToken = createSupabaseClient<Database>(
+
+      // Use service role key to verify the user token
+      const supabaseAdmin = createSupabaseClient<Database>(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        process.env.SUPABASE_SERVICE_ROLE_KEY!,
+        {
+          auth: {
+            autoRefreshToken: false,
+            persistSession: false
+          }
+        }
       )
-      // Pass token directly to getUser()
-      const { data: { user: tokenUser }, error: tokenError } = await supabaseWithToken.auth.getUser(token)
+
+      console.log('🔍 [Share API] Calling getUser with token using admin client...')
+      // Verify the JWT token using the admin client
+      const { data: { user: tokenUser }, error: tokenError } = await supabaseAdmin.auth.getUser(token)
+
+      console.log('🔍 [Share API] getUser result - error:', tokenError, 'user:', tokenUser?.id)
+
       if (tokenError) {
-        console.error('Token verification error:', tokenError.message, tokenError.status)
+        console.error('❌ [Share API] Token verification error:', tokenError.message, tokenError.status, JSON.stringify(tokenError))
         return NextResponse.json({ error: 'Invalid token', details: tokenError.message }, { status: 401 })
       }
       if (!tokenUser) {
-        console.error('No user returned from token verification')
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        console.error('❌ [Share API] No user returned from token verification')
+        return NextResponse.json({ error: 'Unauthorized', details: 'No user found' }, { status: 401 })
       }
-      console.log('Token verified successfully, user ID:', tokenUser.id)
+      console.log('✅ [Share API] Token verified successfully, user ID:', tokenUser.id)
       user = tokenUser
-      // For token-based auth, we need to use the service client or set auth header on each request
-      // Create a client that uses the token for all requests
-      supabase = createSupabaseClient<Database>(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-          global: {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        }
-      ) as any // Type assertion needed due to different client types
+      // Use the admin client for database operations with the verified user context
+      supabase = supabaseAdmin as any
     } else {
       // Web client - use cookies
       supabase = await createClient()

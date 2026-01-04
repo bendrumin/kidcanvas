@@ -9,10 +9,6 @@ import { Logo } from '@/components/logo'
 import { CheckCircle, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 
-// Prevent caching of this page
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-
 function VerifyEmailContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
