@@ -11,7 +11,8 @@ import {
   Baby,
   Settings,
   Heart,
-  Sparkles
+  Sparkles,
+  TrendingUp
 } from 'lucide-react'
 
 interface DashboardNavProps {
@@ -38,6 +39,20 @@ export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100 }: 
       icon: Heart,
       show: true,
       gradient: 'from-crayon-red to-crayon-pink',
+    },
+    {
+      label: 'Timeline',
+      href: '/dashboard/timeline',
+      icon: TrendingUp,
+      show: true,
+      gradient: 'from-crayon-blue to-crayon-purple',
+    },
+    {
+      label: 'Analytics',
+      href: '/dashboard/analytics',
+      icon: Sparkles,
+      show: true,
+      gradient: 'from-crayon-green to-crayon-blue',
     },
     {
       label: 'Upload',

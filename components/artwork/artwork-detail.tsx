@@ -40,9 +40,11 @@ import {
   Tag,
   Sparkles,
   Save,
-  X
+  X,
+  QrCode
 } from 'lucide-react'
 import type { ArtworkWithChild, Child } from '@/lib/supabase/types'
+import { QRCodeDialog } from './qr-code-dialog'
 
 interface ArtworkDetailProps {
   artwork: ArtworkWithChild
@@ -61,6 +63,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
   const [isLoading, setIsLoading] = useState(false)
   const [isFavorite, setIsFavorite] = useState(artwork.is_favorite)
   const [shareUrl, setShareUrl] = useState<string | null>(null)
+  const [showQRCode, setShowQRCode] = useState(false)
   
   const [editForm, setEditForm] = useState({
     title: artwork.title,
@@ -246,6 +249,16 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
               )}
               {shareUrl ? 'Link Copied!' : 'Share'}
             </Button>
+            {shareUrl && (
+              <Button 
+                variant="outline" 
+                onClick={() => setShowQRCode(true)}
+                title="Generate QR code"
+              >
+                <QrCode className="w-4 h-4 mr-2" />
+                QR Code
+              </Button>
+            )}
           </div>
         </div>
 
@@ -406,6 +419,17 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* QR Code Dialog */}
+      {shareUrl && (
+        <QRCodeDialog
+          open={showQRCode}
+          onOpenChange={setShowQRCode}
+          shareUrl={shareUrl}
+          artworkTitle={artwork.title}
+          childName={artwork.child?.name}
+        />
+      )}
     </div>
   )
 }
