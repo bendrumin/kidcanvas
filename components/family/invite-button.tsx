@@ -154,7 +154,7 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
   const copyLink = async () => {
     await navigator.clipboard.writeText(inviteLink)
     setCopied(true)
-    toast({ title: 'Link copied!' })
+    // Visual feedback (button changes to "Copied!") is enough
     setTimeout(() => setCopied(false), 2000)
   }
 

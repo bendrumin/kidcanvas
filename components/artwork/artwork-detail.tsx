@@ -86,9 +86,9 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
       
       // Copy to clipboard
       await navigator.clipboard.writeText(data.url)
-      toast({ 
-        title: 'Link copied!', 
-        description: 'Share this link with family and friends' 
+      toast({
+        title: 'Share link copied!',
+        duration: 2000,
       })
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to create share link'
@@ -109,8 +109,8 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
         .eq('id', artwork.id)
 
       if (error) throw error
-      
-      toast({ title: newValue ? 'Added to favorites!' : 'Removed from favorites' })
+
+      // Visual feedback (heart icon fills/unfills) is enough
     } catch (error) {
       setIsFavorite(!newValue) // Revert
       const errorMessage = error instanceof Error ? error.message : 'Failed to update'

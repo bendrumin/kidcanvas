@@ -11,9 +11,11 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Sparkles, Share2, CreditCard, Palette, X } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 const CURRENT_VERSION = '1.0.0'
 const CHANGELOG_KEY = 'kidcanvas_last_seen_version'
+const WELCOME_SHOWN_KEY = 'kidcanvas_welcome_shown'
 
 const changelog = [
   {
@@ -45,19 +47,48 @@ export function WhatsNewModal() {
   const [hasSeenVersion, setHasSeenVersion] = useState(true)
 
   useEffect(() => {
-    // Check if user has seen current version
-    const lastSeenVersion = localStorage.getItem(CHANGELOG_KEY)
-    if (lastSeenVersion !== CURRENT_VERSION) {
+    const checkShouldShowWelcome = async () => {
+      // Check if welcome has been shown before (persists even after logout)
+      const welcomeShown = localStorage.getItem(WELCOME_SHOWN_KEY)
+
+      if (welcomeShown === 'true') {
+        // User has seen the welcome modal before, don't show again
+        return
+      }
+
+      // Check if user is authenticated
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+
+      if (!user) {
+        return
+      }
+
+      // Only show for new users - check if account was created in last 7 days
+      const accountCreatedAt = new Date(user.created_at)
+      const daysSinceCreation = (Date.now() - accountCreatedAt.getTime()) / (1000 * 60 * 60 * 24)
+
+      if (daysSinceCreation > 7) {
+        // Account is older than 7 days, mark as welcome shown and don't display
+        localStorage.setItem(WELCOME_SHOWN_KEY, 'true')
+        return
+      }
+
       // Small delay so it doesn't pop up immediately
       const timer = setTimeout(() => {
         setIsOpen(true)
         setHasSeenVersion(false)
       }, 1500)
+
       return () => clearTimeout(timer)
     }
+
+    checkShouldShowWelcome()
   }, [])
 
   const handleClose = () => {
+    // Mark welcome as shown permanently
+    localStorage.setItem(WELCOME_SHOWN_KEY, 'true')
     localStorage.setItem(CHANGELOG_KEY, CURRENT_VERSION)
     setIsOpen(false)
     setHasSeenVersion(true)

@@ -31,7 +31,7 @@ export function PendingInvites({ invites }: PendingInvitesProps) {
     const link = `${window.location.origin}/invite/${code}`
     await navigator.clipboard.writeText(link)
     setCopiedId(id)
-    toast({ title: 'Link copied!' })
+    // Visual feedback (icon changes to checkmark) is enough
     setTimeout(() => setCopiedId(null), 2000)
   }
 

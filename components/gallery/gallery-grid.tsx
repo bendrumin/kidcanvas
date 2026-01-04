@@ -51,6 +51,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [favoriteStates, setFavoriteStates] = useState<Record<string, boolean>>({})
 
 
   // Update count when artworks change
@@ -204,6 +205,41 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
     window.location.reload()
   }
 
+  const handleToggleFavorite = async (artworkId: string, currentFavoriteState: boolean, e: React.MouseEvent) => {
+    // Stop propagation to prevent opening lightbox
+    e.stopPropagation()
+
+    const newFavoriteState = !currentFavoriteState
+
+    // Optimistic update
+    setFavoriteStates(prev => ({ ...prev, [artworkId]: newFavoriteState }))
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from('artworks') as any)
+        .update({ is_favorite: newFavoriteState })
+        .eq('id', artworkId)
+
+      if (error) throw error
+
+      // Visual feedback (heart icon) is enough, no toast needed
+
+      // Refresh the page to update the gallery if we're on the favorites filter
+      if (typeof window !== 'undefined' && window.location.search.includes('favorites=true')) {
+        setTimeout(() => window.location.reload(), 500)
+      }
+    } catch (error) {
+      // Revert optimistic update on error
+      setFavoriteStates(prev => ({ ...prev, [artworkId]: currentFavoriteState }))
+
+      toast({
+        title: 'Error',
+        description: 'Failed to update favorite status',
+        variant: 'destructive',
+      })
+    }
+  }
+
   return (
     <>
       {/* Bulk selection toolbar */}
@@ -326,17 +362,17 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                 >
                   {/* Selection checkbox */}
                   {isSelectionMode && (
-                    <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-30">
+                    <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-30 p-1">
                       <div
                         className={cn(
-                          "w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center transition-all",
+                          "w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 flex items-center justify-center transition-all shadow-sm",
                           selectedIds.has(artwork.id)
                             ? "bg-primary border-primary"
                             : "bg-white border-gray-300"
                         )}
                       >
                         {selectedIds.has(artwork.id) && (
-                          <Check className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                          <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
                         )}
                       </div>
                     </div>
@@ -425,14 +461,25 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                     </div>
                   </div>
 
-                  {/* Favorite heart */}
-                  {artwork.is_favorite && (
-                    <div className="absolute top-1 right-1 z-20" aria-label="Favorited">
-                      <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white shadow-md flex items-center justify-center animate-pulse">
-                        <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-crayon-red fill-crayon-red" aria-hidden="true" />
-                        <span className="sr-only">Favorited</span>
+                  {/* Favorite heart - Always visible, toggleable */}
+                  {!isSelectionMode && (
+                    <button
+                      className="absolute top-1 right-1 z-20 transition-transform hover:scale-110 active:scale-95"
+                      onClick={(e) => handleToggleFavorite(artwork.id, favoriteStates[artwork.id] ?? artwork.is_favorite, e)}
+                      aria-label={favoriteStates[artwork.id] ?? artwork.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
+                      type="button"
+                    >
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white shadow-md flex items-center justify-center hover:shadow-lg transition-shadow">
+                        <Heart
+                          className={cn(
+                            "w-3 h-3 sm:w-4 sm:h-4 transition-all",
+                            favoriteStates[artwork.id] ?? artwork.is_favorite
+                              ? "text-crayon-red fill-crayon-red"
+                              : "text-gray-400"
+                          )}
+                        />
                       </div>
-                    </div>
+                    </button>
                   )}
                 </div>
 

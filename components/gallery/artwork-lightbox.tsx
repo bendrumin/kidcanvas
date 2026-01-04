@@ -54,10 +54,18 @@ export function ArtworkLightbox({
 }: ArtworkLightboxProps) {
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
   const supabase = createClient()
   const { toast } = useToast()
   const closeButtonRef = useRef<HTMLButtonElement>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
+
+  // Update favorite state when artwork changes
+  useEffect(() => {
+    if (artwork) {
+      setIsFavorite(artwork.is_favorite ?? false)
+    }
+  }, [artwork])
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (!artwork) return
@@ -95,7 +103,7 @@ export function ArtworkLightbox({
 
   const handleDelete = async () => {
     if (!artwork) return
-    
+
     setIsDeleting(true)
     try {
       const { error } = await supabase
@@ -118,6 +126,36 @@ export function ArtworkLightbox({
       const errorMessage = error instanceof Error ? error.message : 'Failed to delete'
       toast({ title: 'Error', description: errorMessage, variant: 'destructive' })
       setIsDeleting(false)
+    }
+  }
+
+  const handleToggleFavorite = async () => {
+    if (!artwork) return
+
+    const newFavoriteState = !isFavorite
+
+    // Optimistic update
+    setIsFavorite(newFavoriteState)
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from('artworks') as any)
+        .update({ is_favorite: newFavoriteState })
+        .eq('id', artwork.id)
+
+      if (error) throw error
+
+      // Visual feedback (heart icon fills/unfills) is enough, no toast needed
+    } catch (error) {
+      // Revert on error
+      setIsFavorite(!newFavoriteState)
+
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update'
+      toast({
+        title: 'Error',
+        description: errorMessage,
+        variant: 'destructive'
+      })
     }
   }
 
@@ -211,9 +249,17 @@ export function ArtworkLightbox({
                   Artwork by {artwork.child?.name}, created on {formatDate(artwork.created_date)}
                 </p>
                 <div className="flex items-center gap-2 flex-wrap" role="group" aria-label="Artwork actions">
-                  <Button variant="outline" size="sm" aria-label="Add to favorites">
-                    <Heart className="w-4 h-4 mr-1" aria-hidden="true" />
-                    Favorite
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleToggleFavorite}
+                    aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                  >
+                    <Heart
+                      className={`w-4 h-4 mr-1 transition-all ${isFavorite ? 'fill-crayon-red text-crayon-red' : ''}`}
+                      aria-hidden="true"
+                    />
+                    {isFavorite ? 'Favorited' : 'Favorite'}
                   </Button>
                   <Button variant="outline" size="sm" aria-label="Share artwork">
                     <Share2 className="w-4 h-4 mr-1" aria-hidden="true" />
