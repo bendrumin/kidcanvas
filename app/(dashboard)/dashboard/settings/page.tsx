@@ -4,15 +4,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Settings, CreditCard, Download, Trash2 } from 'lucide-react'
+import { getUserSubscriptionLimits } from '@/lib/subscription'
 
 export default async function SettingsPage() {
   const supabase = await createClient()
-  
+
   const { data: { user } } = await supabase.auth.getUser()
-  
+
   if (!user) {
     redirect('/login')
   }
+
+  // Get subscription limits
+  const limits = await getUserSubscriptionLimits(user.id)
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -34,30 +38,38 @@ export default async function SettingsPage() {
               </CardTitle>
               <CardDescription>Manage your plan and billing</CardDescription>
             </div>
-            <Badge variant="secondary">Free Plan</Badge>
+            <Badge variant="secondary">
+              {limits.planId === 'family' ? 'Family Plan' : limits.planId === 'pro' ? 'Pro Plan' : 'Free Plan'}
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-crayon-yellow/10 to-crayon-orange/10 rounded-xl">
-            <div>
-              <p className="font-semibold">Upgrade to Family Plan</p>
-              <p className="text-sm text-muted-foreground">
-                Unlimited artwork, AI tagging, collections, and more
-              </p>
+          {limits.planId === 'free' && (
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-crayon-yellow/10 to-crayon-orange/10 rounded-xl">
+              <div>
+                <p className="font-semibold">Upgrade to Family Plan</p>
+                <p className="text-sm text-muted-foreground">
+                  Unlimited artwork, AI tagging, collections, and more
+                </p>
+              </div>
+              <Button className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90">
+                Upgrade — $4.99/mo
+              </Button>
             </div>
-            <Button className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90">
-              Upgrade — $4.99/mo
-            </Button>
-          </div>
+          )}
           
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div className="p-3 bg-muted/50 rounded-lg">
               <p className="text-muted-foreground">Artworks</p>
-              <p className="font-semibold">0 / 100</p>
+              <p className="font-semibold">
+                {limits.currentArtworks} / {limits.artworkLimit === -1 ? '∞' : limits.artworkLimit}
+              </p>
             </div>
             <div className="p-3 bg-muted/50 rounded-lg">
               <p className="text-muted-foreground">Children</p>
-              <p className="font-semibold">0 / 2</p>
+              <p className="font-semibold">
+                {limits.currentChildren} / {limits.childrenLimit === -1 ? '∞' : limits.childrenLimit}
+              </p>
             </div>
           </div>
         </CardContent>

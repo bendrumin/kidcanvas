@@ -20,9 +20,10 @@ interface DashboardNavProps {
   role: string | null
   currentArtworks?: number
   artworkLimit?: number
+  planId?: string
 }
 
-export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100 }: DashboardNavProps) {
+export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100, planId = 'free' }: DashboardNavProps) {
   const pathname = usePathname()
   const userRole = (role || 'viewer') as Role
 
@@ -171,7 +172,9 @@ export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100 }: 
           <div className="relative">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="w-4 h-4 text-crayon-orange" />
-              <p className="text-sm font-semibold text-foreground">Free Plan</p>
+              <p className="text-sm font-semibold text-foreground">
+                {planId === 'family' ? 'Family Plan' : planId === 'pro' ? 'Pro Plan' : 'Free Plan'}
+              </p>
             </div>
             
             <div className="space-y-3">
@@ -192,14 +195,16 @@ export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100 }: 
                 </div>
               </div>
             </div>
-            
-            <Link 
-              href="/dashboard/billing" 
-              className="mt-4 flex items-center gap-1 text-xs font-semibold text-primary hover:underline group"
-            >
-              Upgrade to Family Plan
-              <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </Link>
+
+            {planId === 'free' && (
+              <Link
+                href="/dashboard/billing"
+                className="mt-4 flex items-center gap-1 text-xs font-semibold text-primary hover:underline group"
+              >
+                Upgrade to Family Plan
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </Link>
+            )}
           </div>
         </div>
       </div>

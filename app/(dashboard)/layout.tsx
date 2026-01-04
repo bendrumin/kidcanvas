@@ -70,10 +70,11 @@ export default async function DashboardLayout({
         role={role} 
       />
       <div className="flex">
-        <DashboardNav 
-          role={role} 
+        <DashboardNav
+          role={role}
           currentArtworks={limits.currentArtworks}
           artworkLimit={limits.artworkLimit}
+          planId={limits.planId}
         />
         <main 
           id="main-content" 
