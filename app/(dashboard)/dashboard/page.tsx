@@ -153,7 +153,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         {artworks && artworks.length > 0 ? (
           <GalleryGridWithCounter 
             artworks={artworks} 
-            canEdit={membership.role === 'owner' || membership.role === 'parent'} 
+            canEdit={membership.role === 'owner' || membership.role === 'parent'}
+            planId={limits.planId}
           />
         ) : searchQuery || (childFilter && childFilter !== 'all') || showFavorites ? (
           <NoResults 

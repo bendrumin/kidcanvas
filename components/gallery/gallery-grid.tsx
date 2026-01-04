@@ -27,6 +27,7 @@ interface GalleryGridProps {
   artworks: ArtworkWithChild[]
   onCountChange?: (count: number) => void
   canEdit?: boolean
+  planId?: 'free' | 'family' | 'pro'
 }
 
 // Decorative tape colors for variety
@@ -42,7 +43,7 @@ const tapeColors = [
 // Subtle rotation for organic feel
 const rotations = [-2, 1, -1, 2, 0, -1.5, 1.5, -0.5]
 
-export function GalleryGrid({ artworks, onCountChange, canEdit = false }: GalleryGridProps) {
+export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId = 'free' }: GalleryGridProps) {
   const { shouldReduceMotion } = useMobile()
   const { toast } = useToast()
   const supabase = createClient()
@@ -264,16 +265,32 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
             <div className="flex items-center gap-2">
               {selectedIds.size > 0 && (
                 <>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowArtBookDialog(true)}
-                    className="text-xs sm:text-sm bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90 text-white border-0"
-                  >
-                    <Book className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                    <span className="hidden sm:inline">Create Book ({selectedIds.size})</span>
-                    <span className="sm:hidden">Book</span>
-                  </Button>
+                  {(planId === 'family' || planId === 'pro') ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowArtBookDialog(true)}
+                      className="text-xs sm:text-sm bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90 text-white border-0"
+                    >
+                      <Book className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                      <span className="hidden sm:inline">Create Book ({selectedIds.size})</span>
+                      <span className="sm:hidden">Book</span>
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        window.location.href = '/dashboard/billing'
+                      }}
+                      className="text-xs sm:text-sm"
+                      title="Upgrade to Family plan to create art books"
+                    >
+                      <Book className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                      <span className="hidden sm:inline">Create Book (Upgrade)</span>
+                      <span className="sm:hidden">Upgrade</span>
+                    </Button>
+                  )}
                   <Button
                     variant="destructive"
                     size="sm"
@@ -518,12 +535,13 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
       />
 
       {/* Art Book Dialog */}
-      {selectedIds.size > 0 && (
+      {selectedIds.size > 0 && (planId === 'family' || planId === 'pro') && (
         <ArtBookDialog
           open={showArtBookDialog}
           onOpenChange={setShowArtBookDialog}
           artworks={artworks.filter(a => selectedIds.has(a.id))}
           defaultTitle={`${selectedIds.size} Selected Artworks`}
+          planId={planId}
         />
       )}
 

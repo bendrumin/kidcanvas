@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AnalyticsDashboard } from '@/components/analytics/analytics-dashboard'
 import { AnalyticsSkeleton } from '@/components/analytics/analytics-skeleton'
+import { UpgradePrompt } from '@/components/paywall/upgrade-prompt'
+import { getUserSubscriptionLimits } from '@/lib/subscription'
 import { Suspense } from 'react'
 import type { ArtworkWithChild, Child } from '@/lib/supabase/types'
 
@@ -61,6 +63,10 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
     .eq('family_id', membership.family_id)
     .order('name') as { data: Child[] | null }
 
+  // Check subscription for advanced analytics
+  const limits = await getUserSubscriptionLimits(user.id)
+  const hasAdvancedAnalytics = limits.planId === 'pro'
+
   if (!artworks || artworks.length === 0) {
     return (
       <div className="max-w-4xl mx-auto">
@@ -94,13 +100,22 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
         </p>
       </div>
 
-      <Suspense fallback={<AnalyticsSkeleton />}>
-        <AnalyticsDashboard
-          artworks={artworks}
-          children={children || []}
-          selectedChildId={childFilter || undefined}
+      {!hasAdvancedAnalytics ? (
+        <UpgradePrompt
+          feature="Advanced Analytics"
+          plan="pro"
+          description="Unlock detailed charts, insights, and analytics to understand your children's artistic journey."
+          currentPlan={limits.planId}
         />
-      </Suspense>
+      ) : (
+        <Suspense fallback={<AnalyticsSkeleton />}>
+          <AnalyticsDashboard
+            artworks={artworks}
+            children={children || []}
+            selectedChildId={childFilter || undefined}
+          />
+        </Suspense>
+      )}
     </div>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -30,6 +30,7 @@ interface ArtBookDialogProps {
   artworks: ArtworkWithChild[]
   defaultTitle?: string
   defaultChildName?: string
+  planId?: 'free' | 'family' | 'pro'
 }
 
 export function ArtBookDialog({
@@ -38,9 +39,30 @@ export function ArtBookDialog({
   artworks,
   defaultTitle = 'My Art Collection',
   defaultChildName,
+  planId = 'free',
 }: ArtBookDialogProps) {
   const { toast } = useToast()
   const [isGenerating, setIsGenerating] = useState(false)
+  
+  // Check if user has access
+  const hasAccess = planId === 'family' || planId === 'pro'
+  
+  useEffect(() => {
+    if (open && !hasAccess) {
+      toast({
+        title: 'Upgrade Required',
+        description: 'Art Books are available in the Family plan. Upgrade to create print-ready PDFs!',
+        variant: 'destructive',
+      })
+      onOpenChange(false)
+      // Redirect to billing
+      window.location.href = '/dashboard/billing'
+    }
+  }, [open, hasAccess, onOpenChange, toast])
+  
+  if (!hasAccess) {
+    return null
+  }
   const [options, setOptions] = useState<ArtBookOptions>({
     title: defaultTitle,
     subtitle: defaultChildName ? `by ${defaultChildName}` : undefined,
