@@ -47,6 +47,9 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  alternates: {
+    canonical: 'https://kidcanvas.app',
+  },
   verification: {
     // Add these when you have them:
     // google: 'your-google-verification-code',

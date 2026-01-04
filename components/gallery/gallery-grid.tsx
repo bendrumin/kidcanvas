@@ -467,6 +467,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                       className="absolute top-1 right-1 z-20 transition-transform hover:scale-110 active:scale-95"
                       onClick={(e) => handleToggleFavorite(artwork.id, favoriteStates[artwork.id] ?? artwork.is_favorite, e)}
                       aria-label={favoriteStates[artwork.id] ?? artwork.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
+                      aria-pressed={favoriteStates[artwork.id] ?? artwork.is_favorite}
                       type="button"
                     >
                       <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white shadow-md flex items-center justify-center hover:shadow-lg transition-shadow">

@@ -58,15 +58,15 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
     <div className="space-y-4">
       {/* Child Filter */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Filter by Child</label>
-        <Select 
-          value={currentChild} 
+        <label htmlFor="child-filter" className="text-sm font-medium">Filter by Child</label>
+        <Select
+          value={currentChild}
           onValueChange={(value) => {
             updateParams('child', value)
             onClose?.()
           }}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger id="child-filter" className="w-full">
             <SelectValue placeholder="All children" />
           </SelectTrigger>
           <SelectContent>
@@ -82,15 +82,15 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
 
       {/* Sort */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Sort By</label>
-        <Select 
-          value={currentSort} 
+        <label htmlFor="sort-filter" className="text-sm font-medium">Sort By</label>
+        <Select
+          value={currentSort}
           onValueChange={(value) => {
             updateParams('sort', value)
             onClose?.()
           }}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger id="sort-filter" className="w-full">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -144,6 +144,7 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
           value={currentSearch}
           onChange={(e) => updateParams('search', e.target.value)}
           className="pl-9 transition-all focus:ring-2 focus:ring-primary text-sm sm:text-base"
+          aria-label="Search artwork by title, artist, or tags"
         />
         {currentSearch && (
           <button

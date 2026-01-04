@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { GalleryGridWithCounter } from '@/components/gallery/gallery-grid-with-counter'
 import { GalleryFilters } from '@/components/gallery/gallery-filters'
@@ -12,6 +13,11 @@ import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import type { FamilyMember, ArtworkWithChild, Child } from '@/lib/supabase/types'
 import { getUserSubscriptionLimits } from '@/lib/subscription'
+
+export const metadata: Metadata = {
+  title: 'Gallery',
+  description: 'View and manage your family\'s artwork collection. Search, filter, and organize your children\'s precious art.',
+}
 
 interface DashboardPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>

@@ -254,6 +254,7 @@ export function ArtworkLightbox({
                     size="sm"
                     onClick={handleToggleFavorite}
                     aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                    aria-pressed={isFavorite}
                   >
                     <Heart
                       className={`w-4 h-4 mr-1 transition-all ${isFavorite ? 'fill-crayon-red text-crayon-red' : ''}`}
