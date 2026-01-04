@@ -368,16 +368,47 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
                   />
                   <p className="text-xs text-muted-foreground">Separate tags with commas</p>
                 </div>
-              ) : allTags.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {allTags.map((tag, i) => (
-                    <Badge key={i} variant="secondary">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
               ) : (
-                <p className="text-sm text-muted-foreground">No tags yet</p>
+                <div className="space-y-3">
+                  {/* User Tags */}
+                  {artwork.tags && artwork.tags.length > 0 && (
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-2">Your tags</p>
+                      <div className="flex flex-wrap gap-2">
+                        {artwork.tags.map((tag, i) => (
+                          <Badge key={i} variant="secondary">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* AI Tags */}
+                  {artwork.ai_tags && artwork.ai_tags.length > 0 && (
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-crayon-blue" />
+                        AI detected
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {artwork.ai_tags.map((tag, i) => (
+                          <Badge
+                            key={i}
+                            variant="secondary"
+                            className="bg-gradient-to-r from-crayon-blue/20 to-crayon-green/20 border-crayon-blue/30"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {!artwork.tags?.length && !artwork.ai_tags?.length && (
+                    <p className="text-sm text-muted-foreground">No tags yet</p>
+                  )}
+                </div>
               )}
             </CardContent>
           </Card>

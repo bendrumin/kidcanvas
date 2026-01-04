@@ -3,16 +3,17 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn, hasPermission, type Role } from '@/lib/utils'
-import { 
-  LayoutGrid, 
-  Upload, 
-  Users, 
-  FolderHeart, 
+import {
+  LayoutGrid,
+  Upload,
+  Users,
+  FolderHeart,
   Baby,
   Settings,
   Heart,
   Sparkles,
-  TrendingUp
+  TrendingUp,
+  Plus
 } from 'lucide-react'
 
 interface DashboardNavProps {
@@ -25,105 +26,140 @@ export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100 }: 
   const pathname = usePathname()
   const userRole = (role || 'viewer') as Role
 
-  const navItems = [
+  // Organized navigation sections
+  const navSections = [
     {
-      label: 'Gallery',
-      href: '/dashboard',
-      icon: LayoutGrid,
-      show: true,
-      gradient: 'from-crayon-blue to-crayon-purple',
+      title: 'Browse',
+      items: [
+        {
+          label: 'Gallery',
+          href: '/dashboard',
+          icon: LayoutGrid,
+          show: true,
+          gradient: 'from-crayon-blue to-crayon-purple',
+        },
+        {
+          label: 'Favorites',
+          href: '/dashboard/favorites',
+          icon: Heart,
+          show: true,
+          gradient: 'from-crayon-red to-crayon-pink',
+        },
+        {
+          label: 'Collections',
+          href: '/dashboard/collections',
+          icon: FolderHeart,
+          show: true,
+          gradient: 'from-crayon-purple to-crayon-pink',
+        },
+      ]
     },
     {
-      label: 'Favorites',
-      href: '/dashboard/favorites',
-      icon: Heart,
-      show: true,
-      gradient: 'from-crayon-red to-crayon-pink',
+      title: 'Insights',
+      items: [
+        {
+          label: 'Timeline',
+          href: '/dashboard/timeline',
+          icon: TrendingUp,
+          show: true,
+          gradient: 'from-crayon-blue to-crayon-purple',
+        },
+        {
+          label: 'Analytics',
+          href: '/dashboard/analytics',
+          icon: Sparkles,
+          show: true,
+          gradient: 'from-crayon-green to-crayon-blue',
+        },
+      ]
     },
     {
-      label: 'Timeline',
-      href: '/dashboard/timeline',
-      icon: TrendingUp,
-      show: true,
-      gradient: 'from-crayon-blue to-crayon-purple',
-    },
-    {
-      label: 'Analytics',
-      href: '/dashboard/analytics',
-      icon: Sparkles,
-      show: true,
-      gradient: 'from-crayon-green to-crayon-blue',
-    },
-    {
-      label: 'Upload',
-      href: '/dashboard/upload',
-      icon: Upload,
-      show: hasPermission(userRole, 'addArtwork'),
-      gradient: 'from-crayon-green to-crayon-blue',
-    },
-    {
-      label: 'Children',
-      href: '/dashboard/children',
-      icon: Baby,
-      show: true,
-      gradient: 'from-crayon-yellow to-crayon-orange',
-    },
-    {
-      label: 'Collections',
-      href: '/dashboard/collections',
-      icon: FolderHeart,
-      show: true,
-      gradient: 'from-crayon-purple to-crayon-pink',
-    },
-    {
-      label: 'Family',
-      href: '/dashboard/family',
-      icon: Users,
-      show: true,
-      gradient: 'from-crayon-orange to-crayon-red',
-    },
-    {
-      label: 'Settings',
-      href: '/dashboard/settings',
-      icon: Settings,
-      show: true,
-      gradient: 'from-gray-400 to-gray-600',
-    },
+      title: 'Manage',
+      items: [
+        {
+          label: 'Children',
+          href: '/dashboard/children',
+          icon: Baby,
+          show: true,
+          gradient: 'from-crayon-yellow to-crayon-orange',
+        },
+        {
+          label: 'Family',
+          href: '/dashboard/family',
+          icon: Users,
+          show: true,
+          gradient: 'from-crayon-orange to-crayon-red',
+        },
+        {
+          label: 'Settings',
+          href: '/dashboard/settings',
+          icon: Settings,
+          show: true,
+          gradient: 'from-gray-400 to-gray-600',
+        },
+      ]
+    }
   ]
 
   return (
-    <nav 
+    <nav
       className="fixed left-0 top-16 bottom-0 w-64 bg-background/90 backdrop-blur-md border-r hidden lg:block overflow-y-auto"
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className="p-4 space-y-1" role="list">
-        {navItems.filter(item => item.show).map((item) => {
-          const isActive = pathname === item.href || 
-            (item.href !== '/dashboard' && pathname.startsWith(item.href))
-          
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                'group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200',
-                isActive 
-                  ? `bg-gradient-to-r ${item.gradient} text-white shadow-md` 
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-              )}
-            >
-              <item.icon className={cn(
-                'w-5 h-5 transition-transform duration-200',
-                !isActive && 'group-hover:scale-110'
-              )} />
-              {item.label}
-              {isActive && (
-                <div className="ml-auto w-2 h-2 rounded-full bg-white/50 animate-pulse" />
-              )}
-            </Link>
-          )
-        })}
+      <div className="p-4 space-y-6">
+        {/* Upload CTA Button */}
+        {hasPermission(userRole, 'addArtwork') && (
+          <Link
+            href="/dashboard/upload"
+            className={cn(
+              'group flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg',
+              pathname === '/dashboard/upload'
+                ? 'bg-gradient-to-r from-crayon-green to-crayon-blue text-white'
+                : 'bg-gradient-to-r from-crayon-green to-crayon-blue text-white hover:scale-105'
+            )}
+          >
+            <Plus className="w-5 h-5" />
+            Upload Artwork
+          </Link>
+        )}
+
+        {/* Navigation Sections */}
+        {navSections.map((section) => (
+          <div key={section.title}>
+            <h3 className="px-3 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              {section.title}
+            </h3>
+            <div className="space-y-1">
+              {section.items.filter(item => item.show).map((item) => {
+                const isActive = pathname === item.href ||
+                  (item.href !== '/dashboard' && pathname.startsWith(item.href))
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      'group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                      isActive
+                        ? `bg-gradient-to-r ${item.gradient} text-white shadow-md`
+                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                    )}
+                  >
+                    <item.icon className={cn(
+                      'w-5 h-5 transition-transform duration-200',
+                      !isActive && 'group-hover:scale-110'
+                    )} />
+                    {item.label}
+                    {isActive && (
+                      <div className="ml-auto w-2 h-2 rounded-full bg-white/50 animate-pulse" />
+                    )}
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Quick Stats Card */}

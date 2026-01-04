@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArtworkLightbox } from './artwork-lightbox'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Heart, ExternalLink, Check, Trash2, X, Book } from 'lucide-react'
+import { Heart, ExternalLink, Check, Trash2, X, Book, Sparkles } from 'lucide-react'
 import { formatDate, calculateAge, cn } from '@/lib/utils'
 import { useMobile } from '@/lib/use-mobile'
 import { useToast } from '@/components/ui/use-toast'
@@ -483,6 +483,11 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
                         <span className="text-xs sm:text-sm text-muted-foreground truncate">
                           {artwork.child?.name}
                         </span>
+                        {artwork.ai_description && (
+                          <span title="AI analyzed">
+                            <Sparkles className="w-3 h-3 text-crayon-blue flex-shrink-0" />
+                          </span>
+                        )}
                       </div>
                       {artwork.child && artwork.child_age_months && (
                         <span className="text-[10px] sm:text-xs text-muted-foreground bg-gray-100 px-1.5 sm:px-2 py-0.5 rounded-full flex-shrink-0">

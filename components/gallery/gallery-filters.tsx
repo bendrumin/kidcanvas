@@ -140,11 +140,11 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
       <div className="relative flex-1 w-full sm:max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
         <Input
-          placeholder="Search artwork..."
+          placeholder="Search by title, tags, or AI description..."
           value={currentSearch}
           onChange={(e) => updateParams('search', e.target.value)}
           className="pl-9 transition-all focus:ring-2 focus:ring-primary text-sm sm:text-base"
-          aria-label="Search artwork by title, artist, or tags"
+          aria-label="Search artwork by title, artist, tags, or AI description"
         />
         {currentSearch && (
           <button

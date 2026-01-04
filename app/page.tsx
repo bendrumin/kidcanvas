@@ -91,20 +91,24 @@ export default function LandingPage() {
             </Link>
           </div>
           
-          <div className="mt-6 flex items-center justify-center gap-6 text-sm text-muted-foreground">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-600" />
               <span>No credit card required</span>
             </div>
             <div className="flex items-center gap-2">
               <Lock className="w-4 h-4 text-green-600" />
-              <span>Secure & private</span>
+              <span>Private & secure</span>
             </div>
             <div className="flex items-center gap-2">
               <Heart className="w-4 h-4 text-green-600" />
-              <span>Cancel anytime</span>
+              <span>You own your data</span>
             </div>
           </div>
+
+          <p className="mt-3 text-xs text-green-700 dark:text-green-400 font-medium">
+            Your kids' artwork is never used for AI training
+          </p>
           
           <p className="mt-4 text-sm text-muted-foreground">
             📱 iOS app (iPhone & iPad) available via request — <Link href="/support" className="text-[#E91E63] hover:underline">use our contact form</Link> to request a TestFlight invite
@@ -370,9 +374,23 @@ export default function LandingPage() {
                   othersCheck: [false, false, false],
                 },
                 {
+                  feature: 'Privacy & data usage',
+                  kidcanvas: 'Your data stays private - never used for AI training',
+                  others: ['Unclear policy', 'Unclear policy', 'May be used for ML'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                },
+                {
+                  feature: 'Ad-free experience',
+                  kidcanvas: 'Zero ads, ever',
+                  others: ['No ads', 'No ads', 'Ads for premium features'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                },
+                {
                   feature: 'Family sharing',
-                  kidcanvas: 'Built-in family groups',
-                  others: ['Limited sharing', 'Yes', 'Shared folders'],
+                  kidcanvas: 'Simple link sharing - no account needed',
+                  others: ['Limited sharing', 'Yes', 'Complex folder permissions'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, true],
                 },
@@ -456,8 +474,11 @@ export default function LandingPage() {
             
             {/* Bottom CTA */}
             <div className="p-6 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30 border-t border-amber-100 dark:border-border text-center">
+              <p className="text-sm font-semibold text-foreground mb-1">
+                Why pay more for less?
+              </p>
               <p className="text-sm text-muted-foreground mb-3">
-                The best value for families — try KidCanvas free today
+                100 artworks free forever • AI tagging • Timeline view • Your data stays private
               </p>
               <Link href="/signup">
                 <Button className="bg-[#E91E63] hover:bg-[#C2185B]">
@@ -492,8 +513,8 @@ export default function LandingPage() {
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-foreground">AI auto-tagging included</p>
-                    <p className="text-muted-foreground">Artkive doesn't offer this</p>
+                    <p className="font-semibold text-foreground">Smart AI auto-tagging</p>
+                    <p className="text-muted-foreground">Recognizes animals, rainbows, people, colors & more</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -501,6 +522,13 @@ export default function LandingPage() {
                   <div>
                     <p className="font-semibold text-foreground">Timeline view of growth</p>
                     <p className="text-muted-foreground">See each child's artistic journey</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-foreground">Your data stays private</p>
+                    <p className="text-muted-foreground">Never used for AI training</p>
                   </div>
                 </div>
               </div>
@@ -535,8 +563,8 @@ export default function LandingPage() {
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-foreground">Family-friendly sharing</p>
-                    <p className="text-muted-foreground">Built for grandparents to view easily</p>
+                    <p className="font-semibold text-foreground">Easy sharing for grandparents</p>
+                    <p className="text-muted-foreground">Just send a link - no account needed</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
