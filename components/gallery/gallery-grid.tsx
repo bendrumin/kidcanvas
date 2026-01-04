@@ -52,6 +52,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
   const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
+
   // Update count when artworks change
   // Use a ref to prevent calling onCountChange on initial mount if count is already correct
   const prevLengthRef = useRef(artworks.length)
@@ -255,8 +256,8 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
         </div>
       )}
 
-      <div 
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
+      <div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6 lg:gap-8"
         role="list"
         aria-label="Artwork gallery"
       >
@@ -269,32 +270,33 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
               <motion.div
                 key={artwork.id}
                 layout={!shouldReduceMotion}
-                initial={shouldReduceMotion ? false : { opacity: 0, y: 20, rotate: rotation }}
-                animate={shouldReduceMotion ? {} : { opacity: 1, y: 0, rotate: rotation }}
+                initial={{ opacity: 1, y: 0, rotate: 0 }}
+                animate={{ opacity: 1, y: 0, rotate: shouldReduceMotion ? 0 : rotation }}
                 exit={shouldReduceMotion ? {} : { opacity: 0, scale: 0.9 }}
-                transition={shouldReduceMotion ? {} : { 
-                  delay: index * 0.05, 
-                  duration: 0.4,
+                transition={shouldReduceMotion ? {} : {
+                  delay: 0,
+                  duration: 0.2,
                   type: "spring",
                   stiffness: 100
                 }}
-                whileHover={shouldReduceMotion ? {} : { 
-                  scale: 1.03, 
+                whileHover={shouldReduceMotion ? {} : {
+                  scale: 1.03,
                   rotate: 0,
                   zIndex: 10,
                   transition: { duration: 0.2 }
                 }}
                 className="group relative"
+                style={{ visibility: 'visible', display: 'block', minHeight: '300px' }}
               >
                 {/* Paper card with shadow */}
-                <div 
+                <div
                   className={cn(
-                    "relative bg-white rounded-sm shadow-md active:shadow-lg overflow-visible focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2",
-                    isSelectionMode 
-                      ? "cursor-default" 
+                    "relative bg-white dark:bg-gray-800 rounded-sm shadow-md active:shadow-lg overflow-visible focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 min-h-[300px]",
+                    isSelectionMode
+                      ? "cursor-default"
                       : "cursor-pointer",
-                    shouldReduceMotion 
-                      ? "transition-shadow duration-150" 
+                    shouldReduceMotion
+                      ? "transition-shadow duration-150"
                       : "hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0",
                     isSelectionMode && selectedIds.has(artwork.id) && "ring-2 ring-primary ring-offset-2"
                   )}
@@ -353,7 +355,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                   
                   {/* Image container with paper padding */}
                   <div className="p-2 sm:p-3 pb-0">
-                    <div className="relative aspect-square overflow-hidden bg-gray-50 rounded-sm">
+                    <div className="relative aspect-square overflow-hidden bg-gray-50 rounded-sm min-h-[200px] sm:min-h-[250px]">
                       {artwork.thumbnail_url || artwork.image_url ? (
                         <Image
                           src={artwork.thumbnail_url || artwork.image_url}
@@ -361,13 +363,14 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false }: Galler
                           fill
                           className={cn(
                             "object-cover",
-                            shouldReduceMotion 
-                              ? "" 
+                            shouldReduceMotion
+                              ? ""
                               : "transition-transform duration-500 group-hover:scale-105"
                           )}
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                           loading={index < 8 ? "eager" : "lazy"}
                           priority={index < 4}
+                          unoptimized={false}
                           onError={(e) => {
                             console.error('Image failed to load:', artwork.thumbnail_url || artwork.image_url)
                             // Fallback to the full image URL if thumbnail fails

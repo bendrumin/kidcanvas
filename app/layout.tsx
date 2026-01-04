@@ -16,6 +16,13 @@ export const metadata: Metadata = {
   keywords: ['kids artwork', 'children art', 'family gallery', 'artwork scanner', 'digital keepsakes', 'kids art storage', 'family photos', 'preserve memories', 'children drawings'],
   authors: [{ name: 'KidCanvas' }],
   creator: 'KidCanvas',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+    viewportFit: 'cover',
+  },
   openGraph: {
     title: 'KidCanvas - Every Scribble Tells a Story',
     description: 'Preserve your children\'s precious artwork forever. Scan, organize, and share with family. Free for up to 100 artworks.',
