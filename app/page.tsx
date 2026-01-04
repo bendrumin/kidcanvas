@@ -14,6 +14,7 @@ import {
   Heart,
   Star,
   Users,
+  X,
 } from 'lucide-react'
 
 export default function LandingPage() {
@@ -301,6 +302,226 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Section */}
+      <section className="py-12 px-4 sm:px-6 bg-gradient-to-b from-amber-50/50 to-transparent dark:from-transparent">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl font-bold text-center text-foreground mb-4">
+            How KidCanvas compares to other solutions
+          </h2>
+          <p className="text-center text-muted-foreground mb-8 text-sm max-w-2xl mx-auto">
+            See why families choose KidCanvas over artwork storage apps, cloud storage, and photo apps
+          </p>
+          
+          {/* Desktop Comparison Table */}
+          <div className="hidden lg:block bg-white dark:bg-card rounded-2xl shadow-lg border border-amber-100 dark:border-border overflow-hidden">
+            {/* Header */}
+            <div className="grid grid-cols-5 gap-4 p-4 border-b border-amber-100 dark:border-border bg-gray-50 dark:bg-secondary">
+              <div className="font-semibold text-foreground">Feature</div>
+              <div className="font-semibold text-foreground text-center">KidCanvas</div>
+              <div className="font-semibold text-foreground text-center text-sm">Artkive</div>
+              <div className="font-semibold text-foreground text-center text-sm">Keepy</div>
+              <div className="font-semibold text-foreground text-center text-sm">Google Photos / Dropbox</div>
+            </div>
+            
+            {/* Comparison Rows */}
+            <div className="divide-y divide-amber-100 dark:divide-border">
+              {[
+                {
+                  feature: 'Free tier',
+                  kidcanvas: '100 artworks free forever',
+                  others: ['No free tier', 'Limited free', 'Free storage, but...'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, true],
+                },
+                {
+                  feature: 'Monthly pricing',
+                  kidcanvas: '$4.99/mo',
+                  others: ['$9.99/mo', '$7.99/mo', '$2-10/mo (general storage)'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, true],
+                },
+                {
+                  feature: 'Built for artwork',
+                  kidcanvas: 'Purpose-built for kids\' art',
+                  others: ['Yes', 'Yes', 'No - generic storage'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                },
+                {
+                  feature: 'Child tagging',
+                  kidcanvas: 'Tag by child, see growth over time',
+                  others: ['Yes', 'Yes', 'Manual tagging only'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                },
+                {
+                  feature: 'AI auto-tagging',
+                  kidcanvas: 'Included - auto-describe artwork',
+                  others: ['Not available', 'Not available', 'Generic image tags'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, false],
+                },
+                {
+                  feature: 'Family sharing',
+                  kidcanvas: 'Built-in family groups',
+                  others: ['Limited sharing', 'Yes', 'Shared folders'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, true],
+                },
+                {
+                  feature: 'Web + Mobile',
+                  kidcanvas: 'Full-featured web + iOS app',
+                  others: ['Web + Mobile', 'Mobile-first', 'Web + Mobile'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, true],
+                },
+                {
+                  feature: 'No credit card to start',
+                  kidcanvas: 'Start completely free',
+                  others: ['Payment required', 'Trial then pay', 'Free with limits'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, true],
+                },
+                {
+                  feature: 'Keep free tier after canceling',
+                  kidcanvas: 'Yes - 100 artworks forever',
+                  others: ['No', 'No', 'Yes, but limited'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, true],
+                },
+                {
+                  feature: 'Search by artwork content',
+                  kidcanvas: 'Search by child, tags, description',
+                  others: ['Basic search', 'Basic search', 'File name only'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                },
+              ].map((row, i) => (
+                <div key={i} className="grid grid-cols-5 gap-4 p-4 hover:bg-gray-50/50 dark:hover:bg-secondary/50 transition-colors">
+                  <div className="font-medium text-foreground text-sm flex items-center">{row.feature}</div>
+                  <div className="flex items-center gap-2 text-sm">
+                    {row.kidcanvasCheck ? (
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                    ) : (
+                      <X className="w-4 h-4 text-red-600 flex-shrink-0" />
+                    )}
+                    <span className={row.kidcanvasCheck ? 'text-foreground' : 'text-muted-foreground'}>
+                      {row.kidcanvas}
+                    </span>
+                  </div>
+                  {row.others.map((other, idx) => (
+                    <div key={idx} className="flex items-center gap-2 text-sm">
+                      {row.othersCheck[idx] ? (
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                      ) : (
+                        <X className="w-4 h-4 text-red-600 flex-shrink-0" />
+                      )}
+                      <span className={row.othersCheck[idx] ? 'text-foreground' : 'text-muted-foreground'}>
+                        {other}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            
+            {/* Bottom CTA */}
+            <div className="p-6 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30 border-t border-amber-100 dark:border-border text-center">
+              <p className="text-sm text-muted-foreground mb-3">
+                The best value for families — try KidCanvas free today
+              </p>
+              <Link href="/signup">
+                <Button className="bg-[#E91E63] hover:bg-[#C2185B]">
+                  Start Free — No Credit Card
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Mobile Comparison Cards */}
+          <div className="lg:hidden space-y-6">
+            <div className="bg-white dark:bg-card rounded-2xl shadow-lg border border-amber-100 dark:border-border p-6">
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-amber-100 dark:border-border">
+                <h3 className="text-lg font-bold text-foreground">KidCanvas vs. Artkive</h3>
+              </div>
+              <div className="space-y-4 text-sm">
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-foreground">50% cheaper</p>
+                    <p className="text-muted-foreground">$4.99/mo vs $9.99/mo</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-foreground">100 artworks free forever</p>
+                    <p className="text-muted-foreground">Artkive requires payment upfront</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-foreground">AI auto-tagging included</p>
+                    <p className="text-muted-foreground">Artkive doesn't offer this</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-card rounded-2xl shadow-lg border border-amber-100 dark:border-border p-6">
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-amber-100 dark:border-border">
+                <h3 className="text-lg font-bold text-foreground">KidCanvas vs. Generic Storage</h3>
+              </div>
+              <div className="space-y-4 text-sm">
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-foreground">Built specifically for artwork</p>
+                    <p className="text-muted-foreground">Not just another photo folder</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-foreground">Tag by child, track growth</p>
+                    <p className="text-muted-foreground">See each kid's artistic journey</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-foreground">AI understands artwork</p>
+                    <p className="text-muted-foreground">Auto-tags and describes drawings</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-foreground">Family-friendly sharing</p>
+                    <p className="text-muted-foreground">Built for grandparents to view easily</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile CTA */}
+            <div className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30 rounded-2xl border border-amber-100 dark:border-border p-6 text-center">
+              <p className="text-sm text-muted-foreground mb-4">
+                Try KidCanvas free — no credit card required
+              </p>
+              <Link href="/signup">
+                <Button className="bg-[#E91E63] hover:bg-[#C2185B] w-full">
+                  Start Free
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
