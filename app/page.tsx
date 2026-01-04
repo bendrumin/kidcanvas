@@ -6,16 +6,19 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { ArtworkScribble } from '@/components/artwork-scribble'
 import { Logo } from '@/components/logo'
 import { OrganizationSchema, SoftwareApplicationSchema, WebSiteSchema } from '@/components/seo/structured-data'
-import { 
+import {
   ArrowRight,
   Check,
   Shield,
   Lock,
   Heart,
   Star,
-  Users,
   X,
 } from 'lucide-react'
+
+// Note: Metadata cannot be exported from 'use client' files
+// The parent layout.tsx already has comprehensive metadata
+// This component focuses on structured data (JSON-LD) instead
 
 export default function LandingPage() {
   return (
@@ -361,8 +364,8 @@ export default function LandingPage() {
                 },
                 {
                   feature: 'AI auto-tagging',
-                  kidcanvas: 'Included - auto-describe artwork',
-                  others: ['Not available', 'Not available', 'Generic image tags'],
+                  kidcanvas: 'Smart AI describes artwork automatically',
+                  others: ['Not available', 'Not available', 'Generic photo tags only'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, false],
                 },
@@ -400,6 +403,27 @@ export default function LandingPage() {
                   others: ['Basic search', 'Basic search', 'File name only'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, false],
+                },
+                {
+                  feature: 'Export your data',
+                  kidcanvas: 'Download all artwork anytime',
+                  others: ['Limited export', 'Limited export', 'Yes'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, true],
+                },
+                {
+                  feature: 'Create photo books',
+                  kidcanvas: 'Coming soon - print books',
+                  others: ['Yes (extra cost)', 'Yes (extra cost)', 'No'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                },
+                {
+                  feature: 'Timeline view',
+                  kidcanvas: 'See artwork growth over time',
+                  others: ['No', 'Limited', 'No'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, true, false],
                 },
               ].map((row, i) => (
                 <div key={i} className="grid grid-cols-5 gap-4 p-4 hover:bg-gray-50/50 dark:hover:bg-secondary/50 transition-colors">
@@ -472,6 +496,13 @@ export default function LandingPage() {
                     <p className="text-muted-foreground">Artkive doesn't offer this</p>
                   </div>
                 </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-foreground">Timeline view of growth</p>
+                    <p className="text-muted-foreground">See each child's artistic journey</p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -506,6 +537,13 @@ export default function LandingPage() {
                   <div>
                     <p className="font-semibold text-foreground">Family-friendly sharing</p>
                     <p className="text-muted-foreground">Built for grandparents to view easily</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-foreground">Export all your data anytime</p>
+                    <p className="text-muted-foreground">Download everything - you own it</p>
                   </div>
                 </div>
               </div>
