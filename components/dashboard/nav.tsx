@@ -13,7 +13,8 @@ import {
   Heart,
   Sparkles,
   TrendingUp,
-  Plus
+  Plus,
+  Shield
 } from 'lucide-react'
 
 interface DashboardNavProps {
@@ -21,11 +22,14 @@ interface DashboardNavProps {
   currentArtworks?: number
   artworkLimit?: number
   planId?: string
+  userEmail?: string | null
 }
 
-export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100, planId = 'free' }: DashboardNavProps) {
+export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100, planId = 'free', userEmail = null }: DashboardNavProps) {
   const pathname = usePathname()
   const userRole = (role || 'viewer') as Role
+  const ADMIN_EMAIL = 'bsiegel13@gmail.com'
+  const isAdmin = userEmail === ADMIN_EMAIL
 
   // Organized navigation sections
   const navSections = [
@@ -99,6 +103,18 @@ export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100, pl
           gradient: 'from-gray-400 to-gray-600',
         },
       ]
+    },
+    {
+      title: 'Admin',
+      items: [
+        {
+          label: 'User Management',
+          href: '/dashboard/admin',
+          icon: Shield,
+          show: isAdmin,
+          gradient: 'from-red-500 to-orange-600',
+        },
+      ]
     }
   ]
 
@@ -126,41 +142,46 @@ export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100, pl
         )}
 
         {/* Navigation Sections */}
-        {navSections.map((section) => (
-          <div key={section.title}>
-            <h3 className="px-3 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              {section.title}
-            </h3>
-            <div className="space-y-1">
-              {section.items.filter(item => item.show).map((item) => {
-                const isActive = pathname === item.href ||
-                  (item.href !== '/dashboard' && pathname.startsWith(item.href))
+        {navSections.map((section) => {
+          const visibleItems = section.items.filter(item => item.show)
+          if (visibleItems.length === 0) return null
 
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      'group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
-                      isActive
-                        ? `bg-gradient-to-r ${item.gradient} text-white shadow-md`
-                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                    )}
-                  >
-                    <item.icon className={cn(
-                      'w-5 h-5 transition-transform duration-200',
-                      !isActive && 'group-hover:scale-110'
-                    )} />
-                    {item.label}
-                    {isActive && (
-                      <div className="ml-auto w-2 h-2 rounded-full bg-white/50 animate-pulse" />
-                    )}
-                  </Link>
-                )
-              })}
+          return (
+            <div key={section.title}>
+              <h3 className="px-3 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                {section.title}
+              </h3>
+              <div className="space-y-1">
+                {visibleItems.map((item) => {
+                  const isActive = pathname === item.href ||
+                    (item.href !== '/dashboard' && pathname.startsWith(item.href))
+
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={cn(
+                        'group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                        isActive
+                          ? `bg-gradient-to-r ${item.gradient} text-white shadow-md`
+                          : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      )}
+                    >
+                      <item.icon className={cn(
+                        'w-5 h-5 transition-transform duration-200',
+                        !isActive && 'group-hover:scale-110'
+                      )} />
+                      {item.label}
+                      {isActive && (
+                        <div className="ml-auto w-2 h-2 rounded-full bg-white/50 animate-pulse" />
+                      )}
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {/* Quick Stats Card */}

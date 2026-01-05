@@ -75,6 +75,7 @@ export default async function DashboardLayout({
           currentArtworks={limits.currentArtworks}
           artworkLimit={limits.artworkLimit}
           planId={limits.planId}
+          userEmail={user.email ?? null}
         />
         <main 
           id="main-content" 
