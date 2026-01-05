@@ -21,7 +21,7 @@ const changelog = [
   {
     version: '1.0.0',
     date: 'January 2025',
-    title: "Welcome to KidCanvas! 🎨",
+    title: "Welcome to KidCanvas!",
     highlights: [
       {
         icon: Palette,

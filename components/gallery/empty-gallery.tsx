@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Palette, Upload, Sparkles, ArrowRight } from 'lucide-react'
 import { useMobile } from '@/lib/use-mobile'
+import { ArtworkScribble } from '@/components/artwork-scribble'
 
 const floatingAnimation = {
   initial: { y: 0 },
@@ -70,7 +71,7 @@ export function EmptyGallery() {
         animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
         transition={shouldReduceMotion ? {} : { delay: 0.2 }}
       >
-        Your Gallery Awaits! ✨
+        Your Gallery Awaits!
       </motion.h2>
       
       <motion.p 
@@ -110,9 +111,9 @@ export function EmptyGallery() {
         animate={shouldReduceMotion ? {} : { opacity: 1 }}
         transition={shouldReduceMotion ? {} : { delay: 0.6 }}
       >
-        {['🎨', '🖍️', '✏️', '🖌️'].map((emoji, i) => (
+        {(['palette', 'flower', 'rainbow', 'dinosaur'] as const).map((variant, i) => (
           <motion.div 
-            key={i}
+            key={variant}
             className="relative"
             initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.8, rotate: (i - 1.5) * 3 }}
             animate={shouldReduceMotion ? {} : { opacity: 0.6, scale: 1, rotate: (i - 1.5) * 3 }}
@@ -123,8 +124,8 @@ export function EmptyGallery() {
             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-4 bg-yellow-200/70 rounded-sm transform -rotate-2 z-10" />
             
             <div className="bg-white p-2 rounded-sm shadow-md">
-              <div className="aspect-square rounded-sm bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center text-4xl">
-                {emoji}
+              <div className="aspect-square rounded-sm bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+                <ArtworkScribble variant={variant} size={48} />
               </div>
             </div>
           </motion.div>

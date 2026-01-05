@@ -111,7 +111,7 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
                 <Baby className="w-8 h-8 text-white" />
               </div>
               <DialogTitle className="text-2xl font-display text-center">
-                Add Your First Artist! 🎨
+                Add Your First Artist!
               </DialogTitle>
               <DialogDescription className="text-center">
                 Let's add your child so we can organize their masterpieces

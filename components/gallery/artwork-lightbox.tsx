@@ -17,7 +17,8 @@ import {
   Calendar,
   User,
   Tag,
-  Loader2
+  Loader2,
+  Sparkles
 } from 'lucide-react'
 import { formatDate, calculateAge } from '@/lib/utils'
 import type { ArtworkWithChild } from '@/lib/supabase/types'
@@ -341,8 +342,9 @@ export function ArtworkLightbox({
               {/* AI Description */}
               {artwork.ai_description && (
                 <div className="p-3 rounded-xl bg-gradient-to-r from-crayon-blue/10 to-crayon-green/10">
-                  <p className="text-xs font-medium text-muted-foreground mb-1">
-                    <span aria-hidden="true">✨</span> AI Description
+                  <p className="text-xs font-medium text-muted-foreground mb-1 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    AI Description
                   </p>
                   <p className="text-sm">{artwork.ai_description}</p>
                 </div>

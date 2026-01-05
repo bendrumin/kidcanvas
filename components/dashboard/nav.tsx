@@ -209,12 +209,6 @@ export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100, pl
         </div>
       </div>
 
-      {/* Fun footer decoration */}
-      <div className="absolute bottom-4 left-0 right-0 px-4">
-        <div className="text-center text-2xl opacity-40 hover:opacity-60 transition-opacity cursor-default">
-          🎨 🖍️ ✨
-        </div>
-      </div>
     </nav>
   )
 }

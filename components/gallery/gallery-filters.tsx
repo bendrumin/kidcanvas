@@ -18,7 +18,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { Search, SlidersHorizontal, X, Menu } from 'lucide-react'
+import { Search, SlidersHorizontal, X, Menu, Heart } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Child } from '@/lib/supabase/types'
 
@@ -115,7 +115,7 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
             onClose?.()
           }}
         >
-          <span className={showFavorites ? '' : 'opacity-60'}>❤️</span>
+          <Heart className={cn('w-4 h-4', showFavorites ? 'fill-current' : 'opacity-60')} />
           <span className="ml-2">Favorites Only</span>
         </Button>
       </div>
@@ -223,7 +223,7 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
             showFavorites && 'bg-crayon-red hover:bg-crayon-red/90 shadow-md hover:shadow-lg transition-all'
           )}
         >
-          <span className={showFavorites ? '' : 'opacity-60'}>❤️</span>
+          <Heart className={cn('w-4 h-4', showFavorites ? 'fill-current' : 'opacity-60')} />
           <span className="ml-1.5">Favorites</span>
         </Button>
 

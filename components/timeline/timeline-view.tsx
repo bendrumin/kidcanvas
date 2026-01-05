@@ -18,7 +18,9 @@ import {
   Calendar, 
   Sparkles,
   TrendingUp,
-  Clock
+  Clock,
+  Palette,
+  Heart
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { ArtworkWithChild, Child } from '@/lib/supabase/types'
@@ -140,7 +142,9 @@ export function TimelineView({
   if (timelineData.timelineArtworks.length === 0) {
     return (
       <Card className="p-8 text-center">
-        <div className="text-6xl mb-4">🎨</div>
+        <div className="flex justify-center mb-4">
+          <Palette className="w-16 h-16 text-muted-foreground/40" />
+        </div>
         <h3 className="text-xl font-semibold text-foreground mb-2">
           No artwork found
         </h3>
@@ -324,8 +328,8 @@ export function TimelineView({
                       />
                       {artwork.is_favorite && (
                         <div className="absolute top-2 right-2">
-                          <Badge className="bg-pink-500 text-white text-xs">
-                            ❤️
+                          <Badge className="bg-pink-500 text-white text-xs p-1">
+                            <Heart className="w-3 h-3 fill-current" />
                           </Badge>
                         </div>
                       )}
