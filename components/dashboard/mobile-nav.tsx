@@ -178,7 +178,7 @@ export function MobileNav({ role, familyName }: MobileNavProps) {
         </div>
 
         {/* Decorative bottom */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-gradient-to-t from-amber-50/50">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-gradient-to-t from-amber-50/50 dark:from-gray-900/50">
           <div className="flex justify-center gap-2 text-2xl">
             🎨 🖍️ ✏️ 🖌️
           </div>

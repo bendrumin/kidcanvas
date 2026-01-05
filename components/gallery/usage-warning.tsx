@@ -62,7 +62,7 @@ export function UsageWarning({ current, limit, type }: UsageWarningProps) {
     >
       <AlertTriangle className={cn(
         'h-4 w-4',
-        isAtLimit ? 'text-destructive' : isNearLimit ? 'text-yellow-600 dark:text-yellow-500' : 'text-primary'
+        isAtLimit ? 'text-destructive' : isNearLimit ? 'text-yellow-700 dark:text-yellow-500' : 'text-primary'
       )} />
       <AlertTitle className="font-semibold">{message.title}</AlertTitle>
       <AlertDescription className="mt-2">

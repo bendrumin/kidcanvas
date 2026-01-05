@@ -11,7 +11,7 @@ export default function NotFound() {
           <Logo size="lg" showText={false} className="scale-150" />
         </div>
         
-        <h1 className="text-6xl font-display font-bold text-gray-900 mb-4">404</h1>
+        <h1 className="text-6xl font-display font-bold text-foreground mb-4">404</h1>
         <h2 className="text-2xl font-display font-semibold mb-4">Page Not Found</h2>
         <p className="text-muted-foreground mb-8">
           Oops! This masterpiece seems to have gone missing. Let's get you back to the gallery.

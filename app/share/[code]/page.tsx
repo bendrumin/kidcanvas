@@ -197,7 +197,7 @@ export default async function SharePage({ params }: SharePageProps) {
           {/* Artwork Info */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-display font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl font-display font-bold text-foreground mb-2">
                 {artwork.title}
               </h1>
               
@@ -207,7 +207,7 @@ export default async function SharePage({ params }: SharePageProps) {
                     {artwork.child.name?.[0]}
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900">by {artwork.child.name}</p>
+                    <p className="font-semibold text-foreground">by {artwork.child.name}</p>
                     <p className="text-sm text-muted-foreground">
                       Little Artist ✨
                     </p>

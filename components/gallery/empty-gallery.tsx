@@ -64,8 +64,8 @@ export function EmptyGallery() {
         />
       </motion.div>
 
-      <motion.h2 
-        className="text-3xl font-display font-bold text-gray-900 mb-3"
+      <motion.h2
+        className="text-3xl font-display font-bold text-foreground mb-3"
         initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
         animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
         transition={shouldReduceMotion ? {} : { delay: 0.2 }}

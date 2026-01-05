@@ -459,8 +459,8 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
                       {!isSelectionMode && (
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 group-active:bg-black/30 transition-all duration-300 flex items-center justify-center z-10 pointer-events-none">
                           <div className="opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-all duration-300 transform group-hover:scale-110 group-active:scale-95">
-                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow pointer-events-auto">
-                              <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 group-hover:text-primary transition-colors" />
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 dark:bg-gray-800/90 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow pointer-events-auto">
+                              <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 dark:text-gray-200 group-hover:text-primary transition-colors" />
                             </div>
                           </div>
                         </div>
@@ -470,7 +470,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
 
                   {/* Info section styled like caption */}
                   <div className="p-2 sm:p-3 pt-2">
-                    <h3 className="font-display font-semibold text-gray-900 truncate text-base sm:text-lg">
+                    <h3 className="font-display font-semibold text-foreground truncate text-base sm:text-lg">
                       {artwork.title}
                     </h3>
                     <div className="flex items-center justify-between mt-1 gap-2">

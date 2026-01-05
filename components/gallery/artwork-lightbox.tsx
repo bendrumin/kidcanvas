@@ -218,7 +218,7 @@ export function ArtworkLightbox({
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="flex flex-col lg:flex-row max-w-6xl max-h-[90vh] w-full mx-4 bg-white rounded-2xl overflow-hidden"
+          className="flex flex-col lg:flex-row max-w-6xl max-h-[90vh] w-full mx-4 bg-white dark:bg-gray-900 rounded-2xl overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Image */}
