@@ -59,9 +59,10 @@ export async function POST(request: Request) {
     // 2. Delete shared artwork links
     if (artworkIds.length > 0) {
       await serviceClient
-        .from('shared_artworks')
+        .from('share_links')
         .delete()
-        .in('artwork_id', artworkIds)
+        .eq('type', 'artwork')
+        .in('resource_id', artworkIds)
     }
 
     // 3. Delete artworks uploaded by this user
