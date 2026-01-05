@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as SonnerToaster } from 'sonner'
 import { SkipLink } from '@/components/ui/skip-link'
+import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://kidcanvas.app'),
@@ -88,6 +89,7 @@ export default function RootLayout({
           <Toaster />
           <SonnerToaster richColors position="top-center" />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )
