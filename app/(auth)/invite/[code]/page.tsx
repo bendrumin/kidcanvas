@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AcceptInviteForm } from '@/components/family/accept-invite-form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Users } from 'lucide-react'
+import { Users, AlertCircle } from 'lucide-react'
 import { Logo } from '@/components/logo'
 import Link from 'next/link'
 import type { FamilyInviteWithFamily } from '@/lib/supabase/types'
@@ -30,7 +30,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
         <Card className="max-w-md w-full text-center">
           <CardHeader>
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-crayon-red/20 to-crayon-orange/20 flex items-center justify-center mx-auto mb-4">
-              <span className="text-3xl">😕</span>
+              <AlertCircle className="w-8 h-8 text-crayon-red" />
             </div>
             <CardTitle>Invalid or Expired Invite</CardTitle>
             <CardDescription>

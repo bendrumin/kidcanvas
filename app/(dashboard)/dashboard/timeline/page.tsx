@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { TimelineView } from '@/components/timeline/timeline-view'
 import { TimelineSkeleton } from '@/components/timeline/timeline-skeleton'
 import type { ArtworkWithChild, Child } from '@/lib/supabase/types'
+import { Palette } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Art Growth Timeline',
@@ -88,7 +89,9 @@ export default async function TimelinePage({ searchParams }: TimelinePageProps) 
           See how your children's artwork evolves over time
         </p>
         <div className="bg-white dark:bg-card rounded-2xl border border-amber-100 dark:border-border p-12 text-center">
-          <div className="text-6xl mb-4">🎨</div>
+          <div className="flex justify-center mb-4">
+            <Palette className="w-16 h-16 text-muted-foreground" />
+          </div>
           <h3 className="text-xl font-semibold text-foreground mb-2">
             No artwork with age data yet
           </h3>

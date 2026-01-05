@@ -7,6 +7,7 @@ import { UpgradePrompt } from '@/components/paywall/upgrade-prompt'
 import { getUserSubscriptionLimits } from '@/lib/subscription'
 import { Suspense } from 'react'
 import type { ArtworkWithChild, Child } from '@/lib/supabase/types'
+import { BarChart3 } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Art Analytics',
@@ -77,7 +78,9 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
           Insights and statistics about your artwork collection
         </p>
         <div className="bg-white dark:bg-card rounded-2xl border border-amber-100 dark:border-border p-12 text-center">
-          <div className="text-6xl mb-4">📊</div>
+          <div className="flex justify-center mb-4">
+            <BarChart3 className="w-16 h-16 text-muted-foreground" />
+          </div>
           <h3 className="text-xl font-semibold text-foreground mb-2">
             No artwork yet
           </h3>

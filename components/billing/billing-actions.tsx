@@ -58,7 +58,7 @@ function BillingActionsContent({
     const canceled = searchParams.get('canceled')
 
     if (success === 'true') {
-      toast.success('🎉 Welcome to your new plan!', {
+      toast.success('Welcome to your new plan!', {
         description: 'Your subscription is now active.',
       })
       // Clean up URL

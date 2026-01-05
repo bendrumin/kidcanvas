@@ -271,8 +271,8 @@ export default function SignupPage() {
                 <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
               </p>
               <div className="mt-4 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-900">
-                <p className="text-xs text-green-800 dark:text-green-200 text-center">
-                  🔒 Your data is secure. Cancel anytime. No hidden fees.
+                <p className="text-xs text-green-800 dark:text-green-200 text-center flex items-center justify-center gap-1">
+                  <Lock className="w-3 h-3" /> Your data is secure. Cancel anytime. No hidden fees.
                 </p>
               </div>
             </form>

@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Loader2, Download, Book } from 'lucide-react'
+import { Loader2, Download, Book, Lightbulb } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
 import { generateArtBookPDF, type ArtBookOptions } from '@/lib/pdf-generator'
 import type { ArtworkWithChild } from '@/lib/supabase/types'
@@ -208,7 +208,9 @@ export function ArtBookDialog({
 
           {/* Info */}
           <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4 text-sm text-amber-900 dark:text-amber-200">
-            <p className="font-semibold mb-1">💡 Print-ready PDF</p>
+            <p className="font-semibold mb-1 flex items-center gap-1">
+              <Lightbulb className="w-3 h-3" /> Print-ready PDF
+            </p>
             <p className="text-xs">
               The PDF can be printed at home or uploaded to services like Shutterfly, Mixbook, or Printique for professional printing.
             </p>

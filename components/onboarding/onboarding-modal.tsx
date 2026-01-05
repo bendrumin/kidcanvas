@@ -171,8 +171,8 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
               <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-crayon-green to-crayon-blue flex items-center justify-center">
                 <Check className="w-8 h-8 text-white" />
               </div>
-              <DialogTitle className="text-2xl font-display text-center">
-                Perfect! 🎉
+              <DialogTitle className="text-2xl font-display text-center flex items-center justify-center gap-2">
+                Perfect! <Sparkles className="w-6 h-6 text-crayon-pink" />
               </DialogTitle>
               <DialogDescription className="text-center">
                 {childName} is ready to become a famous artist!

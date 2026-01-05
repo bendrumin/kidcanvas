@@ -23,13 +23,14 @@ import { getInitials } from '@/lib/utils'
 import { MobileNav } from './mobile-nav'
 import { FamilySwitcher } from './family-switcher'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { 
-  Settings, 
-  LogOut, 
+import {
+  Settings,
+  LogOut,
   User,
   Bell,
   CreditCard,
-  Sparkles
+  Sparkles,
+  Check
 } from 'lucide-react'
 import { Logo } from '@/components/logo'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
@@ -142,9 +143,10 @@ export function DashboardHeader({ user, family, families, role }: DashboardHeade
                         document.cookie = `selected_family=${f.id};path=/;max-age=${60 * 60 * 24 * 365}`
                         router.refresh()
                       }}
-                      className="cursor-pointer"
+                      className="cursor-pointer flex items-center gap-2"
                     >
-                      {f.id === family?.id ? '✓ ' : '  '}{f.name}
+                      {f.id === family?.id && <Check className="w-4 h-4" />}
+                      {f.name}
                     </DropdownMenuItem>
                   ))}
                   <DropdownMenuSeparator />

@@ -266,7 +266,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
       celebrate()
 
       toast({
-        title: '🎉 Success!',
+        title: 'Success!',
         description: `${files.length} artwork${files.length > 1 ? 's' : ''} uploaded successfully!`,
         duration: 3000,
       })

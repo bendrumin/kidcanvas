@@ -14,6 +14,7 @@ import {
   Heart,
   Star,
   X,
+  Smartphone,
 } from 'lucide-react'
 
 // Note: Metadata cannot be exported from 'use client' files
@@ -110,8 +111,8 @@ export default function LandingPage() {
             Your kids' artwork is never used for AI training
           </p>
           
-          <p className="mt-4 text-sm text-muted-foreground">
-            📱 iOS app (iPhone & iPad) available via request — <Link href="/support" className="text-[#E91E63] hover:underline">use our contact form</Link> to request a TestFlight invite
+          <p className="mt-4 text-sm text-muted-foreground flex items-center justify-center gap-2">
+            <Smartphone className="w-4 h-4" /> iOS app (iPhone & iPad) available via request — <Link href="/support" className="text-[#E91E63] hover:underline">use our contact form</Link> to request a TestFlight invite
           </p>
         </div>
       </section>
@@ -272,7 +273,7 @@ export default function LandingPage() {
             Free for most families. Upgrade if you need more.
           </p>
           <p className="text-center text-sm text-green-600 dark:text-green-400 mb-8 font-medium">
-            ✓ No credit card required • ✓ Cancel anytime • ✓ 100 artworks free forever
+            <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> No credit card required</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> Cancel anytime</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> 100 artworks free forever</span>
           </p>
           
           <div className="grid sm:grid-cols-2 gap-4">

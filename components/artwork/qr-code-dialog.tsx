@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Download, Copy, Check } from 'lucide-react'
+import { Download, Copy, Check, Lightbulb } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
 
 interface QRCodeDialogProps {
@@ -195,7 +195,9 @@ export function QRCodeDialog({
 
           {/* Instructions */}
           <div className="text-xs text-muted-foreground space-y-1 pt-2 border-t">
-            <p>💡 <strong>Ways to use this QR code:</strong></p>
+            <p className="flex items-center gap-1">
+              <Lightbulb className="w-3 h-3" /> <strong>Ways to use this QR code:</strong>
+            </p>
             <ul className="list-disc list-inside space-y-0.5 ml-2">
               <li>Print it and display with the artwork</li>
               <li>Share with grandparents to scan and view</li>

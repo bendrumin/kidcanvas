@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/logo'
-import { CheckCircle, Loader2 } from 'lucide-react'
+import { CheckCircle, Loader2, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 
 function VerifyEmailContent() {
@@ -102,7 +102,7 @@ function VerifyEmailContent() {
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-crayon-green to-crayon-blue flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle className="text-2xl font-display">Email Verified! ✨</CardTitle>
+                <CardTitle className="text-2xl font-display">Email Verified!</CardTitle>
                 <CardDescription className="text-base">
                   Your email address has been successfully verified
                 </CardDescription>
@@ -110,7 +110,7 @@ function VerifyEmailContent() {
             ) : (
               <>
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-crayon-red/20 to-crayon-orange/20 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl">😕</span>
+                  <AlertCircle className="w-8 h-8 text-crayon-red" />
                 </div>
                 <CardTitle className="text-2xl font-display">Verification Failed</CardTitle>
                 <CardDescription className="text-base">

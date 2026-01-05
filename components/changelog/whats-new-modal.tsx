@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Sparkles, Share2, CreditCard, Palette, X } from 'lucide-react'
+import { Sparkles, Share2, CreditCard, Palette, X, Rocket } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 const CURRENT_VERSION = '1.0.0'
@@ -130,11 +130,11 @@ export function WhatsNewModal() {
         </div>
 
         <div className="flex justify-end pt-2">
-          <Button 
+          <Button
             onClick={handleClose}
-            className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90"
+            className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90 flex items-center gap-2"
           >
-            Let's Go! 🚀
+            Let's Go! <Rocket className="w-4 h-4" />
           </Button>
         </div>
       </DialogContent>
