@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 const ADMIN_EMAIL = 'bsiegel13@gmail.com'
@@ -34,8 +34,11 @@ export async function POST(request: Request) {
       )
     }
 
+    // Use service client for admin operations
+    const serviceClient = await createServiceClient()
+
     // Get user's family info before deletion
-    const { data: familyMemberships } = await supabase
+    const { data: familyMemberships } = await serviceClient
       .from('family_members')
       .select('family_id')
       .eq('user_id', userId)
@@ -46,7 +49,7 @@ export async function POST(request: Request) {
     // Order matters for foreign key constraints!
 
     // 1. Get artwork IDs for this user
-    const { data: artworks } = await supabase
+    const { data: artworks } = await serviceClient
       .from('artworks')
       .select('id')
       .eq('uploaded_by', userId)
@@ -55,52 +58,52 @@ export async function POST(request: Request) {
 
     // 2. Delete shared artwork links
     if (artworkIds.length > 0) {
-      await supabase
+      await serviceClient
         .from('shared_artworks')
         .delete()
         .in('artwork_id', artworkIds)
     }
 
     // 3. Delete artworks uploaded by this user
-    await supabase
+    await serviceClient
       .from('artworks')
       .delete()
       .eq('uploaded_by', userId)
 
     // 4. Delete family invites created by this user
-    await supabase
+    await serviceClient
       .from('family_invites')
       .delete()
       .eq('invited_by', userId)
 
     // 5. Delete family memberships
-    await supabase
+    await serviceClient
       .from('family_members')
       .delete()
       .eq('user_id', userId)
 
     // 6. Delete subscriptions
-    await supabase
+    await serviceClient
       .from('subscriptions')
       .delete()
       .eq('user_id', userId)
 
     // 7. Delete families if this was the only member
     for (const familyId of familyIds) {
-      const { data: remainingMembers } = await supabase
+      const { data: remainingMembers } = await serviceClient
         .from('family_members')
         .select('id')
         .eq('family_id', familyId)
 
       if (!remainingMembers || remainingMembers.length === 0) {
         // Delete children in this family
-        await supabase
+        await serviceClient
           .from('children')
           .delete()
           .eq('family_id', familyId)
 
         // Delete the family
-        await supabase
+        await serviceClient
           .from('families')
           .delete()
           .eq('id', familyId)
@@ -108,7 +111,7 @@ export async function POST(request: Request) {
     }
 
     // 8. Finally, delete the auth user (using admin API)
-    const { error: deleteError } = await supabase.auth.admin.deleteUser(userId)
+    const { error: deleteError } = await serviceClient.auth.admin.deleteUser(userId)
 
     if (deleteError) {
       throw deleteError

@@ -166,26 +166,28 @@ export function UserManagementTable({ users, adminEmail }: UserManagementTablePr
               <AlertTriangle className="w-5 h-5" />
               <AlertDialogTitle>Deep Delete User</AlertDialogTitle>
             </div>
-            <AlertDialogDescription className="space-y-2">
-              <p>
-                Are you sure you want to <strong>permanently delete</strong>{' '}
-                <strong>{userToDelete?.email}</strong>?
-              </p>
-              <div className="mt-4 p-3 bg-destructive/10 rounded-lg border border-destructive/20">
-                <p className="text-sm font-semibold text-destructive mb-2">
-                  This will permanently delete:
+            <AlertDialogDescription asChild>
+              <div className="space-y-2">
+                <p>
+                  Are you sure you want to <strong>permanently delete</strong>{' '}
+                  <strong>{userToDelete?.email}</strong>?
                 </p>
-                <ul className="text-sm space-y-1 text-muted-foreground">
-                  <li>• User account and authentication</li>
-                  <li>• Family memberships</li>
-                  <li>• All uploaded artworks</li>
-                  <li>• All created invites</li>
-                  <li>• Associated families (if only member)</li>
-                </ul>
+                <div className="mt-4 p-3 bg-destructive/10 rounded-lg border border-destructive/20">
+                  <p className="text-sm font-semibold text-destructive mb-2">
+                    This will permanently delete:
+                  </p>
+                  <ul className="text-sm space-y-1 text-muted-foreground">
+                    <li>• User account and authentication</li>
+                    <li>• Family memberships</li>
+                    <li>• All uploaded artworks</li>
+                    <li>• All created invites</li>
+                    <li>• Associated families (if only member)</li>
+                  </ul>
+                </div>
+                <p className="text-sm font-semibold mt-4">
+                  This action cannot be undone!
+                </p>
               </div>
-              <p className="text-sm font-semibold mt-4">
-                This action cannot be undone!
-              </p>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
