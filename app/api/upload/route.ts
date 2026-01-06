@@ -229,14 +229,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Trigger AI tagging in background (optional)
-    if (process.env.ANTHROPIC_API_KEY && data) {
-      fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/ai-tag`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ artworkId: data.id, imageUrl }),
-      }).catch(console.error) // Fire and forget
-    }
+    // NOTE: AI tagging is now manual - removed automatic tagging to reduce CPU usage
+    // Users can trigger AI tagging from the artwork detail page
 
     return NextResponse.json({ success: true, artwork: data })
   } catch (error) {
@@ -254,4 +248,5 @@ export async function POST(request: NextRequest) {
 // Route segment config for Next.js App Router
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+export const maxDuration = 60 // 60 seconds max for upload + image processing
 

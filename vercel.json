@@ -1,5 +1,19 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "regions": ["sfo1"]
+  "regions": ["sfo1"],
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 10
+    },
+    "app/api/upload/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/ai-tag/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/admin/deep-delete-user/route.ts": {
+      "maxDuration": 30
+    }
+  }
 }

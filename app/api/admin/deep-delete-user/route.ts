@@ -132,3 +132,6 @@ export async function POST(request: Request) {
     )
   }
 }
+
+// Route segment config
+export const maxDuration = 30 // 30 seconds max for deep delete operations

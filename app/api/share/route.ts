@@ -160,3 +160,6 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// Route segment config
+export const maxDuration = 10
+

@@ -113,3 +113,8 @@ Be encouraging and focus on what makes this artwork special. Keep it family-frie
   }
 }
 
+// Route segment config
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+export const maxDuration = 30 // 30 seconds max for AI analysis
+

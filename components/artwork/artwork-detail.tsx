@@ -64,6 +64,9 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
   const [isFavorite, setIsFavorite] = useState(artwork.is_favorite)
   const [shareUrl, setShareUrl] = useState<string | null>(null)
   const [showQRCode, setShowQRCode] = useState(false)
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false)
+  const [aiDescription, setAiDescription] = useState(artwork.ai_description)
+  const [aiTags, setAiTags] = useState(artwork.ai_tags)
   
   const [editForm, setEditForm] = useState({
     title: artwork.title,
@@ -150,7 +153,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
 
   const handleDelete = async () => {
     setIsLoading(true)
-    
+
     try {
       const { error } = await supabase
         .from('artworks')
@@ -169,7 +172,42 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
     }
   }
 
-  const allTags = [...(artwork.tags || []), ...(artwork.ai_tags || [])]
+  const handleGenerateAI = async () => {
+    setIsGeneratingAI(true)
+
+    try {
+      const response = await fetch('/api/ai-tag', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ artworkId: artwork.id, imageUrl: artwork.image_url }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok || data.error) {
+        throw new Error(data.error || 'Failed to generate AI tags')
+      }
+
+      setAiDescription(data.description)
+      setAiTags(data.tags)
+
+      toast({
+        title: 'AI analysis complete!',
+        description: 'Tags and description have been generated.',
+      })
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to generate AI tags'
+      toast({
+        title: 'Error',
+        description: errorMessage,
+        variant: 'destructive'
+      })
+    } finally {
+      setIsGeneratingAI(false)
+    }
+  }
+
+  const allTags = [...(artwork.tags || []), ...(aiTags || [])]
 
   return (
     <div className="space-y-6">
@@ -353,10 +391,28 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
           {/* Tags */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Tag className="w-4 h-4" />
-                Tags
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Tag className="w-4 h-4" />
+                  Tags
+                </CardTitle>
+                {canEdit && !isEditing && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleGenerateAI}
+                    disabled={isGeneratingAI}
+                    className="bg-gradient-to-r from-crayon-blue/10 to-crayon-green/10 hover:from-crayon-blue/20 hover:to-crayon-green/20"
+                  >
+                    {isGeneratingAI ? (
+                      <Loader2 className="w-3 h-3 mr-2 animate-spin" />
+                    ) : (
+                      <Sparkles className="w-3 h-3 mr-2 text-crayon-blue" />
+                    )}
+                    {aiTags && aiTags.length > 0 ? 'Refresh AI' : 'Generate AI'}
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
               {isEditing ? (
@@ -385,14 +441,14 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
                   )}
 
                   {/* AI Tags */}
-                  {artwork.ai_tags && artwork.ai_tags.length > 0 && (
+                  {aiTags && aiTags.length > 0 && (
                     <div>
                       <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
                         <Sparkles className="w-3 h-3 text-crayon-blue" />
                         AI detected
                       </p>
                       <div className="flex flex-wrap gap-2">
-                        {artwork.ai_tags.map((tag, i) => (
+                        {aiTags.map((tag, i) => (
                           <Badge
                             key={i}
                             variant="secondary"
@@ -405,7 +461,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
                     </div>
                   )}
 
-                  {!artwork.tags?.length && !artwork.ai_tags?.length && (
+                  {!artwork.tags?.length && !aiTags?.length && (
                     <p className="text-sm text-muted-foreground">No tags yet</p>
                   )}
                 </div>
@@ -414,7 +470,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
           </Card>
 
           {/* AI Description */}
-          {artwork.ai_description && (
+          {aiDescription && (
             <Card className="bg-gradient-to-br from-crayon-blue/5 to-crayon-green/5">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
@@ -423,7 +479,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm">{artwork.ai_description}</p>
+                <p className="text-sm">{aiDescription}</p>
               </CardContent>
             </Card>
           )}

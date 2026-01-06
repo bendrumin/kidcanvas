@@ -173,3 +173,6 @@ function mapStripeStatus(stripeStatus: Stripe.Subscription.Status): string {
   }
 }
 
+// Route segment config
+export const maxDuration = 10 // 10 seconds max for webhook processing
+
