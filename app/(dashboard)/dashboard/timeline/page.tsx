@@ -60,14 +60,18 @@ export default async function TimelinePage({ searchParams }: TimelinePageProps) 
     artworkQuery = artworkQuery.eq('child_id', childFilter)
   }
 
-  const { data: artworks } = await artworkQuery as { data: ArtworkWithChild[] | null }
-
-  // Fetch children for filters
-  const { data: children } = await supabase
-    .from('children')
-    .select('*')
-    .eq('family_id', membership.family_id)
-    .order('name') as { data: Child[] | null }
+  // Parallelize artwork and children queries (both only depend on family_id)
+  const [artworksResult, childrenResult] = await Promise.all([
+    artworkQuery as Promise<{ data: ArtworkWithChild[] | null }>,
+    supabase
+      .from('children')
+      .select('*')
+      .eq('family_id', membership.family_id)
+      .order('name') as Promise<{ data: Child[] | null }>,
+  ])
+  
+  const { data: artworks } = artworksResult
+  const { data: children } = childrenResult
 
   // Get selected child for timeline calculations
   const selectedChild = childFilter && childFilter !== 'all'

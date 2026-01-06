@@ -1,7 +1,6 @@
 import { ImageResponse } from 'next/og'
 
-export const runtime = 'edge'
-
+// Removed edge runtime - Node.js runtime is more efficient for image generation
 export const alt = 'KidCanvas - Preserve Your Children\'s Artwork'
 export const size = {
   width: 1200,
@@ -50,7 +49,7 @@ export default async function Image() {
           <span
             style={{
               fontSize: '64px',
-              fontWeight: 'bold',
+              fontWeight: 700,
               background: 'linear-gradient(135deg, #E91E63 0%, #9B59B6 100%)',
               backgroundClip: 'text',
               color: 'transparent',
@@ -64,7 +63,7 @@ export default async function Image() {
         <div
           style={{
             fontSize: '42px',
-            fontWeight: 600,
+            fontWeight: 700,
             color: '#1F2937',
             textAlign: 'center',
             marginBottom: '20px',

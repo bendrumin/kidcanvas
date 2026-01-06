@@ -1,7 +1,6 @@
 import { ImageResponse } from 'next/og'
 
-export const runtime = 'edge'
-
+// Removed edge runtime - Node.js runtime is more efficient for image generation
 export const size = {
   width: 32,
   height: 32,

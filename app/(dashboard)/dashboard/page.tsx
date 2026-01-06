@@ -116,15 +116,17 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     })
   }
 
-  // Fetch children for filters
-  const { data: children } = await supabase
-    .from('children')
-    .select('*')
-    .eq('family_id', membership.family_id)
-    .order('name') as { data: Child[] | null }
-
-  // Get subscription limits for usage warnings
-  const limits = await getUserSubscriptionLimits(user.id)
+  // Parallelize independent queries: children and subscription limits
+  const [childrenResult, limits] = await Promise.all([
+    supabase
+      .from('children')
+      .select('*')
+      .eq('family_id', membership.family_id)
+      .order('name') as Promise<{ data: Child[] | null }>,
+    getUserSubscriptionLimits(user.id),
+  ])
+  
+  const { data: children } = childrenResult
 
   return (
     <div className="space-y-6">
