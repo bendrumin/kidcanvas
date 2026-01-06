@@ -45,7 +45,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
     )
   }
 
-  // Fetch artworks
+  // Build artwork query
   let artworkQuery = supabase
     .from('artworks')
     .select('*, child:children(*)')
@@ -55,19 +55,19 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
     artworkQuery = artworkQuery.eq('child_id', childFilter)
   }
 
-  // Parallelize independent queries: artworks, children, and subscription limits
+  // Execute artwork query and parallelize children/subscription queries
   const [artworksResult, childrenResult, limits] = await Promise.all([
-    artworkQuery as Promise<{ data: ArtworkWithChild[] | null }>,
+    artworkQuery,
     supabase
       .from('children')
       .select('*')
       .eq('family_id', membership.family_id)
-      .order('name') as Promise<{ data: Child[] | null }>,
+      .order('name'),
     getUserSubscriptionLimits(user.id),
   ])
   
-  const { data: artworks } = artworksResult
-  const { data: children } = childrenResult
+  const { data: artworks } = artworksResult as { data: ArtworkWithChild[] | null }
+  const { data: children } = childrenResult as { data: Child[] | null }
   const hasAdvancedAnalytics = limits.planId === 'pro'
 
   if (!artworks || artworks.length === 0) {

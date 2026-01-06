@@ -122,11 +122,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       .from('children')
       .select('*')
       .eq('family_id', membership.family_id)
-      .order('name') as Promise<{ data: Child[] | null }>,
+      .order('name'),
     getUserSubscriptionLimits(user.id),
   ])
   
-  const { data: children } = childrenResult
+  const { data: children } = childrenResult as { data: Child[] | null }
 
   return (
     <div className="space-y-6">
