@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,15 +10,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/components/ui/use-toast'
 import { createClient } from '@/lib/supabase/client'
 import { validatePassword } from '@/lib/utils'
-import { Mail, Lock, User, Users, Loader2, Check, AlertCircle } from 'lucide-react'
+import { Mail, Lock, User, Users, Loader2, Check, AlertCircle, GraduationCap } from 'lucide-react'
 import { Logo } from '@/components/logo'
+import { Checkbox } from '@/components/ui/checkbox'
 
 export default function SignupPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { toast } = useToast()
   const supabase = createClient()
-  
+
   const [isLoading, setIsLoading] = useState(false)
+  const [isTeacher, setIsTeacher] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -26,6 +29,14 @@ export default function SignupPage() {
     familyName: '',
   })
   const [passwordErrors, setPasswordErrors] = useState<string[]>([])
+
+  // Check URL parameter for teacher signup
+  useEffect(() => {
+    const type = searchParams.get('type')
+    if (type === 'teacher') {
+      setIsTeacher(true)
+    }
+  }, [searchParams])
 
   const handlePasswordChange = (password: string) => {
     setFormData({ ...formData, password })
@@ -57,7 +68,8 @@ export default function SignupPage() {
         options: {
           data: {
             full_name: formData.fullName,
-            family_name: formData.familyName || `${formData.fullName.split(' ')[0]}'s Family`,
+            family_name: formData.familyName || `${formData.fullName.split(' ')[0]}'s ${isTeacher ? 'Classroom' : 'Family'}`,
+            user_type: isTeacher ? 'teacher' : 'parent',
           },
           emailRedirectTo: `${window.location.origin}/auth/verify-email`,
         },
@@ -69,21 +81,21 @@ export default function SignupPage() {
         // Check if user session exists (auto-confirm is enabled)
         if (authData.session) {
           // User is already logged in, create family immediately
-          const familyName = formData.familyName || `${formData.fullName.split(' ')[0]}'s Family`
+          const familyName = formData.familyName || `${formData.fullName.split(' ')[0]}'s ${isTeacher ? 'Classroom' : 'Family'}`
           const { error: familyError } = await supabase.rpc('create_family_for_user', { family_name: familyName } as never)
 
           if (familyError) {
             console.error('Failed to create family:', familyError)
             toast({
               title: 'Account Created with Warning',
-              description: 'Your account was created but there was an issue setting up your family. Please contact support.',
+              description: `Your account was created but there was an issue setting up your ${isTeacher ? 'classroom' : 'family'}. Please contact support.`,
               variant: 'destructive',
             })
             // Still redirect to dashboard - they can create a family there
           } else {
             toast({
               title: 'Welcome to KidCanvas!',
-              description: 'Your account is ready.',
+              description: `Your ${isTeacher ? 'portfolio system' : 'gallery'} is ready.`,
             })
           }
 
@@ -121,12 +133,19 @@ export default function SignupPage() {
 
         <Card className="border-2 shadow-xl">
           <CardHeader className="text-center pb-2">
-            <CardTitle className="text-2xl font-display">Create Your Gallery</CardTitle>
-            <CardDescription>Start preserving your children's artwork today</CardDescription>
+            <CardTitle className="text-2xl font-display">
+              {isTeacher ? 'Create Your Portfolio System' : 'Create Your Gallery'}
+            </CardTitle>
+            <CardDescription>
+              {isTeacher
+                ? 'Start organizing your students\' artwork today'
+                : 'Start preserving your children\'s artwork today'
+              }
+            </CardDescription>
             <div className="mt-4 flex items-center justify-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Check className="w-4 h-4 text-green-600" />
-                <span>unlimited artworks free</span>
+                <span>unlimited {isTeacher ? 'students' : 'artworks'} free</span>
               </div>
               <div className="flex items-center gap-1">
                 <Check className="w-4 h-4 text-green-600" />
@@ -206,13 +225,19 @@ export default function SignupPage() {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="familyName">Family Name</Label>
+                <Label htmlFor="familyName">
+                  {isTeacher ? 'Classroom Name' : 'Family Name'}
+                </Label>
                 <div className="relative">
-                  <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  {isTeacher ? (
+                    <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  ) : (
+                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  )}
                   <Input
                     id="familyName"
                     type="text"
-                    placeholder="The Johnson Family"
+                    placeholder={isTeacher ? "Ms. Smith's 3rd Grade" : "The Johnson Family"}
                     value={formData.familyName}
                     onChange={(e) => setFormData({ ...formData, familyName: e.target.value })}
                     className="pl-10"
@@ -220,6 +245,27 @@ export default function SignupPage() {
                 </div>
                 <p className="text-xs text-muted-foreground">Optional — we'll create one based on your name</p>
               </div>
+
+              {!isTeacher && (
+                <div className="flex items-start space-x-2 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-900">
+                  <Checkbox
+                    id="teacher"
+                    checked={isTeacher}
+                    onCheckedChange={(checked) => setIsTeacher(checked as boolean)}
+                  />
+                  <div className="grid gap-1.5 leading-none">
+                    <label
+                      htmlFor="teacher"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                    >
+                      I'm an art teacher
+                    </label>
+                    <p className="text-xs text-muted-foreground">
+                      Get a portfolio system for your classroom instead
+                    </p>
+                  </div>
+                </div>
+              )}
 
               <Button 
                 type="submit" 

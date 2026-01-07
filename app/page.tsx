@@ -41,7 +41,7 @@ export default function LandingPage() {
       </div>
       
       {/* Simple Navigation */}
-      <nav 
+      <nav
         className="fixed top-0 left-0 right-0 z-50 bg-[#FFFBF5]/90 dark:bg-background/90 backdrop-blur-sm border-b border-amber-100 dark:border-border"
         role="navigation"
         aria-label="Main navigation"
@@ -50,6 +50,9 @@ export default function LandingPage() {
           <div className="flex items-center justify-between h-14">
             <Logo size="sm" />
             <div className="flex items-center gap-2">
+              <Link href="/teachers" className="hidden sm:block">
+                <Button variant="ghost" size="sm">For Teachers</Button>
+              </Link>
               <ThemeToggle />
               <Link href="/login">
                 <Button variant="ghost" size="sm">Log in</Button>
