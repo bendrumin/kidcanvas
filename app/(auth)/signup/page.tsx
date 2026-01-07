@@ -9,7 +9,8 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useToast } from '@/components/ui/use-toast'
 import { createClient } from '@/lib/supabase/client'
-import { Mail, Lock, User, Users, Loader2, Check } from 'lucide-react'
+import { validatePassword } from '@/lib/utils'
+import { Mail, Lock, User, Users, Loader2, Check, AlertCircle } from 'lucide-react'
 import { Logo } from '@/components/logo'
 
 export default function SignupPage() {
@@ -24,9 +25,28 @@ export default function SignupPage() {
     fullName: '',
     familyName: '',
   })
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([])
+
+  const handlePasswordChange = (password: string) => {
+    setFormData({ ...formData, password })
+    const validation = validatePassword(password)
+    setPasswordErrors(validation.errors)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Validate password before submitting
+    const passwordValidation = validatePassword(formData.password)
+    if (!passwordValidation.isValid) {
+      toast({
+        title: 'Invalid Password',
+        description: passwordValidation.errors[0],
+        variant: 'destructive',
+      })
+      return
+    }
+
     setIsLoading(true)
 
     try {
@@ -49,19 +69,23 @@ export default function SignupPage() {
         // Check if user session exists (auto-confirm is enabled)
         if (authData.session) {
           // User is already logged in, create family immediately
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const { error: familyError } = await (supabase as any).rpc('create_family_for_user', {
-            family_name: formData.familyName || `${formData.fullName.split(' ')[0]}'s Family`,
-          })
+          const familyName = formData.familyName || `${formData.fullName.split(' ')[0]}'s Family`
+          const { error: familyError } = await supabase.rpc('create_family_for_user', { family_name: familyName } as never)
 
           if (familyError) {
             console.error('Failed to create family:', familyError)
+            toast({
+              title: 'Account Created with Warning',
+              description: 'Your account was created but there was an issue setting up your family. Please contact support.',
+              variant: 'destructive',
+            })
+            // Still redirect to dashboard - they can create a family there
+          } else {
+            toast({
+              title: 'Welcome to KidCanvas!',
+              description: 'Your account is ready.',
+            })
           }
-
-          toast({
-            title: 'Welcome to KidCanvas!',
-            description: 'Your account is ready.',
-          })
 
           router.push('/dashboard')
           router.refresh()
@@ -102,7 +126,7 @@ export default function SignupPage() {
             <div className="mt-4 flex items-center justify-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Check className="w-4 h-4 text-green-600" />
-                <span>100 artworks free</span>
+                <span>unlimited artworks free</span>
               </div>
               <div className="flex items-center gap-1">
                 <Check className="w-4 h-4 text-green-600" />
@@ -153,13 +177,32 @@ export default function SignupPage() {
                     type="password"
                     placeholder="••••••••"
                     value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    onChange={(e) => handlePasswordChange(e.target.value)}
                     className="pl-10"
-                    minLength={8}
                     required
                   />
                 </div>
-                <p className="text-xs text-muted-foreground">Must be at least 8 characters</p>
+                {formData.password && passwordErrors.length > 0 && (
+                  <div className="space-y-1">
+                    {passwordErrors.map((error, index) => (
+                      <div key={index} className="flex items-start gap-1 text-xs text-destructive">
+                        <AlertCircle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                        <span>{error}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {formData.password && passwordErrors.length === 0 && (
+                  <p className="text-xs text-green-600 dark:text-green-500 flex items-center gap-1">
+                    <Check className="w-3 h-3" />
+                    Password meets all requirements
+                  </p>
+                )}
+                {!formData.password && (
+                  <p className="text-xs text-muted-foreground">
+                    Must include uppercase, lowercase, number, and special character
+                  </p>
+                )}
               </div>
               
               <div className="space-y-2">

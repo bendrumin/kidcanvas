@@ -66,11 +66,10 @@ export default async function InvitePage({ params }: InvitePageProps) {
     // If user is logged in but not a member, they might have just confirmed their email
     // Try to auto-accept the invite
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: acceptError } = await (supabase as any).rpc('accept_family_invite', {
+      const { error: acceptError } = await supabase.rpc('accept_family_invite', {
         invite_code: code,
         member_nickname: invite.nickname || null,
-      })
+      } as never)
 
       if (!acceptError) {
         // Successfully accepted, redirect to dashboard

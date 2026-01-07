@@ -1,8 +1,6 @@
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
-const ADMIN_EMAIL = 'bsiegel13@gmail.com'
-
 export async function POST(request: Request) {
   try {
     const supabase = await createClient()
@@ -10,7 +8,15 @@ export async function POST(request: Request) {
     // Verify admin access
     const { data: { user } } = await supabase.auth.getUser()
 
-    if (!user || user.email !== ADMIN_EMAIL) {
+    const adminEmail = process.env.ADMIN_EMAIL
+    if (!adminEmail) {
+      return NextResponse.json(
+        { error: 'Server configuration error: ADMIN_EMAIL not set' },
+        { status: 500 }
+      )
+    }
+
+    if (!user || user.email !== adminEmail) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 403 }

@@ -75,7 +75,7 @@ export default function LandingPage() {
             Stop throwing away your kids' masterpieces
           </h1>
           <p className="sr-only">
-            KidCanvas helps you digitally preserve your children's artwork. Upload photos, tag the artist, and share with family. Free for up to 100 artworks.
+            KidCanvas helps you digitally preserve your children's artwork. Upload photos, tag the artist, and share with family. Free with unlimited artworks.
           </p>
           
           <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
@@ -86,7 +86,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/signup">
               <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">
-                Start free — 100 artworks included
+                Start free — Unlimited artworks
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
@@ -273,7 +273,7 @@ export default function LandingPage() {
             Free for most families. Upgrade if you need more.
           </p>
           <p className="text-center text-sm text-green-600 dark:text-green-400 mb-8 font-medium">
-            <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> No credit card required</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> Cancel anytime</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> 100 artworks free forever</span>
+            <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> No credit card required</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> Cancel anytime</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> Unlimited artworks free forever</span>
           </p>
           
           <div className="grid sm:grid-cols-2 gap-4">
@@ -288,7 +288,7 @@ export default function LandingPage() {
               <p className="text-3xl font-bold text-foreground mt-1">$0</p>
               <p className="text-muted-foreground text-sm mb-4">Forever</p>
               <ul className="space-y-2 text-sm">
-                {['100 artworks', '2 children', '1 family', 'Web upload'].map((f) => (
+                {['Unlimited artworks', '3 children', '1 family', 'Basic gallery view', 'Public sharing links'].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-foreground">
                     <Check className="w-4 h-4 text-green-600" />
                     {f}
@@ -341,7 +341,7 @@ export default function LandingPage() {
               {[
                 {
                   feature: 'Free tier',
-                  kidcanvas: '100 artworks free forever',
+                  kidcanvas: 'Unlimited artworks free forever',
                   others: ['No free tier', 'Limited free', 'Free storage, but...'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, true],
@@ -411,7 +411,7 @@ export default function LandingPage() {
                 },
                 {
                   feature: 'Keep free tier after canceling',
-                  kidcanvas: 'Yes - 100 artworks forever',
+                  kidcanvas: 'Yes - Unlimited artworks forever',
                   others: ['No', 'No', 'Yes, but limited'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, true],
@@ -479,7 +479,7 @@ export default function LandingPage() {
                 Why pay more for less?
               </p>
               <p className="text-sm text-muted-foreground mb-3">
-                100 artworks free forever • AI tagging • Timeline view • Your data stays private
+                Unlimited artworks free forever • AI tagging • Timeline view • Your data stays private
               </p>
               <Link href="/signup">
                 <Button className="bg-[#E91E63] hover:bg-[#C2185B]">
@@ -507,7 +507,7 @@ export default function LandingPage() {
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-foreground">100 artworks free forever</p>
+                    <p className="font-semibold text-foreground">Unlimited artworks free forever</p>
                     <p className="text-muted-foreground">Artkive requires payment upfront</p>
                   </div>
                 </div>
@@ -604,7 +604,7 @@ export default function LandingPage() {
             {[
               {
                 q: "Is it really free?",
-                a: "Yes! The free plan includes 100 artworks, 2 children, and all core features. No credit card required. You only pay if you need unlimited storage."
+                a: "Yes! The free plan includes unlimited artworks, 3 children, and all core features. No credit card required. You only pay if you need unlimited storage."
               },
               {
                 q: "What happens to my photos?",
@@ -616,7 +616,7 @@ export default function LandingPage() {
               },
               {
                 q: "What if I want to cancel?",
-                a: "Cancel anytime, no questions asked. Your free plan continues with 100 artworks. You can export all your data before canceling."
+                a: "Cancel anytime, no questions asked. Your free plan continues with unlimited artworks. You can export all your data before canceling."
               },
               {
                 q: "Do I need the iOS app?",
@@ -642,7 +642,7 @@ export default function LandingPage() {
             Stop losing artwork to the recycling bin
           </h2>
           <p className="text-muted-foreground mb-6">
-            Takes 2 minutes to set up. Free for up to 100 artworks. No credit card required.
+            Takes 2 minutes to set up. Free with unlimited artworks. No credit card required.
           </p>
           <Link href="/signup">
             <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">

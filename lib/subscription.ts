@@ -79,25 +79,16 @@ export async function getUserSubscriptionLimits(userId: string): Promise<Subscri
 
 /**
  * Check if user can add more artworks
+ * NOTE: Artworks are now unlimited for all plans!
  */
 export async function checkArtworkLimit(userId: string, familyId: string): Promise<LimitCheckResult> {
   const limits = await getUserSubscriptionLimits(userId)
-  
-  // Unlimited plan
-  if (limits.artworkLimit === -1) {
-    return { allowed: true, limit: -1, current: limits.currentArtworks }
-  }
-  
-  // Check limit
-  const allowed = limits.currentArtworks < limits.artworkLimit
-  
+
+  // All plans have unlimited artworks now
   return {
-    allowed,
-    limit: limits.artworkLimit,
-    current: limits.currentArtworks,
-    message: allowed 
-      ? undefined 
-      : `You've reached the limit of ${limits.artworkLimit} artworks on the free plan. Upgrade to upload more!`
+    allowed: true,
+    limit: -1,
+    current: limits.currentArtworks
   }
 }
 

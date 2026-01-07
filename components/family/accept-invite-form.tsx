@@ -62,11 +62,10 @@ export function AcceptInviteForm({ inviteCode, isLoggedIn, defaultNickname, defa
       }
 
       // Accept the invite (user is now authenticated)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: inviteError } = await (supabase as any).rpc('accept_family_invite', {
+      const { error: inviteError } = await supabase.rpc('accept_family_invite', {
         invite_code: inviteCode,
         member_nickname: formData.nickname || null,
-      })
+      } as never)
 
       if (inviteError) throw inviteError
 

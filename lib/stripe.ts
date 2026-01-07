@@ -50,31 +50,30 @@ export const PLANS: Record<PlanId, {
     name: 'Free',
     description: 'Perfect for getting started',
     features: [
-      'Up to 100 artworks',
+      'Unlimited artworks',
       '1 family',
       '3 children profiles',
       'Basic gallery view',
       'Public sharing links',
     ],
     limits: {
-      artworks: 100,
+      artworks: -1, // unlimited
       families: 1,
       children: 3,
     },
   },
   family: {
     name: 'Family',
-    description: 'Everything your family needs',
+    description: 'Enhanced features for your gallery',
     features: [
-      'Unlimited artworks',
-      '1 family',
+      'Everything in Free',
       'Unlimited children',
-      'AI auto-tagging',
+      'AI auto-tagging & smart search',
       'Collections & albums',
-      'Print-ready art books (PDF)',
-      'QR code sharing',
+      'Print-ready photo books (PDF)',
+      'Bulk upload & operations',
+      'Advanced analytics',
       'Priority support',
-      'No watermarks',
     ],
     limits: {
       artworks: -1, // unlimited
