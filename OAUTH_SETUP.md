@@ -18,12 +18,18 @@ This guide will help you configure Google OAuth provider in Supabase for KidCanv
 2. Create a new project or select an existing one
 3. Navigate to **APIs & Services** > **Credentials**
 4. Click **Create Credentials** > **OAuth client ID**
-5. Configure the OAuth consent screen if prompted:
-   - User Type: **External** (unless you have a Google Workspace)
-   - App name: **KidCanvas**
-   - User support email: Your email
-   - Developer contact: Your email
-   - Scopes: `email`, `profile`, `openid`
+5. Configure the OAuth consent screen (CRITICAL - This controls what users see):
+   - Go to **APIs & Services** > **OAuth consent screen**
+   - If not configured, select **External** user type (unless you have a Google Workspace)
+   - **App name**: **KidCanvas** (this is what users will see instead of your Supabase subdomain)
+   - **User support email**: Your email (e.g., bsiegel13@gmail.com)
+   - **App logo**: Upload your KidCanvas logo (optional but recommended - 120x120px)
+   - **App domain**: Add `kidcanvas.app` (your production domain)
+   - **Developer contact information**: Your email
+   - **Scopes**: Add `email`, `profile`, `openid`
+   - **Authorized domains**: Add `kidcanvas.app` and `supabase.co` (if needed)
+   - **Test users** (if in Testing mode): Add test email addresses
+   - **IMPORTANT**: After configuring, click **PUBLISH APP** at the top to make it live (otherwise it will show the Supabase domain)
 6. Create OAuth client ID:
    - Application type: **Web application**
    - Name: **KidCanvas Web**
@@ -73,6 +79,12 @@ This guide will help you configure Google OAuth provider in Supabase for KidCanv
 - **"redirect_uri_mismatch"**: Make sure all redirect URIs are added in Google Cloud Console
 - **"invalid_client"**: Verify Client ID and Secret are correct in Supabase
 - **"access_denied"**: Check OAuth consent screen is configured and published
+- **"Showing Supabase subdomain instead of KidCanvas"**: 
+  - Go to Google Cloud Console > OAuth consent screen
+  - Make sure **App name** is set to "KidCanvas" (not your Supabase subdomain)
+  - Verify you clicked **PUBLISH APP** (the app must be published, not in testing mode)
+  - Check that your app domain is added under "App domain"
+  - The app must be in "In production" status, not "Testing"
 
 ### General Issues
 
