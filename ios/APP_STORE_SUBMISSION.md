@@ -86,7 +86,7 @@ FEATURES:
 • Works on iPhone and iPad
 
 SUBSCRIPTION PLANS:
-• Free: Up to 100 artworks, 3 children
+• Free: 50 artworks, 1 child
 • Family ($4.99/mo): Unlimited artworks & children
 
 Every scribble tells a story. Start preserving them today.

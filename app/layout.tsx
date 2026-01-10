@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     default: 'KidCanvas - Preserve Your Children\'s Artwork',
     template: '%s | KidCanvas',
   },
-  description: 'Scan, organize, and share your kids\' artwork with family. Every scribble tells a story. Free for up to unlimited artworks.',
+  description: 'Scan, organize, and share your kids\' artwork with family. Every scribble tells a story. Free for 50 artworks.',
   keywords: ['kids artwork', 'children art', 'family gallery', 'artwork scanner', 'digital keepsakes', 'kids art storage', 'family photos', 'preserve memories', 'children drawings'],
   authors: [{ name: 'KidCanvas' }],
   creator: 'KidCanvas',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'KidCanvas - Every Scribble Tells a Story',
-    description: 'Preserve your children\'s precious artwork forever. Scan, organize, and share with family. Free for up to unlimited artworks.',
+    description: 'Preserve your children\'s precious artwork forever. Scan, organize, and share with family. Free for 50 artworks.',
     url: 'https://kidcanvas.app',
     siteName: 'KidCanvas',
     locale: 'en_US',

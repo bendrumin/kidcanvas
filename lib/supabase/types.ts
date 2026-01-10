@@ -131,6 +131,8 @@ export interface Database {
           image_url: string
           thumbnail_url: string
           title: string
+          story: string | null
+          moment_photo_url: string | null
           created_date: string
           child_age_months: number | null
           tags: string[]
@@ -147,6 +149,8 @@ export interface Database {
           image_url: string
           thumbnail_url: string
           title: string
+          story?: string | null
+          moment_photo_url?: string | null
           created_date: string
           child_age_months?: number | null
           tags?: string[]
@@ -163,6 +167,8 @@ export interface Database {
           image_url?: string
           thumbnail_url?: string
           title?: string
+          story?: string | null
+          moment_photo_url?: string | null
           created_date?: string
           child_age_months?: number | null
           tags?: string[]
@@ -171,6 +177,57 @@ export interface Database {
           is_favorite?: boolean
           uploaded_by?: string
           uploaded_at?: string
+        }
+        Relationships: []
+      }
+      artwork_reactions: {
+        Row: {
+          id: string
+          artwork_id: string
+          user_id: string
+          emoji_type: '❤️' | '😍' | '🎨' | '👏' | '🌟'
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          artwork_id: string
+          user_id: string
+          emoji_type: '❤️' | '😍' | '🎨' | '👏' | '🌟'
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          artwork_id?: string
+          user_id?: string
+          emoji_type?: '❤️' | '😍' | '🎨' | '👏' | '🌟'
+          created_at?: string
+        }
+        Relationships: []
+      }
+      artwork_comments: {
+        Row: {
+          id: string
+          artwork_id: string
+          user_id: string
+          text: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          artwork_id: string
+          user_id: string
+          text: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          artwork_id?: string
+          user_id?: string
+          text?: string
+          created_at?: string
+          updated_at?: string
         }
         Relationships: []
       }

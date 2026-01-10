@@ -20,7 +20,7 @@ const faqs = [
   },
   {
     q: 'What\'s included free?',
-    a: 'Up to 100 artworks, 2 children profiles, and 1 family group. Most families never need more.',
+    a: 'Up to 50 artworks, 1 child profile, and 1 family group. Perfect for getting started!',
   },
   {
     q: 'How do I cancel?',

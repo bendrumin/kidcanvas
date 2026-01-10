@@ -79,16 +79,32 @@ export async function getUserSubscriptionLimits(userId: string): Promise<Subscri
 
 /**
  * Check if user can add more artworks
- * NOTE: Artworks are now unlimited for all plans!
  */
 export async function checkArtworkLimit(userId: string, familyId: string): Promise<LimitCheckResult> {
   const limits = await getUserSubscriptionLimits(userId)
 
-  // All plans have unlimited artworks now
+  // Unlimited plan
+  if (limits.artworkLimit === -1) {
+    return { allowed: true, limit: -1, current: limits.currentArtworks }
+  }
+
+  // Get artwork count for this specific family
+  const supabase = await createClient()
+  const { count } = await supabase
+    .from('artworks')
+    .select('*', { count: 'exact', head: true })
+    .eq('family_id', familyId)
+
+  const currentCount = count || 0
+  const allowed = currentCount < limits.artworkLimit
+
   return {
-    allowed: true,
-    limit: -1,
-    current: limits.currentArtworks
+    allowed,
+    limit: limits.artworkLimit,
+    current: currentCount,
+    message: allowed
+      ? undefined
+      : `You've reached the limit of ${limits.artworkLimit} artworks on the free plan. Upgrade to add more!`
   }
 }
 
