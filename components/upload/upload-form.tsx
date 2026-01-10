@@ -44,6 +44,7 @@ import { formatFileSize, cn } from '@/lib/utils'
 import type { Child } from '@/lib/supabase/types'
 import { LimitReachedDialog } from '@/components/paywall/limit-reached-dialog'
 import { StoryTemplateSelector } from '@/components/upload/story-template-selector'
+import { VoiceRecorder } from '@/components/upload/voice-recorder'
 import type { StoryTemplate } from '@/lib/story-templates'
 
 // Celebration confetti effect
@@ -85,6 +86,8 @@ interface FilePreview {
   tags: string
   momentPhoto?: File
   momentPhotoPreview?: string
+  voiceNote?: Blob
+  voiceDuration?: number
 }
 
 export function UploadForm({ familyId, children, userId }: UploadFormProps) {
@@ -271,7 +274,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
 
         if (!response.ok) {
           const errorData = await response.json()
-          
+
           // Check if it's a limit error
           if (errorData.limitReached) {
             setLimitInfo({ current: errorData.current, limit: errorData.limit })
@@ -279,9 +282,33 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
             setIsUploading(false)
             return
           }
-          
+
           const errorMessage = errorData.details || errorData.error || 'Upload failed'
           throw new Error(errorMessage)
+        }
+
+        const result = await response.json()
+
+        // Upload voice note if present
+        if (fileData.voiceNote && result.artwork?.id) {
+          const voiceFormData = new FormData()
+          voiceFormData.append('audio', fileData.voiceNote)
+          voiceFormData.append('artworkId', result.artwork.id)
+          voiceFormData.append('familyId', familyId)
+          voiceFormData.append('userId', userId)
+          if (fileData.voiceDuration) {
+            voiceFormData.append('duration', fileData.voiceDuration.toString())
+          }
+
+          const voiceResponse = await fetch('/api/upload-voice', {
+            method: 'POST',
+            body: voiceFormData,
+          })
+
+          if (!voiceResponse.ok) {
+            console.error('Voice note upload failed, but artwork was uploaded')
+            // Don't fail the entire upload if voice upload fails
+          }
         }
       }
 
@@ -615,6 +642,23 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                     </div>
                   )}
                 </div>
+
+                {/* Voice Story Recorder */}
+                <VoiceRecorder
+                  onRecordingComplete={(audioBlob, duration) => {
+                    updateFile(currentFileIndex, {
+                      voiceNote: audioBlob,
+                      voiceDuration: duration
+                    })
+                  }}
+                  onRecordingRemove={() => {
+                    updateFile(currentFileIndex, {
+                      voiceNote: undefined,
+                      voiceDuration: undefined
+                    })
+                  }}
+                  disabled={isUploading}
+                />
 
                 <div className="space-y-2">
                   <Label htmlFor="title">Title (optional)</Label>

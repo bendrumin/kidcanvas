@@ -1,27 +1,73 @@
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { checkRateLimit, getClientIdentifier } from '@/lib/rate-limit'
+import { verifyCsrfProtection } from '@/lib/csrf-protection'
 
 export async function POST(request: Request) {
   try {
+    // SECURITY: CSRF protection
+    const csrfCheck = verifyCsrfProtection(request)
+    if (!csrfCheck.success) {
+      console.warn('CSRF check failed on admin endpoint:', csrfCheck.error)
+      return NextResponse.json(
+        { error: 'Invalid request origin' },
+        { status: 403 }
+      )
+    }
+
     const supabase = await createClient()
 
-    // Verify admin access
-    const { data: { user } } = await supabase.auth.getUser()
+    // SECURITY: Verify admin access
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      console.warn('Admin endpoint accessed without authentication')
+      return NextResponse.json(
+        { error: 'Unauthorized - Authentication required' },
+        { status: 401 }
+      )
+    }
 
     const adminEmail = process.env.ADMIN_EMAIL
     if (!adminEmail) {
+      console.error('ADMIN_EMAIL environment variable not configured')
       return NextResponse.json(
         { error: 'Server configuration error: ADMIN_EMAIL not set' },
         { status: 500 }
       )
     }
 
-    if (!user || user.email !== adminEmail) {
+    if (user.email !== adminEmail) {
+      console.warn(`Unauthorized admin access attempt by: ${user.email}`)
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Forbidden - Admin access required' },
         { status: 403 }
       )
     }
+
+    // SECURITY: Rate limiting for admin operations
+    const identifier = getClientIdentifier(request, user.id)
+    const rateLimit = checkRateLimit(identifier, 'general')
+
+    if (!rateLimit.success) {
+      const retryAfter = Math.ceil((rateLimit.reset - Date.now()) / 1000)
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          details: 'Too many admin requests. Please try again later.',
+          retryAfter
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': retryAfter.toString(),
+          }
+        }
+      )
+    }
+
+    // SECURITY: Audit logging
+    console.log(`Admin action initiated by ${user.email} at ${new Date().toISOString()}`)
 
     const { userId } = await request.json()
 
@@ -77,11 +123,11 @@ export async function POST(request: Request) {
       .delete()
       .eq('uploaded_by', userId)
 
-    // 4. Delete family invites created by this user
+    // 4. Delete family invites created by this user (FIX: correct field name)
     await serviceClient
       .from('family_invites')
       .delete()
-      .eq('invited_by', userId)
+      .eq('created_by', userId)
 
     // 5. Delete family memberships
     await serviceClient
@@ -123,6 +169,9 @@ export async function POST(request: Request) {
     if (deleteError) {
       throw deleteError
     }
+
+    // SECURITY: Audit log successful deletion
+    console.log(`Admin ${user.email} successfully deleted user ${userId} and ${familyIds.length} families at ${new Date().toISOString()}`)
 
     return NextResponse.json({
       success: true,

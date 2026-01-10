@@ -133,6 +133,9 @@ export interface Database {
           title: string
           story: string | null
           moment_photo_url: string | null
+          voice_note_url: string | null
+          voice_duration_seconds: number | null
+          voice_uploaded_at: string | null
           created_date: string
           child_age_months: number | null
           tags: string[]
@@ -151,6 +154,9 @@ export interface Database {
           title: string
           story?: string | null
           moment_photo_url?: string | null
+          voice_note_url?: string | null
+          voice_duration_seconds?: number | null
+          voice_uploaded_at?: string | null
           created_date: string
           child_age_months?: number | null
           tags?: string[]
@@ -169,6 +175,9 @@ export interface Database {
           title?: string
           story?: string | null
           moment_photo_url?: string | null
+          voice_note_url?: string | null
+          voice_duration_seconds?: number | null
+          voice_uploaded_at?: string | null
           created_date?: string
           child_age_months?: number | null
           tags?: string[]

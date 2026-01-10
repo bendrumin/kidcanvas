@@ -1,14 +1,107 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
+import { checkRateLimit, getClientIdentifier } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
+    // 1. VERIFY AUTHENTICATION
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    // SECURITY: Rate limiting for expensive AI operations
+    const identifier = getClientIdentifier(request, user.id)
+    const rateLimit = checkRateLimit(identifier, 'ai')
+
+    if (!rateLimit.success) {
+      const retryAfter = Math.ceil((rateLimit.reset - Date.now()) / 1000)
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          details: `Too many AI tagging requests. Please try again in ${Math.ceil(retryAfter / 60)} minutes.`,
+          retryAfter
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': retryAfter.toString(),
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': rateLimit.reset.toString(),
+          }
+        }
+      )
+    }
+
     const { artworkId, imageUrl } = await request.json()
 
+    // SECURITY: Validate input
     if (!artworkId || !imageUrl) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
+      )
+    }
+
+    // SECURITY: Validate UUID format
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (!uuidRegex.test(artworkId)) {
+      return NextResponse.json(
+        { error: 'Invalid artwork ID format' },
+        { status: 400 }
+      )
+    }
+
+    // SECURITY: Verify image URL is from allowed domain
+    try {
+      const url = new URL(imageUrl)
+      const allowedDomains = ['r2.cloudflarestorage.com', 'r2.dev']
+      const isAllowed = allowedDomains.some(domain => url.hostname.endsWith(domain))
+
+      if (!isAllowed) {
+        return NextResponse.json(
+          { error: 'Invalid image URL', details: 'Image must be from allowed storage domain' },
+          { status: 400 }
+        )
+      }
+    } catch {
+      return NextResponse.json(
+        { error: 'Invalid image URL format' },
+        { status: 400 }
+      )
+    }
+
+    // 2. VERIFY USER HAS ACCESS TO THIS ARTWORK
+    const { data: artwork, error: artworkError } = await supabase
+      .from('artworks')
+      .select('family_id')
+      .eq('id', artworkId)
+      .single()
+
+    if (artworkError || !artwork) {
+      return NextResponse.json(
+        { error: 'Artwork not found' },
+        { status: 404 }
+      )
+    }
+
+    // 3. VERIFY USER IS A MEMBER OF THE ARTWORK'S FAMILY
+    const { data: membership, error: membershipError } = await supabase
+      .from('family_members')
+      .select('id, role')
+      .eq('family_id', artwork.family_id)
+      .eq('user_id', user.id)
+      .single()
+
+    if (membershipError || !membership) {
+      return NextResponse.json(
+        { error: 'Forbidden - You do not have access to this artwork' },
+        { status: 403 }
       )
     }
 
