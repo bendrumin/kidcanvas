@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { checkArtworkLimit } from '@/lib/subscription'
 import { checkRateLimit, getClientIdentifier } from '@/lib/rate-limit'
 import { verifyCsrfProtection } from '@/lib/csrf-protection'
+import { trackServerEvent } from '@/lib/analytics'
 
 // Create S3 client function - reads env vars at request time (not module load time)
 function createS3Client() {
@@ -185,6 +186,17 @@ export async function POST(request: NextRequest) {
         createdDate: !!createdDate,
         userId: !!verifiedUserId
       })
+
+      // Track validation failure
+      trackServerEvent('upload_validation_blocked', {
+        validationError: 'missing_required_fields',
+        storyLength: story?.length || 0,
+        hasFile: !!file,
+        hasStory: !!story,
+        userId: verifiedUserId,
+        familyId,
+      })
+
       return NextResponse.json(
         { error: 'Missing required fields', details: 'Story is required (minimum 20 characters). All other fields are required.' },
         { status: 400 }
@@ -194,9 +206,18 @@ export async function POST(request: NextRequest) {
     // Check artwork limit before processing (use verified user ID)
     const limitCheck = await checkArtworkLimit(verifiedUserId, familyId)
     if (!limitCheck.allowed) {
+      // Track limit reached
+      trackServerEvent('upload_validation_blocked', {
+        validationError: 'limit_reached',
+        currentLimit: limitCheck.limit,
+        currentUsage: limitCheck.current,
+        userId: verifiedUserId,
+        familyId,
+      })
+
       return NextResponse.json(
-        { 
-          error: 'Artwork limit reached', 
+        {
+          error: 'Artwork limit reached',
           details: limitCheck.message || `You've reached the limit of ${limitCheck.limit} artworks. Upgrade to upload more!`,
           limitReached: true,
           limit: limitCheck.limit,
@@ -430,6 +451,20 @@ export async function POST(request: NextRequest) {
 
     // NOTE: AI tagging is now manual - removed automatic tagging to reduce CPU usage
     // Users can trigger AI tagging from the artwork detail page
+
+    // Track successful upload
+    if (data) {
+      trackServerEvent('upload_completed', {
+        artworkId: data.id,
+        userId: verifiedUserId,
+        familyId,
+        storyLength: story.trim().length,
+        hasMomentPhoto: !!momentPhotoUrl,
+        hasTags: !!(tagsString && tagsString.trim()),
+        hasTitle: !!(title && title.trim()),
+        fileSize: buffer.length,
+      })
+    }
 
     return NextResponse.json({ success: true, artwork: data })
   } catch (error) {

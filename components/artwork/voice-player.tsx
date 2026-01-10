@@ -40,7 +40,6 @@ export function VoicePlayer({
       cursorWidth: 1,
       height: 60,
       barGap: 2,
-      responsive: true,
       normalize: true,
     })
 
@@ -85,7 +84,7 @@ export function VoicePlayer({
   const handleDownload = () => {
     const link = document.createElement('a')
     link.href = voiceUrl
-    link.download = `voice-story-${artworkId || 'recording'}.webm`
+    link.download = `voice-story-${Date.now()}.webm`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)

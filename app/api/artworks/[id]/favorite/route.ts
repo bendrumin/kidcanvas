@@ -91,8 +91,9 @@ export async function POST(
     }
 
     // SECURITY: Verify user has access to this artwork by checking family membership
-    const { data: artwork, error: artworkError } = await (supabase
-      .from('artworks') as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: artwork, error: artworkError } = await (supabase as any)
+      .from('artworks')
       .select('id, family_id, is_favorite')
       .eq('id', artworkId)
       .single() as { data: { id: string; family_id: string; is_favorite: boolean } | null; error: unknown }
@@ -106,8 +107,9 @@ export async function POST(
     }
 
     // Check family membership
-    const { data: membership } = await (supabase
-      .from('family_members') as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: membership } = await (supabase as any)
+      .from('family_members')
       .select('id')
       .eq('family_id', artwork.family_id)
       .eq('user_id', user.id)
@@ -124,8 +126,9 @@ export async function POST(
     // Toggle favorite status
     const newFavoriteStatus = !artwork.is_favorite
 
-    const { data: updatedArtwork, error: updateError } = await (supabase
-      .from('artworks') as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: updatedArtwork, error: updateError } = await (supabase as any)
+      .from('artworks')
       .update({ is_favorite: newFavoriteStatus })
       .eq('id', artworkId)
       .select('id, is_favorite')

@@ -46,6 +46,7 @@ import { LimitReachedDialog } from '@/components/paywall/limit-reached-dialog'
 import { StoryTemplateSelector } from '@/components/upload/story-template-selector'
 import { VoiceRecorder } from '@/components/upload/voice-recorder'
 import type { StoryTemplate } from '@/lib/story-templates'
+import { useAnalytics, useStoryTracking, useMultiFileTracking, useVoiceTracking } from '@/hooks/useAnalytics'
 
 // Celebration confetti effect
 const celebrate = () => {
@@ -102,6 +103,21 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
   const [showCamera, setShowCamera] = useState(false)
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const uploadStartTimeRef = useRef<number | null>(null)
+
+  // Analytics hooks
+  const { track } = useAnalytics({ userId, familyId })
+  const { trackStoryProgress, resetTracking: resetStoryTracking } = useStoryTracking()
+  const {
+    trackFileNavigation,
+    trackFileRemoved,
+    getFileTimeSpent,
+    resetTracking: resetMultiFileTracking
+  } = useMultiFileTracking(files.length)
+  const {
+    trackRecordingComplete,
+    trackRecordingDeleted,
+  } = useVoiceTracking()
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.map(file => ({
@@ -116,7 +132,15 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
     setFiles(newFiles)
     setCurrentFileIndex(0)
     setShowModal(true)
-  }, [children])
+
+    // Track upload started
+    uploadStartTimeRef.current = Date.now()
+    track('upload_started', {
+      fileCount: newFiles.length,
+      userId,
+      familyId,
+    })
+  }, [children, track, userId, familyId])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -187,10 +211,10 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
     if (!ctx) return
 
     ctx.drawImage(video, 0, 0)
-    
+
     canvas.toBlob((blob) => {
       if (!blob) return
-      
+
       const file = new File([blob], `artwork-${Date.now()}.jpg`, { type: 'image/jpeg' })
       const newFile: FilePreview = {
         file,
@@ -201,15 +225,33 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         createdDate: new Date().toISOString().split('T')[0],
         tags: '',
       }
-      
+
       setFiles(prev => [...prev, newFile])
       setCurrentFileIndex(files.length)
       stopCamera()
       setShowModal(true)
+
+      // Track camera capture upload started
+      uploadStartTimeRef.current = Date.now()
+      track('upload_started', {
+        fileCount: files.length + 1,
+        userId,
+        familyId,
+        captureMethod: 'camera',
+      })
     }, 'image/jpeg', 0.9)
   }
 
   const removeFile = (index: number) => {
+    // Track file removal
+    const timeSpentMs = getFileTimeSpent(index)
+    trackFileRemoved(index, files.length - 1, {
+      userId,
+      familyId,
+      timeSpentMs,
+      storyLength: files[index]?.story?.length || 0,
+    })
+
     setFiles(prev => {
       const newFiles = [...prev]
       URL.revokeObjectURL(newFiles[index].preview)
@@ -235,6 +277,20 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
   }
 
   const handleCancel = () => {
+    // Track upload abandoned
+    const uploadDurationMs = uploadStartTimeRef.current
+      ? Date.now() - uploadStartTimeRef.current
+      : undefined
+
+    track('upload_abandoned', {
+      fileCount: files.length,
+      currentFileIndex,
+      storyLength: files[currentFileIndex]?.story?.length || 0,
+      uploadDurationMs,
+      userId,
+      familyId,
+    })
+
     files.forEach(f => {
       URL.revokeObjectURL(f.preview)
       if (f.momentPhotoPreview) {
@@ -243,12 +299,16 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
     })
     setFiles([])
     setShowModal(false)
+    uploadStartTimeRef.current = null
+    resetStoryTracking()
+    resetMultiFileTracking()
   }
 
   const handleUpload = async () => {
     if (files.length === 0) return
 
     setIsUploading(true)
+    const uploadAttemptStart = Date.now()
 
     try {
       for (const fileData of files) {
@@ -277,6 +337,16 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
 
           // Check if it's a limit error
           if (errorData.limitReached) {
+            // Track limit reached
+            track('upload_validation_blocked', {
+              validationError: 'limit_reached',
+              fileCount: files.length,
+              currentLimit: errorData.limit,
+              currentUsage: errorData.current,
+              userId,
+              familyId,
+            })
+
             setLimitInfo({ current: errorData.current, limit: errorData.limit })
             setShowLimitDialog(true)
             setIsUploading(false)
@@ -284,6 +354,15 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
           }
 
           const errorMessage = errorData.details || errorData.error || 'Upload failed'
+
+          // Track validation error
+          track('upload_validation_blocked', {
+            validationError: errorMessage,
+            fileCount: files.length,
+            userId,
+            familyId,
+          })
+
           throw new Error(errorMessage)
         }
 
@@ -312,6 +391,31 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         }
       }
 
+      // Track successful upload
+      const uploadDurationMs = uploadStartTimeRef.current
+        ? Date.now() - uploadStartTimeRef.current
+        : undefined
+      const apiDurationMs = Date.now() - uploadAttemptStart
+
+      // Calculate aggregate stats for all uploaded files
+      const totalStoryLength = files.reduce((sum, f) => sum + (f.story?.length || 0), 0)
+      const avgStoryLength = Math.round(totalStoryLength / files.length)
+      const filesWithVoice = files.filter(f => f.voiceNote).length
+      const filesWithMomentPhoto = files.filter(f => f.momentPhoto).length
+      const filesWithTags = files.filter(f => f.tags?.trim()).length
+
+      track('upload_completed', {
+        fileCount: files.length,
+        uploadDurationMs,
+        apiDurationMs,
+        avgStoryLength,
+        filesWithVoice,
+        filesWithMomentPhoto,
+        filesWithTags,
+        userId,
+        familyId,
+      })
+
       // Celebrate with confetti!
       setShowModal(false)
       celebrate()
@@ -321,7 +425,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         description: `${files.length} artwork${files.length > 1 ? 's' : ''} uploaded successfully!`,
         duration: 3000,
       })
-      
+
       // Dispatch event to update gallery counter
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('artwork-added'))
@@ -335,7 +439,10 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         }
       })
       setFiles([])
-      
+      uploadStartTimeRef.current = null
+      resetStoryTracking()
+      resetMultiFileTracking()
+
       // Small delay to let confetti be seen
       setTimeout(() => {
         router.push('/dashboard')
@@ -487,7 +594,15 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => setCurrentFileIndex(i => Math.max(0, i - 1))}
+                      onClick={() => {
+                        const newIndex = Math.max(0, currentFileIndex - 1)
+                        setCurrentFileIndex(newIndex)
+                        trackFileNavigation(newIndex, {
+                          userId,
+                          familyId,
+                          direction: 'previous',
+                        })
+                      }}
                       disabled={currentFileIndex === 0}
                     >
                       <ChevronLeft className="w-4 h-4" />
@@ -498,7 +613,15 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => setCurrentFileIndex(i => Math.min(files.length - 1, i + 1))}
+                      onClick={() => {
+                        const newIndex = Math.min(files.length - 1, currentFileIndex + 1)
+                        setCurrentFileIndex(newIndex)
+                        trackFileNavigation(newIndex, {
+                          userId,
+                          familyId,
+                          direction: 'next',
+                        })
+                      }}
                       disabled={currentFileIndex === files.length - 1}
                     >
                       <ChevronRight className="w-4 h-4" />
@@ -537,6 +660,14 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                     <StoryTemplateSelector
                       onSelectTemplate={(template: StoryTemplate) => {
                         updateFile(currentFileIndex, { story: template.template })
+                        track('story_template_used', {
+                          templateId: template.id,
+                          templateTitle: template.title,
+                          userId,
+                          familyId,
+                          fileCount: files.length,
+                          currentFileIndex,
+                        })
                       }}
                       childName={children.find(c => c.id === currentFile.childId)?.name}
                       isPremium={false}
@@ -545,7 +676,17 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                   <Textarea
                     id="story"
                     value={currentFile.story}
-                    onChange={(e) => updateFile(currentFileIndex, { story: e.target.value })}
+                    onChange={(e) => {
+                      const newStory = e.target.value
+                      updateFile(currentFileIndex, { story: newStory })
+                      // Track story progress milestones
+                      trackStoryProgress(newStory.length, {
+                        userId,
+                        familyId,
+                        fileCount: files.length,
+                        currentFileIndex,
+                      })
+                    }}
                     placeholder="What did your child say about this? When did they make it? How did they feel? Every masterpiece has a story..."
                     className="min-h-[120px] resize-y"
                     required
@@ -604,6 +745,12 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                               URL.revokeObjectURL(currentFile.momentPhotoPreview)
                             }
                             updateFile(currentFileIndex, { momentPhoto: undefined, momentPhotoPreview: undefined })
+                            track('moment_photo_removed', {
+                              userId,
+                              familyId,
+                              fileCount: files.length,
+                              currentFileIndex,
+                            })
                           }}
                           className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70"
                         >
@@ -636,6 +783,12 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                               momentPhoto: file,
                               momentPhotoPreview: URL.createObjectURL(file)
                             })
+                            track('moment_photo_added', {
+                              userId,
+                              familyId,
+                              fileCount: files.length,
+                              currentFileIndex,
+                            })
                           }
                         }}
                       />
@@ -650,11 +803,25 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                       voiceNote: audioBlob,
                       voiceDuration: duration
                     })
+                    trackRecordingComplete(duration, {
+                      userId,
+                      familyId,
+                      fileCount: files.length,
+                      currentFileIndex,
+                      hasStory: (currentFile?.story?.length || 0) >= 20,
+                    })
                   }}
                   onRecordingRemove={() => {
+                    const currentDuration = currentFile?.voiceDuration
                     updateFile(currentFileIndex, {
                       voiceNote: undefined,
                       voiceDuration: undefined
+                    })
+                    trackRecordingDeleted(currentDuration, {
+                      userId,
+                      familyId,
+                      fileCount: files.length,
+                      currentFileIndex,
                     })
                   }}
                   disabled={isUploading}

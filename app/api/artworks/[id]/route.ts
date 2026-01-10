@@ -118,8 +118,9 @@ export async function DELETE(
     }
 
     // SECURITY: Verify user has access to this artwork and permission to delete
-    const { data: artwork, error: artworkError } = await (supabase
-      .from('artworks') as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: artwork, error: artworkError } = await (supabase as any)
+      .from('artworks')
       .select('id, family_id, image_url, thumbnail_url, uploaded_by')
       .eq('id', artworkId)
       .single() as { data: { id: string; family_id: string; image_url: string; thumbnail_url: string; uploaded_by: string } | null; error: unknown }
@@ -133,8 +134,9 @@ export async function DELETE(
     }
 
     // Check family membership and role (only owners/parents can delete)
-    const { data: membership } = await (supabase
-      .from('family_members') as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: membership } = await (supabase as any)
+      .from('family_members')
       .select('role')
       .eq('family_id', artwork.family_id)
       .eq('user_id', user.id)
@@ -173,8 +175,9 @@ export async function DELETE(
     const thumbnailKey = extractR2Key(artwork.thumbnail_url)
 
     // Delete from database first (if this fails, we haven't deleted files yet)
-    const { error: deleteError } = await (supabase
-      .from('artworks') as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error: deleteError } = await (supabase as any)
+      .from('artworks')
       .delete()
       .eq('id', artworkId)
 

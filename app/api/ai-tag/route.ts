@@ -77,11 +77,11 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. VERIFY USER HAS ACCESS TO THIS ARTWORK
-    const { data: artwork, error: artworkError } = await supabase
-      .from('artworks')
+    const { data: artwork, error: artworkError } = await (supabase
+      .from('artworks') as any)
       .select('family_id')
       .eq('id', artworkId)
-      .single()
+      .single() as { data: { family_id: string } | null; error: unknown }
 
     if (artworkError || !artwork) {
       return NextResponse.json(
@@ -91,8 +91,8 @@ export async function POST(request: NextRequest) {
     }
 
     // 3. VERIFY USER IS A MEMBER OF THE ARTWORK'S FAMILY
-    const { data: membership, error: membershipError } = await supabase
-      .from('family_members')
+    const { data: membership, error: membershipError } = await (supabase
+      .from('family_members') as any)
       .select('id, role')
       .eq('family_id', artwork.family_id)
       .eq('user_id', user.id)
@@ -178,9 +178,9 @@ Be encouraging and focus on what makes this artwork special. Keep it family-frie
     const { description, tags } = parsed
 
     // Update the artwork in the database
-    const supabase = await createServiceClient()
+    const supabaseService = await createServiceClient()
     
-    const { error } = await supabase
+    const { error } = await supabaseService
       .from('artworks')
       .update({
         ai_description: description,

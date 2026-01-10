@@ -335,7 +335,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
       {artwork.voice_note_url && (
         <VoicePlayer
           voiceUrl={artwork.voice_note_url}
-          duration={artwork.voice_duration_seconds}
+          duration={artwork.voice_duration_seconds ?? undefined}
         />
       )}
 

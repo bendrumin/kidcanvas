@@ -59,7 +59,7 @@ class RateLimiter {
   }
 
   private cleanup(now: number) {
-    for (const [key, entry] of this.cache.entries()) {
+    for (const [key, entry] of Array.from(this.cache.entries())) {
       if (now > entry.resetTime) {
         this.cache.delete(key)
       }
