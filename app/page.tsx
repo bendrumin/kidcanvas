@@ -35,7 +35,7 @@ export default function LandingPage() {
           <Link href="/signup" className="block w-full">
             <Button size="lg" className="w-full bg-[#E91E63] hover:bg-[#C2185B]">
               Start Free — No Credit Card
-              <ArrowRight className="ml-2 w-4 h-4" />
+              <ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
             </Button>
           </Link>
         </div>
@@ -96,22 +96,22 @@ export default function LandingPage() {
             <Link href="/signup">
               <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">
                 Start free — 50 artworks
-                <ArrowRight className="ml-2 w-4 h-4" />
+                <ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
               </Button>
             </Link>
           </div>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-600" />
+              <Shield className="w-4 h-4 text-green-600 dark:text-green-400" aria-hidden="true" />
               <span>No credit card required</span>
             </div>
             <div className="flex items-center gap-2">
-              <Lock className="w-4 h-4 text-green-600" />
+              <Lock className="w-4 h-4 text-green-600 dark:text-green-400" aria-hidden="true" />
               <span>Private & secure</span>
             </div>
             <div className="flex items-center gap-2">
-              <Heart className="w-4 h-4 text-green-600" />
+              <Heart className="w-4 h-4 text-green-600 dark:text-green-400" aria-hidden="true" />
               <span>Stories, not just storage</span>
             </div>
           </div>
@@ -121,7 +121,7 @@ export default function LandingPage() {
           </p>
 
           <p className="mt-4 text-sm text-muted-foreground flex items-center justify-center gap-2">
-            <Smartphone className="w-4 h-4" /> iOS app (iPhone & iPad) available via request — <Link href="/support" className="text-[#E91E63] hover:underline">use our contact form</Link> to request a TestFlight invite
+            <Smartphone className="w-4 h-4" aria-hidden="true" /> iOS app (iPhone & iPad) available via request — <Link href="/support" className="text-[#E91E63] hover:underline">use our contact form</Link> to request a TestFlight invite
           </p>
         </div>
       </section>
@@ -172,27 +172,27 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-8">
               <div>
                 <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <span className="text-2xl">📱</span> Instagram
+                  <span className="text-2xl" aria-hidden="true">📱</span> Instagram
                 </h3>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-start gap-2">
-                    <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <X className="w-4 h-4 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <span>Public feeds, algorithm-driven</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <X className="w-4 h-4 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <span>Photos are everything, captions optional</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <X className="w-4 h-4 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <span>Ads, influencers, noise</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <X className="w-4 h-4 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <span>Optimized for engagement, not meaning</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <X className="w-4 h-4 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <span>Lost in thousands of random photos</span>
                   </li>
                 </ul>
@@ -200,27 +200,27 @@ export default function LandingPage() {
               
               <div>
                 <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <span className="text-2xl">🎨</span> KidCanvas
+                  <span className="text-2xl" aria-hidden="true">🎨</span> KidCanvas
                 </h3>
                 <ul className="space-y-2 text-sm text-foreground">
                   <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <span><span className="font-semibold">Private to your family only</span> — no strangers, no algorithm</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <span><span className="font-semibold">Stories are required</span> — no story, no upload</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <span><span className="font-semibold">No ads, ever</span> — just your family, just your memories</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <span><span className="font-semibold">Built for preserving memories</span> — not maximizing engagement</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <span><span className="font-semibold">Purpose-built for artwork</span> — never gets lost in photo clutter</span>
                   </li>
                 </ul>
@@ -367,7 +367,7 @@ export default function LandingPage() {
             Start capturing stories free. Upgrade when you want unlimited.
           </p>
           <p className="text-center text-sm text-green-600 dark:text-green-400 mb-8 font-medium">
-            <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> No credit card required</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> Cancel anytime</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> 50 artworks free forever</span>
+            <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> No credit card required</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> Cancel anytime</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> 50 artworks free forever</span>
           </p>
           
           <div className="grid sm:grid-cols-2 gap-4">
@@ -384,7 +384,7 @@ export default function LandingPage() {
               <ul className="space-y-2 text-sm">
                 {['50 artworks with stories', '1 child', '1 family', 'Basic story capture', 'Family reactions & comments', 'Basic moment photos', 'Public sharing links'].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-foreground">
-                    <Check className="w-4 h-4 text-green-600" />
+                    <Check className="w-4 h-4 text-green-600 dark:text-green-400" aria-hidden="true" />
                     {f}
                   </li>
                 ))}
@@ -399,7 +399,7 @@ export default function LandingPage() {
               <ul className="space-y-2 text-sm">
                 {['Unlimited artworks with stories', 'Unlimited children', 'Unlimited moment photos', 'Story templates & prompts', 'Memory timeline view', 'AI auto-tagging', 'Reactions & comments', 'Priority support'].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-foreground">
-                    <Check className="w-4 h-4 text-green-600" />
+                    <Check className="w-4 h-4 text-green-600 dark:text-green-400" aria-hidden="true" />
                     {f}
                   </li>
                 ))}
@@ -423,7 +423,7 @@ export default function LandingPage() {
           <div className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-pink-100 to-purple-100 dark:from-pink-950/30 dark:to-purple-950/30 border-2 border-pink-300 dark:border-pink-800">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center shrink-0">
-                <Sparkles className="w-6 h-6 text-white" />
+                <Sparkles className="w-6 h-6 text-white" aria-hidden="true" />
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-foreground mb-2">
@@ -701,9 +701,9 @@ export default function LandingPage() {
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     {row.kidcanvasCheck ? (
-                      <Check className={`w-4 h-4 flex-shrink-0 ${row.highlight ? 'text-pink-600' : 'text-green-600'}`} />
+                      <Check className={`w-4 h-4 flex-shrink-0 ${row.highlight ? 'text-pink-600 dark:text-pink-400' : 'text-green-600 dark:text-green-400'}`} aria-hidden="true" />
                     ) : (
-                      <X className="w-4 h-4 text-red-600 flex-shrink-0" />
+                      <X className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0" aria-hidden="true" />
                     )}
                     <span className={`${row.kidcanvasCheck ? 'text-foreground' : 'text-muted-foreground'} ${row.highlight ? 'font-semibold' : ''}`}>
                       {row.kidcanvas}
@@ -712,9 +712,9 @@ export default function LandingPage() {
                   {row.others.map((other, idx) => (
                     <div key={idx} className="flex items-center gap-2 text-sm">
                       {row.othersCheck[idx] ? (
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                        <Check className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" aria-hidden="true" />
                       ) : (
-                        <X className="w-4 h-4 text-red-600 flex-shrink-0" />
+                        <X className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0" aria-hidden="true" />
                       )}
                       <span className={row.othersCheck[idx] ? 'text-foreground' : 'text-muted-foreground'}>
                         {other}
@@ -736,7 +736,7 @@ export default function LandingPage() {
               <Link href="/signup">
                 <Button className="bg-[#E91E63] hover:bg-[#C2185B]">
                   Start Free — No Credit Card
-                  <ArrowRight className="ml-2 w-4 h-4" />
+                  <ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
                 </Button>
               </Link>
             </div>
@@ -750,42 +750,42 @@ export default function LandingPage() {
               </div>
               <div className="space-y-4 text-sm">
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">50% cheaper</p>
                     <p className="text-muted-foreground">$4.99/mo vs $9.99/mo</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">50 artworks free forever</p>
                     <p className="text-muted-foreground">Artkive requires payment upfront</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">Capture stories, not just photos</p>
                     <p className="text-muted-foreground">Remember what your child said, share the moment</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">Family reactions & comments</p>
                     <p className="text-muted-foreground">Grandparents can react and engage, not just view</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">Moment photos</p>
                     <p className="text-muted-foreground">Photo of child with artwork + artwork itself</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">Your data stays private</p>
                     <p className="text-muted-foreground">Never used for AI training</p>
@@ -800,35 +800,35 @@ export default function LandingPage() {
               </div>
               <div className="space-y-4 text-sm">
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">Capture stories, not just store photos</p>
                     <p className="text-muted-foreground">Remember the context, share the moment</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">Family engagement built-in</p>
                     <p className="text-muted-foreground">Reactions, comments, moment photos - all included</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">AI understands artwork</p>
                     <p className="text-muted-foreground">Auto-tags and describes drawings</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">Easy sharing for grandparents</p>
                     <p className="text-muted-foreground">Just send a link - no account needed</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">Export all your data anytime</p>
                     <p className="text-muted-foreground">Download everything - you own it</p>
@@ -845,7 +845,7 @@ export default function LandingPage() {
               <Link href="/signup">
                 <Button className="bg-[#E91E63] hover:bg-[#C2185B] w-full">
                   Start Free
-                  <ArrowRight className="ml-2 w-4 h-4" />
+                  <ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
                 </Button>
               </Link>
             </div>
@@ -910,7 +910,7 @@ export default function LandingPage() {
           <Link href="/signup">
             <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">
               Start capturing stories — It's free!
-              <ArrowRight className="ml-2 w-4 h-4" />
+              <ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
             </Button>
           </Link>
           <p className="mt-4 text-xs text-muted-foreground">
