@@ -82,6 +82,11 @@ export default function LandingPage() {
             KidCanvas helps you capture and share the stories behind your children's artwork. Remember what they said, share the moment with family, and keep those memories alive. Free for 50 artworks.
           </p>
 
+          <p className="text-base sm:text-lg text-muted-foreground mb-3 max-w-2xl mx-auto">
+            <span className="font-semibold text-foreground">Instagram for kids' art—</span>
+            but private, meaningful, and story-first.
+          </p>
+
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
             Capture the stories behind your kids' art. Share magical moments with family.
             <span className="font-semibold text-foreground"> Because the story matters more than the drawing.</span>
@@ -147,6 +152,87 @@ export default function LandingPage() {
                 <span className="font-semibold text-[#E91E63]">KidCanvas captures both.</span>
                 {" "}The artwork AND the story. Share the moment with grandma. She sees what your child said, not just the drawing.
                 Years later, you remember why it mattered.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Instagram Comparison Section - NEW */}
+      <section className="py-12 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold text-center text-foreground mb-4">
+            Instagram for Kids' Art (But Actually Better)
+          </h2>
+          <p className="text-center text-muted-foreground mb-8 text-sm max-w-2xl mx-auto">
+            You know Instagram? It made photos social. But for kids' artwork? You need something different.
+          </p>
+          
+          <div className="bg-white dark:bg-card rounded-2xl shadow-lg border border-amber-100 dark:border-border p-6 sm:p-8 mb-8">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <span className="text-2xl">📱</span> Instagram
+                </h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-start gap-2">
+                    <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <span>Public feeds, algorithm-driven</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <span>Photos are everything, captions optional</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <span>Ads, influencers, noise</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <span>Optimized for engagement, not meaning</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <span>Lost in thousands of random photos</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <span className="text-2xl">🎨</span> KidCanvas
+                </h3>
+                <ul className="space-y-2 text-sm text-foreground">
+                  <li className="flex items-start gap-2">
+                    <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span><span className="font-semibold">Private to your family only</span> — no strangers, no algorithm</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span><span className="font-semibold">Stories are required</span> — no story, no upload</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span><span className="font-semibold">No ads, ever</span> — just your family, just your memories</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span><span className="font-semibold">Built for preserving memories</span> — not maximizing engagement</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span><span className="font-semibold">Purpose-built for artwork</span> — never gets lost in photo clutter</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="mt-8 pt-8 border-t border-amber-100 dark:border-border">
+              <p className="text-center text-sm text-muted-foreground mb-2">
+                <span className="font-semibold text-foreground">The key difference?</span> On Instagram, photos are everything. On KidCanvas, <span className="font-semibold text-foreground">stories are everything.</span>
+              </p>
+              <p className="text-center text-sm text-muted-foreground">
+                Because the artwork is just paper. The <span className="font-semibold text-foreground">story</span> is what makes it precious.
               </p>
             </div>
           </div>
@@ -330,7 +416,7 @@ export default function LandingPage() {
             How KidCanvas compares to other solutions
           </h2>
           <p className="text-center text-muted-foreground mb-8 text-sm max-w-2xl mx-auto">
-            See why families choose KidCanvas over artwork storage apps, cloud storage, and photo apps
+            See why families choose KidCanvas over Instagram, artwork storage apps, cloud storage, and photo apps
           </p>
 
           {/* Key Differentiator Callout */}
@@ -453,8 +539,8 @@ export default function LandingPage() {
                   highlight: true,
                 },
                 {
-                  feature: '📱 Instagram-style feed',
-                  kidcanvas: 'Stories-first feed - see the moment, not just image',
+                  feature: '📱 Instagram-style feed (stories-first)',
+                  kidcanvas: 'Feed shows stories prominently - see the moment, not just image',
                   others: ['Grid view only', 'Grid view only', 'Folder structure'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, false],
