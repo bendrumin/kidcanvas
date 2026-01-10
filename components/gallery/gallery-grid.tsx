@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArtworkLightbox } from './artwork-lightbox'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Heart, ExternalLink, Check, Trash2, X, Book, Sparkles } from 'lucide-react'
+import { Heart, ExternalLink, Check, Trash2, X, Book, Sparkles, Camera } from 'lucide-react'
 import { formatDate, calculateAge, cn } from '@/lib/utils'
 import { useMobile } from '@/lib/use-mobile'
 import { useToast } from '@/components/ui/use-toast'
@@ -470,9 +470,33 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
 
                   {/* Info section styled like caption */}
                   <div className="p-2 sm:p-3 pt-2">
-                    <h3 className="font-display font-semibold text-foreground truncate text-base sm:text-lg">
+                    <h3 className="font-display font-semibold text-foreground truncate text-base sm:text-lg mb-1.5">
                       {artwork.title}
                     </h3>
+                    {/* Story preview - show first 60 chars if available */}
+                    {(artwork.story || artwork.ai_description) && (
+                      <p className="text-sm text-muted-foreground line-clamp-2 mb-2 leading-relaxed">
+                        {artwork.story || artwork.ai_description}
+                      </p>
+                    )}
+                    {/* Moment photo thumbnail if available */}
+                    {artwork.moment_photo_url && (
+                      <div className="mb-2 flex items-center gap-2">
+                        <div className="relative w-12 h-12 rounded-md overflow-hidden border border-gray-200 dark:border-gray-700 flex-shrink-0">
+                          <Image
+                            src={artwork.moment_photo_url}
+                            alt="Moment photo"
+                            fill
+                            className="object-cover"
+                            sizes="48px"
+                          />
+                        </div>
+                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                          <Camera className="w-3.5 h-3.5" />
+                          <span>Moment photo</span>
+                        </span>
+                      </div>
+                    )}
                     <div className="flex items-center justify-between mt-1 gap-2">
                       <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
                         <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center flex-shrink-0">

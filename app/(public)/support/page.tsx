@@ -11,16 +11,16 @@ import { toast } from 'sonner'
 
 const faqs = [
   {
-    q: 'How do I scan artwork?',
-    a: 'Open the iOS app, tap the camera icon, and hold your phone over the artwork. It automatically detects edges and captures the image.',
+    q: 'How do I capture artwork and stories?',
+    a: 'Upload a photo of the artwork, then add the story - what your child said, what was special about it, or any context. You can also add a "moment photo" showing your child with the artwork.',
   },
   {
-    q: 'Can grandparents view the artwork?',
-    a: 'Yes! Invite them to your family, or create shareable links for individual pieces. They don\'t need an account to view shared links.',
+    q: 'Can grandparents see the stories and react?',
+    a: 'Yes! Share a link and they can see the artwork, read the story, view moment photos, and even react or comment - all without creating an account.',
   },
   {
     q: 'What\'s included free?',
-    a: 'Up to 50 artworks, 1 child profile, and 1 family group. Perfect for getting started!',
+    a: 'Up to 50 artworks with stories, 1 child profile, family reactions & comments, moment photos, and 1 family group. Perfect for getting started!',
   },
   {
     q: 'How do I cancel?',

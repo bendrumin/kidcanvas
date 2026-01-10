@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -7,26 +7,29 @@ import { Toaster as SonnerToaster } from 'sonner'
 import { SkipLink } from '@/components/ui/skip-link'
 import { Analytics } from '@vercel/analytics/react'
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#E91E63' },
+    { media: '(prefers-color-scheme: dark)', color: '#E91E63' },
+  ],
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://kidcanvas.app'),
   title: {
-    default: 'KidCanvas - Preserve Your Children\'s Artwork',
+    default: 'KidCanvas - Capture the Stories Behind Your Kids\' Art',
     template: '%s | KidCanvas',
   },
-  description: 'Scan, organize, and share your kids\' artwork with family. Every scribble tells a story. Free for 50 artworks.',
-  keywords: ['kids artwork', 'children art', 'family gallery', 'artwork scanner', 'digital keepsakes', 'kids art storage', 'family photos', 'preserve memories', 'children drawings'],
+  description: 'Capture and share the stories behind your children\'s artwork. Remember what they said, share the moment with family, and keep those memories alive. Free for 50 artworks.',
+  keywords: ['kids artwork', 'children art', 'family gallery', 'artwork stories', 'kids art stories', 'family sharing', 'children drawings', 'artwork memories', 'family moments', 'artwork social'],
   authors: [{ name: 'KidCanvas' }],
   creator: 'KidCanvas',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-    viewportFit: 'cover',
-  },
   openGraph: {
-    title: 'KidCanvas - Every Scribble Tells a Story',
-    description: 'Preserve your children\'s precious artwork forever. Scan, organize, and share with family. Free for 50 artworks.',
+    title: 'KidCanvas - Capture the Stories Behind Your Kids\' Art',
+    description: 'Capture and share the stories behind your children\'s artwork. Remember what they said, share the moment with family. Free for 50 artworks.',
     url: 'https://kidcanvas.app',
     siteName: 'KidCanvas',
     locale: 'en_US',
@@ -34,8 +37,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'KidCanvas - Preserve Your Children\'s Artwork',
-    description: 'Scan, organize, and share your kids\' artwork with family. Every scribble tells a story.',
+    title: 'KidCanvas - Capture the Stories Behind Your Kids\' Art',
+    description: 'Capture and share the stories behind your children\'s artwork. Remember what they said, share the moment with family.',
   },
   robots: {
     index: true,

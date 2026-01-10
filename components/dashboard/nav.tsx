@@ -14,7 +14,8 @@ import {
   Sparkles,
   TrendingUp,
   Plus,
-  Shield
+  Shield,
+  ScrollText
 } from 'lucide-react'
 
 interface DashboardNavProps {
@@ -36,6 +37,13 @@ export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100, pl
     {
       title: 'Browse',
       items: [
+        {
+          label: 'Feed',
+          href: '/dashboard/feed',
+          icon: ScrollText,
+          show: true,
+          gradient: 'from-crayon-pink to-crayon-purple',
+        },
         {
           label: 'Gallery',
           href: '/dashboard',

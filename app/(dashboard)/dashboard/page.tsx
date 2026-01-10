@@ -8,6 +8,7 @@ import { GalleryHeader } from '@/components/gallery/gallery-header'
 import { GallerySkeleton } from '@/components/gallery/gallery-skeleton'
 import { NoResults } from '@/components/gallery/no-results'
 import { UsageWarning } from '@/components/gallery/usage-warning'
+import { MemoryPrompts } from '@/components/dashboard/memory-prompts'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
@@ -128,11 +129,16 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   
   const { data: children } = childrenResult as { data: Child[] | null }
 
+  // Get last upload date for memory prompts
+  const lastUploadDate = artworks && artworks.length > 0
+    ? [...artworks].sort((a, b) => new Date(b.created_date).getTime() - new Date(a.created_date).getTime())[0].created_date
+    : undefined
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <GalleryHeader 
-        initialCount={artworks?.length || 0} 
+      <GalleryHeader
+        initialCount={artworks?.length || 0}
         canEdit={membership.role === 'owner' || membership.role === 'parent'}
       />
 
@@ -144,6 +150,17 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           type="artwork"
         />
       )}
+
+      {/* Memory Prompts */}
+      <MemoryPrompts
+        childrenData={children?.map(c => ({
+          id: c.id,
+          name: c.name,
+          birthday: c.birth_date
+        }))}
+        lastUploadDate={lastUploadDate}
+        isPremium={limits.planId === 'family' || limits.planId === 'pro'}
+      />
 
       {/* Filters */}
       <Suspense fallback={<div className="h-12 bg-muted animate-pulse rounded-xl" />}>

@@ -15,6 +15,7 @@ import {
   Star,
   X,
   Smartphone,
+  Sparkles,
 } from 'lucide-react'
 
 // Note: Metadata cannot be exported from 'use client' files
@@ -71,21 +72,21 @@ export default function LandingPage() {
       <section className="pt-24 pb-12 px-4 sm:px-6" id="main-content">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-[#E91E63] font-medium mb-4 text-sm uppercase tracking-wide">
-            For parents drowning in artwork
+            Every masterpiece has a story
           </p>
-          
+
           <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight">
-            Stop throwing away your kids' masterpieces
+            Remember what they said,<br />not just what they drew
           </h1>
           <p className="sr-only">
-            KidCanvas helps you digitally preserve your children's artwork. Upload photos, tag the artist, and share with family. Free for 50 artworks.
+            KidCanvas helps you capture and share the stories behind your children's artwork. Remember what they said, share the moment with family, and keep those memories alive. Free for 50 artworks.
           </p>
-          
-          <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
-            Upload photos of artwork. Tag the artist. Share with grandparents. 
-            Find "that rainbow drawing from last summer" in seconds.
+
+          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
+            Capture the stories behind your kids' art. Share magical moments with family.
+            <span className="font-semibold text-foreground"> Because the story matters more than the drawing.</span>
           </p>
-          
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/signup">
               <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">
@@ -94,7 +95,7 @@ export default function LandingPage() {
               </Button>
             </Link>
           </div>
-          
+
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-600" />
@@ -106,14 +107,14 @@ export default function LandingPage() {
             </div>
             <div className="flex items-center gap-2">
               <Heart className="w-4 h-4 text-green-600" />
-              <span>You own your data</span>
+              <span>Stories, not just storage</span>
             </div>
           </div>
 
           <p className="mt-3 text-xs text-green-700 dark:text-green-400 font-medium">
             Your kids' artwork is never used for AI training
           </p>
-          
+
           <p className="mt-4 text-sm text-muted-foreground flex items-center justify-center gap-2">
             <Smartphone className="w-4 h-4" /> iOS app (iPhone & iPad) available via request — <Link href="/support" className="text-[#E91E63] hover:underline">use our contact form</Link> to request a TestFlight invite
           </p>
@@ -124,26 +125,30 @@ export default function LandingPage() {
       <section className="py-12 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white dark:bg-card rounded-2xl p-8 shadow-sm border border-amber-100 dark:border-border">
-            <p className="text-lg text-foreground leading-relaxed flex items-start gap-4">
+            <div className="flex items-start gap-4 mb-6">
               <span className="flex-shrink-0 mt-1">
                 <ArtworkScribble variant="palette" size={56} />
               </span>
-              <span>Your kid comes home with a painting. 
-              It goes on the fridge. Then another. And another.</span>
+              <p className="text-lg text-foreground leading-relaxed">
+                Your kid brings home artwork and says <span className="font-semibold italic">"It's a rainbow dinosaur that eats sunshine!"</span>
+              </p>
+            </div>
+
+            <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+              You think you'll remember. But by next week, <span className="font-semibold text-foreground">the story is forgotten</span>.
+              The artwork becomes just another drawing in a pile.
             </p>
-            <p className="text-lg text-foreground leading-relaxed mt-4">
-              Soon you have a <span className="font-semibold">pile</span>. 
-              You feel <span className="font-semibold">guilty</span> throwing any away. 
-              The good ones get <span className="font-semibold">damaged</span> in a drawer.
-            </p>
-            <p className="text-lg text-foreground leading-relaxed mt-4 flex items-start gap-4">
+
+            <div className="flex items-start gap-4 pt-6 border-t border-amber-100 dark:border-border">
               <span className="flex-shrink-0 mt-1">
                 <ArtworkScribble variant="camera" size={56} />
               </span>
-              <span><span className="font-semibold">KidCanvas fixes this.</span> 
-              {" "}Snap a photo, tag the artist, done. Grandma can see it instantly. 
-              You can find it years later.</span>
-            </p>
+              <p className="text-lg text-foreground leading-relaxed">
+                <span className="font-semibold text-[#E91E63]">KidCanvas captures both.</span>
+                {" "}The artwork AND the story. Share the moment with grandma. She sees what your child said, not just the drawing.
+                Years later, you remember why it mattered.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -152,7 +157,7 @@ export default function LandingPage() {
       <section className="py-12 px-4 sm:px-6 bg-gradient-to-b from-transparent to-amber-50/50 dark:to-transparent">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-center text-foreground mb-8">
-            Here's what your gallery looks like
+            Stories, moments, and artwork together
           </h2>
           
           {/* Fake Gallery Preview */}
@@ -273,7 +278,7 @@ export default function LandingPage() {
             Simple pricing
           </h2>
           <p className="text-center text-muted-foreground mb-2">
-            Free for most families. Upgrade if you need more.
+            Start capturing stories free. Upgrade when you want unlimited.
           </p>
           <p className="text-center text-sm text-green-600 dark:text-green-400 mb-8 font-medium">
             <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> No credit card required</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> Cancel anytime</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" /> 50 artworks free forever</span>
@@ -291,7 +296,7 @@ export default function LandingPage() {
               <p className="text-3xl font-bold text-foreground mt-1">$0</p>
               <p className="text-muted-foreground text-sm mb-4">Forever</p>
               <ul className="space-y-2 text-sm">
-                {['50 artworks', '1 child', '1 family', 'Basic gallery view', 'Public sharing links'].map((f) => (
+                {['50 artworks with stories', '1 child', '1 family', 'Basic story capture', 'Family reactions & comments', 'Basic moment photos', 'Public sharing links'].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-foreground">
                     <Check className="w-4 h-4 text-green-600" />
                     {f}
@@ -306,7 +311,7 @@ export default function LandingPage() {
               <p className="text-3xl font-bold text-foreground mt-1">$4.99<span className="text-sm font-normal text-muted-foreground">/mo</span></p>
               <p className="text-muted-foreground text-sm mb-4">or $49/year <span className="text-green-600 dark:text-green-400">(save 17%)</span></p>
               <ul className="space-y-2 text-sm">
-                {['Unlimited artworks', 'Unlimited children', 'AI auto-tagging', 'Share with anyone', 'Priority support'].map((f) => (
+                {['Unlimited artworks with stories', 'Unlimited children', 'Unlimited moment photos', 'Story templates & prompts', 'Memory timeline view', 'AI auto-tagging', 'Reactions & comments', 'Priority support'].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-foreground">
                     <Check className="w-4 h-4 text-green-600" />
                     {f}
@@ -327,6 +332,40 @@ export default function LandingPage() {
           <p className="text-center text-muted-foreground mb-8 text-sm max-w-2xl mx-auto">
             See why families choose KidCanvas over artwork storage apps, cloud storage, and photo apps
           </p>
+
+          {/* Key Differentiator Callout */}
+          <div className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-pink-100 to-purple-100 dark:from-pink-950/30 dark:to-purple-950/30 border-2 border-pink-300 dark:border-pink-800">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center shrink-0">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-foreground mb-2">
+                  The KidCanvas Difference: Stories, Not Just Storage
+                </h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Other apps treat kids' art like files in a folder. <span className="font-semibold text-foreground">We treat them like memories.</span> Every artwork gets a story, every moment gets captured, and every family member can celebrate together.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-xs bg-pink-200 dark:bg-pink-900/40 text-pink-800 dark:text-pink-200 px-3 py-1 rounded-full font-medium">
+                    📖 Required stories
+                  </span>
+                  <span className="text-xs bg-purple-200 dark:bg-purple-900/40 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full font-medium">
+                    📸 Moment photos
+                  </span>
+                  <span className="text-xs bg-blue-200 dark:bg-blue-900/40 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full font-medium">
+                    ❤️ Family reactions
+                  </span>
+                  <span className="text-xs bg-green-200 dark:bg-green-900/40 text-green-800 dark:text-green-200 px-3 py-1 rounded-full font-medium">
+                    💬 Story templates
+                  </span>
+                  <span className="text-xs bg-orange-200 dark:bg-orange-900/40 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full font-medium">
+                    📱 Instagram-style feed
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
           
           {/* Desktop Comparison Table */}
           <div className="hidden lg:block bg-white dark:bg-card rounded-2xl shadow-lg border border-amber-100 dark:border-border overflow-hidden">
@@ -342,121 +381,245 @@ export default function LandingPage() {
             {/* Comparison Rows */}
             <div className="divide-y divide-amber-100 dark:divide-border">
               {[
+                // PRICING & VALUE
                 {
                   feature: 'Free tier',
-                  kidcanvas: '50 artworks free forever',
-                  others: ['No free tier', 'Limited free', 'Free storage, but...'],
+                  kidcanvas: '50 artworks + stories free forever',
+                  others: ['No free tier', '10 artworks free', 'Free storage, no features'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, true],
+                  category: 'pricing',
                 },
                 {
                   feature: 'Monthly pricing',
-                  kidcanvas: '$4.99/mo',
+                  kidcanvas: '$4.99/mo (50% cheaper)',
                   others: ['$9.99/mo', '$7.99/mo', '$2-10/mo (general storage)'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, true],
-                },
-                {
-                  feature: 'Built for artwork',
-                  kidcanvas: 'Purpose-built for kids\' art',
-                  others: ['Yes', 'Yes', 'No - generic storage'],
-                  kidcanvasCheck: true,
-                  othersCheck: [true, true, false],
-                },
-                {
-                  feature: 'Child tagging',
-                  kidcanvas: 'Tag by child, see growth over time',
-                  others: ['Yes', 'Yes', 'Manual tagging only'],
-                  kidcanvasCheck: true,
-                  othersCheck: [true, true, false],
-                },
-                {
-                  feature: 'AI auto-tagging',
-                  kidcanvas: 'Smart AI describes artwork automatically',
-                  others: ['Not available', 'Not available', 'Generic photo tags only'],
-                  kidcanvasCheck: true,
-                  othersCheck: [false, false, false],
-                },
-                {
-                  feature: 'Privacy & data usage',
-                  kidcanvas: 'Your data stays private - never used for AI training',
-                  others: ['Unclear policy', 'Unclear policy', 'May be used for ML'],
-                  kidcanvasCheck: true,
-                  othersCheck: [true, true, false],
-                },
-                {
-                  feature: 'Ad-free experience',
-                  kidcanvas: 'Zero ads, ever',
-                  others: ['No ads', 'No ads', 'Ads for premium features'],
-                  kidcanvasCheck: true,
-                  othersCheck: [true, true, false],
-                },
-                {
-                  feature: 'Family sharing',
-                  kidcanvas: 'Simple link sharing - no account needed',
-                  others: ['Limited sharing', 'Yes', 'Complex folder permissions'],
-                  kidcanvasCheck: true,
-                  othersCheck: [true, true, true],
-                },
-                {
-                  feature: 'Web + Mobile',
-                  kidcanvas: 'Full-featured web + iOS app',
-                  others: ['Web + Mobile', 'Mobile-first', 'Web + Mobile'],
-                  kidcanvasCheck: true,
-                  othersCheck: [true, true, true],
+                  category: 'pricing',
                 },
                 {
                   feature: 'No credit card to start',
-                  kidcanvas: 'Start completely free',
-                  others: ['Payment required', 'Trial then pay', 'Free with limits'],
+                  kidcanvas: 'Start completely free, no card',
+                  others: ['Payment required', 'Free trial, then pay', 'Free with limits'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, true],
+                  category: 'pricing',
                 },
                 {
-                  feature: 'Keep free tier after canceling',
-                  kidcanvas: 'Yes - 50 artworks forever',
-                  others: ['No', 'No', 'Yes, but limited'],
+                  feature: 'Keep data after canceling',
+                  kidcanvas: 'Yes - 50 artworks forever + all stories',
+                  others: ['Lose everything', 'Lose everything', 'Keep files, lose context'],
                   kidcanvasCheck: true,
-                  othersCheck: [false, false, true],
+                  othersCheck: [false, false, false],
+                  category: 'pricing',
+                },
+
+                // STORYTELLING FEATURES (UNIQUE DIFFERENTIATORS)
+                {
+                  feature: '📖 Story capture (REQUIRED)',
+                  kidcanvas: 'Every artwork has a story - capture what they said',
+                  others: ['Not available', 'Not available', 'Manual notes only (rarely used)'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, false],
+                  category: 'storytelling',
+                  highlight: true,
                 },
                 {
-                  feature: 'Search by artwork content',
-                  kidcanvas: 'Search by child, tags, description',
+                  feature: '📸 Moment photos',
+                  kidcanvas: 'Photo of child creating + artwork = complete memory',
+                  others: ['No', 'No', 'Upload separately (different folder)'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, false],
+                  category: 'storytelling',
+                  highlight: true,
+                },
+                {
+                  feature: '💬 Story templates & prompts',
+                  kidcanvas: '21 templates to help capture the moment',
+                  others: ['Not available', 'Not available', 'No guidance provided'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, false],
+                  category: 'storytelling',
+                  highlight: true,
+                },
+                {
+                  feature: '⏰ Memory prompts',
+                  kidcanvas: 'Reminds you to capture art at the right time',
+                  others: ['Not available', 'Not available', 'No reminders'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, false],
+                  category: 'storytelling',
+                  highlight: true,
+                },
+                {
+                  feature: '📱 Instagram-style feed',
+                  kidcanvas: 'Stories-first feed - see the moment, not just image',
+                  others: ['Grid view only', 'Grid view only', 'Folder structure'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, false],
+                  category: 'storytelling',
+                  highlight: true,
+                },
+
+                // FAMILY ENGAGEMENT
+                {
+                  feature: '❤️ Family reactions (5 types)',
+                  kidcanvas: 'React with Love, Amazing, Artistic, Proud, Star',
+                  others: ['Not available', 'Not available', 'No reactions'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, false],
+                  category: 'engagement',
+                  highlight: true,
+                },
+                {
+                  feature: '💬 Family comments',
+                  kidcanvas: 'Family can comment and celebrate together',
+                  others: ['Not available', 'Not available', 'No social features'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, false],
+                  category: 'engagement',
+                  highlight: true,
+                },
+                {
+                  feature: '🔗 Share with story context',
+                  kidcanvas: 'Share artwork + story + moment photo (full context)',
+                  others: ['Share image only', 'Share image only', 'Share file (no context)'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                  category: 'engagement',
+                },
+                {
+                  feature: '👨‍👩‍👧 Family roles & permissions',
+                  kidcanvas: 'Owner, Parent, Member, Viewer roles',
+                  others: ['Basic sharing', 'Basic sharing', 'No roles'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                  category: 'engagement',
+                },
+
+                // ORGANIZATION & SEARCH
+                {
+                  feature: '🏷️ Child tagging',
+                  kidcanvas: 'Tag by child, filter by artist, see growth',
+                  others: ['Yes', 'Yes', 'Manual folders only'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                  category: 'organization',
+                },
+                {
+                  feature: '🤖 AI auto-tagging',
+                  kidcanvas: 'AI describes artwork content automatically',
+                  others: ['Not available', 'Not available', 'Generic photo tags'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, false],
+                  category: 'organization',
+                },
+                {
+                  feature: '🔍 Search by story content',
+                  kidcanvas: 'Search stories, tags, child name, AI description',
                   others: ['Basic search', 'Basic search', 'File name only'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, false],
+                  category: 'organization',
                 },
                 {
-                  feature: 'Export your data',
-                  kidcanvas: 'Download all artwork anytime',
-                  others: ['Limited export', 'Limited export', 'Yes'],
-                  kidcanvasCheck: true,
-                  othersCheck: [true, true, true],
-                },
-                {
-                  feature: 'Create photo books',
-                  kidcanvas: 'Coming soon - print books',
-                  others: ['Yes (extra cost)', 'Yes (extra cost)', 'No'],
-                  kidcanvasCheck: true,
-                  othersCheck: [true, true, false],
-                },
-                {
-                  feature: 'Timeline view',
-                  kidcanvas: 'See artwork growth over time',
-                  others: ['No', 'Limited', 'No'],
+                  feature: '📅 Timeline & growth view',
+                  kidcanvas: 'See artwork evolution and development',
+                  others: ['No timeline', 'Basic timeline', 'No timeline'],
                   kidcanvasCheck: true,
                   othersCheck: [false, true, false],
+                  category: 'organization',
+                },
+                {
+                  feature: '📁 Collections & albums',
+                  kidcanvas: 'Organize by theme, event, or milestone',
+                  others: ['Limited albums', 'Limited albums', 'Folders only'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                  category: 'organization',
+                },
+
+                // PRIVACY & TRUST
+                {
+                  feature: '🔒 Privacy & AI training',
+                  kidcanvas: 'Your data NEVER used for AI training (guaranteed)',
+                  others: ['Unclear policy', 'Unclear policy', 'May train AI models on your data'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                  category: 'privacy',
+                },
+                {
+                  feature: '🚫 Ad-free experience',
+                  kidcanvas: 'Zero ads, ever. Period.',
+                  others: ['No ads', 'No ads', 'Ads for upsells + partner offers'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                  category: 'privacy',
+                },
+                {
+                  feature: '💾 Data ownership',
+                  kidcanvas: 'You own your data. Export anytime.',
+                  others: ['Export available', 'Limited export', 'Export available'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, true],
+                  category: 'privacy',
+                },
+
+                // PLATFORM & ACCESS
+                {
+                  feature: '💻 Web + Mobile apps',
+                  kidcanvas: 'Full-featured web app + iOS (iPhone & iPad)',
+                  others: ['Web + Mobile', 'Mobile-first (limited web)', 'Web + Mobile'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, true],
+                  category: 'platform',
+                },
+                {
+                  feature: '🌐 No-signup sharing',
+                  kidcanvas: 'Share links work without account (grandparents!)',
+                  others: ['Requires account', 'Requires app download', 'Requires account'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, false],
+                  category: 'platform',
+                },
+
+                // FUTURE FEATURES
+                {
+                  feature: '📖 Print photo books',
+                  kidcanvas: 'Print books with stories (coming soon)',
+                  others: ['Yes ($30-50 per book)', 'Yes ($40-60 per book)', 'No'],
+                  kidcanvasCheck: true,
+                  othersCheck: [true, true, false],
+                  category: 'future',
+                },
+                {
+                  feature: '🎙️ Voice note stories',
+                  kidcanvas: 'Record child telling story (coming soon)',
+                  others: ['Not available', 'Not available', 'No'],
+                  kidcanvasCheck: true,
+                  othersCheck: [false, false, false],
+                  category: 'future',
                 },
               ].map((row, i) => (
-                <div key={i} className="grid grid-cols-5 gap-4 p-4 hover:bg-gray-50/50 dark:hover:bg-secondary/50 transition-colors">
-                  <div className="font-medium text-foreground text-sm flex items-center">{row.feature}</div>
+                <div
+                  key={i}
+                  className={`grid grid-cols-5 gap-4 p-4 transition-colors ${
+                    row.highlight
+                      ? 'bg-gradient-to-r from-pink-50/50 to-purple-50/50 dark:from-pink-950/20 dark:to-purple-950/20 border-l-4 border-l-pink-500'
+                      : 'hover:bg-gray-50/50 dark:hover:bg-secondary/50'
+                  }`}
+                >
+                  <div className={`font-medium text-sm flex items-center ${row.highlight ? 'text-pink-700 dark:text-pink-400' : 'text-foreground'}`}>
+                    {row.feature}
+                  </div>
                   <div className="flex items-center gap-2 text-sm">
                     {row.kidcanvasCheck ? (
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                      <Check className={`w-4 h-4 flex-shrink-0 ${row.highlight ? 'text-pink-600' : 'text-green-600'}`} />
                     ) : (
                       <X className="w-4 h-4 text-red-600 flex-shrink-0" />
                     )}
-                    <span className={row.kidcanvasCheck ? 'text-foreground' : 'text-muted-foreground'}>
+                    <span className={`${row.kidcanvasCheck ? 'text-foreground' : 'text-muted-foreground'} ${row.highlight ? 'font-semibold' : ''}`}>
                       {row.kidcanvas}
                     </span>
                   </div>
@@ -482,7 +645,7 @@ export default function LandingPage() {
                 Why pay more for less?
               </p>
               <p className="text-sm text-muted-foreground mb-3">
-                50 artworks free forever • AI tagging • Timeline view • Your data stays private
+                50 artworks with stories free forever • Family reactions & comments • Moment photos • Your data stays private
               </p>
               <Link href="/signup">
                 <Button className="bg-[#E91E63] hover:bg-[#C2185B]">
@@ -517,15 +680,22 @@ export default function LandingPage() {
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-foreground">Smart AI auto-tagging</p>
-                    <p className="text-muted-foreground">Recognizes animals, rainbows, people, colors & more</p>
+                    <p className="font-semibold text-foreground">Capture stories, not just photos</p>
+                    <p className="text-muted-foreground">Remember what your child said, share the moment</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-foreground">Timeline view of growth</p>
-                    <p className="text-muted-foreground">See each child's artistic journey</p>
+                    <p className="font-semibold text-foreground">Family reactions & comments</p>
+                    <p className="text-muted-foreground">Grandparents can react and engage, not just view</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-foreground">Moment photos</p>
+                    <p className="text-muted-foreground">Photo of child with artwork + artwork itself</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -546,15 +716,15 @@ export default function LandingPage() {
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-foreground">Built specifically for artwork</p>
-                    <p className="text-muted-foreground">Not just another photo folder</p>
+                    <p className="font-semibold text-foreground">Capture stories, not just store photos</p>
+                    <p className="text-muted-foreground">Remember the context, share the moment</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-foreground">Tag by child, track growth</p>
-                    <p className="text-muted-foreground">See each kid's artistic journey</p>
+                    <p className="font-semibold text-foreground">Family engagement built-in</p>
+                    <p className="text-muted-foreground">Reactions, comments, moment photos - all included</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -614,8 +784,12 @@ export default function LandingPage() {
                 a: "Your artwork photos are stored securely in the cloud. You own your data and can export everything anytime. We never share your photos with anyone."
               },
               {
-                q: "Can grandparents access it?",
-                a: "Yes! Share a simple link with family members. They can view the gallery without creating an account. Perfect for long-distance grandparents."
+                q: "Can grandparents see the stories too?",
+                a: "Yes! Share a simple link with family members. They can see the artwork, read the story, view moment photos, and even react or comment - all without creating an account. Perfect for long-distance grandparents."
+              },
+              {
+                q: "What if I forget to add a story?",
+                a: "Every artwork requires a story (minimum 20 characters). This helps you remember the context and makes sharing more meaningful. We provide prompts to help you capture what your child said or what was special about the moment."
               },
               {
                 q: "What if I want to cancel?",
@@ -642,14 +816,14 @@ export default function LandingPage() {
             <ArtworkScribble variant="palette" size={96} />
           </div>
           <h2 className="text-2xl font-bold text-foreground mb-4">
-            Stop losing artwork to the recycling bin
+            Start capturing the stories, not just the art
           </h2>
           <p className="text-muted-foreground mb-6">
-            Takes 2 minutes to set up. Free for 50 artworks. No credit card required.
+            Remember what your child said. Share the moment with family. Keep those memories alive. Takes 2 minutes to set up. Free for 50 artworks. No credit card required.
           </p>
           <Link href="/signup">
             <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">
-              Create your family gallery — It's free!
+              Start capturing stories — It's free!
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </Link>

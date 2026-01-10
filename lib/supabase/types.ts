@@ -398,6 +398,8 @@ export type FamilyInvite = Database['public']['Tables']['family_invites']['Row']
 export type Child = Database['public']['Tables']['children']['Row']
 export type Artwork = Database['public']['Tables']['artworks']['Row']
 export type Collection = Database['public']['Tables']['collections']['Row']
+export type ArtworkReaction = Database['public']['Tables']['artwork_reactions']['Row']
+export type ArtworkComment = Database['public']['Tables']['artwork_comments']['Row']
 export type ShareLink = Database['public']['Tables']['share_links']['Row']
 export type Subscription = Database['public']['Tables']['subscriptions']['Row']
 

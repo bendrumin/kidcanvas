@@ -44,11 +44,13 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file') as File
     const familyId = formData.get('familyId') as string
     const childId = formData.get('childId') as string
-    const title = formData.get('title') as string
+    const title = formData.get('title') as string | null
+    const story = formData.get('story') as string
     const createdDate = formData.get('createdDate') as string
     const userId = formData.get('userId') as string
     const description = formData.get('description') as string | null
     const tagsString = formData.get('tags') as string | null
+    const momentPhoto = formData.get('momentPhoto') as File | null
 
     console.log('Upload request received:', {
       hasFile: !!file,
@@ -57,22 +59,25 @@ export async function POST(request: NextRequest) {
       familyId,
       childId,
       title,
+      hasStory: !!story,
+      storyLength: story?.length,
       createdDate,
       userId,
-      hasDescription: !!description
+      hasMomentPhoto: !!momentPhoto
     })
 
-    if (!file || !familyId || !childId || !title || !createdDate || !userId) {
+    if (!file || !familyId || !childId || !story || story.trim().length < 20 || !createdDate || !userId) {
       console.error('Missing required fields:', {
         file: !!file,
         familyId: !!familyId,
         childId: !!childId,
-        title: !!title,
+        story: !!story,
+        storyLength: story?.length,
         createdDate: !!createdDate,
         userId: !!userId
       })
       return NextResponse.json(
-        { error: 'Missing required fields', details: 'One or more required fields are missing' },
+        { error: 'Missing required fields', details: 'Story is required (minimum 20 characters). All other fields are required.' },
         { status: 400 }
       )
     }
@@ -174,8 +179,42 @@ export async function POST(request: NextRequest) {
     const imageUrl = `${r2PublicUrl}/${originalKey}`
     const thumbnailUrl = `${r2PublicUrl}/${thumbnailKey}`
 
+    // Process moment photo if provided
+    let momentPhotoUrl: string | null = null
+    if (momentPhoto) {
+      try {
+        const momentBytes = await momentPhoto.arrayBuffer()
+        const momentBuffer = Buffer.from(momentBytes)
+        
+        // Process moment photo with sharp
+        const momentImageId = uuidv4()
+        const momentProcessed = await sharp(momentBuffer)
+          .rotate()
+          .jpeg({ quality: 90 })
+          .toBuffer()
+        
+        const momentKey = `artwork/${familyId}/${momentImageId}_moment.jpg`
+        
+        await s3Client.send(new PutObjectCommand({
+          Bucket: r2Bucket,
+          Key: momentKey,
+          Body: momentProcessed,
+          ContentType: 'image/jpeg',
+        }))
+        
+        momentPhotoUrl = `${r2PublicUrl}/${momentKey}`
+        console.log('Moment photo uploaded:', momentPhotoUrl)
+      } catch (momentError) {
+        console.error('Failed to upload moment photo:', momentError)
+        // Don't fail the entire upload if moment photo fails
+      }
+    }
+
     // Save to database
     const supabase = await createServiceClient()
+    
+    // Use provided title or generate from story (first 50 chars)
+    const artworkTitle = title?.trim() || story.trim().substring(0, 50) || 'Untitled Artwork'
     
     const insertData: {
       family_id: string
@@ -183,6 +222,8 @@ export async function POST(request: NextRequest) {
       image_url: string
       thumbnail_url: string
       title: string
+      story: string
+      moment_photo_url: string | null
       created_date: string
       uploaded_by: string
       description?: string
@@ -192,12 +233,14 @@ export async function POST(request: NextRequest) {
       child_id: childId,
       image_url: imageUrl,
       thumbnail_url: thumbnailUrl,
-      title,
+      title: artworkTitle,
+      story: story.trim(),
+      moment_photo_url: momentPhotoUrl,
       created_date: createdDate,
       uploaded_by: userId,
     }
     
-    // Add description if provided (requires migration 003_add_description_to_artworks.sql)
+    // Add description if provided (legacy field, might be used by AI)
     if (description && description.trim()) {
       insertData.description = description.trim()
     }
@@ -211,6 +254,8 @@ export async function POST(request: NextRequest) {
       family_id: insertData.family_id,
       child_id: insertData.child_id,
       title: insertData.title,
+      storyLength: insertData.story.length,
+      hasMomentPhoto: !!insertData.moment_photo_url,
       hasDescription: !!insertData.description
     })
     

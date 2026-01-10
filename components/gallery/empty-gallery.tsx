@@ -71,17 +71,17 @@ export function EmptyGallery() {
         animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
         transition={shouldReduceMotion ? {} : { delay: 0.2 }}
       >
-        Your Gallery Awaits!
+        Start Capturing Memories!
       </motion.h2>
-      
-      <motion.p 
+
+      <motion.p
         className="text-muted-foreground max-w-md mb-8 text-lg"
         initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
         animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
         transition={shouldReduceMotion ? {} : { delay: 0.3 }}
       >
-        Start building your family's art collection. Upload your children's masterpieces 
-        and watch your gallery come to life.
+        Upload your child's first artwork and capture the story behind it.
+        What did they say? How did they feel? <span className="font-semibold text-foreground">Those moments matter.</span>
       </motion.p>
 
       <motion.div 

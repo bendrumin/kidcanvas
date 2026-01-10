@@ -1,0 +1,75 @@
+
+> kidcanvas@1.0.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/41) ...
+   Generating static pages (10/41) 
+   Generating static pages (20/41) 
+   Generating static pages (30/41) 
+ ✓ Generating static pages (41/41)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    16.6 kB         151 kB
+├ ○ /_not-found                          160 B          87.8 kB
+├ ƒ /api/admin/deep-delete-user          0 B                0 B
+├ ƒ /api/ai-tag                          0 B                0 B
+├ ƒ /api/invite/send-email               0 B                0 B
+├ ƒ /api/limits/check                    0 B                0 B
+├ ƒ /api/share                           0 B                0 B
+├ ƒ /api/stripe/checkout                 0 B                0 B
+├ ƒ /api/stripe/portal                   0 B                0 B
+├ ƒ /api/stripe/webhook                  0 B                0 B
+├ ƒ /api/upload                          0 B                0 B
+├ ○ /apple-icon                          0 B                0 B
+├ ƒ /auth/callback                       0 B                0 B
+├ ƒ /dashboard                           9.83 kB         390 kB
+├ ƒ /dashboard/admin                     7.48 kB         117 kB
+├ ƒ /dashboard/analytics                 114 kB          257 kB
+├ ƒ /dashboard/artwork/[id]              18.1 kB         220 kB
+├ ƒ /dashboard/billing                   9.2 kB          130 kB
+├ ƒ /dashboard/children                  9.52 kB         182 kB
+├ ƒ /dashboard/collections               194 B          96.5 kB
+├ ƒ /dashboard/family                    11.5 kB         204 kB
+├ ƒ /dashboard/family/create             5.6 kB          178 kB
+├ ƒ /dashboard/favorites                 229 B           380 kB
+├ ƒ /dashboard/feed                      6.57 kB         170 kB
+├ ƒ /dashboard/profile                   3.71 kB         107 kB
+├ ƒ /dashboard/settings                  160 B          87.8 kB
+├ ƒ /dashboard/timeline                  6.65 kB         147 kB
+├ ƒ /dashboard/upload                    36.6 kB         185 kB
+├ ○ /forgot-password                     5.31 kB         164 kB
+├ ○ /icon                                0 B                0 B
+├ ƒ /invite/[code]                       4.62 kB         163 kB
+├ ○ /login                               12.5 kB         173 kB
+├ ○ /manifest.webmanifest                0 B                0 B
+├ ○ /opengraph-image                     0 B                0 B
+├ ○ /privacy                             194 B          96.5 kB
+├ ○ /reset-password                      5.89 kB         165 kB
+├ ○ /robots.txt                          0 B                0 B
+├ ƒ /share/[code]                        189 B           102 kB
+├ ○ /signup                              10.9 kB         170 kB
+├ ○ /sitemap.xml                         0 B                0 B
+├ ○ /support                             5.02 kB         118 kB
+├ ○ /teachers                            194 B          96.5 kB
+├ ○ /terms                               194 B          96.5 kB
+└ ○ /verify-email                        4.51 kB         163 kB
++ First Load JS shared by all            87.7 kB
+  ├ chunks/2117-a1c488c0e6d2dd04.js      31.9 kB
+  ├ chunks/fd9d1056-def3aac4257a2603.js  53.7 kB
+  └ other shared chunks (total)          2.1 kB
+
+
+ƒ Middleware                             72.4 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

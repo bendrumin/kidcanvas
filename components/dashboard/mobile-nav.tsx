@@ -18,7 +18,8 @@ import {
   X,
   Sparkles,
   TrendingUp,
-  Plus
+  Plus,
+  ScrollText
 } from 'lucide-react'
 import { Logo } from '@/components/logo'
 
@@ -37,6 +38,13 @@ export function MobileNav({ role, familyName }: MobileNavProps) {
     {
       title: 'Browse',
       items: [
+        {
+          label: 'Feed',
+          href: '/dashboard/feed',
+          icon: ScrollText,
+          show: true,
+          color: 'from-crayon-pink to-crayon-purple',
+        },
         {
           label: 'Gallery',
           href: '/dashboard',
