@@ -149,7 +149,7 @@ export default async function BillingPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-display font-bold text-foreground">Billing & Plans</h1>
+        <h1 className="text-fluid-3xl font-display font-bold text-foreground">Billing & Plans</h1>
         <p className="text-muted-foreground mt-1">
           Manage your subscription and billing information
         </p>
@@ -188,25 +188,25 @@ export default async function BillingPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
               <p className="text-muted-foreground">Artworks Used</p>
-              <p className="text-2xl font-bold">
+              <p className="text-fluid-2xl font-bold">
                 {usage.artworks} {limits.artworks > 0 ? `/ ${limits.artworks}` : ''}
               </p>
             </div>
             <div>
               <p className="text-muted-foreground">Children</p>
-              <p className="text-2xl font-bold">
+              <p className="text-fluid-2xl font-bold">
                 {usage.children} {limits.children > 0 ? `/ ${limits.children}` : ''}
               </p>
             </div>
             <div>
               <p className="text-muted-foreground">Families</p>
-              <p className="text-2xl font-bold">
+              <p className="text-fluid-2xl font-bold">
                 {usage.families} {limits.families > 0 ? `/ ${limits.families}` : ''}
               </p>
             </div>
             <div>
               <p className="text-muted-foreground">Next Billing</p>
-              <p className="text-2xl font-bold">
+              <p className="text-fluid-2xl font-bold">
                 {subscription.current_period_end
                   ? new Date(subscription.current_period_end).toLocaleDateString()
                   : '—'}
@@ -262,7 +262,7 @@ export default async function BillingPage() {
                   </div>
                   <CardDescription>{plan.description}</CardDescription>
                   <div className="mt-4">
-                    <span className="text-4xl font-bold">${plan.price.month}</span>
+                    <span className="text-fluid-3xl font-bold">${plan.price.month}</span>
                     <span className="text-muted-foreground">/month</span>
                     {plan.price.year > 0 && (
                       <p className="text-sm text-green-600 mt-1">

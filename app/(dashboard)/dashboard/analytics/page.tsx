@@ -40,7 +40,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
   if (!membership) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-2xl font-display font-bold mb-4">No Family Found</h2>
+        <h2 className="text-fluid-2xl font-display font-bold mb-4">No Family Found</h2>
       </div>
     )
   }
@@ -73,7 +73,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
   if (!artworks || artworks.length === 0) {
     return (
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-display font-bold text-foreground mb-2">
+        <h1 className="text-fluid-3xl font-display font-bold text-foreground mb-2">
           Art Analytics
         </h1>
         <p className="text-muted-foreground mb-8">
@@ -97,7 +97,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-display font-bold text-foreground mb-2">
+        <h1 className="text-fluid-3xl font-display font-bold text-foreground mb-2">
           Art Analytics
         </h1>
         <p className="text-muted-foreground">

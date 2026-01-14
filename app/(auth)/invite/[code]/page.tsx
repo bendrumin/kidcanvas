@@ -26,7 +26,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
 
   if (!invite) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background p-4">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background p-4 sm:p-6 lg:p-8">
         <Card className="max-w-md w-full text-center">
           <CardHeader>
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-crayon-red/20 to-crayon-orange/20 flex items-center justify-center mx-auto mb-4">
@@ -84,7 +84,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
   const family = invite.families
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background p-4 sm:p-6 lg:p-8">
       {/* Decorative elements */}
       <div className="absolute top-20 left-10 w-32 h-32 bg-crayon-green/20 dark:bg-crayon-green/10 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-40 h-40 bg-crayon-blue/20 dark:bg-crayon-blue/10 rounded-full blur-3xl" />
@@ -100,7 +100,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-crayon-blue to-crayon-purple flex items-center justify-center mx-auto mb-4">
               <Users className="w-8 h-8 text-white" />
             </div>
-            <CardTitle className="text-2xl font-display">You're Invited!</CardTitle>
+            <CardTitle className="text-fluid-2xl font-display">You're Invited!</CardTitle>
             <CardDescription className="text-base">
               You've been invited to join the
             </CardDescription>

@@ -143,18 +143,65 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
           placeholder="Search by title, tags, or AI description..."
           value={currentSearch}
           onChange={(e) => updateParams('search', e.target.value)}
-          className="pl-9 transition-all focus:ring-2 focus:ring-primary text-sm sm:text-base"
+          className="pl-9 pr-11 transition-all focus:ring-2 focus:ring-primary text-base"
           aria-label="Search artwork by title, artist, tags, or AI description"
         />
         {currentSearch && (
           <button
             onClick={() => updateParams('search', '')}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors w-11 h-11 flex items-center justify-center touch-manipulation"
             aria-label="Clear search"
           >
             <X className="w-4 h-4" />
           </button>
         )}
+      </div>
+
+      {/* Mobile quick filters */}
+      <div className="sm:hidden -mx-4 px-4">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 -mb-2">
+          <Button
+            variant={currentChild === 'all' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => updateParams('child', 'all')}
+            className="h-11 whitespace-nowrap"
+          >
+            All
+          </Button>
+          {children.map((child) => (
+            <Button
+              key={child.id}
+              variant={currentChild === child.id ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => updateParams('child', child.id)}
+              className="h-11 whitespace-nowrap"
+            >
+              {child.name}
+            </Button>
+          ))}
+          <Button
+            variant={showFavorites ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => updateParams('favorites', showFavorites ? '' : 'true')}
+            className={cn(
+              'h-11 whitespace-nowrap',
+              showFavorites && 'bg-crayon-red hover:bg-crayon-red/90'
+            )}
+          >
+            <Heart className={cn('w-4 h-4', showFavorites ? 'fill-current' : 'opacity-60')} />
+            <span className="ml-2">Favorites</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsSheetOpen(true)}
+            className="h-11 whitespace-nowrap"
+            aria-label="Open filter sheet"
+          >
+            <SlidersHorizontal className="w-4 h-4 mr-2" />
+            Filter
+          </Button>
+        </div>
       </div>
 
       {/* Mobile: Hamburger Menu */}

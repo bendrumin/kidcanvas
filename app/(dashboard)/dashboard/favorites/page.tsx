@@ -35,7 +35,7 @@ export default async function FavoritesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-display font-bold text-foreground flex items-center gap-3">
+        <h1 className="text-fluid-3xl font-display font-bold text-foreground flex items-center gap-3">
           <Heart className="w-8 h-8 text-crayon-red fill-crayon-red" />
           Favorites
         </h1>

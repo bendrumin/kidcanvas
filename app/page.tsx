@@ -75,7 +75,7 @@ export default function LandingPage() {
             Every masterpiece has a story
           </p>
 
-          <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight">
+          <h1 className="text-fluid-4xl font-bold text-foreground mb-6 leading-tight">
             Remember what they said,<br />not just what they drew
           </h1>
           <p className="sr-only">
@@ -161,7 +161,7 @@ export default function LandingPage() {
       {/* Instagram Comparison Section - NEW */}
       <section className="py-12 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-foreground mb-4">
+          <h2 className="text-fluid-3xl font-bold text-center text-foreground mb-4">
             Instagram for Kids' Art (But Actually Better)
           </h2>
           <p className="text-center text-muted-foreground mb-8 text-sm max-w-2xl mx-auto">
@@ -242,7 +242,7 @@ export default function LandingPage() {
       {/* Simple Demo - Show, Don't Tell */}
       <section className="py-12 px-4 sm:px-6 bg-gradient-to-b from-transparent to-amber-50/50 dark:to-transparent">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-foreground mb-8">
+          <h2 className="text-fluid-3xl font-bold text-center text-foreground mb-8">
             Stories, moments, and artwork together
           </h2>
           
@@ -318,7 +318,7 @@ export default function LandingPage() {
       {/* Who It's For - Personal */}
       <section className="py-12 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-foreground mb-8">
+          <h2 className="text-fluid-3xl font-bold text-center text-foreground mb-8">
             Built for real families
           </h2>
           
@@ -360,7 +360,7 @@ export default function LandingPage() {
       {/* Pricing - Clean */}
       <section className="py-12 px-4 sm:px-6 bg-white dark:bg-card border-y border-amber-100 dark:border-border">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-foreground mb-2">
+          <h2 className="text-fluid-3xl font-bold text-center text-foreground mb-2">
             Simple pricing
           </h2>
           <p className="text-center text-muted-foreground mb-2">
@@ -379,7 +379,7 @@ export default function LandingPage() {
                 </span>
               </div>
               <p className="font-bold text-foreground text-lg">Free</p>
-              <p className="text-3xl font-bold text-foreground mt-1">$0</p>
+              <p className="text-fluid-2xl font-bold text-foreground mt-1">$0</p>
               <p className="text-muted-foreground text-sm mb-4">Forever</p>
               <ul className="space-y-2 text-sm">
                 {['50 artworks with stories', '1 child', '1 family', 'Basic story capture', 'Family reactions & comments', 'Basic moment photos', 'Public sharing links'].map((f) => (
@@ -394,7 +394,7 @@ export default function LandingPage() {
             {/* Family */}
             <div className="p-6 rounded-xl border-2 border-[#E91E63] bg-gradient-to-br from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30">
               <p className="font-bold text-foreground text-lg">Family</p>
-              <p className="text-3xl font-bold text-foreground mt-1">$4.99<span className="text-sm font-normal text-muted-foreground">/mo</span></p>
+              <p className="text-fluid-2xl font-bold text-foreground mt-1">$4.99<span className="text-sm font-normal text-muted-foreground">/mo</span></p>
               <p className="text-muted-foreground text-sm mb-4">or $49/year <span className="text-green-600 dark:text-green-400">(save 17%)</span></p>
               <ul className="space-y-2 text-sm">
                 {['Unlimited artworks with stories', 'Unlimited children', 'Unlimited moment photos', 'Story templates & prompts', 'Memory timeline view', 'AI auto-tagging', 'Reactions & comments', 'Priority support'].map((f) => (
@@ -412,7 +412,7 @@ export default function LandingPage() {
       {/* Comparison Section */}
       <section className="py-12 px-4 sm:px-6 bg-gradient-to-b from-amber-50/50 to-transparent dark:from-transparent">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-foreground mb-4">
+          <h2 className="text-fluid-3xl font-bold text-center text-foreground mb-4">
             How KidCanvas compares to other solutions
           </h2>
           <p className="text-center text-muted-foreground mb-8 text-sm max-w-2xl mx-auto">
@@ -856,7 +856,7 @@ export default function LandingPage() {
       {/* FAQ Section */}
       <section className="py-12 px-4 sm:px-6 bg-white dark:bg-card border-y border-amber-100 dark:border-border">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-foreground mb-8">
+          <h2 className="text-fluid-3xl font-bold text-center text-foreground mb-8">
             Frequently Asked Questions
           </h2>
           <div className="space-y-4">
@@ -901,7 +901,7 @@ export default function LandingPage() {
           <div className="flex justify-center mb-4">
             <ArtworkScribble variant="palette" size={96} />
           </div>
-          <h2 className="text-2xl font-bold text-foreground mb-4">
+          <h2 className="text-fluid-3xl font-bold text-foreground mb-4">
             Start capturing the stories, not just the art
           </h2>
           <p className="text-muted-foreground mb-6">

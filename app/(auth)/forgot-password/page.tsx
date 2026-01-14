@@ -48,7 +48,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background p-4 sm:p-6 lg:p-8">
       {/* Decorative elements */}
       <div className="absolute top-20 left-10 w-32 h-32 bg-crayon-orange/20 dark:bg-crayon-orange/10 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-40 h-40 bg-crayon-blue/20 dark:bg-crayon-blue/10 rounded-full blur-3xl" />
@@ -61,7 +61,7 @@ export default function ForgotPasswordPage() {
 
         <Card className="border-2 shadow-xl">
           <CardHeader className="text-center pb-2">
-            <CardTitle className="text-2xl font-display">Reset Password</CardTitle>
+            <CardTitle className="text-fluid-2xl font-display">Reset Password</CardTitle>
             <CardDescription>
               {emailSent 
                 ? 'Check your email for reset instructions'

@@ -89,6 +89,26 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .text-fluid-xl {
+    font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+    line-height: 1.4;
+  }
+
+  .text-fluid-2xl {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+    line-height: 1.2;
+  }
+
+  .text-fluid-3xl {
+    font-size: clamp(1.875rem, 1.4rem + 1.6vw, 3rem);
+    line-height: 1.15;
+  }
+
+  .text-fluid-4xl {
+    font-size: clamp(2.25rem, 1.6rem + 2.2vw, 3.75rem);
+    line-height: 1.1;
+  }
 }
 
 /* Custom scrollbar */

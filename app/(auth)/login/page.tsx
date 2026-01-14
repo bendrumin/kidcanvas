@@ -88,7 +88,7 @@ function LoginContent() {
   return (
     <main 
       id="main-content" 
-      className="min-h-screen flex items-center justify-center bg-[#FFFBF5] dark:bg-background p-4"
+      className="min-h-screen flex items-center justify-center bg-[#FFFBF5] dark:bg-background p-4 sm:p-6 lg:p-8"
       role="main"
       aria-labelledby="login-heading"
     >
@@ -100,7 +100,7 @@ function LoginContent() {
 
         <Card className="border-2 shadow-xl">
           <CardHeader className="text-center pb-2">
-            <CardTitle id="login-heading" className="text-2xl font-display">Welcome Back!</CardTitle>
+            <CardTitle id="login-heading" className="text-fluid-2xl font-display">Welcome Back!</CardTitle>
             <CardDescription>Sign in to access your family's artwork gallery</CardDescription>
           </CardHeader>
           <CardContent>

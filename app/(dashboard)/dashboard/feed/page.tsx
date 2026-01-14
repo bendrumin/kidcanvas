@@ -32,7 +32,7 @@ export default async function FeedPage() {
   if (!membership) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-2xl font-display font-bold mb-4">No Family Found</h2>
+        <h2 className="text-fluid-2xl font-display font-bold mb-4">No Family Found</h2>
         <p className="text-muted-foreground mb-6">
           It looks like you're not part of a family yet.
         </p>
@@ -113,7 +113,7 @@ export default async function FeedPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-display font-bold text-foreground mb-2">
+        <h1 className="text-fluid-3xl font-display font-bold text-foreground mb-2">
           Family Feed
         </h1>
         <p className="text-muted-foreground">
@@ -138,7 +138,7 @@ export default async function FeedPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-display font-bold text-foreground mb-3">
+              <h3 className="text-fluid-2xl font-display font-bold text-foreground mb-3">
                 Your Story Feed Awaits!
               </h3>
               <p className="text-muted-foreground mb-6">

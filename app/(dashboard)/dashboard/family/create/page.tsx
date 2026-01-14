@@ -100,7 +100,7 @@ export default function CreateFamilyPage() {
           <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-crayon-pink to-crayon-purple flex items-center justify-center mb-4">
             <Users className="w-8 h-8 text-white" />
           </div>
-          <CardTitle className="text-2xl">Create a New Family</CardTitle>
+          <CardTitle className="text-fluid-2xl">Create a New Family</CardTitle>
           <CardDescription>
             Start a new family gallery to organize and share your children's artwork
           </CardDescription>

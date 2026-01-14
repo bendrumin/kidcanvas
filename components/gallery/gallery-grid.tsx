@@ -324,7 +324,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
       )}
 
       <div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6 lg:gap-8"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6 lg:gap-8"
         role="list"
         aria-label="Artwork gallery"
       >
@@ -358,7 +358,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
                 {/* Paper card with shadow */}
                 <div
                   className={cn(
-                    "relative bg-white dark:bg-gray-800 rounded-sm shadow-md active:shadow-lg overflow-visible focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 min-h-[300px]",
+                    "relative bg-white dark:bg-gray-800 rounded-sm shadow-md active:shadow-lg overflow-visible focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 min-h-[300px] touch-manipulation",
                     isSelectionMode
                       ? "cursor-default"
                       : "cursor-pointer",
@@ -434,7 +434,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
                               ? ""
                               : "transition-transform duration-500 group-hover:scale-105"
                           )}
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
                           loading={index < 8 ? "eager" : "lazy"}
                           priority={index < 4}
                           unoptimized={false}
@@ -459,7 +459,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
                       {!isSelectionMode && (
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 group-active:bg-black/30 transition-all duration-300 flex items-center justify-center z-10 pointer-events-none">
                           <div className="opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-all duration-300 transform group-hover:scale-110 group-active:scale-95">
-                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 dark:bg-gray-800/90 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow pointer-events-auto">
+                            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/90 dark:bg-gray-800/90 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow pointer-events-auto">
                               <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 dark:text-gray-200 group-hover:text-primary transition-colors" />
                             </div>
                           </div>
@@ -524,13 +524,13 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
                   {/* Favorite heart - Always visible, toggleable */}
                   {!isSelectionMode && (
                     <button
-                      className="absolute top-1 right-1 z-20 transition-transform hover:scale-110 active:scale-95"
+                      className="absolute top-1 right-1 z-20 transition-transform hover:scale-110 active:scale-95 w-11 h-11 flex items-center justify-center touch-manipulation"
                       onClick={(e) => handleToggleFavorite(artwork.id, favoriteStates[artwork.id] ?? artwork.is_favorite, e)}
                       aria-label={favoriteStates[artwork.id] ?? artwork.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
                       aria-pressed={favoriteStates[artwork.id] ?? artwork.is_favorite}
                       type="button"
                     >
-                      <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white shadow-md flex items-center justify-center hover:shadow-lg transition-shadow">
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white shadow-md flex items-center justify-center hover:shadow-lg transition-shadow">
                         <Heart
                           className={cn(
                             "w-3 h-3 sm:w-4 sm:h-4 transition-all",

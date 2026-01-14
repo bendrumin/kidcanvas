@@ -124,7 +124,7 @@ function SignupForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FFFBF5] dark:bg-background p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#FFFBF5] dark:bg-background p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -133,7 +133,7 @@ function SignupForm() {
 
         <Card className="border-2 shadow-xl">
           <CardHeader className="text-center pb-2">
-            <CardTitle className="text-2xl font-display">
+            <CardTitle className="text-fluid-2xl font-display">
               {isTeacher ? 'Create Your Portfolio System' : 'Create Your Gallery'}
             </CardTitle>
             <CardDescription>
@@ -320,7 +320,7 @@ function SignupForm() {
 export default function SignupPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-[#FFFBF5] dark:bg-background p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFBF5] dark:bg-background p-4 sm:p-6 lg:p-8">
         <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
       </div>
     }>

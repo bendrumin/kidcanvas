@@ -56,22 +56,62 @@ interface SheetContentProps
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
   SheetContentProps
->(({ side = "right", className, children, ...props }, ref) => (
-  <SheetPortal>
-    <SheetOverlay />
-    <SheetPrimitive.Content
-      ref={ref}
-      className={cn(sheetVariants({ side }), className)}
-      {...props}
-    >
-      {children}
-      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-        <X className="h-4 w-4" />
-        <span className="sr-only">Close</span>
-      </SheetPrimitive.Close>
-    </SheetPrimitive.Content>
-  </SheetPortal>
-))
+>(({ side = "right", className, children, ...props }, ref) => {
+  const closeRef = React.useRef<HTMLButtonElement | null>(null)
+  const startRef = React.useRef<{ x: number; y: number } | null>(null)
+
+  const handleTouchStart = (event: React.TouchEvent) => {
+    const touch = event.touches[0]
+    if (!touch) return
+    startRef.current = { x: touch.clientX, y: touch.clientY }
+  }
+
+  const handleTouchEnd = (event: React.TouchEvent) => {
+    const start = startRef.current
+    const touch = event.changedTouches[0]
+    if (!start || !touch) return
+
+    const deltaX = touch.clientX - start.x
+    const deltaY = touch.clientY - start.y
+    const absX = Math.abs(deltaX)
+    const absY = Math.abs(deltaY)
+
+    const isHorizontalSwipe = absX > 80 && absX > absY * 1.2
+    const isVerticalSwipe = absY > 80 && absY > absX * 1.2
+
+    const shouldClose =
+      (side === "right" && isHorizontalSwipe && deltaX > 0) ||
+      (side === "left" && isHorizontalSwipe && deltaX < 0) ||
+      (side === "bottom" && isVerticalSwipe && deltaY > 0) ||
+      (side === "top" && isVerticalSwipe && deltaY < 0)
+
+    if (shouldClose) {
+      closeRef.current?.click()
+    }
+  }
+
+  return (
+    <SheetPortal>
+      <SheetOverlay />
+      <SheetPrimitive.Content
+        ref={ref}
+        className={cn(sheetVariants({ side }), className)}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        {...props}
+      >
+        {children}
+        <SheetPrimitive.Close
+          ref={closeRef}
+          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
+        >
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </SheetPrimitive.Close>
+      </SheetPrimitive.Content>
+    </SheetPortal>
+  )
+})
 SheetContent.displayName = SheetPrimitive.Content.displayName
 
 const SheetHeader = ({

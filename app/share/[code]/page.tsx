@@ -37,7 +37,7 @@ export default async function SharePage({ params }: SharePageProps) {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
             <Logo size="sm" showText={false} className="opacity-50" />
           </div>
-          <h1 className="text-2xl font-display font-bold mb-2">Link Expired</h1>
+          <h1 className="text-fluid-2xl font-display font-bold mb-2">Link Expired</h1>
           <p className="text-muted-foreground mb-6">
             This share link has expired. Ask the owner to share it again.
           </p>
@@ -96,7 +96,7 @@ export default async function SharePage({ params }: SharePageProps) {
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-crayon-blue to-crayon-purple flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-white" />
               </div>
-              <CardTitle className="text-2xl font-display">You're Invited!</CardTitle>
+              <CardTitle className="text-fluid-2xl font-display">You're Invited!</CardTitle>
               <CardDescription className="text-base">
                 You've been invited to view the
               </CardDescription>
@@ -197,7 +197,7 @@ export default async function SharePage({ params }: SharePageProps) {
           {/* Artwork Info */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-display font-bold text-foreground mb-2">
+              <h1 className="text-fluid-3xl font-display font-bold text-foreground mb-2">
                 {artwork.title}
               </h1>
               

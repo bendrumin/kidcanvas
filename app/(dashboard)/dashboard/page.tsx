@@ -50,7 +50,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   if (!membership) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-2xl font-display font-bold mb-4">No Family Found</h2>
+        <h2 className="text-fluid-2xl font-display font-bold mb-4">No Family Found</h2>
         <p className="text-muted-foreground mb-6">
           It looks like you're not part of a family yet.
         </p>
@@ -163,9 +163,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       />
 
       {/* Filters */}
-      <Suspense fallback={<div className="h-12 bg-muted animate-pulse rounded-xl" />}>
-        <GalleryFilters children={children || []} />
-      </Suspense>
+      <div className="sticky top-16 z-30 bg-background/95 backdrop-blur-sm -mx-4 px-4 py-3 border-b border-border sm:static sm:mx-0 sm:px-0 sm:py-0 sm:bg-transparent sm:backdrop-blur-0 sm:border-0">
+        <Suspense fallback={<div className="h-12 bg-muted animate-pulse rounded-xl" />}>
+          <GalleryFilters children={children || []} />
+        </Suspense>
+      </div>
 
       {/* Gallery */}
       <Suspense fallback={<GallerySkeleton count={8} />}>

@@ -128,7 +128,7 @@ export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100, pl
 
   return (
     <nav
-      className="fixed left-0 top-16 bottom-0 w-64 bg-background/90 backdrop-blur-md border-r hidden lg:block overflow-y-auto"
+      className="fixed left-0 top-16 bottom-0 w-64 bg-background/90 backdrop-blur-md border-r hidden md:block overflow-y-auto"
       role="navigation"
       aria-label="Main navigation"
     >

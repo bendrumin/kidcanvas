@@ -38,7 +38,7 @@ export default async function UploadPage() {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-display font-bold text-foreground">Upload Artwork</h1>
+        <h1 className="text-fluid-3xl font-display font-bold text-foreground">Upload Artwork</h1>
         <p className="text-muted-foreground mt-1">
           Add new artwork to your family's collection
         </p>

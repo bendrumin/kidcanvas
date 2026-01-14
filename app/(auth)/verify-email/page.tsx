@@ -74,7 +74,7 @@ function VerifyEmailContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background p-4 sm:p-6 lg:p-8">
       {/* Decorative elements */}
       <div className="absolute top-20 left-10 w-32 h-32 bg-crayon-green/20 dark:bg-crayon-green/10 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-40 h-40 bg-crayon-blue/20 dark:bg-crayon-blue/10 rounded-full blur-3xl" />
@@ -92,7 +92,7 @@ function VerifyEmailContent() {
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-crayon-blue to-crayon-purple flex items-center justify-center mx-auto mb-4">
                   <Loader2 className="w-8 h-8 text-white animate-spin" />
                 </div>
-                <CardTitle className="text-2xl font-display">Verifying Email...</CardTitle>
+                <CardTitle className="text-fluid-2xl font-display">Verifying Email...</CardTitle>
                 <CardDescription className="text-base">
                   Please wait while we verify your email address
                 </CardDescription>
@@ -102,7 +102,7 @@ function VerifyEmailContent() {
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-crayon-green to-crayon-blue flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle className="text-2xl font-display">Email Verified!</CardTitle>
+                <CardTitle className="text-fluid-2xl font-display">Email Verified!</CardTitle>
                 <CardDescription className="text-base">
                   Your email address has been successfully verified
                 </CardDescription>
@@ -112,7 +112,7 @@ function VerifyEmailContent() {
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-crayon-red/20 to-crayon-orange/20 flex items-center justify-center mx-auto mb-4">
                   <AlertCircle className="w-8 h-8 text-crayon-red" />
                 </div>
-                <CardTitle className="text-2xl font-display">Verification Failed</CardTitle>
+                <CardTitle className="text-fluid-2xl font-display">Verification Failed</CardTitle>
                 <CardDescription className="text-base">
                   {error || 'Unable to verify your email address'}
                 </CardDescription>
@@ -184,13 +184,13 @@ function VerifyEmailContent() {
 export default function VerifyEmailPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background p-4">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-background dark:via-background dark:to-background p-4 sm:p-6 lg:p-8">
         <Card className="border-2 shadow-xl">
           <CardHeader className="text-center pb-2">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-crayon-blue to-crayon-purple flex items-center justify-center mx-auto mb-4">
               <Loader2 className="w-8 h-8 text-white animate-spin" />
             </div>
-            <CardTitle className="text-2xl font-display">Loading...</CardTitle>
+            <CardTitle className="text-fluid-2xl font-display">Loading...</CardTitle>
           </CardHeader>
         </Card>
       </div>

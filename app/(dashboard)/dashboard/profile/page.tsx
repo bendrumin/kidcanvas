@@ -30,7 +30,7 @@ export default async function ProfilePage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-3xl font-display font-bold text-foreground">Profile</h1>
+        <h1 className="text-fluid-3xl font-display font-bold text-foreground">Profile</h1>
         <p className="text-muted-foreground mt-1">
           Manage your account settings and preferences
         </p>
@@ -47,7 +47,7 @@ export default async function ProfilePage() {
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <CardTitle className="text-2xl">{userName}</CardTitle>
+              <CardTitle className="text-fluid-2xl">{userName}</CardTitle>
               <CardDescription className="flex items-center gap-2 mt-1">
                 <Mail className="w-4 h-4" />
                 {user.email}

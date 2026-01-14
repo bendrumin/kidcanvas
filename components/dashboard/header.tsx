@@ -61,9 +61,9 @@ export function DashboardHeader({ user, family, families, role }: DashboardHeade
       className="fixed top-0 left-0 right-0 z-40 h-16 bg-background/80 backdrop-blur-md border-b"
       role="banner"
     >
-      <div className="h-full px-4 lg:px-6 flex items-center justify-between">
+      <div className="h-full px-4 sm:px-6 flex items-center justify-between">
         {/* Logo & Family */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <MobileNav role={role} familyName={family?.name} />
           
           <Logo size="md" href="/dashboard" textClassName="hidden sm:block" />
@@ -78,7 +78,7 @@ export function DashboardHeader({ user, family, families, role }: DashboardHeade
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <ThemeToggle />
           
           <Popover open={notificationsOpen} onOpenChange={setNotificationsOpen}>

@@ -74,7 +74,7 @@ export default function SupportPage() {
           </Button>
         </Link>
 
-        <h1 className="text-3xl font-bold text-foreground mb-2">
+        <h1 className="text-fluid-3xl font-bold text-foreground mb-2">
           Need help?
         </h1>
         <p className="text-muted-foreground mb-8">
