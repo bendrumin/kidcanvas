@@ -6,6 +6,18 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
+  // Skip cookie-based auth for API routes that use Bearer tokens (mobile clients)
+  // These routes handle their own authentication via Authorization header
+  const authHeader = request.headers.get('authorization')
+  const isBearerAuth = authHeader?.startsWith('Bearer ')
+  const isApiRoute = request.nextUrl.pathname.startsWith('/api/')
+
+  if (isBearerAuth && isApiRoute) {
+    // Mobile client using Bearer token - skip middleware auth, let API route handle it
+    console.log('🔵 [Middleware] Bypassing auth for Bearer token API request:', request.nextUrl.pathname)
+    return supabaseResponse
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

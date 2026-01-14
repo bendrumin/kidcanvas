@@ -47,10 +47,24 @@ export async function POST(request: NextRequest) {
     let user
     let authenticatedUserId: string | null = null
 
+    console.log('🔵 [Upload API] Checking authentication...')
+    console.log('  - Has Authorization header:', !!authHeader)
+    console.log('  - Authorization header value:', authHeader ? `${authHeader.substring(0, 20)}...` : 'none')
+
     if (authHeader?.startsWith('Bearer ')) {
       // Mobile client (iOS) - verify token from header
       const token = authHeader.replace('Bearer ', '')
+      console.log('🔵 [Upload API] Verifying Bearer token (first 20 chars):', token.substring(0, 20))
+
       const { createClient: createSupabaseClient } = await import('@supabase/supabase-js')
+
+      // Log environment variable status
+      console.log('🔵 [Upload API] Environment check:', {
+        hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+        hasServiceRoleKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+        supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL
+      })
+
       const supabaseAdmin = createSupabaseClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.SUPABASE_SERVICE_ROLE_KEY!,
@@ -62,12 +76,24 @@ export async function POST(request: NextRequest) {
         }
       )
 
+      console.log('🔵 [Upload API] Calling getUser with token...')
       const { data: { user: tokenUser }, error: tokenError } = await supabaseAdmin.auth.getUser(token)
+      console.log('🔵 [Upload API] getUser result:', {
+        hasUser: !!tokenUser,
+        userId: tokenUser?.id,
+        hasError: !!tokenError,
+        errorMessage: tokenError?.message,
+        errorCode: tokenError?.code
+      })
 
       if (tokenError || !tokenUser) {
-        console.error('❌ [Upload API] Token verification error:', tokenError?.message)
+        console.error('❌ [Upload API] Token verification error:', {
+          message: tokenError?.message,
+          code: tokenError?.code,
+          status: tokenError?.status
+        })
         return NextResponse.json(
-          { error: 'Unauthorized', details: 'Invalid or expired authentication token' },
+          { error: 'Unauthorized', details: `Invalid or expired authentication token: ${tokenError?.message || 'Unknown error'}` },
           { status: 401 }
         )
       }
@@ -176,7 +202,7 @@ export async function POST(request: NextRequest) {
       hasMomentPhoto: !!momentPhoto
     })
 
-    if (!file || !familyId || !childId || !story || story.trim().length < 20 || !createdDate) {
+    if (!file || !familyId || !childId || !createdDate) {
       console.error('Missing required fields:', {
         file: !!file,
         familyId: !!familyId,
@@ -198,7 +224,7 @@ export async function POST(request: NextRequest) {
       })
 
       return NextResponse.json(
-        { error: 'Missing required fields', details: 'Story is required (minimum 20 characters). All other fields are required.' },
+        { error: 'Missing required fields', details: 'File, family, child, and date are required.' },
         { status: 400 }
       )
     }
@@ -388,16 +414,16 @@ export async function POST(request: NextRequest) {
     // Save to database
     const supabase = await createServiceClient()
     
-    // Use provided title or generate from story (first 50 chars)
-    const artworkTitle = title?.trim() || story.trim().substring(0, 50) || 'Untitled Artwork'
-    
+    // Use provided title or generate from story (first 50 chars) or default
+    const artworkTitle = title?.trim() || (story && story.trim().substring(0, 50)) || 'Untitled Artwork'
+
     const insertData: {
       family_id: string
       child_id: string
       image_url: string
       thumbnail_url: string
       title: string
-      story: string
+      story: string | null
       moment_photo_url: string | null
       created_date: string
       uploaded_by: string
@@ -409,7 +435,7 @@ export async function POST(request: NextRequest) {
       image_url: imageUrl,
       thumbnail_url: thumbnailUrl,
       title: artworkTitle,
-      story: story.trim(),
+      story: story && story.trim() ? story.trim() : null,
       moment_photo_url: momentPhotoUrl,
       created_date: createdDate,
       uploaded_by: verifiedUserId, // Use verified user ID, not form data
@@ -429,7 +455,7 @@ export async function POST(request: NextRequest) {
       family_id: insertData.family_id,
       child_id: insertData.child_id,
       title: insertData.title,
-      storyLength: insertData.story.length,
+      storyLength: insertData.story?.length || 0,
       hasMomentPhoto: !!insertData.moment_photo_url,
       hasDescription: !!insertData.description
     })
