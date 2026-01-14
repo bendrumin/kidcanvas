@@ -15,7 +15,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from '@/components/ui/dialog'
 import {
   Select,
@@ -34,19 +33,12 @@ import {
   Sparkles,
   ChevronLeft,
   ChevronRight,
-  Camera,
-  BookOpen,
-  Lightbulb,
-  Users,
-  Check
+  Camera
 } from 'lucide-react'
-import { formatFileSize, cn } from '@/lib/utils'
+import { formatFileSize } from '@/lib/utils'
 import type { Child } from '@/lib/supabase/types'
 import { LimitReachedDialog } from '@/components/paywall/limit-reached-dialog'
-import { StoryTemplateSelector } from '@/components/upload/story-template-selector'
-import { VoiceRecorder } from '@/components/upload/voice-recorder'
-import type { StoryTemplate } from '@/lib/story-templates'
-import { useAnalytics, useStoryTracking, useMultiFileTracking, useVoiceTracking } from '@/hooks/useAnalytics'
+import { useAnalytics, useMultiFileTracking } from '@/hooks/useAnalytics'
 
 // Celebration confetti effect
 const celebrate = () => {
@@ -81,14 +73,10 @@ interface FilePreview {
   file: File
   preview: string
   title: string
-  story: string
+  description: string
   childId: string
   createdDate: string
   tags: string
-  momentPhoto?: File
-  momentPhotoPreview?: string
-  voiceNote?: Blob
-  voiceDuration?: number
 }
 
 export function UploadForm({ familyId, children, userId }: UploadFormProps) {
@@ -107,24 +95,19 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
 
   // Analytics hooks
   const { track } = useAnalytics({ userId, familyId })
-  const { trackStoryProgress, resetTracking: resetStoryTracking } = useStoryTracking()
   const {
     trackFileNavigation,
     trackFileRemoved,
     getFileTimeSpent,
     resetTracking: resetMultiFileTracking
   } = useMultiFileTracking(files.length)
-  const {
-    trackRecordingComplete,
-    trackRecordingDeleted,
-  } = useVoiceTracking()
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.map(file => ({
       file,
       preview: URL.createObjectURL(file),
       title: file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '),
-      story: '',
+      description: '',
       childId: children[0]?.id || '',
       createdDate: new Date().toISOString().split('T')[0],
       tags: '',
@@ -220,7 +203,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         file,
         preview: URL.createObjectURL(file),
         title: `Artwork ${new Date().toLocaleDateString()}`,
-        story: '',
+        description: '',
         childId: children[0]?.id || '',
         createdDate: new Date().toISOString().split('T')[0],
         tags: '',
@@ -249,15 +232,11 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
       userId,
       familyId,
       timeSpentMs,
-      storyLength: files[index]?.story?.length || 0,
     })
 
     setFiles(prev => {
       const newFiles = [...prev]
       URL.revokeObjectURL(newFiles[index].preview)
-      if (newFiles[index].momentPhotoPreview) {
-        URL.revokeObjectURL(newFiles[index].momentPhotoPreview)
-      }
       newFiles.splice(index, 1)
       return newFiles
     })
@@ -285,7 +264,6 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
     track('upload_abandoned', {
       fileCount: files.length,
       currentFileIndex,
-      storyLength: files[currentFileIndex]?.story?.length || 0,
       uploadDurationMs,
       userId,
       familyId,
@@ -293,14 +271,10 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
 
     files.forEach(f => {
       URL.revokeObjectURL(f.preview)
-      if (f.momentPhotoPreview) {
-        URL.revokeObjectURL(f.momentPhotoPreview)
-      }
     })
     setFiles([])
     setShowModal(false)
     uploadStartTimeRef.current = null
-    resetStoryTracking()
     resetMultiFileTracking()
   }
 
@@ -316,15 +290,14 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         formData.append('file', fileData.file)
         formData.append('familyId', familyId)
         formData.append('childId', fileData.childId)
-        formData.append('title', fileData.title || fileData.story.substring(0, 50)) // Use story excerpt as title if no title
-        formData.append('story', fileData.story)
+        formData.append('title', fileData.title || 'Untitled Artwork')
         formData.append('createdDate', fileData.createdDate)
         formData.append('userId', userId)
+        if (fileData.description && fileData.description.trim()) {
+          formData.append('description', fileData.description)
+        }
         if (fileData.tags && fileData.tags.trim()) {
           formData.append('tags', fileData.tags)
-        }
-        if (fileData.momentPhoto) {
-          formData.append('momentPhoto', fileData.momentPhoto)
         }
 
         const response = await fetch('/api/upload', {
@@ -366,29 +339,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
           throw new Error(errorMessage)
         }
 
-        const result = await response.json()
-
-        // Upload voice note if present
-        if (fileData.voiceNote && result.artwork?.id) {
-          const voiceFormData = new FormData()
-          voiceFormData.append('audio', fileData.voiceNote)
-          voiceFormData.append('artworkId', result.artwork.id)
-          voiceFormData.append('familyId', familyId)
-          voiceFormData.append('userId', userId)
-          if (fileData.voiceDuration) {
-            voiceFormData.append('duration', fileData.voiceDuration.toString())
-          }
-
-          const voiceResponse = await fetch('/api/upload-voice', {
-            method: 'POST',
-            body: voiceFormData,
-          })
-
-          if (!voiceResponse.ok) {
-            console.error('Voice note upload failed, but artwork was uploaded')
-            // Don't fail the entire upload if voice upload fails
-          }
-        }
+        await response.json()
       }
 
       // Track successful upload
@@ -398,20 +349,15 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
       const apiDurationMs = Date.now() - uploadAttemptStart
 
       // Calculate aggregate stats for all uploaded files
-      const totalStoryLength = files.reduce((sum, f) => sum + (f.story?.length || 0), 0)
-      const avgStoryLength = Math.round(totalStoryLength / files.length)
-      const filesWithVoice = files.filter(f => f.voiceNote).length
-      const filesWithMomentPhoto = files.filter(f => f.momentPhoto).length
       const filesWithTags = files.filter(f => f.tags?.trim()).length
+      const filesWithDescription = files.filter(f => f.description?.trim()).length
 
       track('upload_completed', {
         fileCount: files.length,
         uploadDurationMs,
         apiDurationMs,
-        avgStoryLength,
-        filesWithVoice,
-        filesWithMomentPhoto,
         filesWithTags,
+        filesWithDescription,
         userId,
         familyId,
       })
@@ -434,13 +380,9 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
       // Cleanup
       files.forEach(f => {
         URL.revokeObjectURL(f.preview)
-        if (f.momentPhotoPreview) {
-          URL.revokeObjectURL(f.momentPhotoPreview)
-        }
       })
       setFiles([])
       uploadStartTimeRef.current = null
-      resetStoryTracking()
       resetMultiFileTracking()
 
       // Small delay to let confetti be seen
@@ -652,189 +594,24 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="story" className="flex items-center gap-2">
-                      <BookOpen className="w-4 h-4" />
-                      Story <span className="text-xs text-muted-foreground font-normal">(Optional)</span>
-                    </Label>
-                    <StoryTemplateSelector
-                      onSelectTemplate={(template: StoryTemplate) => {
-                        updateFile(currentFileIndex, { story: template.template })
-                        track('story_template_used', {
-                          templateId: template.id,
-                          templateTitle: template.title,
-                          userId,
-                          familyId,
-                          fileCount: files.length,
-                          currentFileIndex,
-                        })
-                      }}
-                      childName={children.find(c => c.id === currentFile.childId)?.name}
-                      isPremium={false}
-                    />
-                  </div>
-                  <Textarea
-                    id="story"
-                    value={currentFile.story}
-                    onChange={(e) => {
-                      const newStory = e.target.value
-                      updateFile(currentFileIndex, { story: newStory })
-                      // Track story progress milestones
-                      trackStoryProgress(newStory.length, {
-                        userId,
-                        familyId,
-                        fileCount: files.length,
-                        currentFileIndex,
-                      })
-                    }}
-                    placeholder="What did your child say about this? When did they make it? How did they feel? Every masterpiece has a story..."
-                    className="min-h-[120px] resize-y"
-                  />
-                  <div className="flex items-start gap-2 text-xs text-muted-foreground">
-                    <Lightbulb className="w-3 h-3 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="font-medium mb-1">Story prompts:</p>
-                      <ul className="list-disc list-inside space-y-0.5">
-                        <li>What did your child say about this artwork?</li>
-                        <li>When or where did they make it?</li>
-                        <li>How did they feel when creating it?</li>
-                        <li>What makes this piece special?</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <p className={cn(
-                      "text-xs font-medium transition-colors",
-                      currentFile.story.length >= 20
-                        ? "text-green-600 dark:text-green-500"
-                        : "text-amber-600 dark:text-amber-500"
-                    )}>
-                      {currentFile.story.length}/500 characters
-                      {currentFile.story.length < 20 && (
-                        <span className="ml-1">(need {20 - currentFile.story.length} more)</span>
-                      )}
-                    </p>
-                    {currentFile.story.length >= 20 && (
-                      <span className="text-xs text-green-600 dark:text-green-500 flex items-center gap-1">
-                        <Check className="w-3 h-3" />
-                        Ready
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="momentPhoto" className="flex items-center gap-2">
-                    <Users className="w-4 h-4" />
-                    Moment Photo <span className="text-xs text-muted-foreground font-normal">(Optional)</span>
-                  </Label>
-                  {currentFile.momentPhotoPreview ? (
-                    <div className="relative">
-                      <div className="relative aspect-square w-full max-w-[200px] rounded-lg overflow-hidden border-2 border-primary/20">
-                        <Image
-                          src={currentFile.momentPhotoPreview}
-                          alt="Moment photo preview"
-                          fill
-                          className="object-cover"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (currentFile.momentPhotoPreview) {
-                              URL.revokeObjectURL(currentFile.momentPhotoPreview)
-                            }
-                            updateFile(currentFileIndex, { momentPhoto: undefined, momentPhotoPreview: undefined })
-                            track('moment_photo_removed', {
-                              userId,
-                              familyId,
-                              fileCount: files.length,
-                              currentFileIndex,
-                            })
-                          }}
-                          className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1">Photo of your child with their artwork</p>
-                    </div>
-                  ) : (
-                    <div>
-                      <Label
-                        htmlFor="momentPhoto"
-                        className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
-                      >
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          <Camera className="w-6 h-6 mb-2 text-muted-foreground" />
-                          <p className="mb-1 text-sm text-muted-foreground">Upload moment photo</p>
-                          <p className="text-xs text-muted-foreground">Child holding/creating artwork</p>
-                        </div>
-                      </Label>
-                      <Input
-                        id="momentPhoto"
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0]
-                          if (file) {
-                            updateFile(currentFileIndex, {
-                              momentPhoto: file,
-                              momentPhotoPreview: URL.createObjectURL(file)
-                            })
-                            track('moment_photo_added', {
-                              userId,
-                              familyId,
-                              fileCount: files.length,
-                              currentFileIndex,
-                            })
-                          }
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                {/* Voice Story Recorder */}
-                <VoiceRecorder
-                  onRecordingComplete={(audioBlob, duration) => {
-                    updateFile(currentFileIndex, {
-                      voiceNote: audioBlob,
-                      voiceDuration: duration
-                    })
-                    trackRecordingComplete(duration, {
-                      userId,
-                      familyId,
-                      fileCount: files.length,
-                      currentFileIndex,
-                      hasStory: (currentFile?.story?.length || 0) >= 20,
-                    })
-                  }}
-                  onRecordingRemove={() => {
-                    const currentDuration = currentFile?.voiceDuration
-                    updateFile(currentFileIndex, {
-                      voiceNote: undefined,
-                      voiceDuration: undefined
-                    })
-                    trackRecordingDeleted(currentDuration, {
-                      userId,
-                      familyId,
-                      fileCount: files.length,
-                      currentFileIndex,
-                    })
-                  }}
-                  disabled={isUploading}
-                />
-
-                <div className="space-y-2">
                   <Label htmlFor="title">Title (optional)</Label>
                   <Input
                     id="title"
                     value={currentFile.title}
                     onChange={(e) => updateFile(currentFileIndex, { title: e.target.value })}
-                    placeholder="Short title for easy searching"
+                    placeholder="My Rainbow Painting"
                   />
-                  <p className="text-xs text-muted-foreground">A simple name to help you find this later</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="description">Description (optional)</Label>
+                  <Textarea
+                    id="description"
+                    value={currentFile.description}
+                    onChange={(e) => updateFile(currentFileIndex, { description: e.target.value })}
+                    placeholder="Add any notes about this artwork..."
+                    className="min-h-[100px] resize-y"
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -867,9 +644,9 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                   <Button variant="outline" onClick={handleCancel} disabled={isUploading} className="flex-1">
                     Cancel
                   </Button>
-                  <Button 
-                    onClick={handleUpload} 
-                    disabled={isUploading || files.some(f => !f.childId || !f.story || f.story.trim().length < 20)}
+                  <Button
+                    onClick={handleUpload}
+                    disabled={isUploading || files.some(f => !f.childId)}
                     className="flex-1 bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90"
                   >
                     {isUploading ? (
