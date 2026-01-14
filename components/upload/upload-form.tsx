@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
@@ -33,7 +33,6 @@ import {
   Sparkles,
   ChevronLeft,
   ChevronRight,
-  Camera
 } from 'lucide-react'
 import { formatFileSize } from '@/lib/utils'
 import type { Child } from '@/lib/supabase/types'
@@ -88,9 +87,6 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
   const [currentFileIndex, setCurrentFileIndex] = useState(0)
   const [showLimitDialog, setShowLimitDialog] = useState(false)
   const [limitInfo, setLimitInfo] = useState<{ current: number; limit: number } | null>(null)
-  const [showCamera, setShowCamera] = useState(false)
-  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null)
-  const videoRef = useRef<HTMLVideoElement | null>(null)
   const uploadStartTimeRef = useRef<number | null>(null)
 
   // Analytics hooks
@@ -132,98 +128,6 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
     },
     maxSize: 20 * 1024 * 1024, // 20MB
   })
-
-  // Camera functions
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { 
-          facingMode: 'environment', // Use back camera on mobile
-          width: { ideal: 1920 },
-          height: { ideal: 1080 }
-        } 
-      })
-      setCameraStream(stream)
-      setShowCamera(true)
-    } catch (error) {
-      toast({
-        title: 'Camera access denied',
-        description: 'Please allow camera access to take photos of artwork.',
-        variant: 'destructive',
-      })
-    }
-  }
-
-  // Set video stream when camera opens
-  useEffect(() => {
-    if (videoRef.current && cameraStream) {
-      videoRef.current.srcObject = cameraStream
-    }
-    return () => {
-      if (videoRef.current) {
-        videoRef.current.srcObject = null
-      }
-    }
-  }, [cameraStream])
-
-  // Cleanup camera on unmount
-  useEffect(() => {
-    return () => {
-      if (cameraStream) {
-        cameraStream.getTracks().forEach(track => track.stop())
-      }
-    }
-  }, [cameraStream])
-
-  const stopCamera = () => {
-    if (cameraStream) {
-      cameraStream.getTracks().forEach(track => track.stop())
-      setCameraStream(null)
-    }
-    setShowCamera(false)
-  }
-
-  const capturePhoto = () => {
-    const video = videoRef.current
-    if (!video || !cameraStream) return
-
-    const canvas = document.createElement('canvas')
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    ctx.drawImage(video, 0, 0)
-
-    canvas.toBlob((blob) => {
-      if (!blob) return
-
-      const file = new File([blob], `artwork-${Date.now()}.jpg`, { type: 'image/jpeg' })
-      const newFile: FilePreview = {
-        file,
-        preview: URL.createObjectURL(file),
-        title: `Artwork ${new Date().toLocaleDateString()}`,
-        description: '',
-        childId: children[0]?.id || '',
-        createdDate: new Date().toISOString().split('T')[0],
-        tags: '',
-      }
-
-      setFiles(prev => [...prev, newFile])
-      setCurrentFileIndex(files.length)
-      stopCamera()
-      setShowModal(true)
-
-      // Track camera capture upload started
-      uploadStartTimeRef.current = Date.now()
-      track('upload_started', {
-        fileCount: files.length + 1,
-        userId,
-        familyId,
-        captureMethod: 'camera',
-      })
-    }, 'image/jpeg', 0.9)
-  }
 
   const removeFile = (index: number) => {
     // Track file removal
@@ -439,67 +343,44 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         </div>
 
         {/* Upload Options */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Dropzone */}
-          <div
-            {...getRootProps()}
-            className={`
-              relative border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all
-              focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2
-              ${isDragActive 
-                ? 'border-primary bg-primary/5 scale-[1.02]' 
-                : 'border-muted-foreground/25 hover:border-primary/50 hover:bg-muted/50'
+        <div
+          {...getRootProps()}
+          className={`
+            relative border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all
+            focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2
+            ${isDragActive
+              ? 'border-primary bg-primary/5 scale-[1.02]'
+              : 'border-muted-foreground/25 hover:border-primary/50 hover:bg-muted/50'
+            }
+          `}
+          aria-label="Upload artwork. Drag and drop files here or click to browse."
+        >
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center gap-3">
+            <div className={`
+              w-16 h-16 rounded-2xl flex items-center justify-center transition-all
+              ${isDragActive
+                ? 'bg-gradient-to-br from-crayon-pink to-crayon-purple'
+                : 'bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-900'
               }
-            `}
-            aria-label="Upload artwork. Drag and drop files here or click to browse."
-          >
-            <input {...getInputProps()} />
-            <div className="flex flex-col items-center gap-3">
-              <div className={`
-                w-16 h-16 rounded-2xl flex items-center justify-center transition-all
-                ${isDragActive 
-                  ? 'bg-gradient-to-br from-crayon-pink to-crayon-purple' 
-                  : 'bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-900'
-                }
-              `} aria-hidden="true">
-                <ImagePlus className={`w-8 h-8 ${isDragActive ? 'text-white' : 'text-gray-400'}`} />
-              </div>
-              <div>
-                <p className="font-semibold">
-                  {isDragActive ? 'Drop here!' : 'Upload from device'}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Drag & drop or click to browse
-                </p>
-              </div>
+            `} aria-hidden="true">
+              <ImagePlus className={`w-8 h-8 ${isDragActive ? 'text-white' : 'text-gray-400'}`} />
+            </div>
+            <div>
+              <p className="font-semibold">
+                {isDragActive ? 'Drop here!' : 'Upload Artwork'}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Drag & drop, click to browse, or use your camera
+              </p>
             </div>
           </div>
-
-          {/* Camera Button */}
-          <button
-            onClick={startCamera}
-            className="relative border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all hover:border-primary/50 hover:bg-muted/50 focus:ring-2 focus:ring-primary focus:ring-offset-2 border-muted-foreground/25"
-            aria-label="Take a photo with your camera"
-            type="button"
-          >
-            <div className="flex flex-col items-center gap-3">
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-900" aria-hidden="true">
-                <Camera className="w-8 h-8 text-gray-400" />
-              </div>
-              <div>
-                <p className="font-semibold">Take a photo</p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Use your camera to scan artwork
-                </p>
-              </div>
-            </div>
-          </button>
         </div>
       </div>
 
       {/* Artwork Details Modal */}
       <Dialog open={showModal} onOpenChange={(open) => !open && handleCancel()}>
-        <DialogContent className="sm:max-w-2xl">
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-xl font-display">
               {files.length === 1 ? 'Add Artwork Details' : `Artwork ${currentFileIndex + 1} of ${files.length}`}
@@ -507,10 +388,10 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
           </DialogHeader>
 
           {currentFile && (
-            <div className="flex flex-col sm:flex-row gap-6">
-              {/* Image Preview - Left Side */}
-              <div className="sm:w-1/2 flex-shrink-0">
-                <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-muted">
+            <div className="flex flex-col gap-4 sm:gap-6 pb-4">
+              {/* Image Preview - Top */}
+              <div className="w-full">
+                <div className="relative aspect-[4/3] w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto rounded-xl overflow-hidden bg-muted">
                   <Image
                     src={currentFile.preview}
                     alt={`Preview of ${currentFile.title}`}
@@ -519,23 +400,24 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                   />
                   <button
                     onClick={() => removeFile(currentFileIndex)}
-                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+                    className="absolute top-2 right-2 w-10 h-10 sm:w-8 sm:h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors touch-manipulation"
                     aria-label="Remove this artwork"
                     type="button"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-5 h-5 sm:w-4 sm:h-4" />
                   </button>
                 </div>
                 <p className="text-xs text-muted-foreground text-center mt-2">
                   {currentFile.file.name} • {formatFileSize(currentFile.file.size)}
                 </p>
-                
+
                 {/* Navigation for multiple files */}
                 {files.length > 1 && (
-                  <div className="flex items-center justify-center gap-4 mt-3">
+                  <div className="flex items-center justify-center gap-4 mt-4">
                     <Button
                       variant="outline"
                       size="icon"
+                      className="h-10 w-10 sm:h-9 sm:w-9 touch-manipulation"
                       onClick={() => {
                         const newIndex = Math.max(0, currentFileIndex - 1)
                         setCurrentFileIndex(newIndex)
@@ -547,14 +429,15 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                       }}
                       disabled={currentFileIndex === 0}
                     >
-                      <ChevronLeft className="w-4 h-4" />
+                      <ChevronLeft className="w-5 h-5 sm:w-4 sm:h-4" />
                     </Button>
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-sm font-medium text-muted-foreground min-w-[60px] text-center">
                       {currentFileIndex + 1} / {files.length}
                     </span>
                     <Button
                       variant="outline"
                       size="icon"
+                      className="h-10 w-10 sm:h-9 sm:w-9 touch-manipulation"
                       onClick={() => {
                         const newIndex = Math.min(files.length - 1, currentFileIndex + 1)
                         setCurrentFileIndex(newIndex)
@@ -566,14 +449,14 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                       }}
                       disabled={currentFileIndex === files.length - 1}
                     >
-                      <ChevronRight className="w-4 h-4" />
+                      <ChevronRight className="w-5 h-5 sm:w-4 sm:h-4" />
                     </Button>
                   </div>
                 )}
               </div>
 
-              {/* Form Fields - Right Side */}
-              <div className="sm:w-1/2 space-y-4">
+              {/* Form Fields - Below Image */}
+              <div className="w-full space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="artist">Artist *</Label>
                   <Select
@@ -610,7 +493,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                     value={currentFile.description}
                     onChange={(e) => updateFile(currentFileIndex, { description: e.target.value })}
                     placeholder="Add any notes about this artwork..."
-                    className="min-h-[100px] resize-y"
+                    className="min-h-[80px] sm:min-h-[100px] resize-y"
                   />
                 </div>
 
@@ -640,14 +523,19 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-3 pt-4">
-                  <Button variant="outline" onClick={handleCancel} disabled={isUploading} className="flex-1">
+                <div className="flex flex-col-reverse sm:flex-row gap-3 pt-4">
+                  <Button
+                    variant="outline"
+                    onClick={handleCancel}
+                    disabled={isUploading}
+                    className="flex-1 h-11 touch-manipulation"
+                  >
                     Cancel
                   </Button>
                   <Button
                     onClick={handleUpload}
                     disabled={isUploading || files.some(f => !f.childId)}
-                    className="flex-1 bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90"
+                    className="flex-1 h-11 bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90 touch-manipulation"
                   >
                     {isUploading ? (
                       <>
@@ -667,48 +555,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
           )}
         </DialogContent>
       </Dialog>
-      
-      {/* Camera Modal */}
-      <Dialog open={showCamera} onOpenChange={(open) => !open && stopCamera()}>
-        <DialogContent className="sm:max-w-lg" aria-describedby="camera-description">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-display">
-              Take a Photo
-            </DialogTitle>
-            <p id="camera-description" className="sr-only">
-              Use your device camera to capture artwork. Position the artwork in the frame and click Capture.
-            </p>
-          </DialogHeader>
 
-            <div className="space-y-4">
-              <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-black">
-                <video
-                  id="camera-video"
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="w-full h-full object-cover"
-                  aria-label="Camera preview for artwork capture"
-                />
-              </div>
-
-            <div className="flex gap-3">
-              <Button variant="outline" onClick={stopCamera} className="flex-1">
-                Cancel
-              </Button>
-              <Button 
-                onClick={capturePhoto}
-                className="flex-1 bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90"
-              >
-                <Camera className="w-4 h-4 mr-2" />
-                Capture
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-      
       {limitInfo && (
         <LimitReachedDialog
           open={showLimitDialog}
