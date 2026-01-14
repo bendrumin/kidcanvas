@@ -517,7 +517,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                       type="date"
                       value={currentFile.createdDate}
                       onChange={(e) => updateFile(currentFileIndex, { createdDate: e.target.value })}
-                      className="pl-9"
+                      className="pl-9 appearance-none"
                     />
                   </div>
                 </div>
