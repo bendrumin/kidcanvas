@@ -145,12 +145,10 @@ export async function POST(request: NextRequest) {
     const familyId = formData.get('familyId') as string
     const childId = formData.get('childId') as string
     const title = formData.get('title') as string | null
-    const story = formData.get('story') as string
     const createdDate = formData.get('createdDate') as string
     const userId = formData.get('userId') as string // This is UNTRUSTED - validate against authenticated user
     const description = formData.get('description') as string | null
     const tagsString = formData.get('tags') as string | null
-    const momentPhoto = formData.get('momentPhoto') as File | null
 
     // SECURITY: Validate userId from form data matches authenticated user
     // This prevents users from uploading on behalf of other users
@@ -198,11 +196,8 @@ export async function POST(request: NextRequest) {
       familyId,
       childId,
       title,
-      hasStory: !!story,
-      storyLength: story?.length,
       createdDate,
-      userId,
-      hasMomentPhoto: !!momentPhoto
+      userId
     })
 
     if (!file || !familyId || !childId || !createdDate) {
@@ -210,8 +205,6 @@ export async function POST(request: NextRequest) {
         file: !!file,
         familyId: !!familyId,
         childId: !!childId,
-        story: !!story,
-        storyLength: story?.length,
         createdDate: !!createdDate,
         userId: !!verifiedUserId
       })
@@ -219,9 +212,7 @@ export async function POST(request: NextRequest) {
       // Track validation failure
       trackServerEvent('upload_validation_blocked', {
         validationError: 'missing_required_fields',
-        storyLength: story?.length || 0,
         hasFile: !!file,
-        hasStory: !!story,
         userId: verifiedUserId,
         familyId,
       })
@@ -367,58 +358,11 @@ export async function POST(request: NextRequest) {
     const imageUrl = `${r2PublicUrl}/${originalKey}`
     const thumbnailUrl = `${r2PublicUrl}/${thumbnailKey}`
 
-    // Process moment photo if provided
-    let momentPhotoUrl: string | null = null
-    if (momentPhoto) {
-      try {
-        const momentBytes = await momentPhoto.arrayBuffer()
-        const momentBuffer = Buffer.from(momentBytes)
-
-        // SECURITY: Validate moment photo file type and size
-        const momentSignature = Array.from(momentBuffer.subarray(0, 4))
-        const isMomentValid = Object.entries(ALLOWED_SIGNATURES).some(([_, sig]) => {
-          return sig.every((byte, i) => byte === momentSignature[i])
-        })
-
-        if (!isMomentValid) {
-          console.warn('Invalid moment photo format, skipping')
-          return // Skip moment photo if invalid
-        }
-
-        if (momentBuffer.length > MAX_FILE_SIZE) {
-          console.warn('Moment photo too large, skipping')
-          return // Skip moment photo if too large
-        }
-
-        // Process moment photo with sharp
-        const momentImageId = uuidv4()
-        const momentProcessed = await sharp(momentBuffer)
-          .rotate()
-          .jpeg({ quality: 90 })
-          .toBuffer()
-        
-        const momentKey = `artwork/${familyId}/${momentImageId}_moment.jpg`
-        
-        await s3Client.send(new PutObjectCommand({
-          Bucket: r2Bucket,
-          Key: momentKey,
-          Body: momentProcessed,
-          ContentType: 'image/jpeg',
-        }))
-        
-        momentPhotoUrl = `${r2PublicUrl}/${momentKey}`
-        console.log('Moment photo uploaded:', momentPhotoUrl)
-      } catch (momentError) {
-        console.error('Failed to upload moment photo:', momentError)
-        // Don't fail the entire upload if moment photo fails
-      }
-    }
-
     // Save to database
     const supabase = await createServiceClient()
-    
-    // Use provided title or generate from story (first 50 chars) or default
-    const artworkTitle = title?.trim() || (story && story.trim().substring(0, 50)) || 'Untitled Artwork'
+
+    // Use provided title or default
+    const artworkTitle = title?.trim() || 'Untitled Artwork'
 
     const insertData: {
       family_id: string
@@ -426,8 +370,6 @@ export async function POST(request: NextRequest) {
       image_url: string
       thumbnail_url: string
       title: string
-      story: string | null
-      moment_photo_url: string | null
       created_date: string
       uploaded_by: string
       description?: string
@@ -438,8 +380,6 @@ export async function POST(request: NextRequest) {
       image_url: imageUrl,
       thumbnail_url: thumbnailUrl,
       title: artworkTitle,
-      story: story && story.trim() ? story.trim() : null,
-      moment_photo_url: momentPhotoUrl,
       created_date: createdDate,
       uploaded_by: verifiedUserId, // Use verified user ID, not form data
     }
@@ -458,9 +398,8 @@ export async function POST(request: NextRequest) {
       family_id: insertData.family_id,
       child_id: insertData.child_id,
       title: insertData.title,
-      storyLength: insertData.story?.length || 0,
-      hasMomentPhoto: !!insertData.moment_photo_url,
-      hasDescription: !!insertData.description
+      hasDescription: !!insertData.description,
+      hasTags: !!insertData.tags
     })
     
     const { data, error } = await supabase
@@ -487,8 +426,6 @@ export async function POST(request: NextRequest) {
         artworkId: data.id,
         userId: verifiedUserId,
         familyId,
-        storyLength: story.trim().length,
-        hasMomentPhoto: !!momentPhotoUrl,
         hasTags: !!(tagsString && tagsString.trim()),
         hasTitle: !!(title && title.trim()),
         fileSize: buffer.length,
