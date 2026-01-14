@@ -8,9 +8,16 @@ export async function updateSession(request: NextRequest) {
 
   // Skip cookie-based auth for API routes that use Bearer tokens (mobile clients)
   // These routes handle their own authentication via Authorization header
-  const authHeader = request.headers.get('authorization')
+  // Note: Next.js normalizes headers to lowercase
+  const authHeader = request.headers.get('authorization') || request.headers.get('Authorization')
   const isBearerAuth = authHeader?.startsWith('Bearer ')
   const isApiRoute = request.nextUrl.pathname.startsWith('/api/')
+
+  console.log('🔵 [Middleware] Request:', request.nextUrl.pathname)
+  console.log('  - Has authorization header (lowercase):', !!request.headers.get('authorization'))
+  console.log('  - Has Authorization header (uppercase):', !!request.headers.get('Authorization'))
+  console.log('  - Is Bearer auth:', isBearerAuth)
+  console.log('  - Is API route:', isApiRoute)
 
   if (isBearerAuth && isApiRoute) {
     // Mobile client using Bearer token - skip middleware auth, let API route handle it

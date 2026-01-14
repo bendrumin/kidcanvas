@@ -655,7 +655,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                   <div className="flex items-center justify-between">
                     <Label htmlFor="story" className="flex items-center gap-2">
                       <BookOpen className="w-4 h-4" />
-                      Story * <span className="text-xs text-muted-foreground font-normal">(Required)</span>
+                      Story <span className="text-xs text-muted-foreground font-normal">(Optional)</span>
                     </Label>
                     <StoryTemplateSelector
                       onSelectTemplate={(template: StoryTemplate) => {
@@ -689,7 +689,6 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                     }}
                     placeholder="What did your child say about this? When did they make it? How did they feel? Every masterpiece has a story..."
                     className="min-h-[120px] resize-y"
-                    required
                   />
                   <div className="flex items-start gap-2 text-xs text-muted-foreground">
                     <Lightbulb className="w-3 h-3 mt-0.5 flex-shrink-0" />

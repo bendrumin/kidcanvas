@@ -76,12 +76,13 @@ export const emailSchema = z
   .email('Invalid email format')
   .max(255, 'Email too long')
 
-// Story validation
+// Story validation (optional)
 export const storySchema = z
   .string()
-  .min(20, 'Story must be at least 20 characters')
   .max(10000, 'Story too long (max 10,000 characters)')
   .transform(sanitizeText)
+  .optional()
+  .nullable()
 
 // Title validation
 export const titleSchema = z

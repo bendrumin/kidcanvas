@@ -43,13 +43,16 @@ function createS3Client() {
 export async function POST(request: NextRequest) {
   try {
     // SECURITY: Verify authentication FIRST (before processing form data)
-    const authHeader = request.headers.get('authorization')
+    // Note: Next.js normalizes headers to lowercase
+    const authHeader = request.headers.get('authorization') || request.headers.get('Authorization')
     let user
     let authenticatedUserId: string | null = null
 
     console.log('🔵 [Upload API] Checking authentication...')
-    console.log('  - Has Authorization header:', !!authHeader)
-    console.log('  - Authorization header value:', authHeader ? `${authHeader.substring(0, 20)}...` : 'none')
+    console.log('  - Has authorization header (lowercase):', !!request.headers.get('authorization'))
+    console.log('  - Has Authorization header (uppercase):', !!request.headers.get('Authorization'))
+    console.log('  - Final authHeader value:', authHeader ? `${authHeader.substring(0, 20)}...` : 'none')
+    console.log('  - All headers:', JSON.stringify(Array.from(request.headers.entries())))
 
     if (authHeader?.startsWith('Bearer ')) {
       // Mobile client (iOS) - verify token from header
