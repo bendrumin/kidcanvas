@@ -134,13 +134,13 @@ export default function ResetPasswordPage() {
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-crayon-orange/20 to-crayon-red/20 flex items-center justify-center mx-auto mb-4">
                   <span className="text-3xl">⏰</span>
                 </div>
-                <h3 className="text-xl font-display font-bold mb-2">Link Expired</h3>
+                <h3 className="text-xl font-display font-bold mb-2">Link expired</h3>
                 <p className="text-muted-foreground mb-6">
-                  This password reset link has expired or is invalid.
+                  This reset link is expired or invalid.
                 </p>
                 <Link href="/forgot-password">
                   <Button className="w-full">
-                    Request a new link
+                    Send me a new link
                   </Button>
                 </Link>
               </div>

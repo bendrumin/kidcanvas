@@ -79,7 +79,7 @@ export default function LandingPage() {
             Remember what they said,<br />not just what they drew
           </h1>
           <p className="sr-only">
-            KidCanvas helps you capture and share the stories behind your children's artwork. Remember what they said, share the moment with family, and keep those memories alive. Free for 50 artworks.
+            KidCanvas helps you capture and share the stories behind your children's artwork. Remember what they said, share the moment with family, and keep those memories alive. Free for up to 50 artworks.
           </p>
 
           <p className="text-base sm:text-lg text-muted-foreground mb-3 max-w-2xl mx-auto">
@@ -95,7 +95,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/signup">
               <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">
-                Start free — 50 artworks
+                Start free — up to 50 artworks
                 <ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
               </Button>
             </Link>
@@ -364,10 +364,10 @@ export default function LandingPage() {
             Simple pricing
           </h2>
           <p className="text-center text-muted-foreground mb-2">
-            Start capturing stories free. Upgrade when you want unlimited.
+            Start capturing stories for free. Upgrade anytime if you want unlimited.
           </p>
           <p className="text-center text-sm text-green-600 dark:text-green-400 mb-8 font-medium">
-            <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> No credit card required</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> Cancel anytime</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> 50 artworks free forever</span>
+            <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> No credit card required</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> Cancel anytime</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> Up to 50 artworks, free forever</span>
           </p>
           
           <div className="grid sm:grid-cols-2 gap-4">
@@ -382,7 +382,7 @@ export default function LandingPage() {
               <p className="text-fluid-2xl font-bold text-foreground mt-1">$0</p>
               <p className="text-muted-foreground text-sm mb-4">Forever</p>
               <ul className="space-y-2 text-sm">
-                {['50 artworks with stories', '1 child', '1 family', 'Basic story capture', 'Family reactions & comments', 'Basic moment photos', 'Public sharing links'].map((f) => (
+                {['Up to 50 artworks with stories', '1 child', '1 family', 'Basic story capture', 'Family reactions & comments', 'Basic moment photos', 'Public sharing links'].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-foreground">
                     <Check className="w-4 h-4 text-green-600 dark:text-green-400" aria-hidden="true" />
                     {f}
@@ -470,7 +470,7 @@ export default function LandingPage() {
                 // PRICING & VALUE
                 {
                   feature: 'Free tier',
-                  kidcanvas: '50 artworks + stories free forever',
+                  kidcanvas: 'Up to 50 artworks + stories, free forever',
                   others: ['No free tier', '10 artworks free', 'Free storage, no features'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, true],
@@ -494,7 +494,7 @@ export default function LandingPage() {
                 },
                 {
                   feature: 'Keep data after canceling',
-                  kidcanvas: 'Yes - 50 artworks forever + all stories',
+                  kidcanvas: 'Yes - up to 50 artworks forever + all stories',
                   others: ['Lose everything', 'Lose everything', 'Keep files, lose context'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, false],
@@ -731,7 +731,7 @@ export default function LandingPage() {
                 Why pay more for less?
               </p>
               <p className="text-sm text-muted-foreground mb-3">
-                50 artworks with stories free forever • Family reactions & comments • Moment photos • Your data stays private
+                Up to 50 artworks with stories, free forever • Family reactions & comments • Moment photos • Your data stays private
               </p>
               <Link href="/signup">
                 <Button className="bg-[#E91E63] hover:bg-[#C2185B]">
@@ -759,7 +759,7 @@ export default function LandingPage() {
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
-                    <p className="font-semibold text-foreground">50 artworks free forever</p>
+                    <p className="font-semibold text-foreground">Up to 50 artworks, free forever</p>
                     <p className="text-muted-foreground">Artkive requires payment upfront</p>
                   </div>
                 </div>
@@ -905,11 +905,11 @@ export default function LandingPage() {
             Start capturing the stories, not just the art
           </h2>
           <p className="text-muted-foreground mb-6">
-            Remember what your child said. Share the moment with family. Keep those memories alive. Takes 2 minutes to set up. Free for 50 artworks. No credit card required.
+            Remember what your child said. Share the moment with family. Keep those memories alive. Takes 2 minutes to set up. Free for up to 50 artworks. No credit card required.
           </p>
           <Link href="/signup">
             <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">
-              Start capturing stories — It's free!
+              Start capturing stories — it’s free!
               <ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
             </Button>
           </Link>

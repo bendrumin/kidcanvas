@@ -40,7 +40,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
   if (!membership) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-fluid-2xl font-display font-bold mb-4">No Family Found</h2>
+        <h2 className="text-fluid-2xl font-display font-bold mb-4">No family yet</h2>
       </div>
     )
   }
@@ -87,7 +87,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
             No artwork yet
           </h3>
           <p className="text-muted-foreground">
-            Upload some artwork to see analytics and insights.
+            Upload some artwork to see your stats and trends.
           </p>
         </div>
       </div>

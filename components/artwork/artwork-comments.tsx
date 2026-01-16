@@ -133,8 +133,8 @@ export function ArtworkComments({ artworkId, userId, userEmail }: ArtworkComment
     } catch (error) {
       console.error('Error loading comments:', error)
       toast({
-        title: 'Error',
-        description: 'Failed to load comments',
+        title: 'Oops!',
+        description: 'Couldn\'t load comments',
         variant: 'destructive'
       })
     } finally {
@@ -148,7 +148,7 @@ export function ArtworkComments({ artworkId, userId, userEmail }: ArtworkComment
     if (!newComment.trim() || newComment.trim().length > 500) {
       toast({
         title: 'Invalid comment',
-        description: 'Comments must be between 1 and 500 characters',
+        description: 'Comments need to be between 1 and 500 characters',
         variant: 'destructive'
       })
       return
@@ -171,8 +171,8 @@ export function ArtworkComments({ artworkId, userId, userEmail }: ArtworkComment
       await loadComments()
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to post comment',
+        title: 'Oops!',
+        description: 'Couldn\'t post comment',
         variant: 'destructive'
       })
     } finally {
@@ -197,8 +197,8 @@ export function ArtworkComments({ artworkId, userId, userEmail }: ArtworkComment
       })
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to delete comment',
+        title: 'Oops!',
+        description: 'Couldn\'t delete comment',
         variant: 'destructive'
       })
     }

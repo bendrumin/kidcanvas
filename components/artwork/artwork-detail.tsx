@@ -118,8 +118,8 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
         duration: 2000,
       })
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to create share link'
-      toast({ title: 'Error', description: errorMessage, variant: 'destructive' })
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t create share link'
+      toast({ title: 'Oops!', description: errorMessage, variant: 'destructive' })
     } finally {
       setIsSharing(false)
     }
@@ -140,8 +140,8 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
       // Visual feedback (heart icon fills/unfills) is enough
     } catch (error) {
       setIsFavorite(!newValue) // Revert
-      const errorMessage = error instanceof Error ? error.message : 'Failed to update'
-      toast({ title: 'Error', description: errorMessage, variant: 'destructive' })
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t update favorite'
+      toast({ title: 'Oops!', description: errorMessage, variant: 'destructive' })
     }
   }
 
@@ -166,8 +166,8 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
       setIsEditing(false)
       router.refresh()
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to save'
-      toast({ title: 'Error', description: errorMessage, variant: 'destructive' })
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t save changes'
+      toast({ title: 'Oops!', description: errorMessage, variant: 'destructive' })
     } finally {
       setIsLoading(false)
     }
@@ -188,8 +188,8 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
       router.push('/dashboard')
       router.refresh()
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to delete'
-      toast({ title: 'Error', description: errorMessage, variant: 'destructive' })
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t delete artwork'
+      toast({ title: 'Oops!', description: errorMessage, variant: 'destructive' })
       setIsLoading(false)
     }
   }
@@ -207,7 +207,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
       const data = await response.json()
 
       if (!response.ok || data.error) {
-        throw new Error(data.error || 'Failed to generate AI tags')
+        throw new Error(data.error || 'Couldn\'t generate AI tags')
       }
 
       setAiDescription(data.description)
@@ -215,12 +215,12 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
 
       toast({
         title: 'AI analysis complete!',
-        description: 'Tags and description have been generated.',
+        description: 'AI tags and description added!',
       })
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to generate AI tags'
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t generate AI tags'
       toast({
-        title: 'Error',
+        title: 'Oops!',
         description: errorMessage,
         variant: 'destructive'
       })

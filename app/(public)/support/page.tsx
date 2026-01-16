@@ -75,10 +75,10 @@ export default function SupportPage() {
         </Link>
 
         <h1 className="text-fluid-3xl font-bold text-foreground mb-2">
-          Need help?
+          Need a hand?
         </h1>
         <p className="text-muted-foreground mb-8">
-          We usually respond within 24 hours.
+          We usually reply within 24 hours.
         </p>
 
         {/* Simple Contact Form */}

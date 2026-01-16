@@ -37,12 +37,12 @@ export default async function SharePage({ params }: SharePageProps) {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
             <Logo size="sm" showText={false} className="opacity-50" />
           </div>
-          <h1 className="text-fluid-2xl font-display font-bold mb-2">Link Expired</h1>
+          <h1 className="text-fluid-2xl font-display font-bold mb-2">Link expired</h1>
           <p className="text-muted-foreground mb-6">
-            This share link has expired. Ask the owner to share it again.
+            This link has expired. Ask them to share a new one.
           </p>
           <Link href="/">
-            <Button>Go to KidCanvas</Button>
+            <Button>Back to KidCanvas</Button>
           </Link>
         </Card>
       </div>

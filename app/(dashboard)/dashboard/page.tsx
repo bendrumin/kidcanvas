@@ -50,9 +50,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   if (!membership) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-fluid-2xl font-display font-bold mb-4">No Family Found</h2>
+        <h2 className="text-fluid-2xl font-display font-bold mb-4">No family yet</h2>
         <p className="text-muted-foreground mb-6">
-          It looks like you're not part of a family yet.
+          Looks like you haven’t joined or created a family yet.
         </p>
         <Link href="/dashboard/family/create">
           <Button>Create Your Family</Button>

@@ -39,7 +39,7 @@ export function QRCodeDialog({
       const svg = document.getElementById('qr-code-svg') as SVGSVGElement | null
       if (!svg) {
         toast({
-          title: 'Error',
+          title: 'Oops!',
           description: 'QR code not found',
           variant: 'destructive',
         })
@@ -69,8 +69,8 @@ export function QRCodeDialog({
         canvas.toBlob((blob) => {
           if (!blob) {
             toast({
-              title: 'Error',
-              description: 'Failed to generate image',
+              title: 'Oops!',
+              description: 'Couldn\'t generate image',
               variant: 'destructive',
             })
             return
@@ -94,8 +94,8 @@ export function QRCodeDialog({
 
       img.onerror = () => {
         toast({
-          title: 'Error',
-          description: 'Failed to generate QR code image',
+          title: 'Oops!',
+          description: 'Couldn\'t generate QR code',
           variant: 'destructive',
         })
       }
@@ -103,8 +103,8 @@ export function QRCodeDialog({
       img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)))
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to download QR code',
+        title: 'Oops!',
+        description: 'Couldn\'t download QR code',
         variant: 'destructive',
       })
     }
@@ -121,7 +121,7 @@ export function QRCodeDialog({
       setTimeout(() => setCopied(false), 2000)
     } catch (error) {
       toast({
-        title: 'Failed to copy',
+        title: 'Couldn\'t copy',
         variant: 'destructive',
       })
     }

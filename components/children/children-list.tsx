@@ -81,8 +81,8 @@ export function ChildrenList({ children, canManage, familyId }: ChildrenListProp
       setEditChild(null)
       router.refresh()
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to update'
-      toast({ title: 'Error', description: errorMessage, variant: 'destructive' })
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t update'
+      toast({ title: 'Oops!', description: errorMessage, variant: 'destructive' })
     } finally {
       setIsLoading(false)
     }
@@ -104,8 +104,8 @@ export function ChildrenList({ children, canManage, familyId }: ChildrenListProp
       setDeleteChild(null)
       router.refresh()
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to delete'
-      toast({ title: 'Error', description: errorMessage, variant: 'destructive' })
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t delete'
+      toast({ title: 'Oops!', description: errorMessage, variant: 'destructive' })
     } finally {
       setIsLoading(false)
     }

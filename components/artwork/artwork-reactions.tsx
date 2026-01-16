@@ -155,8 +155,8 @@ export function ArtworkReactions({ artworkId, userId }: ArtworkReactionsProps) {
       await loadReactions()
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to update reaction',
+        title: 'Oops!',
+        description: 'Couldn\'t update reaction',
         variant: 'destructive'
       })
     }

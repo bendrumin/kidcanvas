@@ -329,7 +329,7 @@ export default async function BillingPage() {
           ) : (
             <div className="text-center py-8 text-muted-foreground">
               <p>No billing history yet</p>
-              <p className="text-sm">Upgrade to a paid plan to see your invoices here</p>
+              <p className="text-sm">Upgrade to see invoices here</p>
             </div>
           )}
         </CardContent>

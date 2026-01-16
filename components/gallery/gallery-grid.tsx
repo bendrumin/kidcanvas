@@ -141,7 +141,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
       // Check for errors
       const errors = results.filter(r => r.error)
       if (errors.length > 0) {
-        throw new Error(`Failed to delete ${errors.length} artwork(s)`)
+        throw new Error(`Couldn't delete ${errors.length} artwork(s)`)
       }
 
       // Success
@@ -166,9 +166,9 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
       // Refresh the page to update the gallery
       window.location.reload()
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to delete artworks'
+      const errorMessage = error instanceof Error ? error.message : 'Couldn't delete artworks'
       toast({
-        title: 'Error',
+        title: 'Hmm, that didn\'t work',
         description: errorMessage,
         variant: 'destructive',
       })
@@ -236,8 +236,8 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
       setFavoriteStates(prev => ({ ...prev, [artworkId]: currentFavoriteState }))
 
       toast({
-        title: 'Error',
-        description: 'Failed to update favorite status',
+        title: 'Oops!',
+        description: 'Couldn\'t update favorite',
         variant: 'destructive',
       })
     }
@@ -578,9 +578,9 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
       <Dialog open={showBulkDeleteDialog} onOpenChange={setShowBulkDeleteDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete {selectedIds.size} Artwork{selectedIds.size > 1 ? 's' : ''}?</DialogTitle>
+            <DialogTitle>Delete {selectedIds.size} artwork{selectedIds.size > 1 ? 's' : ''}?</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete {selectedIds.size} artwork{selectedIds.size > 1 ? 's' : ''}? This action cannot be undone.
+              This will permanently delete {selectedIds.size} artwork{selectedIds.size > 1 ? 's' : ''}. You can't undo this.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -596,7 +596,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
               onClick={handleBulkDelete}
               disabled={isDeleting}
             >
-              {isDeleting ? 'Deleting...' : `Delete ${selectedIds.size} Artwork${selectedIds.size > 1 ? 's' : ''}`}
+              {isDeleting ? 'Deleting...' : `Delete ${selectedIds.size} artwork${selectedIds.size > 1 ? 's' : ''}`}
             </Button>
           </DialogFooter>
         </DialogContent>

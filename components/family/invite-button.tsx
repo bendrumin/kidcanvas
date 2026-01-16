@@ -135,9 +135,9 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
       setStep('share')
       router.refresh()
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to create invite'
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t create invite'
       toast({
-        title: 'Error',
+        title: 'Oops!',
         description: errorMessage,
         variant: 'destructive',
       })

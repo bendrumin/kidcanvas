@@ -95,8 +95,8 @@ export function MemberList({
       
       setRemoveMember(null)
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to remove member'
-      toast({ title: 'Error', description: errorMessage, variant: 'destructive' })
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t remove member'
+      toast({ title: 'Oops!', description: errorMessage, variant: 'destructive' })
     } finally {
       setIsLoading(false)
     }

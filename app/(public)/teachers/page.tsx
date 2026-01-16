@@ -330,7 +330,7 @@ export default function TeachersPage() {
             <p className="text-fluid-xl mb-8 opacity-90">
               Join art teachers who've cut their portfolio management time by 90%.
               <br />
-              Free forever. No credit card required. Setup in 2 minutes.
+              Free forever. No credit card required. Set up in 2 minutes.
             </p>
             <Link href="/signup?type=teacher">
               <Button size="lg" className="bg-white text-crayon-purple hover:bg-gray-100 text-lg px-8">

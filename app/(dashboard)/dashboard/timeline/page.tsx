@@ -40,9 +40,9 @@ export default async function TimelinePage({ searchParams }: TimelinePageProps) 
   if (!membership) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-fluid-2xl font-display font-bold mb-4">No Family Found</h2>
+        <h2 className="text-fluid-2xl font-display font-bold mb-4">No family yet</h2>
         <p className="text-muted-foreground mb-6">
-          It looks like you're not part of a family yet.
+          Looks like you haven’t joined or created a family yet.
         </p>
       </div>
     )
@@ -97,10 +97,10 @@ export default async function TimelinePage({ searchParams }: TimelinePageProps) 
             <Palette className="w-16 h-16 text-muted-foreground" />
           </div>
           <h3 className="text-xl font-semibold text-foreground mb-2">
-            No artwork with age data yet
+            No age data yet
           </h3>
           <p className="text-muted-foreground mb-6">
-            Upload artwork and make sure each child has a birth date set to see the timeline.
+            Upload artwork and add a birth date for each child to see the timeline.
           </p>
         </div>
       </div>

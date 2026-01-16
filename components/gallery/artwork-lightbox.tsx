@@ -124,8 +124,8 @@ export function ArtworkLightbox({
         window.location.reload()
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to delete'
-      toast({ title: 'Error', description: errorMessage, variant: 'destructive' })
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t delete artwork'
+      toast({ title: 'Oops!', description: errorMessage, variant: 'destructive' })
       setIsDeleting(false)
     }
   }
@@ -151,9 +151,9 @@ export function ArtworkLightbox({
       // Revert on error
       setIsFavorite(!newFavoriteState)
 
-      const errorMessage = error instanceof Error ? error.message : 'Failed to update'
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t update'
       toast({
-        title: 'Error',
+        title: 'Oops!',
         description: errorMessage,
         variant: 'destructive'
       })

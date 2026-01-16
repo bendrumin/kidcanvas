@@ -80,7 +80,7 @@ export default async function Image() {
             marginBottom: '40px',
           }}
         >
-          Scan, organize, and share with family • Free for 100 artworks
+          Scan, organize, and share with family • Free for up to 100 artworks
         </div>
 
         {/* Decorative elements */}

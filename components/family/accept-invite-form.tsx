@@ -77,9 +77,9 @@ export function AcceptInviteForm({ inviteCode, isLoggedIn, defaultNickname, defa
       router.push('/dashboard')
       router.refresh()
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to join family'
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t join family'
       toast({
-        title: 'Error',
+        title: 'Oops!',
         description: errorMessage,
         variant: 'destructive',
       })

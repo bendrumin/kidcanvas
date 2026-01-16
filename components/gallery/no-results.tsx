@@ -32,20 +32,20 @@ export function NoResults({ searchQuery, hasFilters, onClearFilters }: NoResults
       </motion.div>
 
       <h3 className="text-2xl font-display font-bold text-foreground mb-2">
-        No artwork found
+        Nothing here yet
       </h3>
       
       {searchQuery ? (
         <p className="text-muted-foreground mb-6 max-w-md">
-          We couldn't find any artwork matching <span className="font-semibold text-foreground">"{searchQuery}"</span>
+          No artwork matches <span className="font-semibold text-foreground">"{searchQuery}"</span>
         </p>
       ) : hasFilters ? (
         <p className="text-muted-foreground mb-6 max-w-md">
-          No artwork matches your current filters
+          No artwork matches your filters
         </p>
       ) : (
         <p className="text-muted-foreground mb-6 max-w-md">
-          Try adjusting your search or filters
+          Try a different search or clear your filters
         </p>
       )}
 

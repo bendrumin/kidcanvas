@@ -127,8 +127,8 @@ export function FeedCardEnhanced({
     } catch (error) {
       console.error('Error toggling reaction:', error)
       toast({
-        title: 'Error',
-        description: 'Failed to update reaction',
+        title: 'Oops!',
+        description: 'Couldn\'t update reaction',
         variant: 'destructive'
       })
     } finally {
@@ -141,7 +141,7 @@ export function FeedCardEnhanced({
     if (newComment.trim().length > 500) {
       toast({
         title: 'Comment too long',
-        description: 'Comments must be 500 characters or less',
+        description: 'Keep comments under 500 characters',
         variant: 'destructive'
       })
       return
@@ -175,13 +175,13 @@ export function FeedCardEnhanced({
 
       toast({
         title: 'Comment posted!',
-        description: 'Your comment has been added',
+        description: 'Comment added!',
       })
     } catch (error) {
       console.error('Error posting comment:', error)
       toast({
-        title: 'Error',
-        description: 'Failed to post comment',
+        title: 'Oops!',
+        description: 'Couldn\'t post comment',
         variant: 'destructive'
       })
     } finally {

@@ -77,9 +77,9 @@ export function AddChildButton({ familyId }: AddChildButtonProps) {
       setFormData({ name: '', birthDate: '' })
       router.refresh()
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to add child'
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t add child'
       toast({
-        title: 'Error',
+        title: 'Oops!',
         description: errorMessage,
         variant: 'destructive',
       })

@@ -47,8 +47,8 @@ export function PendingInvites({ invites }: PendingInvitesProps) {
       toast({ title: 'Invite deleted' })
       router.refresh()
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to delete invite'
-      toast({ title: 'Error', description: errorMessage, variant: 'destructive' })
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t delete invite'
+      toast({ title: 'Oops!', description: errorMessage, variant: 'destructive' })
     }
   }
 

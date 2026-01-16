@@ -295,9 +295,9 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         router.refresh()
       }, 1500)
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to upload'
+      const errorMessage = error instanceof Error ? error.message : 'Upload didn\'t work'
       toast({
-        title: 'Upload failed',
+        title: 'Oops! Upload didn\'t work',
         description: errorMessage,
         variant: 'destructive',
       })
