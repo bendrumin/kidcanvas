@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { Toaster as SonnerToaster } from 'sonner'
 import { SkipLink } from '@/components/ui/skip-link'
 import { Analytics } from '@vercel/analytics/react'
+import { PageLoadTracker } from '@/components/analytics/page-load-tracker'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -88,6 +89,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SkipLink />
+          <PageLoadTracker />
           {children}
           <Toaster />
           <SonnerToaster richColors position="top-center" />

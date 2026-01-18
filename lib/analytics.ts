@@ -62,6 +62,9 @@ export interface AnalyticsEventProperties {
   sessionId?: string
   timestamp?: string
   platform?: 'web' | 'ios' | 'android'
+  frameworkVersion?: 'react' | 'vanilla-js'
+  reactVersion?: string
+  appVersion?: string
 
   // Additional custom properties
   [key: string]: string | number | boolean | undefined
@@ -103,6 +106,8 @@ class AnalyticsService {
       sessionId: this.sessionId,
       timestamp: new Date().toISOString(),
       platform: this.detectPlatform(),
+      ...this.detectFrameworkVersion(),
+      appVersion: '1.0.0', // From package.json
     }
 
     if (this.config.debug) {
@@ -193,6 +198,59 @@ class AnalyticsService {
   }
 
   /**
+   * Detect which framework version the user is running
+   */
+  private detectFrameworkVersion(): {
+    frameworkVersion: 'react' | 'vanilla-js'
+    reactVersion?: string
+  } {
+    // Server-side: always React (Next.js)
+    if (typeof window === 'undefined') {
+      return {
+        frameworkVersion: 'react',
+        reactVersion: typeof process !== 'undefined' && process.env.npm_package_dependencies?.includes('react')
+          ? 'detected' // Server can't easily detect React version
+          : undefined,
+      }
+    }
+
+    // Client-side: check if React is loaded
+    // React 18+ exposes __REACT_DEVTOOLS_GLOBAL_HOOK__ or we can check for React object
+    const hasReact =
+      (window as any).React ||
+      (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__ ||
+      document.querySelector('script[src*="react"]') ||
+      document.querySelector('script[src*="next"]')
+
+    if (hasReact) {
+      // Try to detect React version if available
+      let reactVersion: string | undefined
+      try {
+        // React may be available on window.React or via __REACT_DEVTOOLS_GLOBAL_HOOK__
+        const reactHook = (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__
+        if (reactHook?.renderers) {
+          const renderer = reactHook.renderers.get(1) // Fiber renderer
+          reactVersion = renderer?.version
+        } else if ((window as any).React?.version) {
+          reactVersion = (window as any).React.version
+        }
+      } catch (e) {
+        // Silently fail - version detection is optional
+      }
+
+      return {
+        frameworkVersion: 'react',
+        reactVersion: reactVersion || 'detected',
+      }
+    }
+
+    // No React detected - vanilla JS
+    return {
+      frameworkVersion: 'vanilla-js',
+    }
+  }
+
+  /**
    * Set user context for all subsequent events
    */
   identify(userId: string, traits?: Record<string, any>): void {
@@ -279,7 +337,9 @@ export function trackServerEvent(
   console.log('[Analytics Server]', eventName, {
     ...properties,
     timestamp: new Date().toISOString(),
-    platform: 'server'
+    platform: 'server',
+    frameworkVersion: 'react', // Server-side is always Next.js/React
+    appVersion: '1.0.0',
   })
 
   // TODO: Implement server-side event logging to database or external service

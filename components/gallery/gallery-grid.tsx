@@ -166,7 +166,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
       // Refresh the page to update the gallery
       window.location.reload()
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Couldn't delete artworks'
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t delete artworks'
       toast({
         title: 'Hmm, that didn\'t work',
         description: errorMessage,
