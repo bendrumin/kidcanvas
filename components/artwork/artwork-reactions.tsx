@@ -12,32 +12,32 @@ const REACTION_CONFIG: Record<ReactionType, { icon: typeof Heart; label: string;
   love: {
     icon: Heart,
     label: 'Love',
-    color: 'text-gray-400 hover:text-pink-500',
-    activeColor: 'text-pink-500 fill-pink-500'
+    color: 'text-muted-foreground hover:text-pink-500 dark:hover:text-pink-400',
+    activeColor: 'text-pink-500 dark:text-pink-400 fill-pink-500 dark:fill-pink-400'
   },
   amazing: {
     icon: Sparkles,
     label: 'Amazing',
-    color: 'text-gray-400 hover:text-purple-500',
-    activeColor: 'text-purple-500 fill-purple-500'
+    color: 'text-muted-foreground hover:text-purple-500 dark:hover:text-purple-400',
+    activeColor: 'text-purple-500 dark:text-purple-400 fill-purple-500 dark:fill-purple-400'
   },
   artistic: {
     icon: Palette,
     label: 'Artistic',
-    color: 'text-gray-400 hover:text-blue-500',
-    activeColor: 'text-blue-500 fill-blue-500'
+    color: 'text-muted-foreground hover:text-blue-500 dark:hover:text-blue-400',
+    activeColor: 'text-blue-500 dark:text-blue-400 fill-blue-500 dark:fill-blue-400'
   },
   proud: {
     icon: HandHeart,
     label: 'Proud',
-    color: 'text-gray-400 hover:text-orange-500',
-    activeColor: 'text-orange-500 fill-orange-500'
+    color: 'text-muted-foreground hover:text-orange-500 dark:hover:text-orange-400',
+    activeColor: 'text-orange-500 dark:text-orange-400 fill-orange-500 dark:fill-orange-400'
   },
   star: {
     icon: Star,
     label: 'Star',
-    color: 'text-gray-400 hover:text-yellow-500',
-    activeColor: 'text-yellow-500 fill-yellow-500'
+    color: 'text-muted-foreground hover:text-yellow-500 dark:hover:text-yellow-400',
+    activeColor: 'text-yellow-500 dark:text-yellow-400 fill-yellow-500 dark:fill-yellow-400'
   }
 }
 
@@ -203,14 +203,14 @@ export function ArtworkReactions({ artworkId, userId }: ArtworkReactionsProps) {
             {count > 0 && (
               <span className={`
                 text-xs font-bold min-w-[1rem] text-center leading-none
-                ${hasReacted ? config.activeColor.split(' ')[0] : 'text-gray-600 dark:text-gray-400'}
+                ${hasReacted ? config.activeColor.split(' ')[0] : 'text-muted-foreground'}
                 transition-colors duration-300
               `}>
                 {count}
               </span>
             )}
             {!count && (
-              <span className="text-[10px] font-medium text-gray-400 dark:text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="text-[10px] font-medium text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
                 {config.label}
               </span>
             )}

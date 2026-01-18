@@ -107,7 +107,7 @@ export function FeedCard({ artwork, reactionCounts, commentCount, currentUserId 
                   const Icon = config?.icon || Heart
                   return (
                     <div key={emoji} className="flex items-center gap-1">
-                      <Icon className={cn("w-5 h-5", config?.color || 'text-gray-400')} />
+                      <Icon className={cn("w-5 h-5", config?.color || 'text-muted-foreground')} />
                       <span className="text-sm font-medium text-foreground">{count}</span>
                     </div>
                   )

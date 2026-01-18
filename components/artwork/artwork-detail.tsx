@@ -288,17 +288,17 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
                 <BookOpen className="w-7 h-7 text-white" strokeWidth={2} />
               </div>
               <div className="flex-1">
-                <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-gray-100 mb-2">
+                <h2 className="text-2xl font-display font-bold text-foreground mb-2">
                   The Story
                 </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                <p className="text-sm text-muted-foreground font-medium">
                   {artwork.child?.name} • {formatDate(artwork.created_date)}
                 </p>
               </div>
             </div>
             
             <div className="prose prose-lg dark:prose-invert max-w-none">
-              <p className="text-gray-800 dark:text-gray-200 leading-relaxed text-lg whitespace-pre-wrap font-medium">
+              <p className="text-foreground leading-relaxed text-lg whitespace-pre-wrap font-medium">
                 {artwork.story}
               </p>
             </div>
@@ -311,10 +311,10 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
               <BookOpen className="w-7 h-7 text-white" strokeWidth={2} />
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-display font-bold text-gray-900 dark:text-gray-100 mb-2">
+              <h2 className="text-xl font-display font-bold text-foreground mb-2">
                 Add a Story
               </h2>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+              <p className="text-muted-foreground leading-relaxed mb-4">
                 This artwork doesn't have a story yet. Stories help preserve the meaningful moments around each piece—what your child said, how they felt, when and where they made it.
               </p>
               {canEdit && (
@@ -500,7 +500,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
                     <div>
                       <p className="font-bold text-base">{artwork.child?.name}</p>
                       {artwork.child && artwork.child_age_months !== null && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                        <p className="text-sm text-muted-foreground font-medium">
                           {calculateAge(artwork.child.birth_date, artwork.created_date)}
                         </p>
                       )}

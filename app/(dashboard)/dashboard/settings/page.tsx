@@ -1,10 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Settings, CreditCard, Download, Trash2 } from 'lucide-react'
+import { CreditCard, Download, Trash2 } from 'lucide-react'
 import { getUserSubscriptionLimits } from '@/lib/subscription'
+import { SettingsActions } from '@/components/settings/settings-actions'
 
 export default async function SettingsPage() {
   const supabase = await createClient()
@@ -52,9 +52,10 @@ export default async function SettingsPage() {
                   Unlimited artwork, AI tagging, collections, and more
                 </p>
               </div>
-              <Button className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90">
-                Upgrade — $4.99/mo
-              </Button>
+              <SettingsActions 
+                action="upgrade"
+                planId={limits.planId}
+              />
             </div>
           )}
           
@@ -90,10 +91,9 @@ export default async function SettingsPage() {
           <p className="text-sm text-muted-foreground mb-4">
             Get a ZIP file with all original images and metadata. Your data is yours — no lock-in.
           </p>
-          <Button variant="outline">
-            <Download className="w-4 h-4 mr-2" />
-            Export All Data
-          </Button>
+          <SettingsActions 
+            action="export"
+          />
         </CardContent>
       </Card>
 
@@ -116,9 +116,10 @@ export default async function SettingsPage() {
                 Permanently delete your account and all data
               </p>
             </div>
-            <Button variant="destructive">
-              Delete Account
-            </Button>
+            <SettingsActions 
+              action="delete"
+              userId={user.id}
+            />
           </div>
         </CardContent>
       </Card>

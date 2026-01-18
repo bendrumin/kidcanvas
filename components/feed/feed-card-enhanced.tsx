@@ -276,7 +276,7 @@ export function FeedCardEnhanced({
                   hoverColor
                 )}
               >
-                <Icon className={cn("w-4 h-4", isActive ? color : "text-gray-400")} />
+                <Icon className={cn("w-4 h-4", isActive ? color : "text-muted-foreground")} />
                 {count > 0 && (
                   <span className={cn("text-sm font-medium", isActive ? color : "text-muted-foreground")}>
                     {count}

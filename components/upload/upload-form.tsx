@@ -4,7 +4,7 @@ import { useState, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
-import confetti from 'canvas-confetti'
+import { celebrateNormal } from '@/lib/celebrations'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -38,29 +38,6 @@ import { formatFileSize } from '@/lib/utils'
 import type { Child } from '@/lib/supabase/types'
 import { LimitReachedDialog } from '@/components/paywall/limit-reached-dialog'
 import { useAnalytics, useMultiFileTracking } from '@/hooks/useAnalytics'
-
-// Celebration confetti effect
-const celebrate = () => {
-  const count = 200
-  const defaults = {
-    origin: { y: 0.7 },
-    zIndex: 9999,
-  }
-
-  function fire(particleRatio: number, opts: confetti.Options) {
-    confetti({
-      ...defaults,
-      ...opts,
-      particleCount: Math.floor(count * particleRatio),
-    })
-  }
-
-  fire(0.25, { spread: 26, startVelocity: 55, colors: ['#E91E63', '#9B59B6', '#3498DB'] })
-  fire(0.2, { spread: 60, colors: ['#F39C12', '#F1C40F', '#2ECC71'] })
-  fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8, colors: ['#E74C3C', '#3498DB'] })
-  fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 })
-  fire(0.1, { spread: 120, startVelocity: 45, colors: ['#9B59B6', '#E91E63'] })
-}
 
 interface UploadFormProps {
   familyId: string
@@ -268,7 +245,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
 
       // Celebrate with confetti!
       setShowModal(false)
-      celebrate()
+      celebrateNormal()
 
       toast({
         title: 'Success!',

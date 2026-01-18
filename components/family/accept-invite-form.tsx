@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
 import { createClient } from '@/lib/supabase/client'
 import { Loader2, Mail, Lock, User } from 'lucide-react'
+import { celebrateNormal } from '@/lib/celebrations'
 
 interface AcceptInviteFormProps {
   inviteCode: string
@@ -68,6 +69,9 @@ export function AcceptInviteForm({ inviteCode, isLoggedIn, defaultNickname, defa
       } as never)
 
       if (inviteError) throw inviteError
+
+      // Celebrate joining the family! 🎉
+      celebrateNormal()
 
       toast({
         title: 'Welcome to the family!',

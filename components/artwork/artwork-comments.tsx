@@ -219,7 +219,7 @@ export function ArtworkComments({ artworkId, userId, userEmail }: ArtworkComment
   if (isLoading) {
     return (
       <div className="space-y-4 py-6">
-        <div className="flex items-center gap-2 text-gray-500 mb-4">
+        <div className="flex items-center gap-2 text-muted-foreground mb-4">
           <MessageCircle className="w-5 h-5" />
           <span className="font-medium">Comments</span>
         </div>
@@ -238,18 +238,18 @@ export function ArtworkComments({ artworkId, userId, userEmail }: ArtworkComment
 
   return (
     <div className="space-y-4 py-6">
-      <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 mb-6">
+      <div className="flex items-center gap-2 text-foreground mb-6">
         <MessageCircle className="w-5 h-5" />
         <span className="font-semibold text-lg">Family Comments</span>
         {comments.length > 0 && (
-          <span className="text-sm text-gray-400 ml-1">({comments.length})</span>
+          <span className="text-sm text-muted-foreground ml-1">({comments.length})</span>
         )}
       </div>
 
       {/* Comments List */}
       <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
         {comments.length === 0 ? (
-          <div className="text-center py-8 text-gray-400">
+          <div className="text-center py-8 text-muted-foreground">
             <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-30" />
             <p className="text-sm">No comments yet. Be the first to share your thoughts!</p>
           </div>
@@ -306,7 +306,7 @@ export function ArtworkComments({ artworkId, userId, userEmail }: ArtworkComment
                   </div>
                   
                   <div className={`
-                    flex items-center gap-2 text-xs text-gray-400 px-1
+                    flex items-center gap-2 text-xs text-muted-foreground px-1
                     ${isOwnComment ? 'justify-end' : 'justify-start'}
                   `}>
                     <span>{comment.user.full_name || comment.user.email.split('@')[0]}</span>
@@ -354,7 +354,7 @@ export function ArtworkComments({ artworkId, userId, userEmail }: ArtworkComment
               )}
             </Button>
             {newComment.length > 0 && (
-              <span className="text-xs text-gray-400 text-center">
+              <span className="text-xs text-muted-foreground text-center">
                 {newComment.length}/500
               </span>
             )}

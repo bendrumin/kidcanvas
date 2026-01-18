@@ -10,6 +10,7 @@ import { Heart, ExternalLink, Check, Trash2, X, Book, Sparkles, Camera } from 'l
 import { formatDate, calculateAge, cn } from '@/lib/utils'
 import { useMobile } from '@/lib/use-mobile'
 import { useToast } from '@/components/ui/use-toast'
+import { celebrateSubtle } from '@/lib/celebrations'
 import { createClient } from '@/lib/supabase/client'
 import {
   Dialog,
@@ -225,7 +226,10 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
 
       if (error) throw error
 
-      // Visual feedback (heart icon) is enough, no toast needed
+      // Celebrate when adding to favorites!
+      if (newFavoriteState) {
+        celebrateSubtle()
+      }
 
       // Refresh the page to update the gallery if we're on the favorites filter
       if (typeof window !== 'undefined' && window.location.search.includes('favorites=true')) {
@@ -450,8 +454,8 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
                           }}
                         />
                       ) : (
-                        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                          <span className="text-gray-400 text-sm">No image</span>
+                        <div className="absolute inset-0 flex items-center justify-center bg-muted">
+                          <span className="text-muted-foreground text-sm">No image</span>
                         </div>
                       )}
 
@@ -460,7 +464,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 group-active:bg-black/30 transition-all duration-300 flex items-center justify-center z-10 pointer-events-none">
                           <div className="opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-all duration-300 transform group-hover:scale-110 group-active:scale-95">
                             <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/90 dark:bg-gray-800/90 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow pointer-events-auto">
-                              <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 dark:text-gray-200 group-hover:text-primary transition-colors" />
+                              <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5 text-foreground group-hover:text-primary transition-colors" />
                             </div>
                           </div>
                         </div>
@@ -536,7 +540,7 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
                             "w-3 h-3 sm:w-4 sm:h-4 transition-all",
                             favoriteStates[artwork.id] ?? artwork.is_favorite
                               ? "text-crayon-red fill-crayon-red"
-                              : "text-gray-400"
+                              : "text-muted-foreground"
                           )}
                         />
                       </div>
