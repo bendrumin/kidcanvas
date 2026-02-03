@@ -69,7 +69,7 @@ function VerifyEmailContent() {
     if (inviteCode) {
       router.push(`/invite/${inviteCode}`)
     } else {
-      router.push('/dashboard')
+      router.push(redirect)
     }
   }
 

@@ -7,8 +7,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
 import { createClient } from '@/lib/supabase/client'
-import { Loader2, Mail, Lock, User } from 'lucide-react'
+import { Loader2, Mail, Lock, User, AlertCircle, Check } from 'lucide-react'
 import { celebrateNormal } from '@/lib/celebrations'
+import { validatePassword } from '@/lib/utils'
 
 interface AcceptInviteFormProps {
   inviteCode: string
@@ -29,9 +30,30 @@ export function AcceptInviteForm({ inviteCode, isLoggedIn, defaultNickname, defa
     fullName: '',
     nickname: defaultNickname || '',
   })
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([])
+
+  const handlePasswordChange = (password: string) => {
+    setFormData({ ...formData, password })
+    const validation = validatePassword(password)
+    setPasswordErrors(validation.errors)
+  }
 
   const handleAccept = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Validate password before submitting (only for new users)
+    if (!isLoggedIn) {
+      const passwordValidation = validatePassword(formData.password)
+      if (!passwordValidation.isValid) {
+        toast({
+          title: 'Invalid Password',
+          description: passwordValidation.errors[0],
+          variant: 'destructive',
+        })
+        return
+      }
+    }
+
     setIsLoading(true)
 
     try {
@@ -178,13 +200,32 @@ export function AcceptInviteForm({ inviteCode, isLoggedIn, defaultNickname, defa
             type="password"
             placeholder="••••••••"
             value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            onChange={(e) => handlePasswordChange(e.target.value)}
             className="pl-10"
-            minLength={8}
             required
           />
         </div>
-        <p className="text-xs text-muted-foreground">At least 8 characters</p>
+        {formData.password && passwordErrors.length > 0 && (
+          <div className="space-y-1">
+            {passwordErrors.map((error, index) => (
+              <div key={index} className="flex items-start gap-1 text-xs text-destructive">
+                <AlertCircle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                <span>{error}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        {formData.password && passwordErrors.length === 0 && (
+          <p className="text-xs text-green-600 dark:text-green-500 flex items-center gap-1">
+            <Check className="w-3 h-3" />
+            Password meets all requirements
+          </p>
+        )}
+        {!formData.password && (
+          <p className="text-xs text-muted-foreground">
+            Must include uppercase, lowercase, number, and special character
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
