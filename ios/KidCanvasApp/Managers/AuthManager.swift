@@ -115,6 +115,29 @@ class AuthManager: ObservableObject {
         children = []
     }
 
+    /// Permanently deletes the account and everything it owns
+    /// (App Store Guideline 5.1.1(v)). Artwork files are removed from storage
+    /// first, since deleting database rows would otherwise orphan them.
+    func deleteAccount() async throws {
+        if let familyId = currentFamily?.id {
+            let folder = familyId.uuidString.lowercased()
+            let storage = supabase.storage.from(Config.artworkBucket)
+            if let files = try? await storage.list(path: folder), !files.isEmpty {
+                let paths = files.map { "\(folder)/\($0.name)" }
+                _ = try? await storage.remove(paths: paths)
+            }
+        }
+
+        try await supabase.rpc("delete_my_account").execute()
+
+        // The auth row is gone, so a server sign-out would fail; clear locally.
+        try? await supabase.auth.signOut()
+        isAuthenticated = false
+        currentUser = nil
+        currentFamily = nil
+        children = []
+    }
+
     func loadFamily() async {
         guard let userId = currentUser?.id else { return }
 

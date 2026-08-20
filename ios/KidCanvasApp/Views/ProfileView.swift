@@ -84,18 +84,8 @@ struct ProfileView: View {
                             .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
                         }
                         
-                        // Settings Section
-                        VStack(spacing: 0) {
-                            SettingsRow(icon: "bell.fill", title: "Notifications", color: .orange)
-                            Divider().padding(.leading, 52)
-                            SettingsRow(icon: "lock.fill", title: "Privacy", color: .blue)
-                            Divider().padding(.leading, 52)
-                            SettingsRow(icon: "questionmark.circle.fill", title: "Help & Support", color: .green)
-                        }
-                        .background(Color.white)
-                        .cornerRadius(16)
-                        .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
-                        
+                        SettingsLinksCard()
+
                         // Sign Out
                         Button(action: { showSignOutAlert = true }) {
                             HStack {
@@ -111,6 +101,8 @@ struct ProfileView: View {
                             .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
                         }
                         
+                        DeleteAccountSection(authManager: authManager)
+
                         Text("KidCanvas v1.0")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -181,6 +173,91 @@ struct ChildRow: View {
             return "\(months) month\(months == 1 ? "" : "s") old"
         }
         return ""
+    }
+}
+
+struct SettingsLinksCard: View {
+    var body: some View {
+        VStack(spacing: 0) {
+            Link(destination: Config.privacyPolicyURL) {
+                SettingsRow(icon: "lock.fill", title: "Privacy Policy", color: .blue)
+            }
+            Divider().padding(.leading, 52)
+            Link(destination: Config.supportURL) {
+                SettingsRow(icon: "questionmark.circle.fill", title: "Help & Support", color: .green)
+            }
+        }
+        .background(Color.white)
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
+    }
+}
+
+/// Required by App Store Guideline 5.1.1(v): an in-app way to permanently
+/// delete the account, not just sign out.
+struct DeleteAccountSection: View {
+    let authManager: AuthManager
+
+    @State private var showConfirm = false
+    @State private var isDeleting = false
+    @State private var errorMessage: String?
+
+    var body: some View {
+        VStack(spacing: 10) {
+            Button(role: .destructive) {
+                showConfirm = true
+            } label: {
+                HStack {
+                    if isDeleting {
+                        ProgressView().tint(.red)
+                    } else {
+                        Image(systemName: "trash")
+                        Text("Delete Account")
+                    }
+                }
+                .font(.subheadline.bold())
+                .foregroundColor(.red)
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(Color.white)
+                .cornerRadius(16)
+                .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
+            }
+            .disabled(isDeleting)
+
+            Text("Permanently deletes your account, your family's gallery, and every artwork you've saved.")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+
+            if let errorMessage {
+                Text(errorMessage)
+                    .font(.caption)
+                    .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+            }
+        }
+        .alert("Delete Account?", isPresented: $showConfirm) {
+            Button("Cancel", role: .cancel) {}
+            Button("Delete Everything", role: .destructive) {
+                deleteAccount()
+            }
+        } message: {
+            Text("This permanently deletes your account, your family, every child profile, and all saved artwork. This cannot be undone.")
+        }
+    }
+
+    private func deleteAccount() {
+        Task {
+            isDeleting = true
+            errorMessage = nil
+            do {
+                try await authManager.deleteAccount()
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+            isDeleting = false
+        }
     }
 }
 

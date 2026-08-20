@@ -1,0 +1,33 @@
+KidCanvas is a private family gallery for children's artwork.
+
+SIGNING IN
+Use the demo account above (email + password). It is pre-populated with a
+family ("The Demo Family"), two child profiles (Maya and Eli), and two saved
+artworks, so the Gallery, Favorites, and Profile tabs all show content
+immediately. You may also create a fresh account from the Sign Up screen —
+no email confirmation is required.
+
+WHAT TO TRY
+• Gallery tab — browse saved artwork; tap a piece for its detail view (title,
+  artist, date, the child's age at creation, description). Tap the heart to
+  favorite it.
+• Scan tab — "Scan Document" uses the camera (device only). On the simulator
+  or without a camera, use "Choose from Photos" to pick any image, then fill
+  in the title and artist and tap Save to Gallery.
+• Favorites tab — artworks marked with a heart.
+• Profile tab — the family, child profiles, "Add Child", Privacy Policy and
+  Help links, Sign Out, and "Delete Account".
+
+ACCOUNT DELETION (Guideline 5.1.1(v))
+Profile tab → "Delete Account" at the bottom. It asks for confirmation, then
+permanently deletes the account, the family, all child profiles, and every
+saved artwork, including the stored image files. Please use a throwaway
+account you create yourself if you want to test this, so the demo account
+stays available.
+
+CHILDREN AND PRIVACY
+Children never have accounts and never sign in. A "child profile" is just a
+name and an optional birth date created by the parent, used to label artwork
+and calculate the child's age. Galleries are private to the family account
+and enforced at the database level. The app contains no ads, no analytics,
+no tracking, and does no AI processing of artwork.
