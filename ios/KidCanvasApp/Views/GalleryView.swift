@@ -5,6 +5,16 @@ struct GalleryView: View {
     @State private var artworks: [Artwork] = []
     @State private var isLoading = true
     @State private var selectedChild: Child?
+    @State private var searchText = ""
+    @State private var sortOrder: SortOrder = .newest
+
+    enum SortOrder: String, CaseIterable, Identifiable {
+        case newest = "Newest"
+        case oldest = "Oldest"
+        case titleAZ = "Title A-Z"
+
+        var id: String { rawValue }
+    }
     
     private let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -53,6 +63,20 @@ struct GalleryView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
+                        Picker("Sort", selection: $sortOrder) {
+                            ForEach(SortOrder.allCases) { order in
+                                Text(order.rawValue).tag(order)
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "arrow.up.arrow.down")
+                            .foregroundColor(.pink)
+                    }
+                    .accessibilityLabel("Sort artwork")
+                }
+
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
                         Button("All Children") {
                             selectedChild = nil
                         }
@@ -74,14 +98,31 @@ struct GalleryView: View {
                 }
             }
         }
+        .searchable(text: $searchText, prompt: "Search titles, stories, artists")
         .task(id: authManager.currentFamily?.id) {
             await loadArtworks()
         }
     }
     
     private var filteredArtworks: [Artwork] {
-        guard let child = selectedChild else { return artworks }
-        return artworks.filter { $0.childId == child.id }
+        var result = artworks
+        if let child = selectedChild {
+            result = result.filter { $0.childId == child.id }
+        }
+        let query = searchText.trimmed.lowercased()
+        if !query.isEmpty {
+            result = result.filter { artwork in
+                artwork.title.lowercased().contains(query)
+                    || (artwork.story ?? "").lowercased().contains(query)
+                    || (artwork.child?.name.lowercased().contains(query) ?? false)
+                    || (artwork.tags ?? []).contains { $0.lowercased().contains(query) }
+            }
+        }
+        switch sortOrder {
+        case .newest: return result.sorted { $0.createdDate > $1.createdDate }
+        case .oldest: return result.sorted { $0.createdDate < $1.createdDate }
+        case .titleAZ: return result.sorted { $0.title.localizedCompare($1.title) == .orderedAscending }
+        }
     }
     
     private func loadArtworks() async {
@@ -131,7 +172,8 @@ struct ArtworkCard: View {
                 Text(artwork.title)
                     .font(.subheadline.bold())
                     .foregroundColor(.primary)
-                    .lineLimit(1)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.9)
                 
                 if let child = artwork.child {
                     HStack(spacing: 4) {
@@ -160,6 +202,10 @@ struct ArtworkCard: View {
         }
         .background(Color.white)
         .cornerRadius(16)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(
+            artwork.child.map { "\(artwork.title), by \($0.name)" } ?? artwork.title
+        )
         .shadow(color: .black.opacity(0.08), radius: 8, y: 4)
         .overlay(alignment: .topTrailing) {
             if artwork.isFavorite {

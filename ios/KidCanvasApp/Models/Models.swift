@@ -79,6 +79,8 @@ struct Artwork: Codable, Identifiable {
     let imageUrl: String
     let thumbnailUrl: String?
     let title: String
+    let story: String?
+    let momentPhotoUrl: String?
     let description: String?
     let tags: [String]?
     let aiTags: [String]?
@@ -99,6 +101,8 @@ struct Artwork: Codable, Identifiable {
         case imageUrl = "image_url"
         case thumbnailUrl = "thumbnail_url"
         case title
+        case story
+        case momentPhotoUrl = "moment_photo_url"
         case description
         case tags
         case aiTags = "ai_tags"
@@ -109,5 +113,72 @@ struct Artwork: Codable, Identifiable {
         case uploadedAt = "uploaded_at"
         case uploadedBy = "uploaded_by"
         case child = "children"
+    }
+}
+
+/// The five reactions the database's CHECK constraint allows.
+enum Reaction: String, CaseIterable, Identifiable {
+    case love = "❤️"
+    case adore = "😍"
+    case artistic = "🎨"
+    case applause = "👏"
+    case star = "🌟"
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .love: "Love"
+        case .adore: "Adore"
+        case .artistic: "Artistic"
+        case .applause: "Bravo"
+        case .star: "Star"
+        }
+    }
+}
+
+struct ReactionCount: Codable, Identifiable {
+    let emojiType: String
+    let count: Int
+
+    var id: String { emojiType }
+
+    enum CodingKeys: String, CodingKey {
+        case emojiType = "emoji_type"
+        case count
+    }
+}
+
+struct ArtworkComment: Codable, Identifiable {
+    let id: UUID
+    let artworkId: UUID
+    let userId: UUID
+    let text: String
+    let createdAt: Date
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case artworkId = "artwork_id"
+        case userId = "user_id"
+        case text
+        case createdAt = "created_at"
+    }
+}
+
+struct FamilyInvite: Codable, Identifiable {
+    let id: UUID
+    let familyId: UUID
+    let code: String
+    let role: String
+    let expiresAt: Date?
+    let usedAt: Date?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case familyId = "family_id"
+        case code
+        case role
+        case expiresAt = "expires_at"
+        case usedAt = "used_at"
     }
 }

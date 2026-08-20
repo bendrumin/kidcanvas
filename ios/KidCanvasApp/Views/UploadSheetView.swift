@@ -7,12 +7,13 @@ struct UploadSheetView: View {
     let onComplete: () -> Void
 
     @State private var title = ""
-    @State private var description = ""
+    @State private var story = ""
     @State private var selectedChild: Child?
     @State private var createdDate = Date()
     @State private var isUploading = false
     @State private var errorMessage: String?
     @State private var showSuccess = false
+    @State private var showTemplates = false
 
     @Environment(\.dismiss) private var dismiss
 
@@ -112,18 +113,11 @@ struct UploadSheetView: View {
                                 .cornerRadius(12)
                             }
 
-                            // Description
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Description (optional)")
-                                    .font(.subheadline.bold())
-                                    .foregroundColor(.secondary)
-
-                                TextField("Notes about this artwork", text: $description, axis: .vertical)
-                                    .lineLimit(3...5)
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(12)
-                            }
+                            StoryField(
+                                story: $story,
+                                childName: selectedChild?.name,
+                                onBrowseTemplates: { showTemplates = true }
+                            )
                         }
                         .padding(.horizontal)
 
@@ -180,11 +174,17 @@ struct UploadSheetView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showTemplates) {
+                StoryTemplatePicker { opener in
+                    story = story.isEmpty ? opener : story + " " + opener
+                    showTemplates = false
+                }
+            }
         }
     }
 
     private var canUpload: Bool {
-        !title.isEmpty && selectedChild != nil
+        !title.isEmpty && selectedChild != nil && story.trimmed.count >= StoryRules.minimumLength
     }
 
     private func uploadArtwork() {
@@ -236,7 +236,7 @@ struct UploadSheetView: View {
                     imageUrl: imageURL,
                     thumbnailUrl: thumbURL,
                     title: title,
-                    description: description.isEmpty ? nil : description,
+                    story: story.trimmed,
                     createdDate: dateFormatter.string(from: createdDate),
                     uploadedBy: authManager.currentUser?.id.uuidString
                 )
@@ -298,7 +298,7 @@ struct NewArtworkPayload: Encodable {
     let imageUrl: String
     let thumbnailUrl: String
     let title: String
-    let description: String?
+    let story: String
     let createdDate: String
     let uploadedBy: String?
 
@@ -309,10 +309,20 @@ struct NewArtworkPayload: Encodable {
         case imageUrl = "image_url"
         case thumbnailUrl = "thumbnail_url"
         case title
-        case description
+        case story
         case createdDate = "created_date"
         case uploadedBy = "uploaded_by"
     }
+}
+
+enum StoryRules {
+    /// Matches the web app's requirement; short enough not to feel like a form,
+    /// long enough to be an actual sentence.
+    static let minimumLength = 20
+}
+
+extension String {
+    var trimmed: String { trimmingCharacters(in: .whitespacesAndNewlines) }
 }
 
 enum UploadLimits {

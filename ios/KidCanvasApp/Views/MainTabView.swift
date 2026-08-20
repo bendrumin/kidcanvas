@@ -5,11 +5,17 @@ struct MainTabView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
+            FeedView()
+                .tabItem {
+                    Label("Recently", systemImage: "sparkles.rectangle.stack.fill")
+                }
+                .tag(0)
+
             GalleryView()
                 .tabItem {
                     Label("Gallery", systemImage: "square.grid.2x2.fill")
                 }
-                .tag(0)
+                .tag(4)
             
             ScannerView()
                 .tabItem {

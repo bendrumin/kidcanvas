@@ -77,6 +77,21 @@ struct ProfileView: View {
                                     .font(.subheadline.bold())
                                     .foregroundColor(.pink)
                                 }
+
+                                Divider()
+
+                                NavigationLink(destination: FamilyInviteView()) {
+                                    HStack {
+                                        Image(systemName: "person.2.badge.plus")
+                                        Text("Invite family")
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .font(.subheadline.bold())
+                                    .foregroundColor(.pink)
+                                }
                             }
                             .padding()
                             .background(Color.white)

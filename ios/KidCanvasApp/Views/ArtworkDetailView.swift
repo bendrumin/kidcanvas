@@ -7,6 +7,7 @@ struct ArtworkDetailView: View {
     @State private var isFavorite: Bool
     @State private var showShareSheet = false
     @State private var showDeleteAlert = false
+    @State private var isAddingStory = false
     @Environment(\.dismiss) private var dismiss
     
     init(artwork: Artwork) {
@@ -14,6 +15,10 @@ struct ArtworkDetailView: View {
         _isFavorite = State(initialValue: artwork.isFavorite)
     }
     
+    private var service: ArtworkService {
+        ArtworkService(client: authManager.client)
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -32,6 +37,8 @@ struct ArtworkDetailView: View {
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.black.opacity(0.03))
                     case .failure:
                         Rectangle()
                             .fill(Color.gray.opacity(0.2))
@@ -106,6 +113,16 @@ struct ArtworkDetailView: View {
                         }
                     }
                     
+                    if let story = artwork.story, !story.trimmed.isEmpty {
+                        StoryCard(story: story, childName: artwork.child?.name)
+                    } else {
+                        AddStoryPrompt { isAddingStory = true }
+                    }
+
+                    ReactionBar(artworkId: artwork.id, service: service)
+
+                    CommentsSection(artworkId: artwork.id, service: service)
+
                     // Description
                     if let description = artwork.description, !description.isEmpty {
                         VStack(alignment: .leading, spacing: 8) {
@@ -194,6 +211,9 @@ struct ArtworkDetailView: View {
             }
         } message: {
             Text("Are you sure you want to delete this artwork? This cannot be undone.")
+        }
+        .sheet(isPresented: $isAddingStory) {
+            AddStorySheet(artwork: artwork, service: service)
         }
     }
     
@@ -314,6 +334,8 @@ struct RoundedCorner: Shape {
             imageUrl: "https://picsum.photos/400",
             thumbnailUrl: nil,
             title: "Rainbow Butterfly",
+            story: "She said it's a butterfly that only comes out at night, and its wings are made of rainbows so it can find its way home.",
+            momentPhotoUrl: nil,
             description: "A beautiful butterfly painting from art class",
             tags: ["butterfly", "colorful", "nature"],
             aiTags: ["painting", "insect", "wings"],
