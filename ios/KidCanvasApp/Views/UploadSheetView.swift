@@ -196,7 +196,9 @@ struct UploadSheetView: View {
             errorMessage = nil
 
             do {
-                guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+                // The bucket caps uploads at 10MB; shrink first so a big scan
+                // fails on quality rather than being rejected outright.
+                guard let imageData = compressedJPEG(maxBytes: UploadLimits.maxImageBytes) else {
                     throw UploadError.invalidImage
                 }
                 let thumbnailData = thumbnailJPEG(maxDimension: 500) ?? imageData
@@ -254,6 +256,29 @@ struct UploadSheetView: View {
         }
     }
 
+    /// Encodes at descending quality, then descending size, until the data
+    /// fits the bucket's limit. Returns nil only if even a small image can't
+    /// be encoded.
+    private func compressedJPEG(maxBytes: Int) -> Data? {
+        for quality in [0.8, 0.6, 0.45] {
+            if let data = image.jpegData(compressionQuality: quality), data.count <= maxBytes {
+                return data
+            }
+        }
+        var candidate = image
+        for _ in 0..<4 {
+            let scaled = CGSize(width: candidate.size.width * 0.7, height: candidate.size.height * 0.7)
+            let renderer = UIGraphicsImageRenderer(size: scaled)
+            candidate = renderer.image { _ in
+                candidate.draw(in: CGRect(origin: .zero, size: scaled))
+            }
+            if let data = candidate.jpegData(compressionQuality: 0.7), data.count <= maxBytes {
+                return data
+            }
+        }
+        return candidate.jpegData(compressionQuality: 0.5)
+    }
+
     private func thumbnailJPEG(maxDimension: CGFloat) -> Data? {
         let scale = min(1, maxDimension / max(image.size.width, image.size.height))
         guard scale < 1 else { return image.jpegData(compressionQuality: 0.7) }
@@ -288,6 +313,11 @@ struct NewArtworkPayload: Encodable {
         case createdDate = "created_date"
         case uploadedBy = "uploaded_by"
     }
+}
+
+enum UploadLimits {
+    /// Matches the `artworks` bucket's file_size_limit.
+    static let maxImageBytes = 10 * 1024 * 1024
 }
 
 enum UploadError: LocalizedError {

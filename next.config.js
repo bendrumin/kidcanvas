@@ -4,11 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '*.r2.cloudflarestorage.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.r2.dev',
+        hostname: '*.supabase.co',
       },
     ],
   },
@@ -53,8 +49,8 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https: blob:",
               "font-src 'self' data:",
-              "connect-src 'self' https://api.anthropic.com https://api.stripe.com https://*.supabase.co wss://*.supabase.co https://*.r2.dev https://*.r2.cloudflarestorage.com",
-              "media-src 'self' https://*.r2.dev https://*.r2.cloudflarestorage.com blob:",
+              "connect-src 'self' https://api.stripe.com https://*.supabase.co wss://*.supabase.co",
+              "media-src 'self' https://*.supabase.co blob:",
               "frame-src 'self' https://js.stripe.com https://checkout.stripe.com",
               "object-src 'none'",
               "base-uri 'self'",

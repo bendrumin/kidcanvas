@@ -72,9 +72,10 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
   const [isFavorite, setIsFavorite] = useState(artwork.is_favorite)
   const [shareUrl, setShareUrl] = useState<string | null>(null)
   const [showQRCode, setShowQRCode] = useState(false)
-  const [isGeneratingAI, setIsGeneratingAI] = useState(false)
-  const [aiDescription, setAiDescription] = useState(artwork.ai_description)
-  const [aiTags, setAiTags] = useState(artwork.ai_tags)
+  // Read-only: AI tagging was removed from the product, but artwork saved
+  // while it existed still has these values and they're worth showing.
+  const aiDescription = artwork.ai_description
+  const aiTags = artwork.ai_tags
   
   const [editForm, setEditForm] = useState({
     title: artwork.title,
@@ -194,40 +195,6 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
     }
   }
 
-  const handleGenerateAI = async () => {
-    setIsGeneratingAI(true)
-
-    try {
-      const response = await fetch('/api/ai-tag', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ artworkId: artwork.id, imageUrl: artwork.image_url }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok || data.error) {
-        throw new Error(data.error || 'Couldn\'t generate AI tags')
-      }
-
-      setAiDescription(data.description)
-      setAiTags(data.tags)
-
-      toast({
-        title: 'AI analysis complete!',
-        description: 'AI tags and description added!',
-      })
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t generate AI tags'
-      toast({
-        title: 'Oops!',
-        description: errorMessage,
-        variant: 'destructive'
-      })
-    } finally {
-      setIsGeneratingAI(false)
-    }
-  }
 
 
   const allTags = [...(artwork.tags || []), ...(aiTags || [])]
@@ -542,22 +509,6 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
                   <Tag className="w-4 h-4" />
                   Tags
                 </CardTitle>
-                {canEdit && !isEditing && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleGenerateAI}
-                    disabled={isGeneratingAI}
-                    className="bg-gradient-to-r from-crayon-blue/10 to-crayon-green/10 hover:from-crayon-blue/20 hover:to-crayon-green/20"
-                  >
-                    {isGeneratingAI ? (
-                      <Loader2 className="w-3 h-3 mr-2 animate-spin" />
-                    ) : (
-                      <Sparkles className="w-3 h-3 mr-2 text-crayon-blue" />
-                    )}
-                    {aiTags && aiTags.length > 0 ? 'Refresh AI' : 'Generate AI'}
-                  </Button>
-                )}
               </div>
             </CardHeader>
             <CardContent>
