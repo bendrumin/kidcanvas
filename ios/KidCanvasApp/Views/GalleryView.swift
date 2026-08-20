@@ -46,6 +46,8 @@ struct GalleryView: View {
                         Text(family.name)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
+                            .lineLimit(1)
+                            .fixedSize()
                     }
                 }
                 

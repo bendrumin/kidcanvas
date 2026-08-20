@@ -221,9 +221,10 @@ struct UploadSheetView: View {
                 let imageURL = try storage.getPublicURL(path: "\(basePath).jpg").absoluteString
                 let thumbURL = try storage.getPublicURL(path: "\(basePath)_thumb.jpg").absoluteString
 
+                // Local timezone: the stored day must be the day the user picked.
                 let dateFormatter = DateFormatter()
                 dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-                dateFormatter.timeZone = TimeZone(identifier: "UTC")
+                dateFormatter.timeZone = .current
                 dateFormatter.dateFormat = "yyyy-MM-dd"
 
                 let payload = NewArtworkPayload(

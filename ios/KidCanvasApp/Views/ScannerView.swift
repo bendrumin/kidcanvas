@@ -5,10 +5,8 @@ import PhotosUI
 struct ScannerView: View {
     @EnvironmentObject var authManager: AuthManager
     @State private var showScanner = false
-    @State private var showPhotoPicker = false
-    @State private var scannedImage: UIImage?
+    @State private var pendingArtwork: PendingArtwork?
     @State private var selectedItem: PhotosPickerItem?
-    @State private var showUploadSheet = false
     
     var body: some View {
         NavigationStack {
@@ -106,29 +104,37 @@ struct ScannerView: View {
             .navigationBarTitleDisplayMode(.inline)
             .fullScreenCover(isPresented: $showScanner) {
                 DocumentScannerView { image in
-                    scannedImage = image
-                    showUploadSheet = true
+                    pendingArtwork = PendingArtwork(image: image)
                 }
             }
             .onChange(of: selectedItem) {
+                guard let item = selectedItem else { return }
                 Task {
-                    if let data = try? await selectedItem?.loadTransferable(type: Data.self),
+                    if let data = try? await item.loadTransferable(type: Data.self),
                        let image = UIImage(data: data) {
-                        scannedImage = image
-                        showUploadSheet = true
+                        pendingArtwork = PendingArtwork(image: image)
                     }
+                    // Clearing the selection lets the same photo be picked again
+                    // later; without this the binding never changes and nothing
+                    // happens on a re-pick.
+                    selectedItem = nil
                 }
             }
-            .sheet(isPresented: $showUploadSheet) {
-                if let image = scannedImage {
-                    UploadSheetView(image: image) {
-                        scannedImage = nil
-                        showUploadSheet = false
-                    }
+            // sheet(item:) rather than sheet(isPresented:) — the presented image
+            // travels with the identity, so the sheet can't build before the
+            // image is set and come up blank.
+            .sheet(item: $pendingArtwork) { pending in
+                UploadSheetView(image: pending.image) {
+                    pendingArtwork = nil
                 }
             }
         }
     }
+}
+
+struct PendingArtwork: Identifiable {
+    let id = UUID()
+    let image: UIImage
 }
 
 struct DocumentScannerView: UIViewControllerRepresentable {

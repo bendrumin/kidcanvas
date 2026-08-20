@@ -117,6 +117,8 @@ struct ProfileView: View {
                             .padding(.top)
                     }
                     .padding()
+                    // Clears the floating tab bar so Sign Out stays tappable.
+                    .padding(.bottom, 70)
                 }
             }
             .navigationTitle("Profile")

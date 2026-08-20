@@ -36,9 +36,12 @@ class AuthManager: ObservableObject {
             let iso = ISO8601DateFormatter()
             if let date = iso.date(from: string) { return date }
 
+            // Date-only columns (created_date, birth_date) are calendar days, not
+            // instants: parse them at LOCAL midnight so a day picked in the app
+            // doesn't display as the day before in a negative-offset timezone.
             let dateOnly = DateFormatter()
             dateOnly.locale = Locale(identifier: "en_US_POSIX")
-            dateOnly.timeZone = TimeZone(identifier: "UTC")
+            dateOnly.timeZone = .current
             dateOnly.dateFormat = "yyyy-MM-dd"
             if let date = dateOnly.date(from: string) { return date }
 

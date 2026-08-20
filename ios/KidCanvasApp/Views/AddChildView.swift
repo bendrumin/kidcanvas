@@ -108,7 +108,9 @@ struct AddChildView: View {
                     }
                     .disabled(name.isEmpty || isLoading)
                     .padding(.horizontal)
-                    .padding(.bottom)
+                    // Clears the floating tab bar, which otherwise overlays the
+                    // button and swallows the tap.
+                    .padding(.bottom, 90)
                 }
             }
         }
@@ -128,7 +130,7 @@ struct AddChildView: View {
                 if hasBirthDate {
                     let formatter = DateFormatter()
                     formatter.locale = Locale(identifier: "en_US_POSIX")
-                    formatter.timeZone = TimeZone(identifier: "UTC")
+                    formatter.timeZone = .current
                     formatter.dateFormat = "yyyy-MM-dd"
                     birthDateString = formatter.string(from: birthDate)
                 }
