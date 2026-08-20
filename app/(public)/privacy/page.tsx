@@ -77,7 +77,7 @@ export default function PrivacyPage() {
             </p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2 mt-4">
               <li><strong>Database:</strong> Supabase (PostgreSQL with Row Level Security)</li>
-              <li><strong>Image Storage:</strong> Cloudflare R2 (encrypted at rest)</li>
+              <li><strong>Image Storage:</strong> Supabase Storage (encrypted at rest)</li>
               <li><strong>Payments:</strong> Stripe (PCI-compliant, we never see your full card number)</li>
               <li><strong>Encryption:</strong> All data transmitted via HTTPS/TLS</li>
             </ul>
@@ -87,8 +87,7 @@ export default function PrivacyPage() {
             <h2 className="text-fluid-2xl font-semibold text-foreground">Third-Party Services</h2>
             <p className="text-muted-foreground leading-relaxed">We use the following third-party services:</p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2 mt-4">
-              <li><strong>Supabase:</strong> Authentication and database</li>
-              <li><strong>Cloudflare:</strong> Image storage and delivery</li>
+              <li><strong>Supabase:</strong> Authentication, database, and image storage</li>
               <li><strong>Stripe:</strong> Payment processing</li>
               <li><strong>Vercel:</strong> Web hosting</li>
             </ul>

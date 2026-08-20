@@ -1,44 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { uploadToStorage, ARTWORK_BUCKET } from '@/lib/storage'
 import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 import { checkArtworkLimit } from '@/lib/subscription'
 import { checkRateLimit, getClientIdentifier } from '@/lib/rate-limit'
 import { verifyCsrfProtection } from '@/lib/csrf-protection'
 import { trackServerEvent } from '@/lib/analytics'
-
-// Create S3 client function - reads env vars at request time (not module load time)
-function createS3Client() {
-  // Trim credentials to remove any accidental whitespace/newlines
-  const r2Bucket = process.env.R2_BUCKET?.trim()
-  const r2Endpoint = process.env.R2_ENDPOINT?.trim()
-  const r2AccessKeyId = process.env.R2_ACCESS_KEY_ID?.trim()
-  const r2SecretAccessKey = process.env.R2_SECRET_ACCESS_KEY?.trim()
-
-  if (!r2Bucket || !r2Endpoint || !r2AccessKeyId || !r2SecretAccessKey) {
-    console.error('Missing R2 configuration:', {
-      hasBucket: !!r2Bucket,
-      hasEndpoint: !!r2Endpoint,
-      hasAccessKey: !!r2AccessKeyId,
-      hasSecretKey: !!r2SecretAccessKey
-    })
-  }
-
-  return {
-    client: new S3Client({
-      region: 'auto',
-      endpoint: r2Endpoint,
-      credentials: {
-        accessKeyId: r2AccessKeyId || '',
-        secretAccessKey: r2SecretAccessKey || '',
-      },
-      forcePathStyle: true, // Required for R2 compatibility
-    }),
-    bucket: r2Bucket,
-    publicUrl: process.env.R2_PUBLIC_URL?.trim()
-  }
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,6 +15,7 @@ export async function POST(request: NextRequest) {
     const authHeader = request.headers.get('authorization') || request.headers.get('Authorization')
     let user
     let authenticatedUserId: string | null = null
+    const authenticatedViaToken = !!authHeader?.startsWith('Bearer ')
 
     console.log('🔵 [Upload API] Checking authentication...')
     console.log('  - Has authorization header (lowercase):', !!request.headers.get('authorization'))
@@ -297,69 +266,36 @@ export async function POST(request: NextRequest) {
       .jpeg({ quality: 80 })
       .toBuffer()
 
-    const originalKey = `artwork/${familyId}/${imageId}.${extension}`
-    const thumbnailKey = `artwork/${familyId}/${imageId}_thumb.jpg`
+    // Paths match what the iOS app writes, so both clients share one layout.
+    const originalKey = `${familyId}/${imageId}.${extension}`
+    const thumbnailKey = `${familyId}/${imageId}_thumb.jpg`
 
-    // Create S3 client and get R2 config (read env vars at request time)
-    const { client: s3Client, bucket: r2Bucket, publicUrl: r2PublicUrl } = createS3Client()
-    
-    // Upload to R2
-    if (!r2Bucket) {
-      console.error('R2_BUCKET environment variable is not set')
-      return NextResponse.json(
-        { error: 'Storage configuration error', details: 'R2 bucket not configured' },
-        { status: 500 }
-      )
-    }
-    
-    if (!r2PublicUrl) {
-      console.error('R2_PUBLIC_URL environment variable is not set')
-      return NextResponse.json(
-        { error: 'Storage configuration error', details: 'R2 public URL not configured' },
-        { status: 500 }
-      )
-    }
-    
-    console.log('Uploading to R2...', { 
-      bucket: r2Bucket, 
-      originalKey,
-      thumbnailKey 
-    })
-    
+    // The caller's own session authorizes the upload, so no storage
+    // credentials are needed; RLS on the bucket does the gatekeeping.
+    const storageClient = await createClient()
+
+    let imageUrl: string
+    let thumbnailUrl: string
     try {
-      await Promise.all([
-        s3Client.send(new PutObjectCommand({
-          Bucket: r2Bucket,
-          Key: originalKey,
-          Body: originalBuffer,
-          ContentType: 'image/jpeg',
-        })),
-        s3Client.send(new PutObjectCommand({
-          Bucket: r2Bucket,
-          Key: thumbnailKey,
-          Body: thumbnailBuffer,
-          ContentType: 'image/jpeg',
-        })),
+      ;[imageUrl, thumbnailUrl] = await Promise.all([
+        uploadToStorage(storageClient, ARTWORK_BUCKET, originalKey, originalBuffer, 'image/jpeg'),
+        uploadToStorage(storageClient, ARTWORK_BUCKET, thumbnailKey, thumbnailBuffer, 'image/jpeg'),
       ])
-      console.log('R2 upload successful')
-    } catch (r2Error) {
-      console.error('R2 upload failed:', r2Error)
-      const errorDetails = r2Error instanceof Error ? r2Error.message : String(r2Error)
-      console.error('R2 error details:', {
-        bucket: r2Bucket,
-        error: errorDetails
-      })
+    } catch (storageError) {
+      const errorDetails = storageError instanceof Error ? storageError.message : String(storageError)
+      console.error('Storage upload failed:', errorDetails)
       return NextResponse.json(
         { error: 'Storage upload failed', details: errorDetails },
         { status: 500 }
       )
     }
 
-    const imageUrl = `${r2PublicUrl}/${originalKey}`
-    const thumbnailUrl = `${r2PublicUrl}/${thumbnailKey}`
-
-    // Save to database
-    const supabase = await createServiceClient()
+    // Save to database. The session client is enough — RLS lets family members
+    // insert — so a service-role key is only needed for the mobile Bearer path.
+    // The two clients carry different generics, so a union of them isn't
+    // callable; the insert shape is asserted on the result below.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const supabase: any = authenticatedViaToken ? await createServiceClient() : storageClient
 
     // Use provided title or default
     const artworkTitle = title?.trim() || 'Untitled Artwork'

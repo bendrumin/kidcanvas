@@ -1,33 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
+import { deleteFromStorage, ARTWORK_BUCKET } from '@/lib/storage'
 import type { Database } from '@/lib/supabase/types'
-
-// Create S3 client function for R2
-function createS3Client() {
-  const r2Bucket = process.env.R2_BUCKET?.trim()
-  const r2Endpoint = process.env.R2_ENDPOINT?.trim()
-  const r2AccessKeyId = process.env.R2_ACCESS_KEY_ID?.trim()
-  const r2SecretAccessKey = process.env.R2_SECRET_ACCESS_KEY?.trim()
-
-  if (!r2Bucket || !r2Endpoint || !r2AccessKeyId || !r2SecretAccessKey) {
-    console.error('Missing R2 configuration')
-    return null
-  }
-
-  return {
-    client: new S3Client({
-      region: 'auto',
-      endpoint: r2Endpoint,
-      credentials: {
-        accessKeyId: r2AccessKeyId,
-        secretAccessKey: r2SecretAccessKey,
-      },
-      forcePathStyle: true, // Required for R2 compatibility
-    }),
-    bucket: r2Bucket,
-  }
-}
 
 export async function DELETE(
   request: NextRequest,
@@ -159,21 +133,6 @@ export async function DELETE(
       )
     }
 
-    // Extract R2 keys from image URLs
-    // URL format: https://pub-xxx.r2.dev/artwork/{familyId}/{imageId}.jpg
-    const extractR2Key = (url: string): string | null => {
-      try {
-        const urlObj = new URL(url)
-        // Remove leading slash from pathname
-        return urlObj.pathname.substring(1)
-      } catch {
-        return null
-      }
-    }
-
-    const imageKey = extractR2Key(artwork.image_url)
-    const thumbnailKey = extractR2Key(artwork.thumbnail_url)
-
     // Delete from database first (if this fails, we haven't deleted files yet)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error: deleteError } = await (supabase as any)
@@ -189,39 +148,12 @@ export async function DELETE(
       )
     }
 
-    // Delete files from R2 (best effort - don't fail if this doesn't work)
-    if (imageKey || thumbnailKey) {
-      const s3Config = createS3Client()
-      if (s3Config) {
-        try {
-          const deletePromises: Promise<unknown>[] = []
-          
-          if (imageKey) {
-            deletePromises.push(
-              s3Config.client.send(new DeleteObjectCommand({
-                Bucket: s3Config.bucket,
-                Key: imageKey,
-              }))
-            )
-          }
-          
-          if (thumbnailKey) {
-            deletePromises.push(
-              s3Config.client.send(new DeleteObjectCommand({
-                Bucket: s3Config.bucket,
-                Key: thumbnailKey,
-              }))
-            )
-          }
-
-          await Promise.all(deletePromises)
-          console.log('✅ [Delete API] Files deleted from R2')
-        } catch (r2Error) {
-          // Log but don't fail - artwork is already deleted from database
-          console.error('⚠️ [Delete API] Failed to delete files from R2 (non-critical):', r2Error)
-        }
-      }
-    }
+    // Best effort: the row is already gone, so a failure here only orphans a
+    // file. URLs from the retired R2 bucket simply don't match and are skipped.
+    await deleteFromStorage(supabase, ARTWORK_BUCKET, [
+      artwork.image_url,
+      artwork.thumbnail_url,
+    ].filter(Boolean))
 
     return NextResponse.json({
       success: true,

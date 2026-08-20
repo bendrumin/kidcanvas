@@ -1,34 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { uploadToStorage, VOICE_BUCKET } from '@/lib/storage'
 import { v4 as uuidv4 } from 'uuid'
 import { checkRateLimit, getClientIdentifier } from '@/lib/rate-limit'
-
-// Create S3 client function
-function createS3Client() {
-  const r2Bucket = process.env.R2_BUCKET?.trim()
-  const r2Endpoint = process.env.R2_ENDPOINT?.trim()
-  const r2AccessKeyId = process.env.R2_ACCESS_KEY_ID?.trim()
-  const r2SecretAccessKey = process.env.R2_SECRET_ACCESS_KEY?.trim()
-
-  if (!r2Bucket || !r2Endpoint || !r2AccessKeyId || !r2SecretAccessKey) {
-    console.error('Missing R2 configuration')
-  }
-
-  return {
-    client: new S3Client({
-      region: 'auto',
-      endpoint: r2Endpoint,
-      credentials: {
-        accessKeyId: r2AccessKeyId || '',
-        secretAccessKey: r2SecretAccessKey || '',
-      },
-      forcePathStyle: true,
-    }),
-    bucket: r2Bucket,
-    publicUrl: process.env.R2_PUBLIC_URL?.trim()
-  }
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -147,37 +121,24 @@ export async function POST(request: NextRequest) {
     if (audioFile.type.includes('wav')) extension = 'wav'
 
     const audioId = uuidv4()
-    const audioKey = `voice/${familyId}/${audioId}.${extension}`
+    const audioKey = `${familyId}/${audioId}.${extension}`
 
-    // Upload to R2
-    const { client: s3Client, bucket: r2Bucket, publicUrl: r2PublicUrl } = createS3Client()
-
-    if (!r2Bucket || !r2PublicUrl) {
-      return NextResponse.json(
-        { error: 'Storage configuration error' },
-        { status: 500 }
-      )
-    }
-
-    console.log('Uploading voice note to R2:', audioKey)
-
+    let voiceUrl: string
     try {
-      await s3Client.send(new PutObjectCommand({
-        Bucket: r2Bucket,
-        Key: audioKey,
-        Body: buffer,
-        ContentType: audioFile.type,
-      }))
-      console.log('Voice note upload successful')
-    } catch (r2Error) {
-      console.error('R2 upload failed:', r2Error)
+      voiceUrl = await uploadToStorage(
+        supabase,
+        VOICE_BUCKET,
+        audioKey,
+        buffer,
+        audioFile.type
+      )
+    } catch (storageError) {
+      console.error('Voice note upload failed:', storageError)
       return NextResponse.json(
         { error: 'Storage upload failed' },
         { status: 500 }
       )
     }
-
-    const voiceUrl = `${r2PublicUrl}/${audioKey}`
 
     // Update artwork with voice note URL and duration
     const { error: updateError } = await supabase

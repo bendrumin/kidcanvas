@@ -36,3 +36,5 @@ next-env.d.ts
 
 screenshots/
 ios/build/
+.vercel
+.env*.local
