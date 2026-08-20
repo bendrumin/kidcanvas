@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KidCanvas — their masterpieces, safe forever</title>
+<meta name="description" content="KidCanvas scans, organizes, and treasures your children's artwork in one private family gallery on your iPhone.">
+<link rel="icon" href="/img/icon-180.png">
+<link rel="apple-touch-icon" href="/img/icon-180.png">
+<meta property="og:title" content="KidCanvas">
+<meta property="og:description" content="Scan and treasure every crayon sunrise and finger-paint dinosaur — in one private family gallery.">
+<meta property="og:image" content="/img/icon-512.png">
+<style>
+:root {
+  --bg: #fffaf5;
+  --bg-soft: #fff3ec;
+  --text: #33202b;
+  --text-soft: #7d6470;
+  --brand-a: #ef476f;
+  --brand-b: #9d4ae0;
+  --card: #ffffff;
+  --border: #f3e2d9;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1d1418;
+    --bg-soft: #271b21;
+    --text: #f8eef2;
+    --text-soft: #bfa4b0;
+    --card: #2c1f26;
+    --border: #45323c;
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+}
+a { color: var(--brand-a); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 1020px; margin: 0 auto; padding: 0 24px; }
+header.nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+.nav .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; color: var(--text); }
+.nav .logo img { width: 34px; height: 34px; border-radius: 9px; }
+.nav nav a { margin-left: 22px; color: var(--text-soft); font-size: .95rem; }
+.hero {
+  text-align: center; padding: 64px 0 56px;
+  background: linear-gradient(135deg, var(--brand-a), var(--brand-b));
+  color: #fff;
+}
+.hero img.icon { width: 100px; height: 100px; border-radius: 24px; box-shadow: 0 12px 40px rgba(0,0,0,.35); margin-bottom: 24px; }
+.hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -.02em; }
+.hero p.sub { max-width: 640px; margin: 16px auto 0; font-size: 1.15rem; opacity: .93; }
+.hero .cta {
+  display: inline-block; margin-top: 28px; padding: 13px 30px; border-radius: 999px;
+  background: #fff; color: var(--brand-a); font-weight: 700; box-shadow: 0 8px 26px rgba(0,0,0,.25);
+}
+.hero .cta:hover { text-decoration: none; }
+.hero .note { margin-top: 12px; font-size: .85rem; opacity: .8; }
+section { padding: 56px 0; }
+section h2 { font-size: 1.8rem; font-weight: 800; letter-spacing: -.01em; margin-bottom: 24px; text-align: center; }
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; }
+.feature { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
+.feature .emoji { font-size: 1.7rem; }
+.feature h3 { font-size: 1.05rem; margin: 10px 0 6px; }
+.feature p { color: var(--text-soft); font-size: .95rem; }
+.support { background: var(--bg-soft); }
+.faq { max-width: 720px; margin: 0 auto; }
+.faq details { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 12px; }
+.faq summary { font-weight: 600; cursor: pointer; }
+.faq p { color: var(--text-soft); margin-top: 10px; font-size: .95rem; }
+.contact { text-align: center; margin-top: 28px; color: var(--text-soft); }
+footer { border-top: 1px solid var(--border); padding: 28px 0; text-align: center; color: var(--text-soft); font-size: .9rem; }
+footer .links a { margin: 0 10px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="nav">
+    <span class="logo"><img src="/img/icon-180.png" alt=""> KidCanvas</span>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#support">Support</a>
+      <a href="/privacy">Privacy</a>
+    </nav>
+  </header>
+</div>
+
+<div class="hero">
+  <div class="wrap">
+    <img class="icon" src="/img/icon-180.png" alt="KidCanvas app icon">
+    <h1>Their masterpieces, safe forever</h1>
+    <p class="sub">The fridge is full and the backpack keeps producing more. KidCanvas scans every crayon sunrise and finger-paint dinosaur into one beautiful, private family gallery — before the recycling bin wins.</p>
+    <a class="cta" href="#support">Coming soon to the App&nbsp;Store</a>
+    <div class="note">iOS 17+ · In private beta</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section id="features">
+    <h2>From backpack to keepsake in seconds</h2>
+    <div class="features">
+      <div class="feature"><span class="emoji">📸</span><h3>Scan like a pro</h3><p>The built-in document scanner auto-detects the page, crops it, and fixes the perspective — or pick any photo from your library.</p></div>
+      <div class="feature"><span class="emoji">🖼️</span><h3>One family gallery</h3><p>Every piece is filed by artist and date, with each child's age at creation calculated automatically. Filter by kid, browse by time.</p></div>
+      <div class="feature"><span class="emoji">❤️</span><h3>Keep the treasures</h3><p>Heart the frame-worthy ones into a Favorites collection, add titles and the story behind each piece.</p></div>
+      <div class="feature"><span class="emoji">🔒</span><h3>Private to your family</h3><p>Your gallery is visible only to your family's accounts. No ads, no analytics, no data selling — ever.</p></div>
+    </div>
+  </section>
+
+  <section class="support" id="support">
+    <h2>Support &amp; FAQ</h2>
+    <div class="faq">
+      <details>
+        <summary>Where are the artwork photos stored?</summary>
+        <p>In KidCanvas's secure cloud database, scoped to your family account — that's what lets the whole family see the same gallery. Only signed-in members of your family can browse it. See the <a href="/privacy">privacy policy</a> for details.</p>
+      </details>
+      <details>
+        <summary>Do my kids need accounts?</summary>
+        <p>No. Parents create child <em>profiles</em> (just a name, plus a birth date if you want automatic age labels). Children never sign in and have no accounts.</p>
+      </details>
+      <details>
+        <summary>Can grandparents see the gallery?</summary>
+        <p>Family invites are part of the KidCanvas design and are coming to the iOS app. For now, one account per family works great on shared devices.</p>
+      </details>
+      <details>
+        <summary>What does it cost?</summary>
+        <p>KidCanvas is free while in beta.</p>
+      </details>
+      <details>
+        <summary>Something's not working — how do I get help?</summary>
+        <p>Open an issue on <a href="https://github.com/bendrumin/kidcanvas/issues">GitHub</a> with your iOS version and what you were doing, and we'll take a look.</p>
+      </details>
+    </div>
+    <p class="contact">Still stuck? Reach out via <a href="https://github.com/bendrumin/kidcanvas/issues">GitHub issues</a>.</p>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="links">
+      <a href="/privacy">Privacy Policy</a> ·
+      <a href="https://github.com/bendrumin/kidcanvas">GitHub</a> ·
+      <a href="https://snapsweep-nine.vercel.app">SnapSweep</a> ·
+      <a href="https://chorestar.app">ChoreStar</a>
+    </div>
+    <p style="margin-top:10px">© 2026 Benjamin Siegel · A Siegel Creates app</p>
+  </div>
+</footer>
+
+</body>
+</html>

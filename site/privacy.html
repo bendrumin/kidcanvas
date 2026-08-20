@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KidCanvas — Privacy Policy</title>
+<link rel="icon" href="/img/icon-180.png">
+<style>
+:root { --bg:#fffaf5; --text:#33202b; --soft:#7d6470; --brand:#ef476f; --border:#f3e2d9; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#1d1418; --text:#f8eef2; --soft:#bfa4b0; --border:#45323c; }
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.7; }
+.wrap { max-width:720px; margin:0 auto; padding:48px 24px 64px; }
+a { color:var(--brand); }
+h1 { font-size:2rem; margin-bottom:4px; }
+.date { color:var(--soft); margin-bottom:32px; }
+h2 { font-size:1.2rem; margin:28px 0 8px; }
+p, li { color:var(--soft); }
+ul { padding-left:22px; margin:8px 0; }
+strong { color:var(--text); }
+.back { display:inline-block; margin-bottom:24px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="/">← KidCanvas</a>
+  <h1>Privacy Policy</h1>
+  <p class="date">Last updated: August 20, 2026</p>
+
+  <p>KidCanvas stores your family's artwork in the cloud so everyone in your family sees the same gallery. This policy explains exactly what that involves.</p>
+
+  <h2>What we collect</h2>
+  <ul>
+    <li><strong>Account information</strong> — your email address, password (stored only as a secure hash by our authentication provider), and the name you enter. Used solely to sign you in and label your contributions.</li>
+    <li><strong>Family and child profiles</strong> — the family name and any child profiles you create (name, optional birth date, avatar color). Children never have accounts, never sign in, and we never knowingly collect information from children directly — profiles are created and managed entirely by parents.</li>
+    <li><strong>Artwork</strong> — the images you scan or upload, plus titles, dates, and descriptions you add. These are stored in our cloud database and storage (hosted on Supabase) so your family's devices can access them.</li>
+  </ul>
+
+  <h2>What we don't do</h2>
+  <ul>
+    <li>No advertising, no analytics SDKs, no trackers.</li>
+    <li>No selling, renting, or sharing of your data with anyone.</li>
+    <li>No AI processing of your artwork.</li>
+    <li>No access to your photo library beyond the specific images you choose to upload.</li>
+  </ul>
+
+  <h2>Who can see your gallery</h2>
+  <p>Only signed-in members of your family account. Access is enforced at the database level (row-level security), not just in the app.</p>
+
+  <h2>Deleting your data</h2>
+  <p>Deleting an artwork in the app removes it from the gallery. To delete your entire account and all associated data, open an issue at the contact link below and we'll complete it promptly.</p>
+
+  <h2>Changes</h2>
+  <p>If this policy changes, the updated text will be published at this URL with a new "last updated" date.</p>
+
+  <h2>Contact</h2>
+  <p>Questions? Open an issue at <a href="https://github.com/bendrumin/kidcanvas/issues">github.com/bendrumin/kidcanvas/issues</a>.</p>
+</div>
+</body>
+</html>
