@@ -1,63 +1,40 @@
-# KidCanvas iOS App
+# KidCanvas iOS
 
-A SwiftUI iOS app for scanning and managing children's artwork.
+The native SwiftUI app for scanning and managing children's artwork. As of
+August 2026 this is the **primary KidCanvas product** — the web app is offline.
 
-## Setup Instructions
+Open `KidCanvas.xcodeproj` in Xcode. The Supabase Swift SDK resolves
+automatically via Swift Package Manager.
 
-### 1. Create Xcode Project
+## Structure
 
-1. Open Xcode
-2. File → New → Project
-3. Choose **App** (iOS)
-4. Settings:
-   - Product Name: `KidCanvas`
-   - Team: Your team
-   - Organization Identifier: `com.yourname` (e.g., `com.kidcanvas`)
-   - Interface: **SwiftUI**
-   - Language: **Swift**
-   - Storage: **None**
-5. Save to: `/Users/bensiegel/KidCanvas/ios/`
-
-### 2. Add Swift Packages
-
-In Xcode: File → Add Package Dependencies
-
-Add these packages:
-- `https://github.com/supabase/supabase-swift` (2.5.1+)
-
-**Important**: Add these products to your **KidCanvas** target:
-- ✅ Supabase
-- ✅ Auth
-- ✅ PostgREST
-- ✅ Storage
-- ✅ Realtime
-- ✅ Functions
-
-**If you see package errors**, see `FIX_PACKAGE_DEPENDENCIES.md` for troubleshooting steps.
-
-### 3. Copy Source Files
-
-Copy all `.swift` files from `ios/KidCanvas/Sources/` into your Xcode project.
-
-### 4. Configure Info.plist
-
-Add these keys for camera/photo access:
-```xml
-<key>NSCameraUsageDescription</key>
-<string>KidCanvas needs camera access to scan artwork</string>
-<key>NSPhotoLibraryUsageDescription</key>
-<string>KidCanvas needs photo library access to import artwork</string>
+```
+ios/
+├── KidCanvas.xcodeproj      # Real Xcode project (buildable folder layout)
+├── Info.plist               # Extra Info.plist keys merged at build time
+└── KidCanvasApp/
+    ├── KidCanvasApp.swift   # App entry + auth routing
+    ├── Config.swift         # Supabase URL + anon key (fill in per project)
+    ├── Managers/AuthManager.swift
+    ├── Models/Models.swift
+    └── Views/               # Auth, Gallery, Scanner, Upload, Favorites, Profile
 ```
 
-### 5. Add Environment Variables
+## Backend setup (fresh Supabase project)
 
-Create a `Config.swift` file with your credentials (already provided in Sources/).
+1. Create a project at supabase.com.
+2. In the SQL Editor, run `supabase/revive_ios_schema.sql` from the repo root —
+   it creates all tables, RLS policies, helper functions, and the public
+   `artworks` storage bucket. There is **no AI processing** in this schema.
+3. (Recommended) Authentication → Providers → Email → turn OFF
+   "Confirm email", so sign-up works instantly in the app.
+4. Copy Project Settings → API → URL and anon key into
+   `KidCanvasApp/Config.swift`.
 
-## Features
+## Notes
 
-- 📷 VisionKit document scanning
-- 🔐 Supabase authentication  
-- 👨‍👩‍👧‍👦 Family & children management
-- 🎨 Artwork gallery with favorites
-- ☁️ Cloud sync via R2 storage
-
+- Artwork images upload to Supabase Storage (`artworks` bucket, public URLs);
+  the old Cloudflare R2 + web-API upload path is gone.
+- Uploads write a full-size JPEG plus a 500px thumbnail.
+- The document scanner (VisionKit) requires a real device — the simulator has
+  no camera. The photo-picker path works everywhere.
