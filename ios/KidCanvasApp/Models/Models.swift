@@ -165,20 +165,3 @@ struct ArtworkComment: Codable, Identifiable {
     }
 }
 
-struct FamilyInvite: Codable, Identifiable {
-    let id: UUID
-    let familyId: UUID
-    let code: String
-    let role: String
-    let expiresAt: Date?
-    let usedAt: Date?
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case familyId = "family_id"
-        case code
-        case role
-        case expiresAt = "expires_at"
-        case usedAt = "used_at"
-    }
-}

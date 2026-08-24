@@ -91,7 +91,7 @@ export const PLANS: Record<PlanId, {
     description: 'For extended families & schools',
     features: [
       'Everything in Family',
-      'Multiple families (grandparents, classrooms)',
+      'Multiple families (grandparents, caregivers)',
       'Voice note stories',
       'Video moment capture',
       'Advanced story templates',

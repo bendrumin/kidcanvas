@@ -60,7 +60,7 @@ const plans = [
   {
     id: 'pro',
     name: 'Pro',
-    description: 'For extended families & schools',
+    description: 'For extended families',
     price: { month: 9.99, year: 99.99 },
     priceId: {
       month: process.env.STRIPE_PRO_PRICE_ID,
@@ -68,7 +68,7 @@ const plans = [
     },
     features: [
       'Everything in Family',
-      'Multiple families (grandparents, classrooms)',
+      'Multiple families (grandparents, caregivers)',
       'Voice note stories',
       'Video moment capture',
       'Advanced story templates',

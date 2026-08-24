@@ -61,8 +61,14 @@ which describe code that no longer exists.
 - **Stale Cloudflare hosts** in the CSP and in `next/image` remote patterns —
   the latter would have broken every Supabase-hosted image on the web app.
   Both now point at Supabase.
-- Web app hardening from the earlier audit is real and present: rate limiting,
-  CSRF protection, zod validation, and HSTS/CSP headers.
+- Web app hardening from the earlier audit is partly real: CSRF protection and
+  HSTS/CSP headers are present and working. Two caveats. Rate limiting is
+  in-memory, so it does not hold across serverless instances, and only 3 of 11
+  API routes call it. And **zod validation was never actually wired up** --
+  `lib/validation.ts` defined a full set of schemas but nothing ever imported
+  it, and no API route references zod at all. That file has been deleted rather
+  than left to imply a check that was not running. The routes do validate, but
+  by hand: UUID regex, magic-byte sniffing, and explicit size caps.
 
 ## Known limitation, by choice
 

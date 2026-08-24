@@ -50,7 +50,6 @@ import type { ArtworkWithChild, Child } from '@/lib/supabase/types'
 import { QRCodeDialog } from './qr-code-dialog'
 import { ArtworkReactions } from './artwork-reactions'
 import { ArtworkComments } from './artwork-comments'
-import { VoicePlayer } from './voice-player'
 
 interface ArtworkDetailProps {
   artwork: ArtworkWithChild
@@ -296,14 +295,6 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
             </div>
           </div>
         </div>
-      )}
-
-      {/* Voice Story Player */}
-      {artwork.voice_note_url && (
-        <VoicePlayer
-          voiceUrl={artwork.voice_note_url}
-          duration={artwork.voice_duration_seconds ?? undefined}
-        />
       )}
 
       {/* Moment Photo or Artwork Image */}
