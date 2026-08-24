@@ -68,8 +68,18 @@ export function verifyCsrfProtection(request: Request): {
  * Get list of allowed origins for CSRF protection
  */
 function getAllowedOrigins(): string[] {
+  // NEXT_PUBLIC_APP_URL stays a single canonical origin, because share links
+  // and Stripe redirect URLs are built from it. Additional origins that should
+  // still pass CSRF -- www, and the old *.vercel.app host the shipped iOS
+  // build points at -- go in CSRF_ALLOWED_ORIGINS, so changing the canonical
+  // domain can't lock the others out.
+  const extraOrigins = (process.env.CSRF_ALLOWED_ORIGINS ?? '')
+    .split(',')
+    .map((origin) => origin.trim())
+
   const origins = [
     process.env.NEXT_PUBLIC_APP_URL,
+    ...extraOrigins,
     'http://localhost:3000',
     'http://localhost:3001',
   ]

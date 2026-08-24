@@ -40,11 +40,27 @@ Supersedes the archived audit docs, which describe code that no longer exists.
 
 ## Known limitation, by choice
 
-**Both storage buckets are public-read.** Object URLs contain two random UUIDs,
-so they're unguessable, but anyone holding a URL can fetch the file without
-authenticating. For a children's photo app, a private bucket with signed URLs
-is the stronger posture; it requires signing logic in both clients, so it's a
-deliberate follow-up rather than something done quietly.
+**Both storage buckets are public-read.** Anyone holding an object URL can fetch
+the file without authenticating. For a children's photo app, a private bucket
+with signed URLs is the stronger posture; it requires signing logic in both
+clients and on the public `/share/[code]` page, so it's a deliberate follow-up
+rather than something done quietly.
+
+The earlier version of this note claimed the two random UUIDs in each path made
+those URLs unguessable. That was wrong, and it was load-bearing: the storage
+policies read `FOR SELECT USING (bucket_id = '...')` with no role restriction,
+which granted the `anon` role row visibility on `storage.objects` -- exactly what
+`POST /storage/v1/object/list` reads. Holding only the anon key that ships inside
+the iOS app, an anonymous caller could list every family folder, list the artwork
+filenames inside it, and then fetch the images. Nothing needed guessing.
+
+`migrations/008_storage_no_anonymous_enumeration.sql` closes that: both buckets'
+SELECT policies are now `TO authenticated` plus a family-membership check.
+Verified afterwards that anonymous listing returns `[]` at both the bucket root
+and inside a known family folder, and that `/object/public/...` still serves, so
+the shipped iOS build and the unauthenticated share page were not regressed.
+Direct fetch of a known URL is still possible by design -- that is what signed
+URLs would fix.
 
 Also worth knowing: the web app's rate limiting is in-memory, which doesn't
 hold across serverless instances. It's a speed bump, not a control, until it's

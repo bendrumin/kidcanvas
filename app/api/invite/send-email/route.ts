@@ -28,17 +28,23 @@ export async function POST(request: NextRequest) {
     // Check for Resend API key (alternative)
     const resendApiKey = process.env.RESEND_API_KEY
 
-    // If no email service configured, log and return success (for development)
+    // No sender configured. This must NOT report success: the caller shows
+    // "Invitation email sent to <address>" on any 2xx, so returning 200 here
+    // told parents an invite had gone out when nothing was ever sent. 503
+    // makes the caller fall through to its share-the-link-manually path.
     if (!smtpHost && !resendApiKey) {
-      console.log('Email would be sent:', {
+      console.warn('Invite email not sent - no SMTP or Resend credentials configured:', {
         to: email,
-        subject: `You're invited to join ${familyName} on KidCanvas!`,
         inviteLink,
       })
-      return NextResponse.json({ 
-        success: true, 
-        message: 'Email service not configured. Email logged to console.' 
-      })
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Email service not configured',
+          details: 'Share the invite link or code directly instead.',
+        },
+        { status: 503 }
+      )
     }
 
     // Send email using Resend

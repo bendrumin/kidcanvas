@@ -38,3 +38,6 @@ screenshots/
 ios/build/
 .vercel
 .env*.local
+
+# supabase cli local state
+supabase/.temp/

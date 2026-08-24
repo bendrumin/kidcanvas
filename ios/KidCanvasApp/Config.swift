@@ -9,6 +9,6 @@ enum Config {
     /// Public storage bucket that artwork images upload into.
     static let artworkBucket = "artworks"
 
-    static let privacyPolicyURL = URL(string: "https://kidcanvas-six.vercel.app/privacy")!
-    static let supportURL = URL(string: "https://kidcanvas-six.vercel.app/#support")!
+    static let privacyPolicyURL = URL(string: "https://kidcanvas.app/privacy")!
+    static let supportURL = URL(string: "https://kidcanvas.app/support")!
 }

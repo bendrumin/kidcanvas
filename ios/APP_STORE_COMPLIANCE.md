@@ -7,7 +7,7 @@ Status as of 2026-08-20, for version 1.0 (build 14).
 | Requirement | Guideline | State |
 |---|---|---|
 | In-app account deletion (full delete, not deactivate) | 5.1.1(v) | ✅ Profile → Delete Account, with confirmation. Removes family, children, artworks, stored image files, and the auth user via the `delete_my_account()` RPC. |
-| Privacy policy reachable in-app | 5.1.1 / 5.1.2 | ✅ Profile → Privacy Policy → kidcanvas-six.vercel.app/privacy |
+| Privacy policy reachable in-app | 5.1.1 / 5.1.2 | ✅ Profile → Privacy Policy → kidcanvas.app/privacy |
 | Support reachable in-app | 1.5 | ✅ Profile → Help & Support |
 | Sign out | — | ✅ Profile → Sign Out |
 | No non-functional UI | 2.1 | ✅ The old dead "Notifications" row was removed; Privacy and Help rows now open real pages. |
