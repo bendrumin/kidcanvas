@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     q: 'Is my data secure?',
-    a: 'Yes. We use industry-standard encryption and secure cloud storage. Your artwork is backed up and only accessible to your family.',
+    a: 'Gallery contents - titles, stories, your children\'s names - are readable only by your family, enforced at the database level. Artwork images are served from unlisted, unguessable addresses; anyone you send one to can view that image. Everything is encrypted in transit and at rest.',
   },
 ]
 
@@ -38,6 +38,9 @@ export default function SupportPage() {
     name: '',
     email: '',
     message: '',
+    // Honeypot -- hidden from people, filled by bots. The API silently drops
+    // any submission that has it set.
+    company: '',
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -45,17 +48,20 @@ export default function SupportPage() {
     setIsSubmitting(true)
     
     try {
-      const response = await fetch('https://formspree.io/f/xjgkgovz', {
+      // Our own API route: the previous Formspree endpoint was blocked by this
+      // site's Content-Security-Policy, so submissions always failed.
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
-      
+
       if (response.ok) {
         toast.success('Message sent! We\'ll get back to you within 24 hours.')
-        setFormData({ name: '', email: '', message: '' })
+        setFormData({ name: '', email: '', message: '', company: '' })
       } else {
-        toast.error('Failed to send message. Please try again.')
+        const data = await response.json().catch(() => ({}))
+        toast.error(data.error || 'Failed to send message. Please try again.')
       }
     } catch {
       toast.error('Failed to send message. Please try again.')
@@ -83,6 +89,16 @@ export default function SupportPage() {
 
         {/* Simple Contact Form */}
         <form onSubmit={handleSubmit} className="space-y-4 mb-16">
+          <input
+            type="text"
+            name="company"
+            value={formData.company}
+            onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+            className="hidden"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+          />
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>

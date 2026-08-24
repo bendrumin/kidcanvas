@@ -48,6 +48,20 @@ project — a dedicated test project would be better before running this in CI.
 Do not use the App Review demo account: it is pre-seeded with children, so the
 first-run guide will not appear.
 
+## Known issue: SpringBoard crashes during runs
+
+Maestro drives the UI through Apple's XCTAutomationSupport, injected into
+SpringBoard. On this setup (iOS 26.5 simulator / macOS 27 beta) that framework
+segfaults intermittently -- the crash report shows Thread 9 dying inside
+`-[XCTAutomationSession initWithAccessibilityFramework:dataSource:]`, in
+SpringBoard, with the app nowhere in the stack. It is an Apple tooling bug, not
+a KidCanvas bug, and cannot affect TestFlight or App Store users.
+
+Symptoms: the simulator drops to the home screen mid-run, or the next flow fails
+on its first assertion. Fix: `xcrun simctl shutdown <udid> && xcrun simctl boot
+<udid>` and re-run. Using a simulator dedicated to testing keeps the crashes
+from interrupting manual work.
+
 ## Build note
 
 `run.sh` builds to `/tmp/kidcanvas-dd`, deliberately outside the repo. Building

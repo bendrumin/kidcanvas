@@ -35,6 +35,28 @@ struct GalleryView: View {
                     EmptyGalleryView()
                 } else {
                     ScrollView {
+                        // The family name lives in the content, not the toolbar:
+                        // iOS 26's glass toolbar collapses a text item into a
+                        // "…" circle, which is how this used to render.
+                        if let family = authManager.currentFamily {
+                            HStack(spacing: 6) {
+                                Image(systemName: "house.fill")
+                                    .font(.caption)
+                                    .foregroundColor(.pink)
+                                Text(family.name)
+                                    .font(.footnote.weight(.semibold))
+                                    .foregroundColor(.primary)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.subtleFill, in: Capsule())
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal)
+                            .padding(.top, 4)
+                        }
+
                         LazyVGrid(columns: columns, spacing: 20) {
                             ForEach(filteredArtworks) { artwork in
                                 NavigationLink(destination: ArtworkDetailView(artwork: artwork)) {
@@ -51,16 +73,6 @@ struct GalleryView: View {
             }
             .navigationTitle("Gallery")
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    if let family = authManager.currentFamily {
-                        Text(family.name)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .lineLimit(1)
-                            .fixedSize()
-                    }
-                }
-                
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Picker("Sort", selection: $sortOrder) {
