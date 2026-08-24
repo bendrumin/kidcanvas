@@ -146,8 +146,8 @@ platform :ios do
       CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
     )
 
-    description = File.read("metadata/beta/description.txt").strip
-    whats_new = File.read("metadata/beta/whats_new.txt").strip
+    description = File.read("beta/description.txt").strip
+    whats_new = File.read("beta/whats_new.txt").strip
 
     existing = app.get_beta_app_localizations.find { |l| l.locale == "en-US" }
     attributes = { description: description, feedbackEmail: feedback_email }
@@ -205,7 +205,7 @@ platform :ios do
         demoAccountRequired: true,
         demoAccountName: File.read("metadata/review_information/demo_user.txt").strip,
         demoAccountPassword: File.read("metadata/review_information/demo_password.txt").strip,
-        notes: File.read("metadata/beta/review_notes.txt").strip
+        notes: File.read("beta/review_notes.txt").strip
       }
     )
     UI.message("Beta App Review contact saved.")
