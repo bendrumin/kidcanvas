@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { getInitials } from '@/lib/utils'
+import { getInitials, formatDate } from '@/lib/utils'
 import { Mail, Calendar, Shield, Users } from 'lucide-react'
 import Link from 'next/link'
 import type { FamilyMemberWithFamily } from '@/lib/supabase/types'
@@ -92,7 +92,7 @@ export default async function ProfilePage() {
                   <div>
                     <p className="font-medium">{membership.families?.name}</p>
                     <p className="text-sm text-muted-foreground">
-                      Joined {new Date(membership.joined_at).toLocaleDateString()}
+                      Joined {formatDate(membership.joined_at)}
                     </p>
                   </div>
                 </div>

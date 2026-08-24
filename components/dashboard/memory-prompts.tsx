@@ -22,7 +22,7 @@ interface MemoryPromptsProps {
   childrenData?: Array<{
     id: string
     name: string
-    birthday?: string
+    birthday?: string | null
   }>
   lastUploadDate?: string
   isPremium?: boolean

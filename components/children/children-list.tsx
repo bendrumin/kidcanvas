@@ -59,7 +59,7 @@ export function ChildrenList({ children, canManage, familyId }: ChildrenListProp
 
   const openEdit = (child: Child) => {
     setEditChild(child)
-    setEditForm({ name: child.name, birthDate: child.birth_date })
+    setEditForm({ name: child.name, birthDate: child.birth_date ?? '' })
   }
 
   const handleEdit = async () => {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { stripe } from '@/lib/stripe'
+import { stripe, PRICE_IDS, type PlanId, type BillingInterval } from '@/lib/stripe'
 import type { Subscription } from '@/lib/supabase/types'
 
 export async function POST(request: NextRequest) {
@@ -23,13 +23,26 @@ export async function POST(request: NextRequest) {
     console.log('Checkout: User:', user.id)
 
     const body = await request.json()
-    const { priceId, planId, interval } = body
+    const { priceId } = body
 
-    console.log('Checkout: Request body:', { priceId, planId, interval })
-
-    if (!priceId || !planId) {
-      return NextResponse.json({ error: 'Missing price or plan ID' }, { status: 400 })
+    if (!priceId || typeof priceId !== 'string') {
+      return NextResponse.json({ error: 'Missing price ID' }, { status: 400 })
     }
+
+    // SECURITY: the plan is derived from the price id, never taken from the
+    // request. Previously both priceId and planId came straight off the body:
+    // priceId was handed to Stripe unchecked, and planId was written into
+    // subscription metadata, which the webhook reads to set subscriptions
+    // .plan_id and therefore the account's limits. A caller could pick any
+    // price in this Stripe account -- it also holds ChoreStar's products and
+    // several $15 test prices -- and pair it with planId 'pro' to buy Pro
+    // entitlements at someone else's price.
+    const resolved = resolvePlanFromPrice(priceId)
+    if (!resolved) {
+      console.warn('Checkout: unrecognised price id', priceId, 'from user', user.id)
+      return NextResponse.json({ error: 'Unknown price' }, { status: 400 })
+    }
+    const { planId, interval } = resolved
 
     // Check if user already has a Stripe customer ID
     console.log('Checkout: Checking for existing subscription...')
@@ -119,3 +132,22 @@ export async function POST(request: NextRequest) {
 // Route segment config
 export const maxDuration = 10
 
+/**
+ * Maps our own configured Stripe price ids to the plan they grant. Entries with
+ * an unset environment variable are skipped so a missing price id can never
+ * collide with an incoming value.
+ */
+function resolvePlanFromPrice(
+  priceId: string
+): { planId: PlanId; interval: BillingInterval } | null {
+  const table: Array<[string | undefined, PlanId, BillingInterval]> = [
+    [PRICE_IDS.family_monthly, 'family', 'month'],
+    [PRICE_IDS.family_yearly, 'family', 'year'],
+    [PRICE_IDS.pro_monthly, 'pro', 'month'],
+    [PRICE_IDS.pro_yearly, 'pro', 'year'],
+  ]
+  for (const [configured, planId, interval] of table) {
+    if (configured && configured === priceId) return { planId, interval }
+  }
+  return null
+}

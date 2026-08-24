@@ -5,8 +5,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatDate(date: Date | string): string {
+/**
+ * Accepts null because the columns these render from -- uploaded_at,
+ * created_at, birth_date -- are all nullable in Postgres. The hand-maintained
+ * types used to claim otherwise, which hid the fact that a missing date would
+ * have rendered "Invalid Date" to the user.
+ */
+export function formatDate(date: Date | string | null | undefined): string {
+  if (!date) return '—'
   const d = typeof date === 'string' ? new Date(date) : date
+  if (Number.isNaN(d.getTime())) return '—'
   return d.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -14,9 +22,14 @@ export function formatDate(date: Date | string): string {
   })
 }
 
-export function calculateAge(birthDate: Date | string, artworkDate: Date | string): string {
+export function calculateAge(
+  birthDate: Date | string | null | undefined,
+  artworkDate: Date | string | null | undefined
+): string {
+  if (!birthDate || !artworkDate) return ''
   const birth = typeof birthDate === 'string' ? new Date(birthDate) : birthDate
   const artwork = typeof artworkDate === 'string' ? new Date(artworkDate) : artworkDate
+  if (Number.isNaN(birth.getTime()) || Number.isNaN(artwork.getTime())) return ''
   
   const months = (artwork.getFullYear() - birth.getFullYear()) * 12 + 
                  (artwork.getMonth() - birth.getMonth())

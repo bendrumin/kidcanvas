@@ -114,7 +114,10 @@ async function handleSubscriptionChange(
   subscription: Stripe.Subscription
 ) {
   const customerId = subscription.customer as string
-  const planId = subscription.metadata.plan_id || 'family'
+  // Fail closed. This used to default to 'family', so a subscription arriving
+  // without our metadata -- created in the Stripe dashboard, or by an older
+  // client -- silently granted a paid plan.
+  const planId = subscription.metadata.plan_id || 'free'
   const interval = subscription.items.data[0]?.plan?.interval || 'month'
 
   // Get user from metadata or customer ID

@@ -393,7 +393,7 @@ export default function LandingPage() {
             <div className="p-6 rounded-xl border-2 border-[#E91E63] bg-gradient-to-br from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30">
               <p className="font-bold text-foreground text-lg">Family</p>
               <p className="text-fluid-2xl font-bold text-foreground mt-1">$4.99<span className="text-sm font-normal text-muted-foreground">/mo</span></p>
-              <p className="text-muted-foreground text-sm mb-4">or $49/year <span className="text-green-600 dark:text-green-400">(save 17%)</span></p>
+              <p className="text-muted-foreground text-sm mb-4">or $49.99/year <span className="text-green-600 dark:text-green-400">(save 17%)</span></p>
               <ul className="space-y-2 text-sm">
                 {[...PLANS.family.features, ...INCLUDED_IN_ALL_PLANS.slice(0, 5)].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-foreground">
