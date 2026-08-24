@@ -193,19 +193,18 @@ export function validateInput<T>(
 }
 
 /**
- * Validate URL is from allowed domain
+ * Validate an image URL is served from our own storage.
+ *
+ * Currently unused, but kept because the name invites reuse -- and until now it
+ * allowed only the retired Cloudflare R2 domains, so wiring it up would have
+ * rejected every real artwork URL while accepting a bucket we no longer own.
+ * Artwork now lives in Supabase Storage; `next.config.js` allows the same host
+ * for `next/image`.
  */
 export function isAllowedImageUrl(url: string): boolean {
   try {
     const parsed = new URL(url)
-    const allowedDomains = [
-      'r2.cloudflarestorage.com',
-      'r2.dev',
-    ]
-
-    return allowedDomains.some(domain =>
-      parsed.hostname.endsWith(domain)
-    )
+    return parsed.protocol === 'https:' && parsed.hostname.endsWith('.supabase.co')
   } catch {
     return false
   }
