@@ -1,0 +1,12 @@
+# Cheapest possible check: the app launches and shows the sign-in screen rather
+# than crashing on a cold start. Run this first -- if it fails, nothing else will
+# tell you anything useful.
+appId: Siegel.KidCanvas
+---
+- launchApp:
+    clearState: true
+- assertVisible: "KidCanvas"
+- assertVisible: "Welcome Back!"
+- assertVisible: "Email"
+- assertVisible: "Password"
+- assertVisible: "Sign In"

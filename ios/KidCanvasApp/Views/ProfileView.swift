@@ -99,6 +99,10 @@ struct ProfileView: View {
                             .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
                         }
                         
+                        if let family = authManager.currentFamily {
+                            FamilyMembersCard(familyId: family.id, authManager: authManager)
+                        }
+
                         SettingsLinksCard()
 
                         // Sign Out
@@ -310,3 +314,129 @@ struct SettingsRow: View {
         .environmentObject(AuthManager.shared)
 }
 
+/// Who else is in this family, and a way to remove them.
+///
+/// App Store Guideline 1.2 asks a user-generated-content app for a way to deal
+/// with an abusive person, not only their individual posts. Comments can be
+/// deleted from the artwork detail view; this is the other half. RLS already
+/// allowed owners and parents to remove members and allowed anyone to remove
+/// themselves -- there was simply no screen for it.
+struct FamilyMembersCard: View {
+    let familyId: UUID
+    @ObservedObject var authManager: AuthManager
+
+    @State private var members: [FamilyMember] = []
+    @State private var myRole: String?
+    @State private var pendingRemoval: FamilyMember?
+    @State private var errorMessage: String?
+
+    private var service: ArtworkService { ArtworkService(client: authManager.client) }
+    private var canRemoveOthers: Bool { myRole == "owner" || myRole == "parent" }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Family members", systemImage: "person.2")
+                .font(.headline)
+
+            if members.isEmpty {
+                Text("Just you so far. Share an invite code to add a grandparent or co-parent.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            ForEach(members) { member in
+                HStack(spacing: 12) {
+                    Circle()
+                        .fill(Color.subtleFill)
+                        .frame(width: 36, height: 36)
+                        .overlay(Text(initials(for: member)).font(.caption.bold()))
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(displayName(for: member))
+                            .font(.subheadline.weight(.medium))
+                        Text(member.userId == authManager.currentUser?.id
+                             ? "\(member.role.capitalized) · you"
+                             : member.role.capitalized)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+
+                    Spacer()
+
+                    if canRemove(member) {
+                        Button {
+                            pendingRemoval = member
+                        } label: {
+                            Image(systemName: "person.fill.xmark")
+                                .foregroundColor(.red)
+                        }
+                        .accessibilityLabel(
+                            member.userId == authManager.currentUser?.id
+                                ? "Leave family"
+                                : "Remove \(displayName(for: member))"
+                        )
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+        }
+        .padding()
+        .background(Color.cardSurface)
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
+        .task(id: familyId) { await load() }
+        .alert("Remove from family?", isPresented: .constant(pendingRemoval != nil)) {
+            Button("Cancel", role: .cancel) { pendingRemoval = nil }
+            Button("Remove", role: .destructive) {
+                if let member = pendingRemoval { remove(member) }
+            }
+        } message: {
+            Text(pendingRemoval?.userId == authManager.currentUser?.id
+                 ? "You'll lose access to this family's gallery."
+                 : "They'll lose access to this family's gallery. Artwork and comments stay.")
+        }
+        .alert("Couldn't remove them",
+               isPresented: .constant(errorMessage != nil),
+               actions: { Button("OK") { errorMessage = nil } },
+               message: { Text(errorMessage ?? "") })
+    }
+
+    /// The owner cannot be removed -- a family with no owner has nobody who can
+    /// manage it. Everyone can remove themselves, which is how you leave.
+    private func canRemove(_ member: FamilyMember) -> Bool {
+        if member.role == "owner" { return false }
+        return canRemoveOthers || member.userId == authManager.currentUser?.id
+    }
+
+    private func displayName(for member: FamilyMember) -> String {
+        if let nickname = member.nickname, !nickname.isEmpty { return nickname }
+        return member.userId == authManager.currentUser?.id ? "You" : "Family member"
+    }
+
+    private func initials(for member: FamilyMember) -> String {
+        let name = displayName(for: member)
+        return String(name.prefix(1)).uppercased()
+    }
+
+    private func load() async {
+        members = (try? await service.familyMembers(familyId: familyId)) ?? []
+        myRole = await service.familyRole(familyId: familyId)
+    }
+
+    private func remove(_ member: FamilyMember) {
+        let isSelf = member.userId == authManager.currentUser?.id
+        pendingRemoval = nil
+        Task {
+            do {
+                try await service.removeMember(id: member.id)
+                if isSelf {
+                    try? await authManager.signOut()
+                } else {
+                    await load()
+                }
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+        }
+    }
+}

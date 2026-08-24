@@ -9,6 +9,7 @@ struct UploadSheetView: View {
     @State private var title = ""
     @State private var story = ""
     @State private var selectedChild: Child?
+    @State private var showAddChild = false
     @State private var createdDate = Date()
     @State private var isUploading = false
     @State private var errorMessage: String?
@@ -52,6 +53,31 @@ struct UploadSheetView: View {
                                 Text("Artist")
                                     .font(.subheadline.bold())
                                     .foregroundColor(.secondary)
+
+                                if authManager.children.isEmpty {
+                                    // Save requires an artist, so with none this
+                                    // screen was a dead end: the picker was empty
+                                    // and the button stayed grey with no reason
+                                    // given.
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        Text("Add an artist before saving. Artwork is filed under whoever made it.")
+                                            .font(.footnote)
+                                            .foregroundColor(.secondary)
+                                            .fixedSize(horizontal: false, vertical: true)
+
+                                        Button {
+                                            showAddChild = true
+                                        } label: {
+                                            Label("Add an artist", systemImage: "person.crop.circle.badge.plus")
+                                                .font(.subheadline.bold())
+                                                .foregroundColor(.pink)
+                                        }
+                                    }
+                                    .padding()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(Color.cardSurface)
+                                    .cornerRadius(12)
+                                }
 
                                 Menu {
                                     ForEach(authManager.children) { child in
@@ -179,6 +205,15 @@ struct UploadSheetView: View {
                     story = story.isEmpty ? opener : story + " " + opener
                     showTemplates = false
                 }
+            }
+            .sheet(isPresented: $showAddChild) {
+                AddChildView()
+                    .environmentObject(authManager)
+            }
+            .onChange(of: authManager.children.count) { _, _ in
+                // Preselect the artist they just created so Save enables without
+                // another tap.
+                if selectedChild == nil { selectedChild = authManager.children.first }
             }
         }
     }

@@ -1,6 +1,12 @@
 import SwiftUI
 
 struct AuthView: View {
+    /// Return advances through the form. The signup fields sit under the
+    /// keyboard, so without this there is no way to reach Email or Password
+    /// except by scrolling the form up by hand.
+    private enum Field { case fullName, familyName, email, password }
+    @FocusState private var focus: Field?
+
     @State private var isLogin = true
     @State private var email = ""
     @State private var password = ""
@@ -68,29 +74,41 @@ struct AuthView: View {
                                 AuthTextField(
                                     icon: "person.fill",
                                     placeholder: "Full Name",
-                                    text: $fullName
+                                    text: $fullName,
+                                    onSubmit: { focus = .familyName }
                                 )
-                                
+                                .focused($focus, equals: .fullName)
+
                                 AuthTextField(
                                     icon: "house.fill",
                                     placeholder: "Family Name",
-                                    text: $familyName
+                                    text: $familyName,
+                                    onSubmit: { focus = .email }
                                 )
+                                .focused($focus, equals: .familyName)
                             }
                             
                             AuthTextField(
                                 icon: "envelope.fill",
                                 placeholder: "Email",
                                 text: $email,
-                                keyboardType: .emailAddress
+                                keyboardType: .emailAddress,
+                                onSubmit: { focus = .password }
                             )
+                            .focused($focus, equals: .email)
                             
                             AuthTextField(
                                 icon: "lock.fill",
                                 placeholder: "Password",
                                 text: $password,
-                                isSecure: true
+                                isSecure: true,
+                                submitLabel: .go,
+                                onSubmit: {
+                                    focus = nil
+                                    handleSubmit()
+                                }
                             )
+                            .focused($focus, equals: .password)
                         }
                         
                         if let error = errorMessage {
@@ -178,7 +196,12 @@ struct AuthTextField: View {
     @Binding var text: String
     var keyboardType: UIKeyboardType = .default
     var isSecure: Bool = false
-    
+    /// Set so Return moves to the next field. Without this the keyboard covers
+    /// Email and Password on a signup form and there is no way to advance or
+    /// dismiss it -- you have to scroll the form out from under the keyboard.
+    var submitLabel: SubmitLabel = .next
+    var onSubmit: () -> Void = {}
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
@@ -187,11 +210,15 @@ struct AuthTextField: View {
             
             if isSecure {
                 SecureField(placeholder, text: $text)
+                    .submitLabel(submitLabel)
+                    .onSubmit(onSubmit)
             } else {
                 TextField(placeholder, text: $text)
                     .keyboardType(keyboardType)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
+                    .submitLabel(submitLabel)
+                    .onSubmit(onSubmit)
             }
         }
         .padding()

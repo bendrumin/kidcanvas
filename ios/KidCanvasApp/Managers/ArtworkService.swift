@@ -133,6 +133,30 @@ struct ArtworkService {
             .execute()
     }
 
+    // MARK: - Family members
+
+    func familyMembers(familyId: UUID) async throws -> [FamilyMember] {
+        try await client
+            .from("family_members")
+            .select()
+            .eq("family_id", value: familyId.uuidString)
+            .order("joined_at", ascending: true)
+            .execute()
+            .value
+    }
+
+    /// Removes someone from a family. RLS allows this for owners and parents, and
+    /// allows anyone to remove themselves, so leaving uses the same call.
+    /// Guideline 1.2 wants a way to deal with an abusive member, not just their
+    /// individual comments.
+    func removeMember(id: UUID) async throws {
+        try await client
+            .from("family_members")
+            .delete()
+            .eq("id", value: id.uuidString)
+            .execute()
+    }
+
     // MARK: - Family invites
 
     /// Creates a single-use invite code that a grandparent or co-parent can

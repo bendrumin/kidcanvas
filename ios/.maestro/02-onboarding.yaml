@@ -1,0 +1,82 @@
+# A brand-new account used to land on an empty gallery with no explanation, and
+# the upload sheet's Save button was permanently disabled because it requires an
+# artist and there were none. This proves the first-run guide appears and leads
+# to adding one.
+#
+# Creates a throwaway account with a generated address, so reruns do not collide.
+appId: Siegel.KidCanvas
+env:
+  PASSWORD: MaestroTest!2026
+---
+# A fixed address fails on the second run ("user already exists"), which looks
+# like a broken app rather than a dirty fixture. Generate one per run.
+- evalScript: ${output.email = 'maestro-' + Date.now() + '@example.com'}
+
+- launchApp:
+    clearState: true
+
+# clearState wipes app data but not the Keychain, and Supabase keeps its session
+# there -- so a rerun can start already signed in as the previous test account.
+# Sign out first when that happens.
+# A previous run may have left us signed in AND sitting on the onboarding sheet,
+# which covers the tab bar. Dismiss it before looking for the Profile tab.
+- runFlow:
+    when:
+      visible: "I'll do this later"
+    commands:
+      - tapOn: "I'll do this later"
+
+- runFlow:
+    when:
+      notVisible: "Sign Up"
+    commands:
+      - tapOn: "Profile"
+      # Sign Out sits below the fold on Profile, more so since the family
+      # members card was added above it.
+      - scrollUntilVisible:
+          element:
+            text: "Sign Out"
+          direction: DOWN
+          timeout: 15000
+      - tapOn: "Sign Out"
+      # The alert's confirm button is the second "Sign Out" on screen: the row
+      # behind it is the first.
+      - tapOn:
+          text: "Sign Out"
+          index: 1
+      - extendedWaitUntil:
+          visible: "Sign Up"
+          timeout: 15000
+
+- assertVisible: "Sign Up"
+- tapOn: "Sign Up"
+- assertVisible: "Full Name"
+
+# Return advances through the form. This matters because the keyboard covers the
+# Email and Password fields, so tapping them directly lands on the keyboard and
+# every subsequent character goes into whichever field still had focus -- which
+# is how this flow first failed, with the whole signup concatenated into Family
+# Name. The app now chains focus, which fixes it for real users too.
+- tapOn: "Full Name"
+- inputText: "Maestro Tester"
+- pressKey: Enter
+- inputText: "Maestro Family"
+- pressKey: Enter
+- inputText: ${output.email}
+- pressKey: Enter
+- inputText: ${PASSWORD}
+- pressKey: Enter
+
+# The first-run guide, shown because the new family has no artists yet.
+- extendedWaitUntil:
+    visible: "Welcome to KidCanvas"
+    timeout: 30000
+- assertVisible: ".*Add an artist.*"
+- assertVisible: ".*Scan the artwork.*"
+- assertVisible: ".*Write down what they said.*"
+
+# ...and it leads somewhere, rather than being a dead end.
+- tapOn: "Add your first artist"
+- extendedWaitUntil:
+    visible: "Add Child"
+    timeout: 10000
