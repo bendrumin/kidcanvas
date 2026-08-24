@@ -97,6 +97,22 @@ Delete duplicate screenshots left behind by a deliver upload retry,
 
 keeping one complete copy of each filename and restoring filename order.
 
+### ios release
+
+```sh
+[bundle exec] fastlane ios release
+```
+
+Attach the newest processed build to the editable App Store version and
+
+submit it for App Review. DRY-RUNS by default and prints what it would
+
+do; only confirm:true actually submits.
+
+e.g. fastlane ios release            # inspect
+
+     fastlane ios release confirm:true
+
 ### ios metadata
 
 ```sh
