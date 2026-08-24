@@ -13,7 +13,6 @@ import {
   Shield,
   Lock,
   Heart,
-  Star,
   X,
   Smartphone,
   Sparkles,
@@ -77,17 +76,17 @@ export default function LandingPage() {
             Remember what they said,<br />not just what they drew
           </h1>
           <p className="sr-only">
-            KidCanvas helps you capture and share the stories behind your children's artwork. Remember what they said, share the moment with family, and keep those memories alive. Free for up to 50 artworks.
+            KidCanvas is a private family gallery for children's artwork. Scan a drawing, write down what your child said about it, and share both with family who can react and comment. Free for your first 50 artworks.
           </p>
 
           <p className="text-base sm:text-lg text-muted-foreground mb-3 max-w-2xl mx-auto">
-            <span className="font-semibold text-foreground">Instagram for kids' art—</span>
-            but private, meaningful, and story-first.
+            <span className="font-semibold text-foreground">Instagram for kids&apos; art</span>
+            {' '}&mdash; invite-only, and the story comes first.
           </p>
 
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-            Capture the stories behind your kids' art. Share magical moments with family.
-            <span className="font-semibold text-foreground"> Because the story matters more than the drawing.</span>
+            Scan the drawing, write down what they said about it, and share both with
+            the family who actually wants to hear it.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -106,7 +105,7 @@ export default function LandingPage() {
             </div>
             <div className="flex items-center gap-2">
               <Lock className="w-4 h-4 text-green-600 dark:text-green-400" aria-hidden="true" />
-              <span>Private & secure</span>
+              <span>Invite-only family gallery</span>
             </div>
             <div className="flex items-center gap-2">
               <Heart className="w-4 h-4 text-green-600 dark:text-green-400" aria-hidden="true" />
@@ -118,8 +117,10 @@ export default function LandingPage() {
             Your kids' artwork is never used for AI training
           </p>
 
-          <p className="mt-4 text-sm text-muted-foreground flex items-center justify-center gap-2">
-            <Smartphone className="w-4 h-4" aria-hidden="true" /> iOS app (iPhone & iPad) available via request — <Link href="/support" className="text-[#E91E63] hover:underline">use our contact form</Link> to request a TestFlight invite
+          <p className="mt-4 text-sm text-muted-foreground">
+            <Smartphone className="w-4 h-4 inline-block align-text-bottom mr-1.5" aria-hidden="true" />
+            iOS app for iPhone and iPad &mdash;{' '}
+            <Link href="/support" className="text-[#E91E63] hover:underline">ask for a TestFlight invite</Link>.
           </p>
         </div>
       </section>
@@ -207,7 +208,7 @@ export default function LandingPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <Check className="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
-                    <span><span className="font-semibold">Stories are required</span> — no story, no upload</span>
+                    <span><span className="font-semibold">The story travels with the artwork</span> &mdash; not an afterthought in a caption</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <Check className="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
@@ -293,23 +294,14 @@ export default function LandingPage() {
       {/* Social Proof */}
       <section className="py-12 px-4 sm:px-6 bg-gradient-to-b from-transparent to-amber-50/50 dark:to-transparent">
         <div className="max-w-2xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="flex -space-x-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-200 to-purple-200 dark:from-pink-800 dark:to-purple-800 border-2 border-white dark:border-background" />
-              ))}
-            </div>
-            <div className="text-left ml-2">
-              <p className="font-semibold text-foreground">Trusted by families</p>
-              <p className="text-sm text-muted-foreground">Preserving memories daily</p>
-            </div>
-          </div>
-          <div className="flex items-center justify-center gap-1 mt-4">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-            ))}
-            <span className="ml-2 text-sm text-muted-foreground">5.0 from early users</span>
-          </div>
+          <p className="text-lg font-semibold text-foreground mb-2">
+            Built by one parent, with a fridge that ran out of room
+          </p>
+          <p className="text-sm text-muted-foreground">
+            KidCanvas is new and in open beta. There are no reviews to show you yet
+            &mdash; so the free tier is 50 artworks with no card, and you can delete
+            your account and everything in it whenever you like.
+          </p>
         </div>
       </section>
 
@@ -498,7 +490,7 @@ export default function LandingPage() {
 
                 // STORYTELLING FEATURES (UNIQUE DIFFERENTIATORS)
                 {
-                  feature: '📖 Story capture (REQUIRED)',
+                  feature: '📖 Story capture',
                   kidcanvas: 'Every artwork has a story - capture what they said',
                   others: ['Not available', 'Not available', 'Manual notes only (rarely used)'],
                   kidcanvasCheck: true,
@@ -572,7 +564,7 @@ export default function LandingPage() {
                 },
                 {
                   feature: '🔍 Search by story content',
-                  kidcanvas: 'Search stories, tags, child name, AI description',
+                  kidcanvas: 'Search the story text, tags, and child name',
                   others: ['Basic search', 'Basic search', 'File name only'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, false],
@@ -614,7 +606,7 @@ export default function LandingPage() {
                 },
                 {
                   feature: '💾 Data ownership',
-                  kidcanvas: 'You own your data. Export anytime.',
+                  kidcanvas: 'Delete your account and everything in it, anytime',
                   others: ['Export available', 'Limited export', 'Export available'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, true],
@@ -642,7 +634,7 @@ export default function LandingPage() {
                 // FUTURE FEATURES
                 {
                   feature: '📖 Print photo books',
-                  kidcanvas: 'Print books with stories (coming soon)',
+                  kidcanvas: 'Print-ready PDF art books, with the stories included',
                   others: ['Yes ($30-50 per book)', 'Yes ($40-60 per book)', 'No'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, false],
@@ -791,8 +783,8 @@ Up to 50 artworks with stories, free forever • Family reactions & comments •
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
-                    <p className="font-semibold text-foreground">Export all your data anytime</p>
-                    <p className="text-muted-foreground">Download everything - you own it</p>
+                    <p className="font-semibold text-foreground">Leave whenever you want</p>
+                    <p className="text-muted-foreground">Delete your account and every artwork in one tap</p>
                   </div>
                 </div>
               </div>
