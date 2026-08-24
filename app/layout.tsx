@@ -1,6 +1,14 @@
 import type { Metadata, Viewport } from 'next'
-import Script from 'next/script'
+import { Fredoka, Nunito } from 'next/font/google'
 import './globals.css'
+
+// Self-hosted at build time. These used to be pulled in with an @import in
+// globals.css, which the Content-Security-Policy blocked -- so in production the
+// typography silently fell back to system-ui on every page. Loading them here
+// means no request to Google at runtime, so the CSP stays strict and the fonts
+// actually render.
+const nunito = Nunito({ subsets: ['latin'], variable: '--font-nunito', display: 'swap' })
+const fredoka = Fredoka({ subsets: ['latin'], variable: '--font-fredoka', display: 'swap' })
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as SonnerToaster } from 'sonner'
@@ -67,21 +75,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning itemScope itemType="https://schema.org/WebSite">
+    <html lang="en" suppressHydrationWarning itemScope itemType="https://schema.org/WebSite" className={`${nunito.variable} ${fredoka.variable}`}>
       <body className="min-h-screen antialiased">
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-DCH53W5VJT"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-DCH53W5VJT');
-          `}
-        </Script>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

@@ -820,7 +820,7 @@ Up to 50 artworks with stories, free forever • Family reactions & comments •
               },
               {
                 q: "What happens to my photos?",
-                a: "Your artwork photos are stored securely in the cloud. You own your data and can export everything anytime. We never share your photos with anyone."
+                a: "Your artwork is stored in our cloud so every device in the family can see it. We never share it with anyone and it is never used for AI training. You can delete any artwork, or your whole account and everything in it, whenever you like."
               },
               {
                 q: "Can grandparents see the stories too?",
@@ -828,11 +828,11 @@ Up to 50 artworks with stories, free forever • Family reactions & comments •
               },
               {
                 q: "What if I forget to add a story?",
-                a: "Every artwork requires a story (minimum 20 characters). This helps you remember the context and makes sharing more meaningful. We provide prompts to help you capture what your child said or what was special about the moment."
+                a: "Nothing stops you uploading without one, and you can add it later by opening the artwork. On iPhone the app asks while you are still there, with prompts if you are not sure what to ask - which is usually the moment you actually remember what they said."
               },
               {
                 q: "What if I want to cancel?",
-                a: "Cancel anytime, no questions asked. Your free plan continues with 50 artworks. You can export all your data before canceling."
+                a: "Cancel anytime, no questions asked. Your free plan continues with 50 artworks and everything you have already added stays put."
               },
               {
                 q: "Do I need the iOS app?",

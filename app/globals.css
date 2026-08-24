@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -37,8 +35,6 @@
 
     --radius: 1rem;
 
-    --font-nunito: 'Nunito', system-ui, sans-serif;
-    --font-fredoka: 'Fredoka', system-ui, sans-serif;
   }
 
   .dark {

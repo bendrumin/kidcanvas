@@ -54,7 +54,10 @@ export default function PrivacyPage() {
 
             <h3 className="text-xl font-medium text-foreground mt-4">Usage Information</h3>
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
-              <li>App usage analytics (anonymized)</li>
+              <li>Aggregate page views, counted by Vercel Analytics. It sets no
+                cookies, does not follow you to other sites, and never receives
+                your artwork, your children&apos;s names, or your stories. The iOS
+                app contains no analytics at all.</li>
               <li>Device information for troubleshooting</li>
             </ul>
           </section>
