@@ -12,7 +12,7 @@ struct AddChildView: View {
     
     var body: some View {
         ZStack {
-            Color(red: 0.98, green: 0.97, blue: 0.95)
+            Color.paperBackground
                 .ignoresSafeArea()
             
             ScrollView {
@@ -45,7 +45,7 @@ struct AddChildView: View {
                             
                             TextField("Child's name", text: $name)
                                 .padding()
-                                .background(Color.white)
+                                .background(Color.cardSurface)
                                 .cornerRadius(12)
                         }
                         
@@ -66,7 +66,7 @@ struct AddChildView: View {
                                 )
                                 .datePickerStyle(.graphical)
                                 .padding()
-                                .background(Color.white)
+                                .background(Color.cardSurface)
                                 .cornerRadius(12)
                             }
                         }

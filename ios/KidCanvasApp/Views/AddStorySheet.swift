@@ -15,14 +15,14 @@ struct AddStorySheet: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(red: 0.98, green: 0.97, blue: 0.95).ignoresSafeArea()
+                Color.paperBackground.ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: 20) {
                         AsyncImage(url: URL(string: artwork.thumbnailUrl ?? artwork.imageUrl)) { image in
                             image.resizable().aspectRatio(contentMode: .fit)
                         } placeholder: {
-                            Rectangle().fill(Color.gray.opacity(0.15)).frame(height: 160)
+                            Rectangle().fill(Color.placeholderFill).frame(height: 160)
                         }
                         .frame(maxHeight: 200)
                         .cornerRadius(14)

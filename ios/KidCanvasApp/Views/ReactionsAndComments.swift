@@ -84,7 +84,7 @@ struct ReactionButton: View {
                 isMine
                     ? AnyShapeStyle(LinearGradient(colors: [.pink, .purple],
                                                    startPoint: .leading, endPoint: .trailing))
-                    : AnyShapeStyle(Color.gray.opacity(0.12)),
+                    : AnyShapeStyle(Color.subtleFill),
                 in: Capsule()
             )
         }
@@ -137,7 +137,7 @@ struct CommentsSection: View {
                 TextField("Add a comment", text: $draft, axis: .vertical)
                     .lineLimit(1...3)
                     .padding(10)
-                    .background(Color.gray.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
+                    .background(Color.subtleFill, in: RoundedRectangle(cornerRadius: 10))
                 Button {
                     send()
                 } label: {
@@ -207,6 +207,6 @@ struct CommentRow: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(Color.gray.opacity(0.07), in: RoundedRectangle(cornerRadius: 12))
+        .background(Color.faintFill, in: RoundedRectangle(cornerRadius: 12))
     }
 }

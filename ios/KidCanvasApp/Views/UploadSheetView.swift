@@ -20,7 +20,7 @@ struct UploadSheetView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(red: 0.98, green: 0.97, blue: 0.95)
+                Color.paperBackground
                     .ignoresSafeArea()
 
                 ScrollView {
@@ -43,7 +43,7 @@ struct UploadSheetView: View {
 
                                 TextField("Artwork title", text: $title)
                                     .padding()
-                                    .background(Color.white)
+                                    .background(Color.cardSurface)
                                     .cornerRadius(12)
                             }
 
@@ -90,7 +90,7 @@ struct UploadSheetView: View {
                                             .foregroundColor(.secondary)
                                     }
                                     .padding()
-                                    .background(Color.white)
+                                    .background(Color.cardSurface)
                                     .cornerRadius(12)
                                 }
                             }
@@ -109,7 +109,7 @@ struct UploadSheetView: View {
                                 .datePickerStyle(.compact)
                                 .labelsHidden()
                                 .padding()
-                                .background(Color.white)
+                                .background(Color.cardSurface)
                                 .cornerRadius(12)
                             }
 

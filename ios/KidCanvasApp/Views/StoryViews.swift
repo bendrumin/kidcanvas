@@ -28,7 +28,7 @@ struct StoryField: View {
             TextField(prompt, text: $story, axis: .vertical)
                 .lineLimit(4...8)
                 .padding()
-                .background(Color.white)
+                .background(Color.cardSurface)
                 .cornerRadius(12)
                 .accessibilityLabel("The story behind this artwork")
 
@@ -109,7 +109,7 @@ struct CategoryStrip: View {
                                     ? AnyShapeStyle(LinearGradient(colors: [.pink, .purple],
                                                                    startPoint: .leading,
                                                                    endPoint: .trailing))
-                                    : AnyShapeStyle(Color.gray.opacity(0.12)),
+                                    : AnyShapeStyle(Color.subtleFill),
                                 in: Capsule()
                             )
                             .foregroundColor(selected == category ? .white : .primary)
@@ -167,7 +167,7 @@ struct AddStoryPrompt: View {
                     .foregroundColor(.secondary)
             }
             .padding(16)
-            .background(Color.gray.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
+            .background(Color.faintFill, in: RoundedRectangle(cornerRadius: 16))
         }
         .buttonStyle(.plain)
     }

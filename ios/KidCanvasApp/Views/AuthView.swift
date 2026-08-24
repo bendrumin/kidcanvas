@@ -15,11 +15,7 @@ struct AuthView: View {
         ZStack {
             // Background gradient
             LinearGradient(
-                colors: [
-                    Color(red: 1.0, green: 0.97, blue: 0.93),
-                    Color(red: 1.0, green: 0.94, blue: 0.90),
-                    Color(red: 1.0, green: 0.93, blue: 0.93)
-                ],
+                colors: Color.paperGradientStops,
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -141,7 +137,7 @@ struct AuthView: View {
                         }
                     }
                     .padding(32)
-                    .background(Color.white)
+                    .background(Color.cardSurface)
                     .cornerRadius(24)
                     .shadow(color: .black.opacity(0.08), radius: 20, y: 10)
                     .padding(.horizontal, 24)
@@ -199,7 +195,7 @@ struct AuthTextField: View {
             }
         }
         .padding()
-        .background(Color.gray.opacity(0.1))
+        .background(Color.subtleFill)
         .cornerRadius(12)
     }
 }

@@ -27,7 +27,7 @@ struct ArtworkDetailView: View {
                     switch phase {
                     case .empty:
                         Rectangle()
-                            .fill(Color.gray.opacity(0.2))
+                            .fill(Color.placeholderFill)
                             .aspectRatio(1, contentMode: .fit)
                             .overlay {
                                 ProgressView()
@@ -38,10 +38,10 @@ struct ArtworkDetailView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(maxWidth: .infinity)
-                            .background(Color.black.opacity(0.03))
+                            .background(Color.faintFill)
                     case .failure:
                         Rectangle()
-                            .fill(Color.gray.opacity(0.2))
+                            .fill(Color.placeholderFill)
                             .aspectRatio(1, contentMode: .fit)
                             .overlay {
                                 Image(systemName: "photo")
@@ -157,7 +157,7 @@ struct ArtworkDetailView: View {
                     }
                 }
                 .padding(24)
-                .background(Color.white)
+                .background(Color.cardSurface)
                 .cornerRadius(24, corners: [.topLeft, .topRight])
                 .offset(y: -24)
             }

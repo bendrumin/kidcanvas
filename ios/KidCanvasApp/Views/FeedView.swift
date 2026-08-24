@@ -15,7 +15,7 @@ struct FeedView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(red: 0.98, green: 0.97, blue: 0.95)
+                Color.paperBackground
                     .ignoresSafeArea()
 
                 if isLoading {
@@ -62,7 +62,7 @@ struct FeedCard: View {
                         image.resizable().aspectRatio(contentMode: .fit)
                     } placeholder: {
                         Rectangle()
-                            .fill(Color.gray.opacity(0.15))
+                            .fill(Color.placeholderFill)
                             .frame(height: 220)
                             .overlay { ProgressView().tint(.pink) }
                     }
@@ -91,7 +91,7 @@ struct FeedCard: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 10)
         }
-        .background(Color.white)
+        .background(Color.cardSurface)
         .cornerRadius(18)
         .shadow(color: .black.opacity(0.07), radius: 10, y: 4)
     }

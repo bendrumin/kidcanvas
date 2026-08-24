@@ -13,10 +13,7 @@ struct ScannerView: View {
             ZStack {
                 // Background
                 LinearGradient(
-                    colors: [
-                        Color(red: 0.98, green: 0.97, blue: 0.95),
-                        Color(red: 1.0, green: 0.95, blue: 0.93)
-                    ],
+                    colors: Color.paperGradientStops,
                     startPoint: .top,
                     endPoint: .bottom
                 )
@@ -90,7 +87,7 @@ struct ScannerView: View {
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .frame(height: 56)
-                            .background(Color.white)
+                            .background(Color.cardSurface)
                             .foregroundColor(.pink)
                             .cornerRadius(16)
                             .shadow(color: .black.opacity(0.08), radius: 8, y: 4)

@@ -25,7 +25,7 @@ struct GalleryView: View {
         NavigationStack {
             ZStack {
                 // Background
-                Color(red: 0.98, green: 0.97, blue: 0.95)
+                Color.paperBackground
                     .ignoresSafeArea()
                 
                 if isLoading {
@@ -158,7 +158,7 @@ struct ArtworkCard: View {
                     .aspectRatio(1, contentMode: .fill)
             } placeholder: {
                 Rectangle()
-                    .fill(Color.gray.opacity(0.2))
+                    .fill(Color.placeholderFill)
                     .overlay {
                         ProgressView()
                             .tint(.pink)
@@ -200,7 +200,7 @@ struct ArtworkCard: View {
             }
             .padding(12)
         }
-        .background(Color.white)
+        .background(Color.cardSurface)
         .cornerRadius(16)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(

@@ -7,7 +7,7 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(red: 0.98, green: 0.97, blue: 0.95)
+                Color.paperBackground
                     .ignoresSafeArea()
                 
                 ScrollView {
@@ -94,7 +94,7 @@ struct ProfileView: View {
                                 }
                             }
                             .padding()
-                            .background(Color.white)
+                            .background(Color.cardSurface)
                             .cornerRadius(16)
                             .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
                         }
@@ -111,7 +111,7 @@ struct ProfileView: View {
                             .foregroundColor(.red)
                             .frame(maxWidth: .infinity)
                             .frame(height: 56)
-                            .background(Color.white)
+                            .background(Color.cardSurface)
                             .cornerRadius(16)
                             .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
                         }
@@ -202,7 +202,7 @@ struct SettingsLinksCard: View {
                 SettingsRow(icon: "questionmark.circle.fill", title: "Help & Support", color: .green)
             }
         }
-        .background(Color.white)
+        .background(Color.cardSurface)
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
     }
@@ -234,7 +234,7 @@ struct DeleteAccountSection: View {
                 .foregroundColor(.red)
                 .frame(maxWidth: .infinity)
                 .frame(height: 50)
-                .background(Color.white)
+                .background(Color.cardSurface)
                 .cornerRadius(16)
                 .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
             }

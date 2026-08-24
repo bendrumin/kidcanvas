@@ -1,0 +1,32 @@
+# The Vercel CLI reads THIS file, not .gitignore. Without it, `vercel --prod`
+# uploaded everything not in Vercel's small default ignore list -- including
+# ios/build, which is ~17,000 files of Xcode derived data and SPM checkouts. That
+# pushed the deploy past Vercel's 15,000-file limit and failed with
+# "`files` should NOT have more than 15000 items".
+#
+# Only what `next build` actually needs should be uploaded.
+
+# Native app: 17k files of build output, and nothing the web build reads
+ios
+
+# Separately-deployed static marketing site (has its own vercel.json)
+site
+
+# Playwright: tests, config, reports, traces
+e2e
+playwright.config.ts
+test-results
+playwright-report
+blob-report
+playwright/.cache
+
+# Database migrations and one-off scripts are applied out-of-band
+supabase
+scripts
+
+# Documentation and planning
+docs
+
+# Local tooling
+.claude
+screenshots

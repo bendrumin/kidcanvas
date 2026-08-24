@@ -18,7 +18,7 @@ struct FamilyInviteView: View {
 
     var body: some View {
         ZStack {
-            Color(red: 0.98, green: 0.97, blue: 0.95).ignoresSafeArea()
+            Color.paperBackground.ignoresSafeArea()
 
             ScrollView {
                 VStack(spacing: 20) {
@@ -154,7 +154,7 @@ struct InviteCodeCard: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity)
-        .background(Color.white)
+        .background(Color.cardSurface)
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.06), radius: 10, y: 4)
     }
@@ -183,7 +183,7 @@ struct JoinFamilySection: View {
                     .autocorrectionDisabled()
                     .font(.system(.body, design: .monospaced))
                     .padding()
-                    .background(Color.white)
+                    .background(Color.cardSurface)
                     .cornerRadius(12)
 
                 Button("Join", action: onJoin)

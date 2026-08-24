@@ -13,7 +13,7 @@ struct FavoritesView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(red: 0.98, green: 0.97, blue: 0.95)
+                Color.paperBackground
                     .ignoresSafeArea()
                 
                 if isLoading {
