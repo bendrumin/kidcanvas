@@ -12,10 +12,24 @@ which describe code that no longer exists.
   deleting the token in Cloudflare breaks nothing.
 - **Move both storage buckets to private and use signed URLs.** Migration 008
   stopped anonymous *discovery*, but the buckets are still public-read, so
-  anyone holding an object URL can fetch it. This needs signing logic in both
-  clients and on the unauthenticated `/share/[code]` page, and it will break
-  image rendering in any already-shipped iOS build, so it has to land with a new
-  build rather than on its own.
+  anyone holding an object URL can fetch it.
+
+  The non-obvious blocker: `artworks.image_url` and `thumbnail_url` store
+  *absolute* public URLs (`.../object/public/artworks/<family>/<artwork>.jpg`).
+  Signed URLs expire, so they cannot live in a column. This is therefore not a
+  config flip but a refactor:
+
+  1. Store the storage path instead of the URL, and backfill existing rows.
+     Cheap now (5 rows), expensive after launch.
+  2. Mint signed URLs at read time. 19 files reference `image_url` /
+     `thumbnail_url` across the web app and iOS.
+  3. Sign server-side for `/share/[code]`, which serves unauthenticated
+     visitors and so cannot sign as the viewer.
+  4. Only then set `public = false` on the bucket.
+
+  Step 4 breaks image rendering in every already-shipped iOS build, so it has to
+  land together with a new build, not on its own. Do this before real families
+  start uploading -- the data migration only gets more expensive.
 
 ## Fixed
 
