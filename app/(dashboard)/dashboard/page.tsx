@@ -80,8 +80,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   // Apply search filter - search across title, tags, and AI description
   // Note: We'll filter by child name in JavaScript after fetching since it's a joined table
   if (searchQuery) {
-    // Search in title and AI description using OR
-    artworkQuery = artworkQuery.or(`title.ilike.%${searchQuery}%,ai_description.ilike.%${searchQuery}%`)
+    // Search title and the story, which is the text people actually write
+    artworkQuery = artworkQuery.or(`title.ilike.%${searchQuery}%,story.ilike.%${searchQuery}%`)
     
     // For tags, we need to check if any tag contains the search term
     // Since Supabase doesn't easily support array contains with ilike, we'll filter in JS
@@ -108,12 +108,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       const childNameMatch = artwork.child?.name?.toLowerCase().includes(searchLower)
       // Check if any tag matches (manual tags)
       const tagsMatch = artwork.tags?.some(tag => tag.toLowerCase().includes(searchLower)) || false
-      // Check if any AI tag matches
-      const aiTagsMatch = artwork.ai_tags?.some(tag => tag.toLowerCase().includes(searchLower)) || false
-      // Check if AI description matches (already filtered by query, but keep for consistency)
-      const aiDescMatch = artwork.ai_description?.toLowerCase().includes(searchLower)
-      
-      return titleMatch || childNameMatch || tagsMatch || aiTagsMatch || aiDescMatch
+      // Check if the story matches
+      const storyMatch = artwork.story?.toLowerCase().includes(searchLower) || false
+
+      return titleMatch || childNameMatch || tagsMatch || storyMatch
     })
   }
 

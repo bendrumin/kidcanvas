@@ -80,11 +80,8 @@ struct Artwork: Codable, Identifiable {
     let thumbnailUrl: String?
     let title: String
     let story: String?
-    let momentPhotoUrl: String?
     let description: String?
     let tags: [String]?
-    let aiTags: [String]?
-    let aiDescription: String?
     let createdDate: Date
     let childAgeMonths: Int?
     let isFavorite: Bool
@@ -102,11 +99,8 @@ struct Artwork: Codable, Identifiable {
         case thumbnailUrl = "thumbnail_url"
         case title
         case story
-        case momentPhotoUrl = "moment_photo_url"
         case description
         case tags
-        case aiTags = "ai_tags"
-        case aiDescription = "ai_description"
         case createdDate = "created_date"
         case childAgeMonths = "child_age_months"
         case isFavorite = "is_favorite"

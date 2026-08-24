@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { formatDate } from '@/lib/utils'
-import { Heart, Sparkles, Palette, HandHeart, Star, MessageCircle, Camera, Send, Loader2 } from 'lucide-react'
+import { Heart, Sparkles, Palette, HandHeart, Star, MessageCircle, Send, Loader2 } from 'lucide-react'
 import type { ArtworkWithChild } from '@/lib/supabase/types'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -52,7 +52,7 @@ export function FeedCardEnhanced({
   const [comments, setComments] = useState(latestComments)
 
   const totalReactions = Object.values(reactionCounts).reduce((sum, count) => sum + count, 0)
-  const storyText = artwork.story || artwork.ai_description || artwork.title || 'No story available'
+  const storyText = artwork.story || artwork.title || 'No story available'
 
   useEffect(() => {
     loadUserReaction()
@@ -237,25 +237,6 @@ export function FeedCardEnhanced({
           </div>
         )}
       </div>
-
-      {/* Moment photo - if available */}
-      {artwork.moment_photo_url && (
-        <div className="px-4 pt-3 pb-2">
-          <div className="flex items-center gap-2 mb-2">
-            <Camera className="w-4 h-4 text-muted-foreground" />
-            <span className="text-xs font-medium text-muted-foreground">Moment Photo</span>
-          </div>
-          <div className="relative w-full max-w-xs aspect-[4/3] rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900">
-            <Image
-              src={artwork.moment_photo_url}
-              alt="Moment photo"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 300px, 400px"
-            />
-          </div>
-        </div>
-      )}
 
       {/* Interactive Reactions Row */}
       <div className="px-4 pt-3 border-t border-gray-100 dark:border-gray-700">

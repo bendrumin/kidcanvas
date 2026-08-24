@@ -73,8 +73,7 @@ export function AnalyticsDashboard({
   const stats = useMemo(() => {
     const totalArtworks = filteredArtworks.length
     const favorites = filteredArtworks.filter(a => a.is_favorite).length
-    // The story is the point of the product, so count that. This used to count
-    // ai_description, which is permanently zero -- the AI route was removed.
+    // The story is the point of the product, so count that.
     const withStory = filteredArtworks.filter(a => a.story && a.story.trim().length > 0).length
     
     // Most productive month

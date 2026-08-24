@@ -159,7 +159,7 @@ export default async function SharePage({ params }: SharePageProps) {
     notFound()
   }
 
-  const allTags = [...(artwork.tags || []), ...(artwork.ai_tags || [])]
+  const allTags = artwork.tags || []
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
@@ -240,10 +240,10 @@ export default async function SharePage({ params }: SharePageProps) {
                   </div>
                 )}
 
-                {artwork.ai_description && (
+                {artwork.story && (
                   <div className="pt-4 border-t">
-                    <p className="text-sm text-muted-foreground mb-2">About this artwork</p>
-                    <p className="text-sm">{artwork.ai_description}</p>
+                    <p className="text-sm text-muted-foreground mb-2">The story</p>
+                    <p className="text-sm">{artwork.story}</p>
                   </div>
                 )}
               </div>

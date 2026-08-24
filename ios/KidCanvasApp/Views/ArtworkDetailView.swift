@@ -155,30 +155,6 @@ struct ArtworkDetailView: View {
                             }
                         }
                     }
-                    
-                    // AI Tags
-                    if let aiTags = artwork.aiTags, !aiTags.isEmpty {
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Image(systemName: "sparkles")
-                                Text("AI Detected")
-                            }
-                            .font(.subheadline.bold())
-                            .foregroundColor(.secondary)
-                            
-                            FlowLayout(spacing: 8) {
-                                ForEach(aiTags, id: \.self) { tag in
-                                    Text(tag)
-                                        .font(.caption)
-                                        .padding(.horizontal, 12)
-                                        .padding(.vertical, 6)
-                                        .background(Color.purple.opacity(0.1))
-                                        .foregroundColor(.purple)
-                                        .cornerRadius(20)
-                                }
-                            }
-                        }
-                    }
                 }
                 .padding(24)
                 .background(Color.white)
@@ -335,11 +311,8 @@ struct RoundedCorner: Shape {
             thumbnailUrl: nil,
             title: "Rainbow Butterfly",
             story: "She said it's a butterfly that only comes out at night, and its wings are made of rainbows so it can find its way home.",
-            momentPhotoUrl: nil,
             description: "A beautiful butterfly painting from art class",
             tags: ["butterfly", "colorful", "nature"],
-            aiTags: ["painting", "insect", "wings"],
-            aiDescription: nil,
             createdDate: Date(),
             childAgeMonths: 48,
             isFavorite: true,

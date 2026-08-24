@@ -49,8 +49,8 @@ export default async function FeedPage() {
     .order('created_date', { ascending: false })
 
   // Filter artworks that have stories (non-null and non-empty)
-  // Type assertion to include story and moment_photo_url fields
-  const artworks = (allArtworks as (ArtworkWithChild & { story?: string | null; moment_photo_url?: string | null })[])?.filter(artwork => 
+  // Type assertion to include the story field
+  const artworks = (allArtworks as (ArtworkWithChild & { story?: string | null })[])?.filter(artwork => 
     artwork.story && typeof artwork.story === 'string' && artwork.story.trim().length > 0
   ) || []
 

@@ -151,10 +151,10 @@ export async function generateArtBookPDF(
           
           pdf.text(metadataLines.join(' • '), margin, metadataY + 7)
           
-          if (artwork.ai_description) {
+          if (artwork.story) {
             pdf.setFontSize(8)
             pdf.setTextColor(100, 100, 100)
-            const descLines = pdf.splitTextToSize(artwork.ai_description, contentWidth)
+            const descLines = pdf.splitTextToSize(artwork.story, contentWidth)
             pdf.text(descLines, margin, metadataY + 16)
           }
         }

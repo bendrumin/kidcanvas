@@ -39,12 +39,10 @@ import {
   Calendar,
   User,
   Tag,
-  Sparkles,
   Save,
   X,
   QrCode,
-  BookOpen,
-  Camera
+  BookOpen
 } from 'lucide-react'
 import type { ArtworkWithChild, Child } from '@/lib/supabase/types'
 import { QRCodeDialog } from './qr-code-dialog'
@@ -71,11 +69,6 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
   const [isFavorite, setIsFavorite] = useState(artwork.is_favorite)
   const [shareUrl, setShareUrl] = useState<string | null>(null)
   const [showQRCode, setShowQRCode] = useState(false)
-  // Read-only: AI tagging was removed from the product, but artwork saved
-  // while it existed still has these values and they're worth showing.
-  const aiDescription = artwork.ai_description
-  const aiTags = artwork.ai_tags
-  
   const [editForm, setEditForm] = useState({
     title: artwork.title,
     story: artwork.story || '',
@@ -196,7 +189,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
 
 
 
-  const allTags = [...(artwork.tags || []), ...(aiTags || [])]
+  const allTags = artwork.tags || []
 
   return (
     <div className="space-y-6">
@@ -297,31 +290,9 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
         </div>
       )}
 
-      {/* Moment Photo or Artwork Image */}
+      {/* Artwork Image */}
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
-          {/* Moment Photo (if available) */}
-          {artwork.moment_photo_url && (
-            <div className="relative group overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-800 shadow-2xl bg-white dark:bg-gray-900">
-              <div className="relative aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-                <Image
-                  src={artwork.moment_photo_url}
-                  alt={`${artwork.child?.name} with their artwork`}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <div className="flex items-center gap-2 text-white/90 text-sm font-medium">
-                    <Camera className="w-4 h-4" />
-                    <span>The moment</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Artwork Image */}
           <div className="relative overflow-hidden rounded-3xl border-2 border-amber-200/50 dark:border-amber-900/30 bg-gradient-to-br from-amber-50/50 to-orange-50/30 dark:from-amber-950/10 dark:to-orange-950/10 shadow-xl p-4 md:p-6">
             <div className="relative aspect-[4/3] bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-inner border border-gray-200 dark:border-gray-800">
@@ -528,28 +499,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
                     </div>
                   )}
 
-                  {/* AI Tags */}
-                  {aiTags && aiTags.length > 0 && (
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-crayon-blue" />
-                        AI detected
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {aiTags.map((tag, i) => (
-                          <Badge
-                            key={i}
-                            variant="secondary"
-                            className="bg-gradient-to-r from-crayon-blue/20 to-crayon-green/20 border-crayon-blue/30"
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {!artwork.tags?.length && !aiTags?.length && (
+                  {!artwork.tags?.length && (
                     <p className="text-sm text-muted-foreground">No tags yet</p>
                   )}
                 </div>
@@ -557,20 +507,6 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
             </CardContent>
           </Card>
 
-          {/* AI Description */}
-          {aiDescription && (
-            <Card className="bg-gradient-to-br from-crayon-blue/5 to-crayon-green/5">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-crayon-blue" />
-                  AI Description
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm">{aiDescription}</p>
-              </CardContent>
-            </Card>
-          )}
         </div>
       </div>
 

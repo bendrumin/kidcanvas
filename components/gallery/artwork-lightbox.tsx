@@ -17,8 +17,7 @@ import {
   Calendar,
   User,
   Tag,
-  Loader2,
-  Sparkles
+  Loader2
 } from 'lucide-react'
 import { formatDate, calculateAge } from '@/lib/utils'
 import type { ArtworkWithChild } from '@/lib/supabase/types'
@@ -162,7 +161,7 @@ export function ArtworkLightbox({
 
   if (!artwork) return null
 
-  const allTags = [...(artwork.tags || []), ...(artwork.ai_tags || [])]
+  const allTags = artwork.tags || []
 
   return (
     <AnimatePresence>
@@ -226,7 +225,7 @@ export function ArtworkLightbox({
           <figure className="relative flex-1 min-h-[300px] lg:min-h-[500px] bg-gray-100 dark:bg-gray-900">
             <Image
               src={artwork.image_url}
-              alt={`${artwork.title} by ${artwork.child?.name || 'Unknown artist'}${artwork.ai_description ? `. ${artwork.ai_description}` : ''}`}
+              alt={`${artwork.title} by ${artwork.child?.name || 'Unknown artist'}${artwork.story ? `. ${artwork.story}` : ''}`}
               fill
               className="object-contain transition-opacity duration-300"
               sizes="(max-width: 1024px) 100vw, 60vw"
@@ -339,14 +338,13 @@ export function ArtworkLightbox({
                 </div>
               )}
 
-              {/* AI Description */}
-              {artwork.ai_description && (
+              {/* The story */}
+              {artwork.story && (
                 <div className="p-3 rounded-xl bg-gradient-to-r from-crayon-blue/10 to-crayon-green/10">
-                  <p className="text-xs font-medium text-muted-foreground mb-1 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    AI Description
+                  <p className="text-xs font-medium text-muted-foreground mb-1">
+                    The story
                   </p>
-                  <p className="text-sm">{artwork.ai_description}</p>
+                  <p className="text-sm">{artwork.story}</p>
                 </div>
               )}
 
