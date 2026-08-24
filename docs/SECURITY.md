@@ -6,10 +6,6 @@ which describe code that no longer exists.
 
 ## Open — needs a person
 
-- **Rotate the old Cloudflare R2 API token.** The secret was committed in
-  plaintext (in the old `ios/.../Config.swift` and in an archived audit doc), so
-  it is permanently in this repo's public history. Nothing uses R2 any more, so
-  deleting the token in Cloudflare breaks nothing.
 - **Move both storage buckets to private and use signed URLs.** Migration 008
   stopped anonymous *discovery*, but the buckets are still public-read, so
   anyone holding an object URL can fetch it.
@@ -32,6 +28,20 @@ which describe code that no longer exists.
   start uploading -- the data migration only gets more expensive.
 
 ## Fixed
+
+- **The leaked Cloudflare R2 credentials are dead.** The access key id and secret
+  were committed in plaintext -- in the old `ios/.../Config.swift` and then, more
+  awkwardly, in the archived audit document describing the leak -- and this repo
+  is public. They were redacted from the working tree, but that only stopped
+  casual browsing: `git show 0144331^:docs/archive/technical/IOS_SECURITY_ISSUES.md`
+  still prints them, and that commit is reachable from `origin/main`. What
+  actually resolved it was deleting the token in Cloudflare (2026-08-23; the
+  account has since been cancelled, as R2 was never used after the migration to
+  Supabase Storage). The strings remain in history and are now worthless.
+
+  Worth keeping the general lesson: redacting a secret from HEAD does not
+  invalidate it. Rotating at the provider is the only fix, and it is usually
+  faster than rewriting published history.
 
 - **Hardcoded storage credentials in the iOS app.** Gone with the rebuild; the
   app now ships only the Supabase anon key, which is safe by design because
