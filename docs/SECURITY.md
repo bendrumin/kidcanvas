@@ -22,13 +22,23 @@ Supersedes the archived audit docs, which describe code that no longer exists.
   row-level security does the enforcement.
 - **iOS uploads bypassing every server-side check.** The app writes straight to
   Storage, so the web app's 10MB cap, MIME check, and membership check never
-  ran. Now enforced *at the bucket* (`security_addendum.sql`): size limits,
-  an allow-list of image and audio types, and insert/delete policies that
-  confine each client to folders named after a family it belongs to. The app
-  also compresses down to fit the cap before uploading.
+  ran. Now enforced *at the bucket*: a 10MB `file_size_limit`, an
+  `allowed_mime_types` allow-list, and insert/delete policies that confine each
+  client to folders named after a family it belongs to. The app also compresses
+  down to fit the cap before uploading.
 - **Any signed-in user could write anywhere in the bucket.** Same policy fix.
 - **Deletes were scoped to the uploader**, so a co-parent removing artwork left
   the file orphaned. Deletes now follow family membership.
+
+  These three were written in `security_addendum.sql` and listed here as fixed
+  for weeks, but querying the live database showed that file had never been run:
+  `file_size_limit` and `allowed_mime_types` were both NULL, INSERT was still
+  the blanket `WITH CHECK (bucket_id = 'artworks')`, and DELETE was still
+  uploader-scoped. Anyone who signed up could write any file of any size into
+  any family's folder. `migrations/009_apply_storage_hardening.sql` actually
+  applied them, and the result was verified by query afterwards. Writing a
+  policy in this repo is not the same as it being live -- check
+  `pg_policies` and `storage.buckets`, not the file list.
 - **A live AI route still spending an Anthropic key.** `app/api/ai-tag` is
   deleted along with the button that called it, since AI was removed from the
   product.
