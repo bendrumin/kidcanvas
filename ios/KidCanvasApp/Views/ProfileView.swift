@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ProfileView: View {
     @EnvironmentObject var authManager: AuthManager
-    @State private var showSignOutAlert = false
     
     var body: some View {
         NavigationStack {
@@ -103,24 +102,6 @@ struct ProfileView: View {
                             FamilyMembersCard(familyId: family.id, authManager: authManager)
                         }
 
-                        SettingsLinksCard()
-
-                        // Sign Out
-                        Button(action: { showSignOutAlert = true }) {
-                            HStack {
-                                Image(systemName: "rectangle.portrait.and.arrow.right")
-                                Text("Sign Out")
-                            }
-                            .font(.headline)
-                            .foregroundColor(.red)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 56)
-                            .background(Color.cardSurface)
-                            .cornerRadius(16)
-                            .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
-                        }
-                        
-                        DeleteAccountSection(authManager: authManager)
 
                         Text("KidCanvas v1.0")
                             .font(.caption)
@@ -133,15 +114,16 @@ struct ProfileView: View {
                 }
             }
             .navigationTitle("Profile")
-            .alert("Sign Out", isPresented: $showSignOutAlert) {
-                Button("Cancel", role: .cancel) {}
-                Button("Sign Out", role: .destructive) {
-                    Task {
-                        try? await authManager.signOut()
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        SettingsView()
+                            .environmentObject(authManager)
+                    } label: {
+                        Image(systemName: "gearshape")
                     }
+                    .accessibilityLabel("Settings")
                 }
-            } message: {
-                Text("Are you sure you want to sign out?")
             }
         }
     }

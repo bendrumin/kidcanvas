@@ -114,6 +114,45 @@ class AuthManager: ObservableObject {
         await loadFamily()
     }
 
+    func renameFamily(_ name: String) async throws {
+        guard let family = currentFamily else { return }
+        struct Rename: Encodable { let name: String }
+        try await supabase
+            .from("families")
+            .update(Rename(name: name))
+            .eq("id", value: family.id.uuidString)
+            .execute()
+        await loadFamily()
+    }
+
+    /// Permanently deletes the family and everything in it, for every member.
+    /// RLS restricts the row delete to the owner, and every table cascades from
+    /// families -- children, artworks, comments, reactions, memberships. Storage
+    /// files are removed first, same as account deletion, since a cascade cannot
+    /// reach the bucket. loadFamily() then self-heals by creating a fresh empty
+    /// family, so the owner lands on a clean slate rather than a broken state.
+    func deleteFamily() async throws {
+        guard let family = currentFamily else { return }
+
+        let folder = family.id.uuidString.lowercased()
+        let storage = supabase.storage.from(Config.artworkBucket)
+        if let files = try? await storage.list(path: folder), !files.isEmpty {
+            _ = try? await storage.remove(paths: files.map { "\(folder)/\($0.name)" })
+        }
+
+        try await supabase
+            .from("families")
+            .delete()
+            .eq("id", value: family.id.uuidString)
+            .execute()
+
+        currentFamily = nil
+        children = []
+        // Let the first-run guide reappear for the fresh family.
+        UserDefaults.standard.removeObject(forKey: "hasSeenOnboarding")
+        await loadFamily()
+    }
+
     func signOut() async throws {
         try await supabase.auth.signOut()
         isAuthenticated = false

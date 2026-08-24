@@ -4,11 +4,17 @@ import Supabase
 @main
 struct KidCanvasApp: App {
     @StateObject private var authManager = AuthManager.shared
-    
+    /// "system" | "light" | "dark", set from Settings.
+    @AppStorage("appearance") private var appearance = "system"
+
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(authManager)
+                .preferredColorScheme(
+                    appearance == "light" ? .light :
+                    appearance == "dark" ? .dark : nil
+                )
         }
     }
 }

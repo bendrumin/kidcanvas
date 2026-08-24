@@ -1,0 +1,117 @@
+# The full click-through: every tab, an artwork's detail, and every Settings
+# section, using the pre-seeded App Review demo account. Read-only on purpose --
+# it asserts what is on screen and never mutates the demo data, so it can run
+# any number of times.
+appId: Siegel.KidCanvas
+---
+- launchApp:
+    clearState: true
+
+# A previous run may have left a live session (clearState does not clear the
+# Keychain). Get to the sign-in screen from whatever state we are in.
+- runFlow:
+    when:
+      visible: "I'll do this later"
+    commands:
+      - tapOn: "I'll do this later"
+- runFlow:
+    when:
+      notVisible: "Sign In"
+    commands:
+      - tapOn: "Profile"
+      - tapOn: "Settings"
+      - scrollUntilVisible:
+          element:
+            text: "Sign Out"
+          direction: DOWN
+          timeout: 15000
+      - tapOn: "Sign Out"
+      - tapOn:
+          text: "Sign Out"
+          index: 1
+
+# Sign in as the demo account (pre-seeded: family, two children, artwork).
+- extendedWaitUntil:
+    visible: "Sign In"
+    timeout: 15000
+- tapOn: "Email"
+- inputText: "kidcanvas.appreview@gmail.com"
+- pressKey: Enter
+- inputText: "ReviewDemo!2026"
+- pressKey: Enter
+# Either the feed appears, or iOS's save-password dialog lands on top of it
+# first -- wait for whichever comes, dismiss the dialog if it is there, and only
+# then assert the feed.
+- extendedWaitUntil:
+    visible: ".*(Save Password|Recently).*"
+    timeout: 25000
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+
+# Feed: the newest artwork with its reactions row.
+- extendedWaitUntil:
+    visible: "Recently"
+    timeout: 10000
+
+# Gallery: grid renders, an artwork opens, detail shows the essentials.
+- tapOn: "Gallery"
+- extendedWaitUntil:
+    visible: ".*Rainbow.*"
+    timeout: 15000
+- tapOn: ".*Rainbow.*"
+- extendedWaitUntil:
+    visible: ".*Comments.*"
+    timeout: 15000
+- back
+
+# Favorites tab renders.
+- tapOn: "Favorites"
+
+# Profile: family card, children, members, invite entry point.
+- tapOn: "Profile"
+- assertVisible: "The Demo Family"
+- assertVisible: ".*Add Child.*"
+- assertVisible: ".*Invite family.*"
+- scrollUntilVisible:
+    element:
+      text: ".*Family members.*"
+    direction: DOWN
+    timeout: 15000
+
+# Settings: every section present, and the theme toggle actually works.
+- tapOn: "Settings"
+- assertVisible: "Appearance"
+- assertVisible: "Memory prompts"
+- assertVisible: "The Demo Family"
+- assertVisible: "Rename family"
+- assertVisible: "Delete family…"
+- tapOn: "Dark"
+- tapOn: "Light"
+- tapOn: "System"
+- scrollUntilVisible:
+    element:
+      text: "Privacy Policy"
+    direction: DOWN
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+      text: "Help & Support"
+    direction: DOWN
+    timeout: 15000
+
+# Sign out, ending where the suite expects to start.
+- scrollUntilVisible:
+    element:
+      text: "Sign Out"
+    direction: DOWN
+    timeout: 15000
+- tapOn: "Sign Out"
+- tapOn:
+    text: "Sign Out"
+    index: 1
+- extendedWaitUntil:
+    visible: "Sign In"
+    timeout: 15000

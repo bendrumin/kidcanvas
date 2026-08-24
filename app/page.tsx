@@ -439,6 +439,9 @@ export default function LandingPage() {
                   <span className="text-xs bg-green-200 dark:bg-green-900/40 text-green-800 dark:text-green-200 px-3 py-1 rounded-full font-medium">
                     📖 Print-ready art books
                   </span>
+                  <span className="text-xs bg-amber-200 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-3 py-1 rounded-full font-medium">
+                    ⏰ Story nudges
+                  </span>
                   <span className="text-xs bg-orange-200 dark:bg-orange-900/40 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full font-medium">
                     📱 Instagram-style feed
                   </span>
@@ -506,8 +509,8 @@ export default function LandingPage() {
                   highlight: true,
                 },
                 {
-                  feature: '⏰ Memory prompts',
-                  kidcanvas: 'Reminds you to capture art at the right time',
+                  feature: '⏰ Story nudges',
+                  kidcanvas: 'A nudge when it has been a week, and before each birthday (iOS)',
                   others: ['Not available', 'Not available', 'No reminders'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, false],
@@ -742,6 +745,13 @@ Up to 50 artworks with stories, free forever • Family reactions & comments •
                   <div>
                     <p className="font-semibold text-foreground">Print-ready art books</p>
                     <p className="text-muted-foreground">Turn a year of artwork and stories into a PDF</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <div>
+                    <p className="font-semibold text-foreground">Story nudges</p>
+                    <p className="text-muted-foreground">The iOS app taps you on the shoulder when it&apos;s been a week &mdash; and before each birthday. Scheduled on your phone; nothing leaves it.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

@@ -31,8 +31,8 @@ env:
       notVisible: "Sign Up"
     commands:
       - tapOn: "Profile"
-      # Sign Out sits below the fold on Profile, more so since the family
-      # members card was added above it.
+      # Sign Out moved into Settings, behind the gear in the nav bar.
+      - tapOn: "Settings"
       - scrollUntilVisible:
           element:
             text: "Sign Out"

@@ -20,6 +20,8 @@ appId: Siegel.KidCanvas
       notVisible: "Sign In"
     commands:
       - tapOn: "Profile"
+      # Sign Out moved into Settings, behind the gear in the nav bar.
+      - tapOn: "Settings"
       - scrollUntilVisible:
           element:
             text: "Sign Out"
