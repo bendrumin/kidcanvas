@@ -41,5 +41,6 @@ Status as of 2026-08-20, for version 1.0 (build 14).
 
 ## Backend prerequisite
 
-`supabase/account_deletion.sql` must be run in the Supabase SQL editor before
-submission, or the Delete Account button will fail — App Review does test it.
+The Delete Account button calls the `delete_my_account()` RPC. Verified live:
+the function exists and is `SECURITY DEFINER`, so this prerequisite is met. Its
+definition is in `supabase/schema_baseline.sql`.

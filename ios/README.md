@@ -23,9 +23,12 @@ ios/
 ## Backend setup (fresh Supabase project)
 
 1. Create a project at supabase.com.
-2. In the SQL Editor, run `supabase/revive_ios_schema.sql` from the repo root —
-   it creates all tables, RLS policies, helper functions, and the public
-   `artworks` storage bucket. There is **no AI processing** in this schema.
+2. In the SQL Editor, run `supabase/schema_baseline.sql` from the repo root —
+   it creates all tables, RLS policies, helper functions, and the event trigger
+   that auto-enables RLS on new tables. Do not run anything in
+   `supabase/archive/`; see `supabase/README.md` for why. You will also need to
+   create the public `artworks` storage bucket. There is **no AI processing**
+   in this schema.
 3. (Recommended) Authentication → Providers → Email → turn OFF
    "Confirm email", so sign-up works instantly in the app.
 4. Copy Project Settings → API → URL and anon key into

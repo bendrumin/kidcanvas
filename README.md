@@ -16,7 +16,7 @@ A beautiful family artwork scanner and gallery app. Scan, organize, and share yo
 
 - **Frontend:** Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui
 - **Backend:** Supabase (Auth, Database, Realtime)
-- **Storage:** Cloudflare R2 (S3-compatible)
+- **Storage:** Supabase Storage
 - **AI:** Anthropic Claude (optional)
 
 ## Getting Started
@@ -25,7 +25,7 @@ A beautiful family artwork scanner and gallery app. Scan, organize, and share yo
 
 - Node.js 18+
 - Supabase account
-- Cloudflare R2 bucket (or any S3-compatible storage)
+- (Storage is a Supabase bucket; no separate provider needed)
 - Anthropic API key (optional, for AI features)
 
 ### Installation
@@ -48,20 +48,16 @@ A beautiful family artwork scanner and gallery app. Scan, organize, and share yo
 
 4. Set up your Supabase database:
    - Create a new Supabase project
-   - Run the SQL in `supabase/schema.sql` in the SQL Editor
+   - Run the SQL in `supabase/schema_baseline.sql` in the SQL Editor
+     (see `supabase/README.md` -- do not run anything in `supabase/archive/`)
    - Copy your project URL and keys to `.env.local`
 
-5. Set up Cloudflare R2:
-   - Create an R2 bucket
-   - Generate API tokens with read/write access
-   - Add the endpoint and credentials to `.env.local`
-
-6. Run the development server:
+5. Run the development server:
    ```bash
    npm run dev
    ```
 
-7. Open [http://localhost:3000](http://localhost:3000)
+6. Open [http://localhost:3000](http://localhost:3000)
 
 ### Environment Variables
 
@@ -71,18 +67,26 @@ NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 
-# Cloudflare R2
-R2_ENDPOINT=https://your-account-id.r2.cloudflarestorage.com
-R2_ACCESS_KEY_ID=your_r2_access_key_id
-R2_SECRET_ACCESS_KEY=your_r2_secret_access_key
-R2_BUCKET=kidcanvas-artwork
-R2_PUBLIC_URL=https://your-bucket.r2.dev
-
-# Optional: Claude API for AI tagging
-ANTHROPIC_API_KEY=your_anthropic_api_key
-
-# App
+# App -- single canonical origin. Share links and Stripe redirect URLs are
+# built from this, so it must be exactly one URL.
 NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# Optional: extra origins that should still pass the CSRF origin check
+# (comma-separated). Used so www and an old deploy host keep working when the
+# canonical domain changes.
+CSRF_ALLOWED_ORIGINS=
+
+# Optional: invite emails. Without either of these the invite API returns 503
+# and the UI falls back to sharing the link manually.
+RESEND_API_KEY=
+# ...or SMTP instead of Resend:
+SMTP_HOST=
+SMTP_PORT=587
+SMTP_USER=
+SMTP_PASSWORD=
+
+# Optional: gates the /dashboard/admin page and the admin delete endpoint
+ADMIN_EMAIL=
 ```
 
 ## Project Structure
@@ -121,7 +125,6 @@ components/
 
 lib/
 ├── supabase/              # Supabase clients
-├── r2.ts                  # R2 storage utilities
 └── utils.ts               # Utility functions
 ```
 

@@ -124,7 +124,7 @@ Host at: `https://kidcanvas.app/privacy`
 
 Create a privacy policy page covering:
 - Data collected (email, photos, children's names)
-- How data is stored (Supabase, Cloudflare R2)
+- How data is stored (Supabase Postgres and Supabase Storage)
 - Third-party services (Stripe for payments)
 - Data retention and deletion
 - Contact information

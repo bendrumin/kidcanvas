@@ -1,7 +1,8 @@
 # KidCanvas security notes
 
-State as of 2026-08-20, after the iOS rebuild and the move off Cloudflare R2.
-Supersedes the archived audit docs, which describe code that no longer exists.
+State as of 2026-08-23, after the kidcanvas.app cutover and the storage
+policy fixes in migrations 008 and 009. Supersedes the archived audit docs,
+which describe code that no longer exists.
 
 ## Open — needs a person
 
@@ -9,11 +10,12 @@ Supersedes the archived audit docs, which describe code that no longer exists.
   plaintext (in the old `ios/.../Config.swift` and in an archived audit doc), so
   it is permanently in this repo's public history. Nothing uses R2 any more, so
   deleting the token in Cloudflare breaks nothing.
-- **Run the SQL addenda** on the Supabase project: `ios_addendum.sql`,
-  `web_addendum.sql`, `account_deletion.sql`, `security_addendum.sql`. Account
-  deletion in particular is an App Store requirement that App Review tests.
-- **Confirm `NEXT_PUBLIC_APP_URL`** in Vercel matches the deployed origin, or
-  CSRF protection will reject legitimate form posts.
+- **Move both storage buckets to private and use signed URLs.** Migration 008
+  stopped anonymous *discovery*, but the buckets are still public-read, so
+  anyone holding an object URL can fetch it. This needs signing logic in both
+  clients and on the unauthenticated `/share/[code]` page, and it will break
+  image rendering in any already-shipped iOS build, so it has to land with a new
+  build rather than on its own.
 
 ## Fixed
 

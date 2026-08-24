@@ -20,9 +20,11 @@ still sells preservation. See `COPY_BANK.md` for story-first alternatives.
 
 ## Next up on iOS
 
-Items 1–5 all ride on schema that already exists in
-`supabase/migrations/004_storytelling_features.sql`, so applying
-`supabase/web_addendum.sql` unblocks them together.
+Items 1–5 all ride on schema that is already live. Verified by query: the
+`artworks` table has `story`, `moment_photo_url`, `voice_note_url`,
+`voice_duration_seconds` and `voice_uploaded_at`, and `artwork_comments` and
+`artwork_reactions` both exist. Nothing needs applying first; this is client
+work only.
 
 1. **Story field on upload.** A required free-text "what did they say about it?"
    field (the web app requires 20+ characters) promoted above the title. The
