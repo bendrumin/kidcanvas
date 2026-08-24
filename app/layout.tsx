@@ -61,7 +61,10 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://kidcanvas.app',
+    // './' resolves against metadataBase per page. The old absolute homepage
+    // URL was inherited by every route, telling Google that /support, /privacy
+    // and /signup were duplicates of / and should not be indexed.
+    canonical: './',
   },
   verification: {
     // Add these when you have them:

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 
 export const metadata = {
-  title: 'Privacy Policy - KidCanvas',
+  title: 'Privacy Policy',
   description: 'KidCanvas privacy policy - how we protect your family\'s data',
 }
 

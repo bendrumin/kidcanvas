@@ -1,91 +1,73 @@
-'use client'
+/**
+ * Server-rendered JSON-LD.
+ *
+ * The previous version injected these with useEffect, so the structured data
+ * only existed client-side after hydration -- a crawler fetching the HTML saw
+ * none of it, which is why Google had nothing to read. These render inline in
+ * the server HTML.
+ *
+ * Also removed while rewriting: a fabricated aggregateRating (5 stars from 1
+ * rating) -- invented review markup is a Google structured-data policy
+ * violation, not just bad taste; a logo URL that 404ed; and a SearchAction
+ * pointing into the auth-walled dashboard, where a search box result would
+ * strand anyone who used it.
+ */
 
-import { useEffect } from 'react'
-
-interface StructuredDataProps {
-  type: 'Organization' | 'SoftwareApplication' | 'WebSite'
-  data: Record<string, any>
-}
-
-export function StructuredData({ type, data }: StructuredDataProps) {
-  useEffect(() => {
-    const script = document.createElement('script')
-    script.type = 'application/ld+json'
-    script.text = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': type,
-      ...data,
-    })
-    document.head.appendChild(script)
-
-    return () => {
-      document.head.removeChild(script)
-    }
-  }, [type, data])
-
-  return null
-}
-
-// Organization schema for homepage
-export function OrganizationSchema() {
+function JsonLd({ data }: { data: Record<string, unknown> }) {
   return (
-    <StructuredData
-      type="Organization"
-      data={{
-        name: 'KidCanvas',
-        url: 'https://kidcanvas.app',
-        logo: 'https://kidcanvas.app/logo.png',
-        description: 'Digitally preserve your children\'s artwork. Scan, organize, and share with family.',
-        sameAs: [
-          // Add social media links when available
-        ],
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({ '@context': 'https://schema.org', ...data }),
       }}
     />
   )
 }
 
-// SoftwareApplication schema
+export function OrganizationSchema() {
+  return (
+    <JsonLd
+      data={{
+        '@type': 'Organization',
+        name: 'KidCanvas',
+        url: 'https://kidcanvas.app',
+        logo: 'https://kidcanvas.app/logo.png',
+        description:
+          "A private family gallery for children's artwork and the stories behind it.",
+      }}
+    />
+  )
+}
+
 export function SoftwareApplicationSchema() {
   return (
-    <StructuredData
-      type="SoftwareApplication"
+    <JsonLd
       data={{
+        '@type': 'SoftwareApplication',
         name: 'KidCanvas',
-        applicationCategory: 'FamilyApplication',
-        operatingSystem: 'Web, iOS',
+        applicationCategory: 'LifestyleApplication',
+        operatingSystem: 'iOS, Web',
+        url: 'https://kidcanvas.app',
+        description:
+          "Scan children's artwork, write down the story in their words, and share both with family who can react and comment.",
         offers: {
           '@type': 'Offer',
           price: '0',
           priceCurrency: 'USD',
         },
-        aggregateRating: {
-          '@type': 'AggregateRating',
-          ratingValue: '5',
-          ratingCount: '1',
-        },
       }}
     />
   )
 }
 
-// WebSite schema with search action
 export function WebSiteSchema() {
   return (
-    <StructuredData
-      type="WebSite"
+    <JsonLd
       data={{
+        '@type': 'WebSite',
         name: 'KidCanvas',
         url: 'https://kidcanvas.app',
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: {
-            '@type': 'EntryPoint',
-            urlTemplate: 'https://kidcanvas.app/dashboard?search={search_term_string}',
-          },
-          'query-input': 'required name=search_term_string',
-        },
       }}
     />
   )
 }
-

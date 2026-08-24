@@ -501,17 +501,19 @@ export default function LandingPage() {
                 // STORYTELLING FEATURES (UNIQUE DIFFERENTIATORS)
                 {
                   feature: '📖 Story capture',
-                  kidcanvas: 'Every artwork has a story - capture what they said',
-                  others: ['Not available', 'Not available', 'Manual notes only (rarely used)'],
+                  kidcanvas: 'Written in their words, searchable, shown with the artwork everywhere',
+                  // Keepy does record voice stories -- claiming otherwise about a
+                  // named competitor is a false statement, not marketing.
+                  others: ['Title and details', 'Voice recordings', 'Manual notes only (rarely used)'],
                   kidcanvasCheck: true,
-                  othersCheck: [false, false, false],
+                  othersCheck: [false, true, false],
                   category: 'storytelling',
                   highlight: true,
                 },
                 {
                   feature: '⏰ Story nudges',
                   kidcanvas: 'A nudge when it has been a week, and before each birthday (iOS)',
-                  others: ['Not available', 'Not available', 'No reminders'],
+                  others: ['Not advertised', 'Not advertised', 'No reminders'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, false],
                   category: 'storytelling',
