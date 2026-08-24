@@ -49,7 +49,7 @@ export default async function SettingsPage() {
               <div>
                 <p className="font-semibold">Upgrade to Family Plan</p>
                 <p className="text-sm text-muted-foreground">
-                  Unlimited artwork, AI tagging, collections, and more
+                  Unlimited artworks and child profiles
                 </p>
               </div>
               <SettingsActions 

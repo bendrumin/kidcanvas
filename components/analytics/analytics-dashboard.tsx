@@ -73,7 +73,9 @@ export function AnalyticsDashboard({
   const stats = useMemo(() => {
     const totalArtworks = filteredArtworks.length
     const favorites = filteredArtworks.filter(a => a.is_favorite).length
-    const withAIDescription = filteredArtworks.filter(a => a.ai_description).length
+    // The story is the point of the product, so count that. This used to count
+    // ai_description, which is permanently zero -- the AI route was removed.
+    const withStory = filteredArtworks.filter(a => a.story && a.story.trim().length > 0).length
     
     // Most productive month
     const monthCounts = new Map<number, number>()
@@ -103,7 +105,7 @@ export function AnalyticsDashboard({
     return {
       totalArtworks,
       favorites,
-      withAIDescription,
+      withStory,
       mostProductiveMonth,
       childCounts,
       avgAge,
@@ -242,14 +244,14 @@ export function AnalyticsDashboard({
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <Palette className="w-4 h-4" />
-              AI Tagged
+              With a story
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-foreground">{stats.withAIDescription}</div>
+            <div className="text-3xl font-bold text-foreground">{stats.withStory}</div>
             <p className="text-xs text-muted-foreground mt-1">
               {stats.totalArtworks > 0
-                ? `${Math.round((stats.withAIDescription / stats.totalArtworks) * 100)}% auto-tagged`
+                ? `${Math.round((stats.withStory / stats.totalArtworks) * 100)}% have one`
                 : 'with descriptions'}
             </p>
           </CardContent>

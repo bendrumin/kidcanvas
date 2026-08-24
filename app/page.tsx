@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { ArtworkScribble } from '@/components/artwork-scribble'
 import { Logo } from '@/components/logo'
+import { PLANS, INCLUDED_IN_ALL_PLANS } from '@/lib/stripe'
 import { OrganizationSchema, SoftwareApplicationSchema, WebSiteSchema } from '@/components/seo/structured-data'
 import {
   ArrowRight,
@@ -379,7 +380,7 @@ export default function LandingPage() {
               <p className="text-fluid-2xl font-bold text-foreground mt-1">$0</p>
               <p className="text-muted-foreground text-sm mb-4">Forever</p>
               <ul className="space-y-2 text-sm">
-                {['Up to 50 artworks with stories', '1 child', '1 family', 'Basic story capture', 'Family reactions & comments', 'Basic moment photos', 'Public sharing links'].map((f) => (
+                {[...PLANS.free.features, ...INCLUDED_IN_ALL_PLANS.slice(0, 4)].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-foreground">
                     <Check className="w-4 h-4 text-green-600 dark:text-green-400" aria-hidden="true" />
                     {f}
@@ -394,7 +395,7 @@ export default function LandingPage() {
               <p className="text-fluid-2xl font-bold text-foreground mt-1">$4.99<span className="text-sm font-normal text-muted-foreground">/mo</span></p>
               <p className="text-muted-foreground text-sm mb-4">or $49/year <span className="text-green-600 dark:text-green-400">(save 17%)</span></p>
               <ul className="space-y-2 text-sm">
-                {['Unlimited artworks with stories', 'Unlimited children', 'Unlimited moment photos', 'Story templates & prompts', 'Memory timeline view', 'AI auto-tagging', 'Reactions & comments', 'Priority support'].map((f) => (
+                {[...PLANS.family.features, ...INCLUDED_IN_ALL_PLANS.slice(0, 5)].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-foreground">
                     <Check className="w-4 h-4 text-green-600 dark:text-green-400" aria-hidden="true" />
                     {f}
@@ -591,14 +592,6 @@ export default function LandingPage() {
                   category: 'organization',
                 },
                 {
-                  feature: '🤖 AI auto-tagging',
-                  kidcanvas: 'AI describes artwork content automatically',
-                  others: ['Not available', 'Not available', 'Generic photo tags'],
-                  kidcanvasCheck: true,
-                  othersCheck: [false, false, false],
-                  category: 'organization',
-                },
-                {
                   feature: '🔍 Search by story content',
                   kidcanvas: 'Search stories, tags, child name, AI description',
                   others: ['Basic search', 'Basic search', 'File name only'],
@@ -674,14 +667,6 @@ export default function LandingPage() {
                   others: ['Yes ($30-50 per book)', 'Yes ($40-60 per book)', 'No'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, false],
-                  category: 'future',
-                },
-                {
-                  feature: '🎙️ Voice note stories',
-                  kidcanvas: 'Record child telling story (coming soon)',
-                  others: ['Not available', 'Not available', 'No'],
-                  kidcanvasCheck: true,
-                  othersCheck: [false, false, false],
                   category: 'future',
                 },
               ].map((row, i) => (

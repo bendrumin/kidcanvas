@@ -4,83 +4,41 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge'
 import { Check, Sparkles, Crown, Zap, AlertCircle } from 'lucide-react'
 import { BillingActions } from '@/components/billing/billing-actions'
+import { PLANS, INCLUDED_IN_ALL_PLANS } from '@/lib/stripe'
 import { cookies } from 'next/headers'
 
+// Presentation only. Names, descriptions, features and limits come from
+// lib/stripe.ts so the two cannot drift apart again -- they already had, with
+// one copy advertising classrooms and the other schools.
 const plans = [
   {
-    id: 'free',
-    name: 'Free',
-    description: 'Perfect for getting started',
+    id: 'free' as const,
+    ...PLANS.free,
     price: { month: 0, year: 0 },
-    features: [
-      '50 artworks with stories',
-      '1 family',
-      '1 child profile',
-      'Basic story capture',
-      'Family reactions & comments',
-      'Basic moment photos',
-      'Public sharing links',
-    ],
-    limitations: [
-      'No story templates',
-      'No AI tagging',
-      'No collections',
-      'Standard support',
-    ],
+    // no Stripe price -- the free tier is never checked out
+    priceId: undefined as { month?: string; year?: string } | undefined,
     icon: Sparkles,
     popular: false,
   },
   {
-    id: 'family',
-    name: 'Family',
-    description: 'Unlimited memories & storytelling',
+    id: 'family' as const,
+    ...PLANS.family,
     price: { month: 4.99, year: 49.99 },
     priceId: {
       month: process.env.STRIPE_FAMILY_PRICE_ID,
       year: process.env.STRIPE_FAMILY_YEARLY_PRICE_ID,
     },
-    features: [
-      'Unlimited artworks with stories',
-      'Unlimited children',
-      'Unlimited moment photos',
-      'Story templates & prompts',
-      'Memory timeline view',
-      'Family reactions & comments',
-      'AI auto-tagging',
-      'Collections & albums',
-      'Print-ready art books (PDF)',
-      'QR code sharing',
-      'Priority support',
-      'No watermarks',
-    ],
-    limitations: [],
     icon: Crown,
     popular: true,
   },
   {
-    id: 'pro',
-    name: 'Pro',
-    description: 'For extended families',
+    id: 'pro' as const,
+    ...PLANS.pro,
     price: { month: 9.99, year: 99.99 },
     priceId: {
       month: process.env.STRIPE_PRO_PRICE_ID,
       year: process.env.STRIPE_PRO_YEARLY_PRICE_ID,
     },
-    features: [
-      'Everything in Family',
-      'Multiple families (grandparents, caregivers)',
-      'Voice note stories',
-      'Video moment capture',
-      'Advanced story templates',
-      'Growth tracking & milestones',
-      'Bulk upload & operations',
-      'Advanced analytics & insights',
-      'Story timeline view',
-      'API access',
-      'White-label sharing',
-      'Dedicated support',
-    ],
-    limitations: [],
     icon: Zap,
     popular: false,
   },
@@ -281,17 +239,6 @@ export default async function BillingPage() {
                       </li>
                     ))}
                   </ul>
-                  
-                  {plan.limitations.length > 0 && (
-                    <ul className="space-y-2 pt-2 border-t">
-                      {plan.limitations.map((limitation) => (
-                        <li key={limitation} className="flex items-start gap-2 text-muted-foreground">
-                          <span className="w-5 h-5 flex items-center justify-center shrink-0">—</span>
-                          <span className="text-sm">{limitation}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
                 </CardContent>
                 
                 <CardFooter>
@@ -309,6 +256,25 @@ export default async function BillingPage() {
             )
           })}
         </div>
+
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="text-fluid-lg">Included on every plan</CardTitle>
+            <CardDescription>
+              Plans differ by how much you can store, not by what you can do.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="grid sm:grid-cols-2 gap-2">
+              {INCLUDED_IN_ALL_PLANS.map((feature) => (
+                <li key={feature} className="flex items-start gap-2">
+                  <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+                  <span className="text-sm">{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Billing History */}

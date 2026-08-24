@@ -36,7 +36,7 @@ const changelog = [
       {
         icon: CreditCard,
         title: 'Family Plans',
-        description: 'Upgrade for unlimited artworks, AI tagging, and more',
+        description: 'Unlimited artworks and child profiles when you need them',
       },
     ],
   },

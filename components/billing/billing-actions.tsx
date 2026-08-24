@@ -205,6 +205,22 @@ function BillingActionsContent({
     )
   }
 
+  // No Stripe price id means STRIPE_*_PRICE_ID is not set in this environment,
+  // so checkout cannot run. Previously this rendered an Upgrade button that was
+  // silently disabled with no explanation. Say what is going on instead.
+  if (!priceId) {
+    return (
+      <div className="w-full space-y-1.5">
+        <Button className="w-full" variant="outline" disabled>
+          Not available yet
+        </Button>
+        <p className="text-xs text-muted-foreground text-center">
+          Paid plans aren&apos;t open yet. You&apos;re on Free with everything unlocked.
+        </p>
+      </div>
+    )
+  }
+
   // Paid plan - show upgrade button
   const isUpgrade = currentPlan === 'free' || 
     (currentPlan === 'family' && planId === 'pro')
@@ -219,7 +235,7 @@ function BillingActionsContent({
             handleCheckout()
           }
         }}
-        disabled={isLoading || !priceId}
+        disabled={isLoading}
         className={`w-full ${isPopular ? 'bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90' : ''}`}
         variant={isPopular ? 'default' : 'outline'}
       >

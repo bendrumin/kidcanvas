@@ -353,9 +353,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // NOTE: AI tagging is now manual - removed automatic tagging to reduce CPU usage
-    // Users can trigger AI tagging from the artwork detail page
-
     // Track successful upload
     if (data) {
       trackServerEvent('upload_completed', {

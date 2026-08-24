@@ -36,6 +36,15 @@ export const PRICE_IDS = {
 export type PlanId = 'free' | 'family' | 'pro'
 export type BillingInterval = 'month' | 'year'
 
+/**
+ * Plans differ by LIMITS ONLY.
+ *
+ * lib/subscription.ts enforces exactly three things -- artwork count, child
+ * count and family count -- and nothing in the app gates a feature on tier. So
+ * these lists describe the caps, and INCLUDED_IN_ALL_PLANS describes what every
+ * account gets. Do not add a feature here unless something actually checks the
+ * tier before allowing it.
+ */
 export const PLANS: Record<PlanId, {
   name: string
   description: string
@@ -48,15 +57,11 @@ export const PLANS: Record<PlanId, {
 }> = {
   free: {
     name: 'Free',
-    description: 'Perfect for getting started',
+    description: 'Enough to see if it sticks',
     features: [
-      '50 artworks with stories',
-      '1 family',
+      '50 artworks',
       '1 child profile',
-      'Basic story capture',
-      'Family reactions & comments',
-      'Basic moment photos',
-      'Public sharing links',
+      '1 family',
     ],
     limits: {
       artworks: 50,
@@ -66,19 +71,11 @@ export const PLANS: Record<PlanId, {
   },
   family: {
     name: 'Family',
-    description: 'Unlimited memories & storytelling',
+    description: 'For one household, without limits',
     features: [
-      'Unlimited artworks with stories',
-      'Unlimited children',
-      'Unlimited moment photos',
-      'Story templates & prompts',
-      'Memory timeline view',
-      'Family reactions & comments',
-      'AI auto-tagging & smart search',
-      'Collections & albums',
-      'Print-ready photo books (PDF)',
-      'Bulk upload & operations',
-      'Priority support',
+      'Unlimited artworks',
+      'Unlimited child profiles',
+      '1 family',
     ],
     limits: {
       artworks: -1, // unlimited
@@ -88,20 +85,11 @@ export const PLANS: Record<PlanId, {
   },
   pro: {
     name: 'Pro',
-    description: 'For extended families & schools',
+    description: 'For families spread across households',
     features: [
-      'Everything in Family',
-      'Multiple families (grandparents, caregivers)',
-      'Voice note stories',
-      'Video moment capture',
-      'Advanced story templates',
-      'Growth tracking & milestones',
-      'Bulk upload & operations',
-      'Advanced analytics & insights',
-      'Story timeline view',
-      'API access',
-      'White-label sharing',
-      'Dedicated support',
+      'Unlimited artworks',
+      'Unlimited child profiles',
+      'Unlimited families, so grandparents and caregivers get their own',
     ],
     limits: {
       artworks: -1,
@@ -110,6 +98,26 @@ export const PLANS: Record<PlanId, {
     },
   },
 }
+
+/**
+ * Every account gets all of these, on every plan. Each one is a feature that
+ * actually ships in the web app today -- verified, not aspirational.
+ *
+ * Deliberately absent: AI auto-tagging (the AI route was deleted), voice notes
+ * (removed; there is no voice-notes bucket), video capture (never existed),
+ * API access and white-label sharing (never built), and story templates (they
+ * exist on iOS only -- the web selector was removed as dead code).
+ */
+export const INCLUDED_IN_ALL_PLANS: string[] = [
+  'A story on every artwork, in their words',
+  'Family reactions and comments',
+  'Collections and albums',
+  'Memory timeline view',
+  'Print-ready art books (PDF)',
+  'QR codes and public share links',
+  'Bulk upload',
+  'Insights on your dashboard',
+]
 
 export const PRICES = {
   family: {
