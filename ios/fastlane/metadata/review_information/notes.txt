@@ -9,8 +9,11 @@ no email confirmation is required.
 
 WHAT TO TRY
 • Gallery tab — browse saved artwork; tap a piece for its detail view (title,
-  artist, date, the child's age at creation, description). Tap the heart to
-  favorite it.
+  artist, date, the child's age at creation, and the story behind it). Tap the
+  heart to favorite it. Tap an emoji to react, or add a comment.
+• Feed tab — the newest artwork across the family with the story attached.
+• Profile tab → "Invite family" — generates an 8-character code. Only someone
+  given that code can join the family and see or comment on anything.
 • Scan tab — "Scan Document" uses the camera (device only). On the simulator
   or without a camera, use "Choose from Photos" to pick any image, then fill
   in the title and artist and tap Save to Gallery.
@@ -28,6 +31,14 @@ stays available.
 CHILDREN AND PRIVACY
 Children never have accounts and never sign in. A "child profile" is just a
 name and an optional birth date created by the parent, used to label artwork
-and calculate the child's age. Galleries are private to the family account
-and enforced at the database level. The app contains no ads, no analytics,
-no tracking, and does no AI processing of artwork.
+and calculate the child's age. Gallery contents — titles, stories, child
+names — are readable only by signed-in members of that family, enforced by
+row-level security in Postgres. Artwork image files are served from addresses
+containing two random identifiers that cannot be listed or guessed; we are
+moving them behind expiring signed links. The app contains no ads, no
+analytics, no tracking, and does no AI processing of artwork.
+
+COMMENTS
+Comments and reactions are visible only inside a family, which is invite-only
+via the code above — there is no public feed and no way to reach another
+family's content.

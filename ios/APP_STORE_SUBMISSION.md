@@ -140,9 +140,18 @@ Create a privacy policy page covering:
 ## 5. In-App Purchases Setup
 
 ### Current Implementation
-The iOS app currently uses **web checkout via Stripe**. Users are directed to the web app for subscription management.
+**The iOS app sells nothing and mentions no paid plan.** Verified by search: there
+is no purchase, upgrade, subscription or billing string anywhere in
+`ios/KidCanvasApp/`, and no link to a payment page.
 
-**Important:** When users hit subscription limits (e.g., artwork upload limit), the app shows an alert directing them to upgrade via the website at `kidcanvas.app/dashboard/billing`. The iOS app does not support in-app purchases - all subscription management happens on the web.
+This matters for Guideline 3.1.1. An earlier version of this document claimed the
+app "shows an alert directing them to upgrade via the website" — it does not, and
+saying so to App Review would have described an external-payment flow that is
+exactly what 3.1.1 prohibits, for something the app never did. If in-app upgrade
+prompts are ever added, they need StoreKit, not a web link.
+
+Web subscriptions exist on kidcanvas.app and are reached by the user going there
+themselves. Nothing in the app steers them.
 
 ### If You Want Native IAP (Optional)
 To add native Apple In-App Purchases, you would need to:
