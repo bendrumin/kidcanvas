@@ -17,29 +17,24 @@ Status as of 2026-08-20, for version 1.0 (build 14).
 | Review notes explaining the app + where deletion lives | 2.1 | ✅ fastlane/metadata/review_information/notes.txt |
 | No third-party ads/analytics/tracking SDKs | 5.1.2 | ✅ Only dependency is the Supabase SDK. |
 
-## Open risk — Guideline 1.2 (user-generated content)
+## Guideline 1.2 (user-generated content)
 
-The app now has comments and reactions, which makes it a UGC app in Apple's
-sense. 1.2 asks for a way to filter objectionable material, a way to report it,
-and a way to block abusive users. None of the three exists:
+The app has comments and reactions, so 1.2 applies. Two of the three legs are now
+in place:
 
-- `ArtworkService.deleteComment(id:)` is implemented but **no view calls it**, so
-  a comment cannot be removed in the app at all.
-- The only DELETE policy on `artwork_comments` is "Users can delete own
-  comments", so even with UI a parent could not remove someone else's comment.
-- There is no way to remove a family member from the app.
+| Leg | State |
+|---|---|
+| Remove objectionable content | ✅ Long-press a comment → Delete. `ArtworkService.deleteComment` was implemented but no view called it; it is now wired into `CommentsSection`. |
+| Moderation by a responsible adult | ✅ Migration 011 adds a DELETE policy letting family owners and parents remove *any* comment in their family, matching how artwork deletion works. Authors keep the ability to delete their own regardless of role. |
+| Block an abusive user | ❌ **Still open.** The `family_members` DELETE policy for owners/parents already exists, but iOS has no member list UI at all, so there is no way to remove someone from a family in the app. |
 
-Mitigating: a family is invite-only via an 8-character code, there is no public
-feed, and no route to another family's content — so the exposure is a person the
-parent themselves invited, not a stranger. Apple applies 1.2 most strictly to
-open networks. But "the parent cannot delete a comment on their own child's
-artwork" is a weak answer to a reviewer, and an easy one to fix.
+Mitigating for the open leg: a family is invite-only via an 8-character code,
+there is no public feed, and no route to another family's content — so the
+worst case is a person the parent themselves invited, and the parent can now
+delete anything that person writes. Apple applies 1.2 most strictly to open
+networks.
 
-Smallest fix that makes the story defensible:
-1. Wire the existing `deleteComment` into the comment row (swipe or long-press).
-2. Add a DELETE policy letting family owners/parents remove any comment in their
-   family, matching how artwork deletion already works.
-3. Add member removal to the Profile tab.
+Remaining work: a members list on the Profile tab with a remove action.
 
 ## Deliberate product decisions
 

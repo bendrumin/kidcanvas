@@ -97,11 +97,21 @@ struct ReactionButton: View {
 
 struct CommentsSection: View {
     let artworkId: UUID
+    let familyId: UUID
     let service: ArtworkService
 
     @State private var comments: [ArtworkComment] = []
     @State private var draft = ""
     @State private var isSending = false
+    @State private var role: String?
+    @State private var deleteError: String?
+
+    /// Authors can always remove their own comment. Owners and parents can remove
+    /// anyone's, which is what makes this moderation rather than just an undo --
+    /// App Store Guideline 1.2 asks for a way to take content down.
+    private func canDelete(_ comment: ArtworkComment) -> Bool {
+        comment.userId == service.currentUserID || role == "owner" || role == "parent"
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -112,6 +122,15 @@ struct CommentsSection: View {
 
             ForEach(comments) { comment in
                 CommentRow(text: comment.text, date: comment.createdAt)
+                    .contextMenu {
+                        if canDelete(comment) {
+                            Button(role: .destructive) {
+                                delete(comment)
+                            } label: {
+                                Label("Delete comment", systemImage: "trash")
+                            }
+                        }
+                    }
             }
 
             HStack(spacing: 8) {
@@ -130,7 +149,26 @@ struct CommentsSection: View {
                 .accessibilityLabel("Post comment")
             }
         }
-        .task(id: artworkId) { await load() }
+        .task(id: artworkId) {
+            await load()
+            role = await service.familyRole(familyId: familyId)
+        }
+        .alert("Couldn't delete that comment",
+               isPresented: .constant(deleteError != nil),
+               actions: { Button("OK") { deleteError = nil } },
+               message: { Text(deleteError ?? "") })
+    }
+
+    private func delete(_ comment: ArtworkComment) {
+        Task {
+            do {
+                try await service.deleteComment(id: comment.id)
+                await load()
+            } catch {
+                // Surface it rather than leaving the comment silently in place.
+                deleteError = error.localizedDescription
+            }
+        }
     }
 
     private var canSend: Bool {

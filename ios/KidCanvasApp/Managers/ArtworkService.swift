@@ -6,8 +6,18 @@ import Supabase
 struct ArtworkService {
     let client: SupabaseClient
 
-    private var currentUserID: UUID? {
+    /// The signed-in user. Views need this to decide whether a comment is theirs.
+    var currentUserID: UUID? {
         client.auth.currentUser?.id
+    }
+
+    /// This user's role in a family: "owner", "parent", "member", "viewer", or
+    /// nil if they are not a member. Owners and parents can moderate comments.
+    func familyRole(familyId: UUID) async -> String? {
+        try? await client
+            .rpc("get_family_role", params: ["family_uuid": familyId.uuidString])
+            .execute()
+            .value
     }
 
     // MARK: - Artwork

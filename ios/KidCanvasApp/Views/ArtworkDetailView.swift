@@ -121,7 +121,7 @@ struct ArtworkDetailView: View {
 
                     ReactionBar(artworkId: artwork.id, service: service)
 
-                    CommentsSection(artworkId: artwork.id, service: service)
+                    CommentsSection(artworkId: artwork.id, familyId: artwork.familyId, service: service)
 
                     // Description
                     if let description = artwork.description, !description.isEmpty {
