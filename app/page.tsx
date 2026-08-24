@@ -428,20 +428,17 @@ export default function LandingPage() {
                   The KidCanvas Difference: Stories, Not Just Storage
                 </h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Other apps treat kids' art like files in a folder. <span className="font-semibold text-foreground">We treat them like memories.</span> Every artwork gets a story, every moment gets captured, and every family member can celebrate together.
+                  Other apps treat kids' art like files in a folder. <span className="font-semibold text-foreground">We treat them like memories.</span> Every artwork gets a story, and every family member can react to it.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <span className="text-xs bg-pink-200 dark:bg-pink-900/40 text-pink-800 dark:text-pink-200 px-3 py-1 rounded-full font-medium">
-                    📖 Required stories
-                  </span>
-                  <span className="text-xs bg-purple-200 dark:bg-purple-900/40 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full font-medium">
-                    📸 Moment photos
+                    📖 A story on every artwork
                   </span>
                   <span className="text-xs bg-blue-200 dark:bg-blue-900/40 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full font-medium">
                     ❤️ Family reactions
                   </span>
                   <span className="text-xs bg-green-200 dark:bg-green-900/40 text-green-800 dark:text-green-200 px-3 py-1 rounded-full font-medium">
-                    💬 Story templates
+                    📖 Print-ready art books
                   </span>
                   <span className="text-xs bg-orange-200 dark:bg-orange-900/40 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full font-medium">
                     📱 Instagram-style feed
@@ -510,24 +507,6 @@ export default function LandingPage() {
                   highlight: true,
                 },
                 {
-                  feature: '📸 Moment photos',
-                  kidcanvas: 'Photo of child creating + artwork = complete memory',
-                  others: ['No', 'No', 'Upload separately (different folder)'],
-                  kidcanvasCheck: true,
-                  othersCheck: [false, false, false],
-                  category: 'storytelling',
-                  highlight: true,
-                },
-                {
-                  feature: '💬 Story templates & prompts',
-                  kidcanvas: '21 templates to help capture the moment',
-                  others: ['Not available', 'Not available', 'No guidance provided'],
-                  kidcanvasCheck: true,
-                  othersCheck: [false, false, false],
-                  category: 'storytelling',
-                  highlight: true,
-                },
-                {
                   feature: '⏰ Memory prompts',
                   kidcanvas: 'Reminds you to capture art at the right time',
                   others: ['Not available', 'Not available', 'No reminders'],
@@ -567,7 +546,7 @@ export default function LandingPage() {
                 },
                 {
                   feature: '🔗 Share with story context',
-                  kidcanvas: 'Share artwork + story + moment photo (full context)',
+                  kidcanvas: 'Share the artwork together with its story',
                   others: ['Share image only', 'Share image only', 'Share file (no context)'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, false],
@@ -713,7 +692,7 @@ export default function LandingPage() {
                 Why pay more for less?
               </p>
               <p className="text-sm text-muted-foreground mb-3">
-                Up to 50 artworks with stories, free forever • Family reactions & comments • Moment photos • Your data stays private
+Up to 50 artworks with stories, free forever • Family reactions & comments • Your data stays private
               </p>
               <Link href="/signup">
                 <Button className="bg-[#E91E63] hover:bg-[#C2185B]">
@@ -762,8 +741,8 @@ export default function LandingPage() {
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
-                    <p className="font-semibold text-foreground">Moment photos</p>
-                    <p className="text-muted-foreground">Photo of child with artwork + artwork itself</p>
+                    <p className="font-semibold text-foreground">Print-ready art books</p>
+                    <p className="text-muted-foreground">Turn a year of artwork and stories into a PDF</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -792,14 +771,14 @@ export default function LandingPage() {
                   <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">Family engagement built-in</p>
-                    <p className="text-muted-foreground">Reactions, comments, moment photos - all included</p>
+                    <p className="text-muted-foreground">Reactions and comments, included on every plan</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
-                    <p className="font-semibold text-foreground">AI understands artwork</p>
-                    <p className="text-muted-foreground">Auto-tags and describes drawings</p>
+                    <p className="font-semibold text-foreground">Search what they said</p>
+                    <p className="text-muted-foreground">Find an artwork by the story, not just the title</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -853,7 +832,7 @@ export default function LandingPage() {
               },
               {
                 q: "Can grandparents see the stories too?",
-                a: "Yes! Share a simple link with family members. They can see the artwork, read the story, view moment photos, and even react or comment - all without creating an account. Perfect for long-distance grandparents."
+                a: "Yes! Share a simple link with family members. They can see the artwork, read the story, and even react or comment - all without creating an account. Perfect for long-distance grandparents."
               },
               {
                 q: "What if I forget to add a story?",

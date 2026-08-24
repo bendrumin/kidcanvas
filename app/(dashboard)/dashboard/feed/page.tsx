@@ -10,7 +10,7 @@ import type { FamilyMember, ArtworkWithChild } from '@/lib/supabase/types'
 
 export const metadata: Metadata = {
   title: 'Feed',
-  description: 'View your family\'s artwork stories in an Instagram-style feed. See reactions, comments, and moment photos.',
+  description: 'View your family\'s artwork stories in an Instagram-style feed. See reactions and comments.',
 }
 
 export default async function FeedPage() {
@@ -40,7 +40,7 @@ export default async function FeedPage() {
     )
   }
 
-  // Fetch artworks with story, moment photo, child info, ordered by newest
+  // Fetch artworks with story and child info, ordered by newest
   // Filter to only show artworks with stories (not null and not empty)
   const { data: allArtworks } = await supabase
     .from('artworks')

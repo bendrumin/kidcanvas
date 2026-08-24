@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { createClient } from '@/lib/supabase/client'
-import { Baby, Upload, Sparkles, ArrowRight, Loader2, Check, BookOpen, Camera, Heart } from 'lucide-react'
+import { Baby, Upload, Sparkles, ArrowRight, Loader2, Check, BookOpen, Heart } from 'lucide-react'
 import { LimitReachedDialog } from '@/components/paywall/limit-reached-dialog'
 
 const ONBOARDING_KEY = 'kidcanvas_onboarding_complete'
@@ -127,18 +127,6 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
                   <h4 className="font-semibold text-sm">Tell the Story</h4>
                   <p className="text-xs text-muted-foreground">
                     What did they say? How did they feel? Capture the moment, not just the image.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-pink-50 dark:bg-pink-950/20">
-                <div className="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center shrink-0">
-                  <Camera className="w-5 h-5 text-pink-600 dark:text-pink-400" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm">Moment Photos</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Add photos of your child creating art to remember their joy and pride.
                   </p>
                 </div>
               </div>

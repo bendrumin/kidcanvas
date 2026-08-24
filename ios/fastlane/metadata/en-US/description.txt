@@ -5,12 +5,14 @@ KidCanvas turns the pile into a keepsake: scan your children's artwork in second
 HOW IT WORKS
 • Scan — the built-in document scanner finds the page, crops it, and squares it up automatically. Or pick any photo from your library.
 • File it — every piece is saved to its artist, with the date and your child's age at creation calculated automatically.
-• Treasure it — add titles and the story behind each piece, heart the frame-worthy ones into Favorites, and browse the gallery by child or by time.
+• Treasure it — write down the story while you remember it ("it's a rainbow that ate a dinosaur"), with prompts to help when you're not sure what to ask. Heart the frame-worthy ones into Favorites, and browse the gallery by child or by time.
 
 MADE FOR FAMILIES
 • One shared gallery for the whole family.
+• Invite grandparents and co-parents with a short code — they see the stories, and can react and leave comments.
+• A family feed of the newest artwork and what was said about it.
 • Kids never need accounts — parents create simple artist profiles (a name, and a birth date if you want age labels).
-• Private by default: your gallery is visible only to your family, enforced at the database level.
+• Private by default: your gallery, the stories, and your children's names are readable only by your family, enforced by row-level security in the database. Artwork images are served from unlisted addresses that cannot be browsed or guessed.
 
 NO NONSENSE
 • No ads, no analytics, no trackers.

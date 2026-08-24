@@ -78,6 +78,7 @@ export default function PrivacyPage() {
             <ul className="list-disc list-inside text-muted-foreground space-y-2 mt-4">
               <li><strong>Database:</strong> Supabase (PostgreSQL with Row Level Security)</li>
               <li><strong>Image Storage:</strong> Supabase Storage (encrypted at rest)</li>
+              <li><strong>Image addresses:</strong> each artwork image is served from its own address containing two random identifiers. The address cannot be listed or guessed, but anyone you send it to can open that image without signing in. Expiring signed links are in progress.</li>
               <li><strong>Payments:</strong> Stripe (PCI-compliant, we never see your full card number)</li>
               <li><strong>Encryption:</strong> All data transmitted via HTTPS/TLS</li>
             </ul>

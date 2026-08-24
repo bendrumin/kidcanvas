@@ -12,15 +12,15 @@ import { toast } from 'sonner'
 const faqs = [
   {
     q: 'How do I capture artwork and stories?',
-    a: 'Upload a photo of the artwork, then add the story - what your child said, what was special about it, or any context. You can also add a "moment photo" showing your child with the artwork.',
+    a: 'Upload a photo of the artwork, then open it and add the story - what your child said, what was special about it, or any context. On iPhone you can add the story while you upload.',
   },
   {
     q: 'Can grandparents see the stories and react?',
-    a: 'Yes! Share a link and they can see the artwork, read the story, view moment photos, and even react or comment - all without creating an account.',
+    a: 'Yes! Share a link and they can see the artwork, read the story, and even react or comment - all without creating an account.',
   },
   {
     q: 'What\'s included free?',
-    a: 'Up to 50 artworks with stories, 1 child profile, family reactions & comments, moment photos, and 1 family group. Perfect for getting started!',
+    a: 'Up to 50 artworks with stories, 1 child profile, and 1 family group. Every feature is included on every plan - paid plans only raise those limits.',
   },
   {
     q: 'How do I cancel?',

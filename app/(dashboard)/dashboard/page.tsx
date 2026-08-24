@@ -98,7 +98,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   
   let { data: artworks } = await artworkQuery as { data: ArtworkWithChild[] | null }
 
-  // If searching, also filter by child name, tags, and AI tags (since array searches are complex in Supabase)
+  // If searching, also filter by child name and tags (array searches are awkward in Supabase)
   if (searchQuery && artworks) {
     const searchLower = searchQuery.toLowerCase()
     artworks = artworks.filter(artwork => {
