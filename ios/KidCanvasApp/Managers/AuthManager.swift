@@ -64,11 +64,18 @@ class AuthManager: ObservableObject {
         isLoading = true
 
         do {
-            let session = try await supabase.auth.session
-            currentUser = session.user
+            // `auth.session` only reads the locally stored token, which stays
+            // valid until it expires -- so an account deleted on the server
+            // (from the web app, or by support) kept "signing in" here for up
+            // to an hour, landing in a ghost state with an empty family.
+            // `auth.user()` round-trips to the server, so a dead account fails
+            // immediately and we fall back to the sign-in screen.
+            _ = try await supabase.auth.session
+            currentUser = try await supabase.auth.user()
             isAuthenticated = true
             await loadFamily()
         } catch {
+            try? await supabase.auth.signOut()
             isAuthenticated = false
             currentUser = nil
         }

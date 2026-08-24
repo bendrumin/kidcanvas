@@ -25,10 +25,28 @@ xcodebuild -project KidCanvas.xcodeproj -scheme KidCanvas \
   -destination "platform=iOS Simulator,name=$DEVICE" \
   -derivedDataPath "$DD" build >/dev/null
 
+# Delete the accounts previous runs created. This is what actually makes the
+# flows deterministic: uninstall and `simctl keychain reset` both leave the
+# Supabase session behind, so the app relaunches signed in as the last throwaway
+# account. Removing the account server-side invalidates that session, so the app
+# falls back to the sign-in screen where every flow expects to start.
+#
+# Scoped to maestro-*@example.com so it can never touch a real account.
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+if command -v supabase >/dev/null 2>&1; then
+  echo "Removing accounts from previous runs..."
+  # Run from the repo root: `--linked` reads supabase/.temp, which is not
+  # reachable from ios/ where the rest of this script works.
+  (cd "$REPO_ROOT" && supabase db query --linked "
+    delete from family_members where user_id in
+      (select id from auth.users where email like 'maestro-%');
+    delete from families where id not in (select family_id from family_members)
+      and created_by in (select id from auth.users where email like 'maestro-%');
+    delete from auth.users where email like 'maestro-%';
+  ") >/dev/null 2>&1 || echo "  (cleanup skipped -- run 'supabase login' to enable)"
+fi
+
 xcrun simctl uninstall "$UDID" "$BUNDLE" 2>/dev/null || true
-# Uninstalling does not remove Keychain items on the simulator, and that is where
-# Supabase stores the session -- so without this the app relaunches already
-# signed in as whatever throwaway account the last run created.
 xcrun simctl keychain "$UDID" reset 2>/dev/null || true
 xcrun simctl install "$UDID" "$DD/Build/Products/Debug-iphonesimulator/KidCanvas.app"
 

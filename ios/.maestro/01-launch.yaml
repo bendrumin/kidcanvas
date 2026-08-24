@@ -1,10 +1,38 @@
 # Cheapest possible check: the app launches and shows the sign-in screen rather
-# than crashing on a cold start. Run this first -- if it fails, nothing else will
-# tell you anything useful.
+# than crashing on a cold start.
+#
+# Maestro does not guarantee the order flows run in, so this cannot assume a
+# fresh device: a signup flow may have run first, leaving a live session in the
+# Keychain (clearState does not clear it). Tolerate that by signing out first.
 appId: Siegel.KidCanvas
 ---
 - launchApp:
     clearState: true
+
+- runFlow:
+    when:
+      visible: "I'll do this later"
+    commands:
+      - tapOn: "I'll do this later"
+
+- runFlow:
+    when:
+      notVisible: "Sign In"
+    commands:
+      - tapOn: "Profile"
+      - scrollUntilVisible:
+          element:
+            text: "Sign Out"
+          direction: DOWN
+          timeout: 15000
+      - tapOn: "Sign Out"
+      - tapOn:
+          text: "Sign Out"
+          index: 1
+      - extendedWaitUntil:
+          visible: "Sign In"
+          timeout: 15000
+
 - assertVisible: "KidCanvas"
 - assertVisible: "Welcome Back!"
 - assertVisible: "Email"

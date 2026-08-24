@@ -67,6 +67,13 @@ env:
 - inputText: ${PASSWORD}
 - pressKey: Enter
 
+# iOS offers to save the new password; the system dialog covers the screen.
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
+
 # The first-run guide, shown because the new family has no artists yet.
 - extendedWaitUntil:
     visible: "Welcome to KidCanvas"

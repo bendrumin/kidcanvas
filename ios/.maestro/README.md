@@ -1,53 +1,49 @@
-# Maestro flows — WORK IN PROGRESS
+# Maestro flows
 
-Playwright covers the web app and is green (46 tests). These iOS flows are **not
-finished**: `01-launch` passes on a clean device, `02-onboarding` gets as far as
-proving the first-run guide appears and then trips over test-fixture problems
-rather than app bugs.
-
-Treat this directory as scaffolding, not as a passing suite. Do not wire it into
-CI until the state problem below is solved.
+UI tests that drive the real app on a simulator. Playwright covers the web app;
+these cover iOS. **Both flows pass.**
 
 ## Running
 
 ```bash
-./.maestro/run.sh                    # build, clean install, run everything
+./.maestro/run.sh                    # cleanup, build, clean install, run all
 ./.maestro/run.sh .maestro/01-launch.yaml
 ```
 
-Needs a JDK (`brew install --cask temurin`).
+Needs a JDK (`brew install --cask temurin`) and, for the account cleanup,
+a `supabase login`.
 
-## The unsolved problem
+## What each flow proves
 
-Getting a genuinely fresh device. `clearState: true` wipes the app container but
-not the Keychain, and Supabase keeps its session there, so a rerun starts already
-signed in as whatever throwaway account the previous run created — and the first
-assertion fails for reasons unrelated to the app. `run.sh` already tries
-`simctl uninstall` followed by `simctl keychain reset` and that is still not
-enough.
+| Flow | Guards against |
+|---|---|
+| `01-launch` | crash on cold start; sign-in screen renders |
+| `02-onboarding` | a new account landing on an empty gallery with no guidance — signs up a real throwaway account, asserts the first-run guide appears, and that its CTA leads to Add Child |
 
-Next thing to try: `xcrun simctl erase` on a simulator dedicated to testing, or a
-dedicated test Supabase project so accounts can be torn down between runs.
+## Hard-won facts about this setup
 
-## What was learned building these (worth keeping)
-
-- `assertVisible` takes no `timeout`; use `extendedWaitUntil`.
-- `hideKeyboard` does not work against this app's inputs.
-- Tapping a field that sits under the keyboard silently lands on the keyboard,
-  and the text goes into whichever field still had focus. The whole signup ended
-  up concatenated into Family Name. **This was a real app problem too** — there
-  was no way to advance or dismiss, so `AuthView` now chains focus and Return
-  moves between fields.
-- Maestro matches the full string, so a step rendered as "1. Add an artist" needs
-  `".*Add an artist.*"`.
-- "Create Account" and "Sign Out" each label two elements, so those taps need an
-  index. Worth considering accessibility identifiers instead.
+- **Flow order is not guaranteed.** Each flow must tolerate the state the others
+  leave behind. Both start by dismissing onboarding and signing out if needed.
+- **`clearState` does not clear the Keychain**, where Supabase keeps its session.
+  `run.sh` deletes previous runs' accounts server-side (scoped to
+  `maestro-%@example.com`), which invalidates those sessions properly — and the
+  app now verifies sessions with the server on launch, so a deleted account falls
+  back to sign-in instead of ghosting. That app fix came out of this suite.
+- **iOS offers to save the password after signup**; the system dialog covers
+  everything, so `02` dismisses it conditionally.
+- `assertVisible` takes no `timeout` — use `extendedWaitUntil`.
+- `hideKeyboard` does not work against these inputs. The app now chains focus so
+  Return advances through the sign-up form — also a real fix, since the keyboard
+  covered the Email and Password fields with no way to reach them.
+- Maestro matches whole strings: a step rendered "1. Add an artist" needs
+  `".*Add an artist.*"`. "Create Account" and "Sign Out" each appear twice, so
+  those taps use an index.
 
 ## Accounts
 
-`02-onboarding` signs up a throwaway account with a generated address. Those
-accumulate in the production Supabase project — delete them, and consider
-pointing these flows at a separate project before running them often.
+`02-onboarding` generates `maestro-<timestamp>@example.com` per run; `run.sh`
+deletes them at the start of the next run. They live in the production Supabase
+project — a dedicated test project would be better before running this in CI.
 
 Do not use the App Review demo account: it is pre-seeded with children, so the
 first-run guide will not appear.
@@ -55,5 +51,5 @@ first-run guide will not appear.
 ## Build note
 
 `run.sh` builds to `/tmp/kidcanvas-dd`, deliberately outside the repo. Building
-into `ios/build` writes ~17,000 files, which pushed a `vercel --prod` upload past
-its 15,000-file limit.
+into `ios/build` writes ~17,000 files, which once pushed a `vercel --prod`
+upload past its 15,000-file limit.
