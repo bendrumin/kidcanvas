@@ -120,7 +120,14 @@ export default function LandingPage() {
           <p className="mt-4 text-sm text-muted-foreground">
             <Smartphone className="w-4 h-4 inline-block align-text-bottom mr-1.5" aria-hidden="true" />
             iOS app for iPhone and iPad &mdash;{' '}
-            <Link href="/support" className="text-[#E91E63] hover:underline">ask for a TestFlight invite</Link>.
+            <a
+              href="https://testflight.apple.com/join/7nT5CzWQ"
+              className="text-[#E91E63] hover:underline"
+              rel="noopener"
+            >
+              join the beta on TestFlight
+            </a>
+            .
           </p>
         </div>
       </section>

@@ -1,0 +1,11 @@
+KidCanvas is a private, invite-only family gallery for children's artwork. Use
+the demo account above — it is pre-seeded with a family, two child profiles, and
+saved artwork, so every tab shows content immediately.
+
+Children never have accounts; a "child profile" is a name and optional birth
+date the parent creates. Comments and reactions are visible only inside a
+family, which is joined by invite code — there is no public feed. Parents can
+delete any comment (long-press) and remove members (Profile). Account deletion
+is in Profile → Delete Account.
+
+The camera scanner requires a device; on the simulator use "Choose from Photos".

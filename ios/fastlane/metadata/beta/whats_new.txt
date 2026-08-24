@@ -1,0 +1,14 @@
+NEW IN THIS BUILD:
+
+• Dark mode now works everywhere — flip appearance in Settings and check every
+  tab. Cards, backgrounds, and text should all adapt.
+• First-run guide for new accounts, ending in adding your first artist. The
+  upload screen also now explains itself instead of silently disabling Save.
+• Long-press any comment to delete it (parents can remove anyone's).
+• Profile shows the family's members, with remove/leave.
+• Return advances through the sign-up form instead of the keyboard trapping you.
+
+Worth trying:
+• Scan a real drawing, write the story, and check the family feed.
+• Invite a second account with the code from Profile → Invite family, comment
+  from it, then delete that comment from the first account.

@@ -1,0 +1,10 @@
+KidCanvas is a private family gallery for your children's artwork — and the
+stories behind it.
+
+Scan a drawing with the built-in document scanner (it finds the page and squares
+it up), file it to the right child with their age calculated automatically, and
+write down what they said about it while you still remember. Invite grandparents
+and co-parents with a short code; they can browse the gallery, read the stories,
+react, and leave comments. Kids never need accounts.
+
+No ads, no trackers, and no AI processing of your children's artwork.
