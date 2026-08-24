@@ -19,9 +19,16 @@ Your web app is secure (9.5/10), but the iOS app has **critical security vulnera
 **File:** [ios/KidCanvas/KidCanvas/KidCanvas/Config.swift](ios/KidCanvas/KidCanvas/KidCanvas/Config.swift)
 
 ```swift
-static let r2AccessKeyId = "0f2fabf9668af834c2c1671b6ee41418"
-static let r2SecretAccessKey = "46a22a36ef302b9dc5178db63267eb56eb1df3c9d2e35a2dc15bb11add575ee6"
+static let r2AccessKeyId = "<redacted - see note below>"
+static let r2SecretAccessKey = "<redacted - see note below>"
 ```
+
+> **Redacted 2026-08-23.** The real key pair used to sit here in plaintext, in
+> the very document describing the leak, and this repo is public on GitHub.
+> Redacting it here does NOT undo the exposure -- both values remain in this
+> repo's git history permanently, so they must be treated as compromised and
+> rotated in Cloudflare. Nothing uses R2 any more, so deleting the token there
+> breaks nothing.
 
 **Why This Is Critical:**
 - These credentials are **compiled into your iOS binary**
