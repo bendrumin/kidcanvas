@@ -72,3 +72,11 @@ test('the sitemap lists every public page', async ({ request }) => {
     expect(xml).toContain(`<loc>https://kidcanvas.app${path === '/' ? '' : path}</loc>`)
   }
 })
+
+test('the open-beta TestFlight link is on the homepage', async ({ request }) => {
+  // The CTA that converts. It appears in the hero and in the FAQ; if a copy
+  // edit drops it, the site stops recruiting testers and nothing else notices.
+  const html = await (await request.get('/')).text()
+  const hits = html.match(/testflight\.apple\.com\/join\/7nT5CzWQ/g) ?? []
+  expect(hits.length).toBeGreaterThanOrEqual(2)
+})

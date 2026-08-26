@@ -12,7 +12,7 @@ import { toast } from 'sonner'
 const faqs = [
   {
     q: 'How do I capture artwork and stories?',
-    a: 'Upload a photo of the artwork, then open it and add the story - what your child said, what was special about it, or any context. On iPhone you can add the story while you upload.',
+    a: 'Upload a photo of the artwork, then open it and add the story - what your child said, what was special about it, or any context. On iPhone the app asks while you upload - the beta is open at https://testflight.apple.com/join/7nT5CzWQ',
   },
   {
     q: 'Can grandparents see the stories and react?',

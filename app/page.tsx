@@ -855,7 +855,7 @@ Up to 50 artworks with stories, free forever • Family reactions & comments •
               },
               {
                 q: "Do I need the iOS app?",
-                a: "No! The web app works perfectly on phones, tablets, and computers. The iOS app (iPhone & iPad) is available via request — use our contact form (in Support) to request a TestFlight invite for easier uploading."
+                a: "No! The web app works perfectly on phones, tablets, and computers. The iOS app (iPhone & iPad) is in open beta — join at https://testflight.apple.com/join/7nT5CzWQ or tap the TestFlight link at the top of this page. Scanning is easier in the app."
               },
             ].map((faq, i) => (
               <div key={i} className="p-4 bg-gray-50 dark:bg-secondary rounded-lg">

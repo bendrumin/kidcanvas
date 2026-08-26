@@ -36,7 +36,7 @@ What I learned building all of this in a few weeks, working with AI as the imple
 
 → Your old notes lie. I had 45 planning documents claiming features were "done" that were never built. Verify against the code, not the changelog.
 
-If you're a parent who wants to try KidCanvas or SnapSweep in TestFlight, comment "beta" and I'll send you a link.
+KidCanvas is in open beta right now: https://testflight.apple.com/join/7nT5CzWQ — and if you want to try SnapSweep, comment "beta" and I'll send you a link.
 
 ChoreStar is on the App Store today: chorestar.app
 
@@ -47,8 +47,8 @@ ChoreStar is on the App Store today: chorestar.app
 
 ## Notes before posting
 
-- Swap the TestFlight CTA for a real link if you have public TestFlight URLs;
-  otherwise "comment beta" is the right ask.
+- KidCanvas's public TestFlight link is live and in the body. SnapSweep still
+  uses "comment beta" until it has its own public link.
 - The "eventually shared kid profiles" line is honest as an intention. Don't
   upgrade it to a promise until the ChoreStar → KidCanvas import exists.
 - If you'd rather have one clean hook: lead with the SnapSweep line ("my kids
