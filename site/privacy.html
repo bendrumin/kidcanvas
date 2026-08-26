@@ -22,6 +22,15 @@ ul { padding-left:22px; margin:8px 0; }
 strong { color:var(--text); }
 .back { display:inline-block; margin-bottom:24px; }
 </style>
+<!-- Google Analytics: same measurement id as the Next.js app, so traffic to
+     these static pages lands in the same property. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DCH53W5VJT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DCH53W5VJT');
+</script>
 </head>
 <body>
 <div class="wrap">

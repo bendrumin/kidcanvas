@@ -73,6 +73,15 @@ section h2 { font-size: 1.8rem; font-weight: 800; letter-spacing: -.01em; margin
 footer { border-top: 1px solid var(--border); padding: 28px 0; text-align: center; color: var(--text-soft); font-size: .9rem; }
 footer .links a { margin: 0 10px; }
 </style>
+<!-- Google Analytics: same measurement id as the Next.js app, so traffic to
+     these static pages lands in the same property. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DCH53W5VJT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DCH53W5VJT');
+</script>
 </head>
 <body>
 

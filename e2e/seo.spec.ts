@@ -80,3 +80,15 @@ test('the open-beta TestFlight link is on the homepage', async ({ request }) => 
   const hits = html.match(/testflight\.apple\.com\/join\/7nT5CzWQ/g) ?? []
   expect(hits.length).toBeGreaterThanOrEqual(2)
 })
+
+test('every public page serves the Google Analytics tag', async ({ request, baseURL }) => {
+  // The GA component renders in production builds only (so dev servers and
+  // this very test suite never pollute the numbers), which means this can only
+  // be asserted against the deployed site:
+  //   PLAYWRIGHT_BASE_URL=https://kidcanvas.app npx playwright test e2e/seo.spec.ts
+  test.skip(!baseURL?.includes('kidcanvas.app'), 'production-only behaviour')
+  for (const path of PAGES) {
+    const html = await (await request.get(path)).text()
+    expect(html, `${path} is missing the GA tag`).toContain('googletagmanager.com/gtag/js?id=G-DCH53W5VJT')
+  }
+})
