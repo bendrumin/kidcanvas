@@ -14,6 +14,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { Toaster as SonnerToaster } from 'sonner'
 import { SkipLink } from '@/components/ui/skip-link'
 import { Analytics } from '@vercel/analytics/next'
+import { GoogleAnalytics } from '@/components/analytics/google-analytics'
 import { PageLoadTracker } from '@/components/analytics/page-load-tracker'
 
 export const viewport: Viewport = {
@@ -86,7 +87,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SkipLink />
+          <GoogleAnalytics />
+        <SkipLink />
           <PageLoadTracker />
           {children}
           <Toaster />

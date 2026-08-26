@@ -113,6 +113,16 @@ e.g. fastlane ios release            # inspect
 
      fastlane ios release confirm:true
 
+### ios testers
+
+```sh
+[bundle exec] fastlane ios testers
+```
+
+Count the testers in each TestFlight group -- the number the public
+
+link exists to move.
+
 ### ios metadata
 
 ```sh

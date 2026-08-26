@@ -56,8 +56,13 @@ export default function PrivacyPage() {
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
               <li>Aggregate page views, counted by Vercel Analytics. It sets no
                 cookies, does not follow you to other sites, and never receives
-                your artwork, your children&apos;s names, or your stories. The iOS
-                app contains no analytics at all.</li>
+                your artwork, your children&apos;s names, or your stories.</li>
+              <li>The website also uses Google Analytics to understand how
+                visitors find and use it. It sets first-party cookies and sends
+                usage data (pages viewed, device type, approximate location) to
+                Google. It never receives your artwork, your children&apos;s
+                names, or your stories. The iOS app contains no analytics at
+                all.</li>
               <li>Device information for troubleshooting</li>
             </ul>
           </section>
