@@ -131,7 +131,7 @@ function SignupForm() {
             <div className="mt-4 flex items-center justify-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Check className="w-4 h-4 text-green-600" />
-                <span>unlimited artworks free</span>
+                <span>First 50 artworks free</span>
               </div>
               <div className="flex items-center gap-1">
                 <Check className="w-4 h-4 text-green-600" />
@@ -205,7 +205,7 @@ function SignupForm() {
                 )}
                 {!formData.password && (
                   <p className="text-xs text-muted-foreground">
-                    Must include uppercase, lowercase, number, and special character
+                    Must include an uppercase letter, a lowercase letter, a number, and a special character
                   </p>
                 )}
               </div>

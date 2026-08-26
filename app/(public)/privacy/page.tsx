@@ -23,7 +23,7 @@ export default function PrivacyPage() {
         </h1>
         
         <p className="text-muted-foreground mb-8">
-          Last updated: December 31, 2024
+          Last updated: August 26, 2026
         </p>
 
         <div className="prose prose-gray max-w-none space-y-8">
@@ -135,7 +135,7 @@ export default function PrivacyPage() {
               <li><strong>Access:</strong> Request a copy of your data</li>
               <li><strong>Correct:</strong> Update inaccurate information</li>
               <li><strong>Delete:</strong> Request deletion of your account and data</li>
-              <li><strong>Export:</strong> Download your artwork and data</li>
+              <li><strong>Export:</strong> Request a copy of your artwork and data</li>
               <li><strong>Opt-out:</strong> Unsubscribe from marketing emails</li>
             </ul>
           </section>

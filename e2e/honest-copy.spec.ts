@@ -42,6 +42,10 @@ const BANNED = [
   'Story capture (REQUIRED)',
   'requires a story',
   'minimum 20 characters',
+  // the free tier is 50, and we have no crowd to invite people to join
+  'unlimited artworks free',
+  'Join families already',
+  '(guaranteed)',
 ]
 
 const PUBLIC_PAGES = ['/', '/support', '/privacy', '/terms', '/login', '/signup']

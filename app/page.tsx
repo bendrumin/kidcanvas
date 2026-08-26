@@ -305,9 +305,9 @@ export default function LandingPage() {
             Built by one parent, with a fridge that ran out of room
           </p>
           <p className="text-sm text-muted-foreground">
-            KidCanvas is new and in open beta. There are no reviews to show you yet
-            &mdash; so the free tier is 50 artworks with no card, and you can delete
-            your account and everything in it whenever you like.
+            KidCanvas is new and in open beta, so there are no reviews to show you
+            yet. Instead, try it without risk: your first 50 artworks are free with no
+            card, and you can delete your account and everything in it whenever you like.
           </p>
         </div>
       </section>
@@ -361,10 +361,10 @@ export default function LandingPage() {
             Simple pricing
           </h2>
           <p className="text-center text-muted-foreground mb-2">
-            Start capturing stories for free. Upgrade anytime if you want unlimited.
+            Start capturing stories for free. Upgrade anytime for unlimited artworks.
           </p>
           <p className="text-center text-sm text-green-600 dark:text-green-400 mb-8 font-medium">
-            <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> No credit card required</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> Cancel anytime</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> Up to 50 artworks, free forever</span>
+            <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> No credit card required</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> Cancel anytime</span> • <span className="inline-flex items-center gap-1"><Check className="w-3 h-3" aria-hidden="true" /> Your first 50 artworks are free, forever</span>
           </p>
           
           <div className="grid sm:grid-cols-2 gap-4">
@@ -413,7 +413,7 @@ export default function LandingPage() {
             How KidCanvas compares to other solutions
           </h2>
           <p className="text-center text-muted-foreground mb-8 text-sm max-w-2xl mx-auto">
-            See why families choose KidCanvas over Instagram, artwork storage apps, cloud storage, and photo apps
+            How KidCanvas compares with Instagram, artwork storage apps, and cloud storage
           </p>
 
           {/* Key Differentiator Callout */}
@@ -427,7 +427,7 @@ export default function LandingPage() {
                   The KidCanvas Difference: Stories, Not Just Storage
                 </h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Other apps treat kids' art like files in a folder. <span className="font-semibold text-foreground">We treat them like memories.</span> Every artwork gets a story, and every family member can react to it.
+                  Other apps treat kids&apos; artwork like files in a folder. <span className="font-semibold text-foreground">We treat every piece like a memory.</span> Each artwork gets a story, and every family member can react to it.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <span className="text-xs bg-pink-200 dark:bg-pink-900/40 text-pink-800 dark:text-pink-200 px-3 py-1 rounded-full font-medium">
@@ -467,7 +467,7 @@ export default function LandingPage() {
                 // PRICING & VALUE
                 {
                   feature: 'Free tier',
-                  kidcanvas: 'Up to 50 artworks + stories, free forever',
+                  kidcanvas: 'First 50 artworks free, forever — stories included',
                   others: ['No free tier', '10 artworks free', 'Free storage, no features'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, true],
@@ -475,7 +475,7 @@ export default function LandingPage() {
                 },
                 {
                   feature: 'Monthly pricing',
-                  kidcanvas: '$4.99/mo (50% cheaper)',
+                  kidcanvas: '$4.99/mo',
                   others: ['$9.99/mo', '$7.99/mo', '$2-10/mo (general storage)'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, true],
@@ -491,7 +491,7 @@ export default function LandingPage() {
                 },
                 {
                   feature: 'Keep data after canceling',
-                  kidcanvas: 'Yes - up to 50 artworks forever + all stories',
+                  kidcanvas: 'Yes — your first 50 artworks and their stories stay, forever',
                   others: ['Lose everything', 'Lose everything', 'Keep files, lose context'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, false],
@@ -521,7 +521,7 @@ export default function LandingPage() {
                 },
                 {
                   feature: '📱 Instagram-style feed (stories-first)',
-                  kidcanvas: 'Feed shows stories prominently - see the moment, not just image',
+                  kidcanvas: 'The story leads each post — you see the moment, not just the image',
                   others: ['Grid view only', 'Grid view only', 'Folder structure'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, false],
@@ -532,7 +532,7 @@ export default function LandingPage() {
                 // FAMILY ENGAGEMENT
                 {
                   feature: '❤️ Family reactions (5 types)',
-                  kidcanvas: 'React with Love, Amazing, Artistic, Proud, Star',
+                  kidcanvas: 'React with ❤️ 😍 🎨 👏 🌟',
                   others: ['Not available', 'Not available', 'No reactions'],
                   kidcanvasCheck: true,
                   othersCheck: [false, false, false],
@@ -602,7 +602,7 @@ export default function LandingPage() {
                 // PRIVACY & TRUST
                 {
                   feature: '🔒 Privacy & AI training',
-                  kidcanvas: 'Your data NEVER used for AI training (guaranteed)',
+                  kidcanvas: 'Your data is never used for AI training',
                   others: ['Unclear policy', 'Unclear policy', 'May train AI models on your data'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, false],
@@ -647,7 +647,7 @@ export default function LandingPage() {
                 {
                   feature: '📖 Print photo books',
                   kidcanvas: 'Print-ready PDF art books, with the stories included',
-                  others: ['Yes ($30-50 per book)', 'Yes ($40-60 per book)', 'No'],
+                  others: ['Paid keepsake books', 'Paid keepsake books', 'No'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, false],
                   category: 'future',
@@ -696,7 +696,7 @@ export default function LandingPage() {
                 Why pay more for less?
               </p>
               <p className="text-sm text-muted-foreground mb-3">
-Up to 50 artworks with stories, free forever • Family reactions & comments • Your data stays private
+Your first 50 artworks are free, forever • Family reactions & comments • Your data stays private
               </p>
               <Link href="/signup">
                 <Button className="bg-[#E91E63] hover:bg-[#C2185B]">
@@ -724,7 +724,7 @@ Up to 50 artworks with stories, free forever • Family reactions & comments •
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
-                    <p className="font-semibold text-foreground">Up to 50 artworks, free forever</p>
+                    <p className="font-semibold text-foreground">Your first 50 artworks are free, forever</p>
                     <p className="text-muted-foreground">Artkive requires payment upfront</p>
                   </div>
                 </div>
@@ -796,7 +796,7 @@ Up to 50 artworks with stories, free forever • Family reactions & comments •
                   <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p className="font-semibold text-foreground">Easy sharing for grandparents</p>
-                    <p className="text-muted-foreground">Just send a link - no account needed</p>
+                    <p className="text-muted-foreground">Just send a link &mdash; no account needed</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -835,7 +835,7 @@ Up to 50 artworks with stories, free forever • Family reactions & comments •
             {[
               {
                 q: "Is it really free?",
-                a: "Yes! The free plan includes 50 artworks, 1 child, and all core features. No credit card required. You only pay if you need more artworks or multiple children."
+                a: "Yes. Your first 50 artworks are free, with 1 child profile and every feature — paid plans only raise the limits. No credit card required, and you only pay if you need more artworks or more children."
               },
               {
                 q: "What happens to my photos?",
@@ -843,11 +843,11 @@ Up to 50 artworks with stories, free forever • Family reactions & comments •
               },
               {
                 q: "Can grandparents see the stories too?",
-                a: "Yes! Share a simple link with family members. They can see the artwork, read the story, and even react or comment - all without creating an account. Perfect for long-distance grandparents."
+                a: "Yes! Share a simple link with family members. They can see the artwork, read the story, and even react or comment — all without creating an account. Perfect for long-distance grandparents."
               },
               {
                 q: "What if I forget to add a story?",
-                a: "Nothing stops you uploading without one, and you can add it later by opening the artwork. On iPhone the app asks while you are still there, with prompts if you are not sure what to ask - which is usually the moment you actually remember what they said."
+                a: "Nothing stops you uploading without one, and you can add it later by opening the artwork. On iPhone the app asks while you are still there, with prompts if you are not sure what to ask — which is usually the moment you actually remember what they said."
               },
               {
                 q: "What if I want to cancel?",
@@ -877,7 +877,7 @@ Up to 50 artworks with stories, free forever • Family reactions & comments •
             Start capturing the stories, not just the art
           </h2>
           <p className="text-muted-foreground mb-6">
-            Remember what your child said. Share the moment with family. Keep those memories alive. Takes 2 minutes to set up. Free for up to 50 artworks. No credit card required.
+            Remember what your child said. Share the moment with family. Keep those memories alive. It takes two minutes to set up, your first 50 artworks are free, and there is no credit card required.
           </p>
           <Link href="/signup">
             <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">
@@ -886,7 +886,7 @@ Up to 50 artworks with stories, free forever • Family reactions & comments •
             </Button>
           </Link>
           <p className="mt-4 text-xs text-muted-foreground">
-            Join families already preserving their kids' masterpieces
+            Start preserving your kids&apos; masterpieces today
           </p>
         </div>
       </section>

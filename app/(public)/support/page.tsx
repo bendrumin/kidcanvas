@@ -12,23 +12,23 @@ import { toast } from 'sonner'
 const faqs = [
   {
     q: 'How do I capture artwork and stories?',
-    a: 'Upload a photo of the artwork, then open it and add the story - what your child said, what was special about it, or any context. On iPhone the app asks while you upload - the beta is open at https://testflight.apple.com/join/7nT5CzWQ',
+    a: 'Upload a photo of the artwork, then open it and add the story — what your child said, what was special about it, or any context. On iPhone the app asks while you upload; the beta is open at https://testflight.apple.com/join/7nT5CzWQ',
   },
   {
     q: 'Can grandparents see the stories and react?',
-    a: 'Yes! Share a link and they can see the artwork, read the story, and even react or comment - all without creating an account.',
+    a: 'Yes! Share a link and they can see the artwork, read the story, and even react or comment — all without creating an account.',
   },
   {
     q: 'What\'s included free?',
-    a: 'Up to 50 artworks with stories, 1 child profile, and 1 family group. Every feature is included on every plan - paid plans only raise those limits.',
+    a: 'Your first 50 artworks, 1 child profile, and 1 family group. Every feature is included on every plan — paid plans only raise those limits.',
   },
   {
     q: 'How do I cancel?',
-    a: 'Go to Settings → Billing. Cancel anytime — you keep access until the end of your billing period.',
+    a: 'Open Billing in your dashboard. Cancel anytime — you keep access until the end of your billing period.',
   },
   {
     q: 'Is my data secure?',
-    a: 'Gallery contents - titles, stories, your children\'s names - are readable only by your family, enforced at the database level. Artwork images are served from unlisted, unguessable addresses; anyone you send one to can view that image. Everything is encrypted in transit and at rest.',
+    a: 'Gallery contents — titles, stories, your children\'s names — are readable only by your family, enforced at the database level. Artwork images are served from unlisted, unguessable addresses; anyone you send one to can view that image. Everything is encrypted in transit and at rest.',
   },
 ]
 
