@@ -53,3 +53,6 @@ ios/fastlane/metadata/review_information/first_name.txt
 ios/fastlane/metadata/review_information/last_name.txt
 ios/fastlane/metadata/review_information/phone_number.txt
 ios/fastlane/metadata/review_information/email_address.txt
+
+# fastlane rewrites this on every lane run
+ios/fastlane/report.xml
