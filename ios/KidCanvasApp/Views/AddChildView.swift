@@ -43,7 +43,7 @@ struct AddChildView: View {
                                 .font(.subheadline.bold())
                                 .foregroundColor(.secondary)
                             
-                            TextField("Child's name", text: $name)
+                            TextField("Artist's name", text: $name)
                                 .padding()
                                 .background(Color.cardSurface)
                                 .cornerRadius(12)
@@ -52,7 +52,7 @@ struct AddChildView: View {
                         // Birth Date
                         VStack(alignment: .leading, spacing: 8) {
                             Toggle(isOn: $hasBirthDate) {
-                                Text("Add birth date")
+                                Text("Add Birth Date")
                                     .font(.subheadline.bold())
                                     .foregroundColor(.secondary)
                             }
@@ -89,7 +89,7 @@ struct AddChildView: View {
                                     .tint(.white)
                             } else {
                                 Image(systemName: "plus.circle.fill")
-                                Text("Add Child")
+                                Text("Add Artist")
                             }
                         }
                         .font(.headline)
@@ -114,7 +114,7 @@ struct AddChildView: View {
                 }
             }
         }
-        .navigationTitle("Add Child")
+        .navigationTitle("Add Artist")
         .navigationBarTitleDisplayMode(.inline)
     }
     

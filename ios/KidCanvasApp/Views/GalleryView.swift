@@ -84,12 +84,12 @@ struct GalleryView: View {
                         Image(systemName: "arrow.up.arrow.down")
                             .foregroundColor(.pink)
                     }
-                    .accessibilityLabel("Sort artwork")
+                    .accessibilityLabel("Sort Artwork")
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
-                        Button("All Children") {
+                        Button("All Artists") {
                             selectedChild = nil
                         }
                         

@@ -45,7 +45,7 @@ struct AddStorySheet: View {
                                     ProgressView().tint(.white)
                                 } else {
                                     Image(systemName: "checkmark.circle.fill")
-                                    Text("Save story")
+                                    Text("Save Story")
                                 }
                             }
                             .font(.headline)
@@ -65,7 +65,7 @@ struct AddStorySheet: View {
                     .padding()
                 }
             }
-            .navigationTitle("Add the story")
+            .navigationTitle("Add the Story")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

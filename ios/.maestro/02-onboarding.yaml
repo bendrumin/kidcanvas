@@ -83,7 +83,7 @@ env:
 - assertVisible: ".*Write down what they said.*"
 
 # ...and it leads somewhere, rather than being a dead end.
-- tapOn: "Add your first artist"
+- tapOn: "Add Your First Artist"
 - extendedWaitUntil:
-    visible: "Add Child"
+    visible: "Add Artist"
     timeout: 10000

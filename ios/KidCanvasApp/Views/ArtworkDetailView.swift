@@ -157,6 +157,10 @@ struct ArtworkDetailView: View {
                     }
                 }
                 .padding(24)
+                // Clears the floating tab bar. Without this the story card ran
+                // underneath it on a 6.3-inch phone and the reactions and
+                // comments below were unreachable.
+                .padding(.bottom, 70)
                 .background(Color.cardSurface)
                 .cornerRadius(24, corners: [.topLeft, .topRight])
                 .offset(y: -24)

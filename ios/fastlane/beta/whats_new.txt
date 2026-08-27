@@ -1,14 +1,15 @@
 NEW IN THIS BUILD:
 
-• Dark mode now works everywhere. Flip appearance in Settings and check every
-  tab. Cards, backgrounds, and text should all adapt.
-• First-run guide for new accounts, ending in adding your first artist. The
-  upload screen also now explains itself instead of silently disabling Save.
-• Long-press any comment to delete it (parents can remove anyone's).
-• Profile shows the family's members, with remove/leave.
-• Return advances through the sign-up form instead of the keyboard trapping you.
+• Every button and label now uses the same capitalization, and the person you
+  file artwork under is called an artist everywhere (it was "child" in a few
+  places and "artist" in others).
+• Artwork detail: the story card no longer runs under the tab bar, so the
+  reactions and comments are reachable without hunting for them.
+• Settings: choose Light, Dark, or System appearance, and turn on story
+  nudges (a reminder when it has been a week, and before each birthday).
+• Rename or delete your family from Settings (owner only).
 
 Worth trying:
-• Scan a real drawing, write the story, and check the family feed.
-• Invite a second account with the code from Profile → Invite family, comment
-  from it, then delete that comment from the first account.
+• Open an artwork with a long story and scroll to the comments.
+• Flip appearance in Settings and check every tab.
+• Turn on story nudges; the app will ask for notification permission once.

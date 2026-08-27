@@ -19,10 +19,10 @@ struct StoryField: View {
                     .foregroundColor(.secondary)
                 Spacer()
                 Button(action: onBrowseTemplates) {
-                    Label("Need a nudge?", systemImage: "lightbulb")
+                    Label("Need a Nudge?", systemImage: "lightbulb")
                         .font(.caption)
                 }
-                .accessibilityLabel("Browse story prompts")
+                .accessibilityLabel("Browse Story Prompts")
             }
 
             TextField(prompt, text: $story, axis: .vertical)
@@ -79,7 +79,7 @@ struct StoryTemplatePicker: View {
                 }
                 .listStyle(.plain)
             }
-            .navigationTitle("Story prompts")
+            .navigationTitle("Story Prompts")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

@@ -53,12 +53,12 @@ struct ProfileView: View {
                                 
                                 Divider()
                                 
-                                Text("Children")
+                                Text("Artists")
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                 
                                 if authManager.children.isEmpty {
-                                    Text("No children added yet")
+                                    Text("No artists yet")
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                         .italic()
@@ -71,7 +71,7 @@ struct ProfileView: View {
                                 NavigationLink(destination: AddChildView()) {
                                     HStack {
                                         Image(systemName: "plus.circle.fill")
-                                        Text("Add Child")
+                                        Text("Add Artist")
                                     }
                                     .font(.subheadline.bold())
                                     .foregroundColor(.pink)
@@ -82,7 +82,7 @@ struct ProfileView: View {
                                 NavigationLink(destination: FamilyInviteView()) {
                                     HStack {
                                         Image(systemName: "person.2.badge.plus")
-                                        Text("Invite family")
+                                        Text("Invite Family")
                                         Spacer()
                                         Image(systemName: "chevron.right")
                                             .font(.caption)
@@ -317,7 +317,7 @@ struct FamilyMembersCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("Family members", systemImage: "person.2")
+            Label("Family Members", systemImage: "person.2")
                 .font(.headline)
 
             if members.isEmpty {

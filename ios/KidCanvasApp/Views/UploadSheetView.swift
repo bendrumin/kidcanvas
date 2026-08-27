@@ -68,7 +68,7 @@ struct UploadSheetView: View {
                                         Button {
                                             showAddChild = true
                                         } label: {
-                                            Label("Add an artist", systemImage: "person.crop.circle.badge.plus")
+                                            Label("Add an Artist", systemImage: "person.crop.circle.badge.plus")
                                                 .font(.subheadline.bold())
                                                 .foregroundColor(.pink)
                                         }

@@ -62,7 +62,7 @@ struct OnboardingView: View {
                     Button {
                         showAddChild = true
                     } label: {
-                        Text("Add your first artist")
+                        Text("Add Your First Artist")
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)

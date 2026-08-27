@@ -48,6 +48,15 @@ project — a dedicated test project would be better before running this in CI.
 Do not use the App Review demo account: it is pre-seeded with children, so the
 first-run guide will not appear.
 
+## The test simulator
+
+`run.sh` creates and uses a simulator named "KidCanvas Tests" on a pinned
+runtime (iOS 26.5; `IOS_RUNTIME=...` to override), and cold-boots it before every
+run. Two reasons: the SpringBoard crashes below stop landing on the simulator you
+use by hand, and a fresh boot makes them rarer. The newest installed runtime is
+usually a beta, and the flows fail on it for beta-UI reasons, which is why the
+runtime is pinned rather than inferred.
+
 ## Known issue: SpringBoard crashes during runs
 
 Maestro drives the UI through Apple's XCTAutomationSupport, injected into

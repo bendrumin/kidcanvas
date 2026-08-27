@@ -35,7 +35,7 @@ struct SettingsView: View {
             }
 
             Section {
-                Toggle("Memory prompts", isOn: $memoryPromptsEnabled)
+                Toggle("Memory Prompts", isOn: $memoryPromptsEnabled)
                     .onChange(of: memoryPromptsEnabled) { _, enabled in
                         Task {
                             if enabled {
@@ -73,12 +73,12 @@ struct SettingsView: View {
                     .padding(.vertical, 2)
 
                     if isOwner {
-                        Button("Rename family") {
+                        Button("Rename Family") {
                             newFamilyName = family.name
                             showRenameFamily = true
                         }
 
-                        Button("Delete family…", role: .destructive) {
+                        Button("Delete Family…", role: .destructive) {
                             showDeleteFamily = true
                         }
                     }
@@ -132,7 +132,7 @@ struct SettingsView: View {
         } message: {
             Text("You can sign back in anytime.")
         }
-        .alert("Rename family", isPresented: $showRenameFamily) {
+        .alert("Rename Family", isPresented: $showRenameFamily) {
             TextField("Family name", text: $newFamilyName)
             Button("Cancel", role: .cancel) {}
             Button("Save") {

@@ -62,8 +62,14 @@ appId: Siegel.KidCanvas
     visible: ".*Rainbow.*"
     timeout: 15000
 - tapOn: ".*Rainbow.*"
+# The story card fills the first screen now, so Comments sits below the fold.
 - extendedWaitUntil:
-    visible: ".*Comments.*"
+    visible: ".*The story.*"
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+      text: ".*Comments.*"
+    direction: DOWN
     timeout: 15000
 - back
 
@@ -73,21 +79,21 @@ appId: Siegel.KidCanvas
 # Profile: family card, children, members, invite entry point.
 - tapOn: "Profile"
 - assertVisible: "The Demo Family"
-- assertVisible: ".*Add Child.*"
-- assertVisible: ".*Invite family.*"
+- assertVisible: ".*Add Artist.*"
+- assertVisible: ".*Invite Family.*"
 - scrollUntilVisible:
     element:
-      text: ".*Family members.*"
+      text: ".*Family Members.*"
     direction: DOWN
     timeout: 15000
 
 # Settings: every section present, and the theme toggle actually works.
 - tapOn: "Settings"
 - assertVisible: "Appearance"
-- assertVisible: "Memory prompts"
+- assertVisible: "Memory Prompts"
 - assertVisible: "The Demo Family"
-- assertVisible: "Rename family"
-- assertVisible: "Delete family…"
+- assertVisible: "Rename Family"
+- assertVisible: "Delete Family…"
 - tapOn: "Dark"
 - tapOn: "Light"
 - tapOn: "System"

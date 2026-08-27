@@ -127,7 +127,7 @@ struct CommentsSection: View {
                             Button(role: .destructive) {
                                 delete(comment)
                             } label: {
-                                Label("Delete comment", systemImage: "trash")
+                                Label("Delete Comment", systemImage: "trash")
                             }
                         }
                     }
@@ -146,7 +146,7 @@ struct CommentsSection: View {
                         .foregroundStyle(canSend ? Color.pink : Color.secondary)
                 }
                 .disabled(!canSend)
-                .accessibilityLabel("Post comment")
+                .accessibilityLabel("Post Comment")
             }
         }
         .task(id: artworkId) {

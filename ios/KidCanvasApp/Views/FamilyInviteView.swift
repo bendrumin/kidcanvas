@@ -33,7 +33,7 @@ struct FamilyInviteView: View {
                                     ProgressView().tint(.white)
                                 } else {
                                     Image(systemName: "person.badge.plus")
-                                    Text("Create an invite code")
+                                    Text("Create an Invite Code")
                                 }
                             }
                             .font(.headline)
@@ -142,7 +142,7 @@ struct InviteCodeCard: View {
                 .accessibilityLabel("Invite code: \(code.map(String.init).joined(separator: " "))")
 
             ShareLink(item: shareText) {
-                Label("Share code", systemImage: "square.and.arrow.up")
+                Label("Share Code", systemImage: "square.and.arrow.up")
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 6)
             }
