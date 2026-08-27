@@ -219,7 +219,7 @@ function LoginContent() {
                       )}
                     </Button>
                     <p className="text-center text-sm text-muted-foreground">
-                      We'll email you a link to sign in instantly — no password needed!
+                      We'll email you a link to sign in instantly, no password needed!
                     </p>
                   </form>
                 )}

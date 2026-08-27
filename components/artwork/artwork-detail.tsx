@@ -274,7 +274,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
                 Add a Story
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                This artwork doesn't have a story yet. Stories help preserve the meaningful moments around each piece—what your child said, how they felt, when and where they made it.
+                This artwork doesn't have a story yet. Stories help preserve the meaningful moments around each piece, like what your child said, how they felt, and when and where they made it.
               </p>
               {canEdit && (
                 <Button 

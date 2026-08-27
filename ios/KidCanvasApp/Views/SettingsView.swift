@@ -54,7 +54,7 @@ struct SettingsView: View {
             } header: {
                 Text("Reminders")
             } footer: {
-                Text("A nudge if it's been a week since the last artwork, and one before each child's birthday. Scheduled on this device — nothing leaves your phone.")
+                Text("A nudge if it's been a week since the last artwork, and one before each child's birthday. Scheduled on this device; nothing leaves your phone.")
             }
 
             if let family = authManager.currentFamily {
@@ -153,7 +153,7 @@ struct SettingsView: View {
                 }
             }
         } message: {
-            Text("Every child profile, artwork, story, comment, and member is permanently removed — for everyone in the family. This cannot be undone.")
+            Text("Every child profile, artwork, story, comment, and member is permanently removed for everyone in the family. This cannot be undone.")
         }
         .alert("Couldn't do that",
                isPresented: .constant(familyActionError != nil),

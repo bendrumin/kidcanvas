@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { CreditCard, Download, Trash2 } from 'lucide-react'
+import { CreditCard, Trash2 } from 'lucide-react'
 import { getUserSubscriptionLimits } from '@/lib/subscription'
 import { SettingsActions } from '@/components/settings/settings-actions'
 
@@ -76,26 +76,6 @@ export default async function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Export */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Download className="w-5 h-5" />
-            Export Data
-          </CardTitle>
-          <CardDescription>
-            Download all your artwork and data
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            Get a ZIP file with all original images and metadata. Your data is yours — no lock-in.
-          </p>
-          <SettingsActions 
-            action="export"
-          />
-        </CardContent>
-      </Card>
 
       {/* Danger Zone */}
       <Card className="border-destructive/50">

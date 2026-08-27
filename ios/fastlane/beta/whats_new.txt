@@ -1,6 +1,6 @@
 NEW IN THIS BUILD:
 
-• Dark mode now works everywhere — flip appearance in Settings and check every
+• Dark mode now works everywhere. Flip appearance in Settings and check every
   tab. Cards, backgrounds, and text should all adapt.
 • First-run guide for new accounts, ending in adding your first artist. The
   upload screen also now explains itself instead of silently disabling Save.

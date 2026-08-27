@@ -33,7 +33,7 @@ struct StoryField: View {
                 .accessibilityLabel("The story behind this artwork")
 
             Text(remaining > 0
-                 ? "A sentence or two — \(remaining) more character\(remaining == 1 ? "" : "s")"
+                 ? "A sentence or two. \(remaining) more character\(remaining == 1 ? "" : "s")"
                  : "This is what you'll be glad you wrote down.")
                 .font(.caption2)
                 .foregroundColor(remaining > 0 ? .secondary : .green)

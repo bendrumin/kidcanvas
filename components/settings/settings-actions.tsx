@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/alert-dialog'
 
 interface SettingsActionsProps {
-  action: 'upgrade' | 'export' | 'delete'
+  action: 'upgrade' | 'delete'
   planId?: string
   userId?: string
 }
@@ -34,36 +34,7 @@ export function SettingsActions({ action, planId, userId }: SettingsActionsProps
         className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90"
         onClick={() => router.push('/dashboard/billing')}
       >
-        Upgrade — $4.99/mo
-      </Button>
-    )
-  }
-
-  if (action === 'export') {
-    return (
-      <Button 
-        variant="outline"
-        onClick={async () => {
-          setIsLoading(true)
-          toast({
-            title: 'Coming soon!',
-            description: 'Data export feature is in development. We\'ll notify you when it\'s ready.',
-          })
-          setIsLoading(false)
-        }}
-        disabled={isLoading}
-      >
-        {isLoading ? (
-          <>
-            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            Preparing...
-          </>
-        ) : (
-          <>
-            <Download className="w-4 h-4 mr-2" />
-            Export All Data
-          </>
-        )}
+        Upgrade for $4.99/mo
       </Button>
     )
   }

@@ -138,7 +138,7 @@ struct EmptyFeedView: View {
         ContentUnavailableView {
             Label("Nothing here yet", systemImage: "sparkles")
         } description: {
-            Text("Scan a drawing and write down what they said about it — that's the part you'll want back later.")
+            Text("Scan a drawing and write down what they said about it. That's the part you'll want back later.")
         }
     }
 }

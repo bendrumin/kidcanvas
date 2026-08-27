@@ -6,13 +6,12 @@ their posts yearly: KinderArt (art-storage-apps), ArtShow's blog,
 YummyMummyClub, siparent.com, refinedroomsllc.com. One inclusion in a ranking
 post is worth more than months of on-page tweaking.
 
-**When to send: after the App Store release is live** — reviewers won't list a
+**When to send: after the App Store release is live**, reviewers won't list a
 TestFlight beta. Personalize the first line per site.
 
-The body below is plain text on purpose — one line per paragraph, no markdown —
+The body below is plain text on purpose, one line per paragraph, no markdown , 
 so it can be pasted into any email client without formatting surprises.
 
----
 
 ```
 Subject: A story-first take on the kids' artwork app (for your roundup)
@@ -29,7 +28,7 @@ Where it sits against the apps you already list: Artkive is archiving plus paid 
 
 It's live on the App Store and at kidcanvas.app. Happy to set you up with a full account to poke at, answer anything, or send screenshots/assets sized however you need.
 
-Thanks for the list either way — it's how parents actually find these tools.
+Thanks for the list either way. It's how parents actually find these tools.
 
 Ben Siegel
 kidcanvas.app · support@kidcanvas.app

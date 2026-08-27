@@ -225,7 +225,7 @@ function SignupForm() {
                     className="pl-10"
                   />
                 </div>
-                <p className="text-xs text-muted-foreground">Optional — we'll create one based on your name</p>
+                <p className="text-xs text-muted-foreground">Optional. We'll create one based on your name</p>
               </div>
 
               <Button 

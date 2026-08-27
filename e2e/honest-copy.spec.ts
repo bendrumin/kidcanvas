@@ -102,3 +102,17 @@ test('fonts are self-hosted, not fetched from Google', async ({ page }) => {
   expect(external, 'font request went out to Google').toEqual([])
   expect(localFonts.length, 'no self-hosted font was requested').toBeGreaterThan(0)
 })
+
+test('public copy has no em dashes and no emoji-as-labels', async ({ page }) => {
+  // From the unslop-text dataset: the em dash is the single most-cited tell
+  // that text was machine-written, and emoji standing in for bullets or
+  // headings is close behind. Both had crept into the copy (many by our own
+  // hand) and were rewritten as ordinary sentences. Keep them out.
+  for (const path of PUBLIC_PAGES) {
+    await page.goto(path)
+    const text = await page.locator('main, body').first().innerText()
+    expect(text.includes('\u2014'), `${path} contains an em dash`).toBe(false)
+    const emojiLabel = text.match(/^\s*[\u{1F300}-\u{1FAFF}\u2600-\u27BF][\uFE0F]?\s+[A-Z]/mu)
+    expect(emojiLabel, `${path} has an emoji-prefixed label: ${emojiLabel?.[0]}`).toBeNull()
+  }
+})

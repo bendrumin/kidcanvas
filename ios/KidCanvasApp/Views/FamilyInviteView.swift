@@ -117,7 +117,7 @@ struct InviteHeader: View {
                 )
             Text("Invite the grandparents")
                 .font(.title3.bold())
-            Text("Share a code and they'll see every new drawing — no more texting photos one at a time.")
+            Text("Share a code and they'll see every new drawing. No more texting photos one at a time.")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)

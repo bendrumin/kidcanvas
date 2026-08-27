@@ -1,4 +1,4 @@
-KidCanvas is a private family gallery for your children's artwork — and the
+KidCanvas is a private family gallery for your children's artwork, and the
 stories behind it.
 
 Scan a drawing with the built-in document scanner (it finds the page and squares

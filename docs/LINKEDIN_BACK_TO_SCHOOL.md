@@ -1,34 +1,33 @@
-# LinkedIn post — back to school, three apps
+# LinkedIn post, back to school, three apps
 
 Status when posting: ChoreStar 1.5 is live on the App Store; SnapSweep and
 KidCanvas are in TestFlight. Don't imply the latter two are shipped.
 
-**LinkedIn has no formatted text.** The draft below is plain text on purpose —
+**LinkedIn has no formatted text.** The draft below is plain text on purpose , 
 no bold, no italics, no markdown. Asterisks and underscores paste through
 literally. Each paragraph is also one unwrapped line, because LinkedIn keeps
 every newline you paste; hard-wrapping the source would break sentences mid-air
 in the published post.
 
----
 
 ## Draft (paste-ready, everything inside the fence)
 
 ```
 Back-to-school week turned my phone into a disaster zone, so I did what any reasonable person does: I built three apps instead of cleaning up once.
 
-They turn out to be the same problem in three costumes — the household runs on paper and pictures, and none of it is organized.
+They turn out to be the same problem in three costumes. The household runs on paper and pictures, and none of it is organized.
 
-ChoreStar — the morning routine. Kids have their own login (no email, just a family code and a PIN), so they run their own checklists, earn allowance, and stop asking me what's next. Version 1.5 is live on the App Store now.
+ChoreStar handles the morning routine. Kids have their own login (no email, just a family code and a PIN), so they run their own checklists, earn allowance, and stop asking me what's next. Version 1.5 is live on the App Store now.
 
-KidCanvas — the backpack. Every day it produces another masterpiece, the fridge fills up, and you feel guilty recycling any of it. It scans artwork into a private family gallery, and it asks for the story, because "it's a rainbow that ate a dinosaur" is the part you forget by next week. In TestFlight.
+KidCanvas handles the backpack. Every day it produces another masterpiece, the fridge fills up, and you feel guilty recycling any of it. It scans artwork into a private family gallery, and it asks for the story, because "it's a rainbow that ate a dinosaur" is the part you forget by next week. In TestFlight.
 
-SnapSweep — the camera roll. My kids took roughly 200 photos of the carpet, a thumb, and the dog's left ear. It finds every blurry and accidental shot on device and clears them in one pass. Also in TestFlight.
+SnapSweep handles the camera roll. My kids took roughly 200 photos of the carpet, a thumb, and the dog's left ear. It finds every blurry and accidental shot on device and clears them in one pass. Also in TestFlight.
 
-The pattern I didn't expect: the same family shows up in all three. Chores in the morning, artwork in the afternoon, and a camera roll that needs saving from both of them. Eventually the kid profiles should just be shared between them — add a child once, not three times.
+The pattern I didn't expect: the same family shows up in all three. Chores in the morning, artwork in the afternoon, and a camera roll that needs saving from both of them. Eventually the kid profiles should just be shared between them, so you add a child once instead of three times.
 
 What I learned building all of this in a few weeks, working with AI as the implementation partner:
 
-→ Shipping is the hard part, not coding. The App Store submission, the account-deletion requirement, the privacy labels, the screenshots — that's where weekends go.
+→ Shipping is the hard part, not coding. The App Store submission, the account-deletion requirement, the privacy labels, the screenshots. That's where weekends go.
 
 → Test on the real thing. An automated pass on the simulator caught a hang in my photo scanner that no amount of code review would have: an Apple framework that simply never returns on a simulator, freezing the whole scan.
 
@@ -36,14 +35,13 @@ What I learned building all of this in a few weeks, working with AI as the imple
 
 → Your old notes lie. I had 45 planning documents claiming features were "done" that were never built. Verify against the code, not the changelog.
 
-KidCanvas is in open beta right now: https://testflight.apple.com/join/7nT5CzWQ — and if you want to try SnapSweep, comment "beta" and I'll send you a link.
+KidCanvas is in open beta right now: https://testflight.apple.com/join/7nT5CzWQ, and if you want to try SnapSweep, comment "beta" and I'll send you a link.
 
 ChoreStar is on the App Store today: chorestar.app
 
 #buildinpublic #iOS #SwiftUI #indiedev #parenting #backtoschool
 ```
 
----
 
 ## Notes before posting
 
@@ -59,4 +57,4 @@ ChoreStar is on the App Store today: chorestar.app
 - Emphasis without formatting: carry it with sentence structure, a short
   standalone line, or the arrow bullets. ALL CAPS works for one or two words at
   most; more than that reads as shouting.
-- The arrows (→) and em dashes (—) are plain Unicode and paste fine.
+- The arrows (→) are plain Unicode and paste fine.
