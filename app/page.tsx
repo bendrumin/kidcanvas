@@ -847,7 +847,7 @@ Your first 50 artworks are free, forever • Family reactions & comments • You
               },
               {
                 q: "What if I forget to add a story?",
-                a: "Nothing stops you uploading without one, and you can add it later by opening the artwork. On iPhone the app asks while you are still there, with prompts if you are not sure what to ask, which is usually the moment you actually remember what they said."
+                a: "Nothing stops you uploading without one, and you can add it later by opening the artwork. On iPhone the app asks while you are still there, with prompts if you are not sure what to ask. That is usually the moment you actually remember what they said."
               },
               {
                 q: "What if I want to cancel?",

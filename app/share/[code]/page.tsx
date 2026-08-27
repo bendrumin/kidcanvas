@@ -110,7 +110,7 @@ export default async function SharePage({ params }: SharePageProps) {
             <CardContent>
               <div className="mb-6 p-4 bg-gradient-to-r from-crayon-purple/10 to-crayon-pink/10 rounded-xl text-center">
                 <p className="text-sm text-muted-foreground mb-1">View their collection of</p>
-                <p className="text-lg font-semibold">Children's Artwork 🎨</p>
+                <p className="text-lg font-semibold">Children's Artwork</p>
               </div>
 
               {!user ? (
