@@ -20,7 +20,7 @@ const faqs = [
   },
   {
     q: 'What\'s included free?',
-    a: 'Your first 50 artworks, 1 child profile, and 1 family group. Every feature is included on every plan. Paid plans only raise those limits.',
+    a: 'Your first 50 artworks, 1 artist profile, and 1 family group. Every feature is included on every plan. Paid plans only raise those limits.',
   },
   {
     q: 'How do I cancel?',

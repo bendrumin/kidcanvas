@@ -49,7 +49,7 @@ export default async function SettingsPage() {
               <div>
                 <p className="font-semibold">Upgrade to Family Plan</p>
                 <p className="text-sm text-muted-foreground">
-                  Unlimited artworks and child profiles
+                  Unlimited artworks and artist profiles
                 </p>
               </div>
               <SettingsActions 
@@ -67,7 +67,7 @@ export default async function SettingsPage() {
               </p>
             </div>
             <div className="p-3 bg-muted/50 rounded-lg">
-              <p className="text-muted-foreground">Children</p>
+              <p className="text-muted-foreground">Artists</p>
               <p className="font-semibold">
                 {limits.currentChildren} / {limits.childrenLimit === -1 ? '∞' : limits.childrenLimit}
               </p>

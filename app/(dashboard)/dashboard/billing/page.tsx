@@ -151,7 +151,7 @@ export default async function BillingPage() {
               </p>
             </div>
             <div>
-              <p className="text-muted-foreground">Children</p>
+              <p className="text-muted-foreground">Artists</p>
               <p className="text-fluid-2xl font-bold">
                 {usage.children} {limits.children > 0 ? `/ ${limits.children}` : ''}
               </p>

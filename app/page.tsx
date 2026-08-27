@@ -567,8 +567,8 @@ export default function LandingPage() {
 
                 // ORGANIZATION & SEARCH
                 {
-                  feature: 'Child tagging',
-                  kidcanvas: 'Tag by child, filter by artist, see growth',
+                  feature: 'Artist tagging',
+                  kidcanvas: 'Tag each piece to its artist, filter by artist, see growth',
                   others: ['Yes', 'Yes', 'Manual folders only'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, false],
@@ -576,7 +576,7 @@ export default function LandingPage() {
                 },
                 {
                   feature: 'Search by story content',
-                  kidcanvas: 'Search the story text, tags, and child name',
+                  kidcanvas: 'Search the story text, tags, and artist name',
                   others: ['Basic search', 'Basic search', 'File name only'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, false],
@@ -835,7 +835,7 @@ Your first 50 artworks are free, forever • Family reactions & comments • You
             {[
               {
                 q: "Is it really free?",
-                a: "Yes. Your first 50 artworks are free, with 1 child profile and every feature. Paid plans only raise the limits. No credit card required, and you only pay if you need more artworks or more children."
+                a: "Yes. Your first 50 artworks are free, with 1 artist profile and every feature. Paid plans only raise the limits. No credit card required, and you only pay if you need more artworks or more children."
               },
               {
                 q: "What happens to my photos?",
