@@ -56,7 +56,7 @@ export function NoResults({ searchQuery, hasFilters, onClearFilters }: NoResults
             className="gap-2"
           >
             <X className="w-4 h-4" />
-            Clear all filters
+            Clear All Filters
           </Button>
         </Link>
       )}

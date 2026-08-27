@@ -140,7 +140,7 @@ export default function ResetPasswordPage() {
                 </p>
                 <Link href="/forgot-password">
                   <Button className="w-full">
-                    Send me a new link
+                    Send Me a New Link
                   </Button>
                 </Link>
               </div>

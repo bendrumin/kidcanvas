@@ -163,7 +163,7 @@ function VerifyEmailContent() {
                     onClick={() => router.push('/login')}
                     className="flex-1"
                   >
-                    Go to Login
+                    Go to Sign In
                   </Button>
                   <Button 
                     onClick={() => router.push('/signup')}

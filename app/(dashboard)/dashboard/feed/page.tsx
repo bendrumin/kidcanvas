@@ -147,7 +147,7 @@ export default async function FeedPage() {
               <Link href="/dashboard/upload">
                 <Button className="bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90">
                   <Upload className="w-4 h-4 mr-2" />
-                  Upload First Story
+                  Upload First Artwork
                 </Button>
               </Link>
             </div>

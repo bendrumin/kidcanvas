@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Log In',
+  title: 'Sign In',
   description: 'Log in to KidCanvas to access your family\'s artwork gallery.',
 }
 

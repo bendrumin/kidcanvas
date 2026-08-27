@@ -195,7 +195,7 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
 
             <div className="flex gap-3">
               <Button variant="ghost" onClick={handleSkip} className="flex-1">
-                Skip for now
+                Skip for Now
               </Button>
               <Button 
                 onClick={handleAddChild}

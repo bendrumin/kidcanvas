@@ -134,7 +134,7 @@ export function WhatsNewModal() {
             onClick={handleClose}
             className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90 flex items-center gap-2"
           >
-            Let's Go! <Rocket className="w-4 h-4" />
+            Let's Go <Rocket className="w-4 h-4" />
           </Button>
         </div>
       </DialogContent>
@@ -193,7 +193,7 @@ export function WhatsNewButton() {
 
           <div className="flex justify-end pt-2">
             <Button onClick={() => setIsOpen(false)}>
-              Got it!
+              Got It
             </Button>
           </div>
         </DialogContent>

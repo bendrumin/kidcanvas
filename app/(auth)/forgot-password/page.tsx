@@ -85,12 +85,12 @@ export default function ForgotPasswordPage() {
                     onClick={() => setEmailSent(false)} 
                     className="w-full"
                   >
-                    Try a different email
+                    Try a Different Email
                   </Button>
                   <Link href="/login">
                     <Button variant="ghost" className="w-full">
                       <ArrowLeft className="w-4 h-4 mr-2" />
-                      Back to login
+                      Back to Sign In
                     </Button>
                   </Link>
                 </div>
@@ -131,7 +131,7 @@ export default function ForgotPasswordPage() {
                 <Link href="/login">
                   <Button variant="ghost" className="w-full">
                     <ArrowLeft className="w-4 h-4 mr-2" />
-                    Back to login
+                    Back to Sign In
                   </Button>
                 </Link>
               </form>

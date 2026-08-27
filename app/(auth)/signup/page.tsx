@@ -267,7 +267,7 @@ function SignupForm() {
               <p className="text-sm text-muted-foreground mb-2">Have an invite code?</p>
               <Link href="/invite">
                 <Button variant="outline" size="sm">
-                  Join an existing family
+                  Join an Existing Family
                 </Button>
               </Link>
             </div>

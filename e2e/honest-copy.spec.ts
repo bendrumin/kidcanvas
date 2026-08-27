@@ -116,3 +116,17 @@ test('public copy has no em dashes and no emoji-as-labels', async ({ page }) => 
     expect(emojiLabel, `${path} has an emoji-prefixed label: ${emojiLabel?.[0]}`).toBeNull()
   }
 })
+
+test('buttons speak with one voice', async ({ page }) => {
+  // The nav said "Log in" while the page it opened said "Sign In" and iOS says
+  // Sign In / Sign Up / Sign Out. The homepage also had six differently-worded
+  // buttons for the same action. Keep the verb consistent and the labels calm:
+  // no "Log in", and no button shouting with an exclamation mark.
+  for (const path of PUBLIC_PAGES) {
+    await page.goto(path)
+    const labels = await page.locator('button, a[role="button"], a.button').allInnerTexts()
+    const flat = labels.map((l) => l.trim()).filter(Boolean)
+    expect(flat.filter((l) => /^log ?in$/i.test(l)), `${path} still says Log in`).toEqual([])
+    expect(flat.filter((l) => l.endsWith('!')), `${path} has a shouting button`).toEqual([])
+  }
+})

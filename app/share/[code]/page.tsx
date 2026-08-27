@@ -262,7 +262,7 @@ export default async function SharePage({ params }: SharePageProps) {
                 className="text-crayon-red border-crayon-red/30 hover:bg-crayon-red/10"
               >
                 <Heart className="w-4 h-4 mr-2" />
-                Love it!
+                Love It
               </Button>
             </div>
 

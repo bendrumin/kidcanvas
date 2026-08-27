@@ -185,7 +185,7 @@ function LoginContent() {
                       We sent a magic link to <strong>{email}</strong>
                     </p>
                     <Button variant="outline" onClick={() => setMagicLinkSent(false)}>
-                      Try a different email
+                      Try a Different Email
                     </Button>
                   </div>
                 ) : (

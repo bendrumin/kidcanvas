@@ -145,7 +145,6 @@ export default async function ProfilePage() {
               <p className="font-medium">Data Export</p>
               <p className="text-sm text-muted-foreground">Download all your data</p>
             </div>
-            <Button variant="outline" size="sm">Export</Button>
           </div>
           <div className="flex items-center justify-between py-2 border-t pt-4">
             <div>

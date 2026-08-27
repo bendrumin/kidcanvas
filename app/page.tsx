@@ -53,7 +53,7 @@ export default function LandingPage() {
             <div className="flex items-center gap-2">
               <ThemeToggle />
               <Link href="/login">
-                <Button variant="ghost" size="sm">Log in</Button>
+                <Button variant="ghost" size="sm">Sign In</Button>
               </Link>
               <Link href="/signup">
                 <Button size="sm" className="bg-[#E91E63] hover:bg-[#C2185B]">
@@ -92,7 +92,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/signup">
               <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">
-                Start free with 50 artworks
+                Start Free
                 <ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
               </Button>
             </Link>
@@ -881,7 +881,7 @@ Your first 50 artworks are free, forever • Family reactions & comments • You
           </p>
           <Link href="/signup">
             <Button size="lg" className="bg-[#E91E63] hover:bg-[#C2185B] px-8 text-lg">
-              Start capturing stories. It’s free!
+              Start Free
               <ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
             </Button>
           </Link>
