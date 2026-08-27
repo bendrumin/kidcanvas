@@ -181,17 +181,17 @@ export function AnalyticsDashboard({
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <label className="text-sm font-medium text-muted-foreground mb-2 block">
-              Child
+              Artist
             </label>
             <Select
               value={selectedChildId || 'all'}
               onValueChange={(value) => updateParams('child', value)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="All children" />
+                <SelectValue placeholder="All artists" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All children</SelectItem>
+                <SelectItem value="all">All artists</SelectItem>
                 {children.map((child) => (
                   <SelectItem key={child.id} value={child.id}>
                     {child.name}
@@ -310,7 +310,7 @@ export function AnalyticsDashboard({
         {childData.length > 0 && (
           <Card>
             <CardHeader>
-              <CardTitle>Artworks by Child</CardTitle>
+              <CardTitle>Artworks by Artist</CardTitle>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>

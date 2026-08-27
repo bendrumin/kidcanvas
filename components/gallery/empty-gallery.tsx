@@ -99,7 +99,7 @@ export function EmptyGallery() {
         </Link>
         <Link href="/dashboard/children">
           <Button size="lg" variant="outline" className="border-2">
-            Add Your Children First
+            Add Your Artists First
           </Button>
         </Link>
       </motion.div>

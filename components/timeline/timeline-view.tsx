@@ -150,7 +150,7 @@ export function TimelineView({
         </h3>
         <p className="text-muted-foreground mb-6">
           {selectedChildId && selectedChildId !== 'all'
-            ? 'Try selecting a different child or age range.'
+            ? 'Try selecting a different artist or age range.'
             : 'Upload artwork to see the timeline.'}
         </p>
       </Card>
@@ -165,17 +165,17 @@ export function TimelineView({
           {/* Child Filter */}
           <div className="flex-1">
             <label className="text-sm font-medium text-muted-foreground mb-2 block">
-              Child
+              Artist
             </label>
             <Select
               value={selectedChildId || 'all'}
               onValueChange={(value) => updateParams('child', value)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="All children" />
+                <SelectValue placeholder="All artists" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All children</SelectItem>
+                <SelectItem value="all">All artists</SelectItem>
                 {children.map((child) => (
                   <SelectItem key={child.id} value={child.id}>
                     {child.name}

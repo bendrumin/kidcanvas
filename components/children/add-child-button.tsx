@@ -69,7 +69,7 @@ export function AddChildButton({ familyId }: AddChildButtonProps) {
       if (error) throw error
 
       toast({
-        title: 'Child added!',
+        title: 'Artist added',
         description: `${formData.name} has been added to your family.`,
       })
 
@@ -77,7 +77,7 @@ export function AddChildButton({ familyId }: AddChildButtonProps) {
       setFormData({ name: '', birthDate: '' })
       router.refresh()
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t add child'
+      const errorMessage = error instanceof Error ? error.message : 'Couldn\'t add artist'
       toast({
         title: 'Oops!',
         description: errorMessage,
@@ -93,7 +93,7 @@ export function AddChildButton({ familyId }: AddChildButtonProps) {
       <DialogTrigger asChild>
         <Button className="bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90">
           <Plus className="w-5 h-5 mr-2" />
-          Add Child
+          Add Artist
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -110,7 +110,7 @@ export function AddChildButton({ familyId }: AddChildButtonProps) {
         <form onSubmit={handleSubmit}>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Child's Name</Label>
+              <Label htmlFor="name">Artist's Name</Label>
               <Input
                 id="name"
                 placeholder="Emma"
@@ -140,7 +140,7 @@ export function AddChildButton({ familyId }: AddChildButtonProps) {
             </Button>
             <Button type="submit" disabled={isLoading}>
               {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              Add Child
+              Add Artist
             </Button>
           </DialogFooter>
         </form>

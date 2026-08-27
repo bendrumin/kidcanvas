@@ -170,7 +170,7 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
 
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="childName">Child's Name</Label>
+                <Label htmlFor="childName">Artist's Name</Label>
                 <Input
                   id="childName"
                   placeholder="e.g., Emma"
@@ -206,7 +206,7 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <>
-                    Add Child
+                    Add Artist
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </>
                 )}

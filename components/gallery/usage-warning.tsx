@@ -30,12 +30,12 @@ export function UsageWarning({ current, limit, type }: UsageWarningProps) {
         : `You've uploaded ${current} of ${limit} artworks. Consider upgrading for unlimited storage.`,
     },
     children: {
-      title: isAtLimit ? 'Children Limit Reached' : isNearLimit ? 'Almost at Children Limit' : 'Approaching Children Limit',
+      title: isAtLimit ? 'Artist Limit Reached' : isNearLimit ? 'Almost at Artist Limit' : 'Approaching Artist Limit',
       description: isAtLimit
-        ? `You've added ${current} of ${limit} children. Upgrade to add more!`
+        ? `You've added ${current} of ${limit} artists. Upgrade to add more.`
         : isNearLimit
-        ? `You've added ${current} of ${limit} children. Upgrade soon to add more!`
-        : `You've added ${current} of ${limit} children. Consider upgrading for unlimited children.`,
+        ? `You've added ${current} of ${limit} artists. Upgrade soon to add more.`
+        : `You've added ${current} of ${limit} artists. Consider upgrading for unlimited artists.`,
     },
     family: {
       title: isAtLimit ? 'Family Limit Reached' : isNearLimit ? 'Almost at Family Limit' : 'Approaching Family Limit',

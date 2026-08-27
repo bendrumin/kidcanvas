@@ -264,7 +264,7 @@ export function InviteButton({ familyId, familyName }: InviteButtonProps) {
                       <SelectItem value="parent" className="py-3">
                         <div className="flex flex-col items-start gap-0.5">
                           <span className="font-medium">Parent</span>
-                          <span className="text-xs text-muted-foreground">Can manage children, artwork, and invite others</span>
+                          <span className="text-xs text-muted-foreground">Can manage artists, artwork, and invite others</span>
                         </div>
                       </SelectItem>
                       <SelectItem value="member" className="py-3">

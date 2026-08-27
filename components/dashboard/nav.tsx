@@ -90,7 +90,7 @@ export function DashboardNav({ role, currentArtworks = 0, artworkLimit = 100, pl
       title: 'Manage',
       items: [
         {
-          label: 'Children',
+          label: 'Artists',
           href: '/dashboard/children',
           icon: Baby,
           show: true,

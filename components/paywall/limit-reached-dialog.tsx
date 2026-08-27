@@ -34,9 +34,9 @@ export function LimitReachedDialog({
       feature: 'Unlimited Artworks',
     },
     children: {
-      title: 'Children Limit Reached',
-      description: `You've added ${current} children on the free plan. Upgrade to Family or Pro to add unlimited children!`,
-      feature: 'Unlimited Children',
+      title: 'Artist Limit Reached',
+      description: `You've added ${current} artists on the free plan. Upgrade to Family or Pro to add unlimited artists.`,
+      feature: 'Unlimited Artists',
     },
     family: {
       title: 'Family Limit Reached',

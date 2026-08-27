@@ -60,7 +60,7 @@ export const PLANS: Record<PlanId, {
     description: 'Enough to see if it sticks',
     features: [
       '50 artworks',
-      '1 child profile',
+      '1 artist profile',
       '1 family',
     ],
     limits: {
@@ -74,7 +74,7 @@ export const PLANS: Record<PlanId, {
     description: 'For one household, without limits',
     features: [
       'Unlimited artworks',
-      'Unlimited child profiles',
+      'Unlimited artist profiles',
       '1 family',
     ],
     limits: {
@@ -88,7 +88,7 @@ export const PLANS: Record<PlanId, {
     description: 'For families spread across households',
     features: [
       'Unlimited artworks',
-      'Unlimited child profiles',
+      'Unlimited artist profiles',
       'Unlimited families, so grandparents and caregivers get their own',
     ],
     limits: {

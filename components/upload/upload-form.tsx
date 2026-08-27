@@ -291,10 +291,10 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         </div>
         <h3 className="text-xl font-display font-bold mb-2">Add a child first</h3>
         <p className="text-muted-foreground mb-4">
-          Before uploading artwork, you need to add at least one child to your family.
+          Before uploading artwork, you need to add at least one artist to your family.
         </p>
         <Button onClick={() => router.push('/dashboard/children')}>
-          Add Your First Child
+          Add Your First Artist
         </Button>
       </Card>
     )

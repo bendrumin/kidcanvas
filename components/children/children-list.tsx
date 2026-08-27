@@ -77,7 +77,7 @@ export function ChildrenList({ children, canManage, familyId }: ChildrenListProp
 
       if (error) throw error
 
-      toast({ title: 'Child updated successfully' })
+      toast({ title: 'Artist updated' })
       setEditChild(null)
       router.refresh()
     } catch (error: unknown) {
@@ -100,7 +100,7 @@ export function ChildrenList({ children, canManage, familyId }: ChildrenListProp
 
       if (error) throw error
 
-      toast({ title: 'Child removed successfully' })
+      toast({ title: 'Artist removed' })
       setDeleteChild(null)
       router.refresh()
     } catch (error: unknown) {
@@ -117,7 +117,7 @@ export function ChildrenList({ children, canManage, familyId }: ChildrenListProp
         <div className="w-20 h-20 rounded-full bg-gradient-to-br from-crayon-pink/30 to-crayon-purple/30 flex items-center justify-center mx-auto mb-4">
           <Baby className="w-10 h-10 text-crayon-purple" />
         </div>
-        <h3 className="text-xl font-display font-bold mb-2">No children yet</h3>
+        <h3 className="text-xl font-display font-bold mb-2">No artists yet</h3>
         <p className="text-muted-foreground mb-6 max-w-md mx-auto">
           Add your children to start organizing their artwork by artist
         </p>
@@ -194,7 +194,7 @@ export function ChildrenList({ children, canManage, familyId }: ChildrenListProp
       <Dialog open={!!editChild} onOpenChange={() => setEditChild(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit Child</DialogTitle>
+            <DialogTitle>Edit Artist</DialogTitle>
             <DialogDescription>
               Update {editChild?.name}'s information
             </DialogDescription>
@@ -234,7 +234,7 @@ export function ChildrenList({ children, canManage, familyId }: ChildrenListProp
       <Dialog open={!!deleteChild} onOpenChange={() => setDeleteChild(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Child Profile</DialogTitle>
+            <DialogTitle>Delete Artist Profile</DialogTitle>
             <DialogDescription>
               Are you sure you want to remove {deleteChild?.name}? This will also delete all their artwork.
               This action cannot be undone.

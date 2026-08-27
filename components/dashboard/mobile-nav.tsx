@@ -91,7 +91,7 @@ export function MobileNav({ role, familyName }: MobileNavProps) {
       title: 'Manage',
       items: [
         {
-          label: 'Children',
+          label: 'Artists',
           href: '/dashboard/children',
           icon: Baby,
           show: true,

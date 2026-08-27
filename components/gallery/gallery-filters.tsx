@@ -58,7 +58,7 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
     <div className="space-y-4">
       {/* Child Filter */}
       <div className="space-y-2">
-        <label htmlFor="child-filter" className="text-sm font-medium">Filter by Child</label>
+        <label htmlFor="child-filter" className="text-sm font-medium">Filter by Artist</label>
         <Select
           value={currentChild}
           onValueChange={(value) => {
@@ -67,10 +67,10 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
           }}
         >
           <SelectTrigger id="child-filter" className="w-full">
-            <SelectValue placeholder="All children" />
+            <SelectValue placeholder="All artists" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All children</SelectItem>
+            <SelectItem value="all">All artists</SelectItem>
             {children.map((child) => (
               <SelectItem key={child.id} value={child.id}>
                 {child.name}
@@ -237,10 +237,10 @@ export function GalleryFilters({ children }: GalleryFiltersProps) {
         {/* Child Filter */}
         <Select value={currentChild} onValueChange={(value) => updateParams('child', value)}>
           <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="All children" />
+            <SelectValue placeholder="All artists" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All children</SelectItem>
+            <SelectItem value="all">All artists</SelectItem>
             {children.map((child) => (
               <SelectItem key={child.id} value={child.id}>
                 {child.name}
