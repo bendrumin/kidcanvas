@@ -106,7 +106,7 @@ export default function PrivacyPage() {
             <h2 className="text-fluid-2xl font-semibold text-foreground">Children's Privacy (COPPA)</h2>
             <p className="text-muted-foreground leading-relaxed">
               KidCanvas is designed for parents and guardians to manage their children's artwork. 
-              We do not collect personal information directly from children. All child profiles 
+              We do not collect personal information directly from children. All artist profiles (each is a child's name and optional birth date) 
               are created and managed by adult account holders.
             </p>
             <p className="text-muted-foreground leading-relaxed mt-4">
