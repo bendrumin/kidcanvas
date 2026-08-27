@@ -45,3 +45,11 @@ supabase/.temp/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# App Review contact details for deliver. Personal data on a public repo, so
+# these live only on the release machine. Regenerate from the Beta App Review
+# record with: fastlane ios beta_review_status
+ios/fastlane/metadata/review_information/first_name.txt
+ios/fastlane/metadata/review_information/last_name.txt
+ios/fastlane/metadata/review_information/phone_number.txt
+ios/fastlane/metadata/review_information/email_address.txt
