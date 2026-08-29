@@ -1,0 +1,25 @@
+"Show me your SaaS" is going around, so here is mine. Three apps, one household, all built after bedtime.
+
+They started as three separate annoyances and turned out to be the same problem: a family runs on paper, pictures, and reminders, and none of it is organized. Here is what each one does and how it works.
+
+ChoreStar (chores, routines, allowance)
+Parents set up chores and step-by-step routines for the morning, bedtime, or after school. Kids log in with a family code and a 4-digit PIN, no email or account needed, and check things off themselves, one step at a time, with a timer if you want one and confetti when they finish. Allowance adds up automatically as a daily amount or per chore, whichever fits your house. The web app and the iPhone and iPad app share one account, so you set it up on a laptop and the kids use the tablet. Free for up to 3 kids and 20 chores. Live at chorestar.app and on the App Store.
+
+KidCanvas (the artwork that piles up)
+Every school day produces another masterpiece, the fridge fills up, and recycling any of it feels wrong. KidCanvas scans the drawing (the scanner finds the page and squares it up), then asks for the story in the kid's own words while you still remember it, because "a rainbow dinosaur that eats sunshine" is the part that disappears first. Both go into a private family gallery where grandparents can look, react, and comment. Kids never get accounts. Free for your first 50 artworks. The web app is live at kidcanvas.app and the iPhone app is in open beta: https://testflight.apple.com/join/7nT5CzWQ
+
+SnapSweep (the camera roll after the kids borrow your phone)
+My kids took roughly 200 photos of the carpet, a thumb, and the dog's left ear. SnapSweep scans your whole photo library on the phone, scores each shot for sharpness and exposure, groups the eight near-identical bursts and keeps the sharpest one, then shows everything it flagged in one grid sorted worst-first. You delete in one pass (through Apple's own Recently Deleted, so it is recoverable) or move them to an album if you would rather not delete anything. Nothing leaves the phone: no network calls, no analytics, no accounts. Free, in public beta: https://testflight.apple.com/join/P4pFs1VX
+
+The stack, since that is the point of the trend:
+- SwiftUI on iOS, Next.js on Vercel for the web apps.
+- Supabase (Postgres, Auth, Storage) is the entire backend for ChoreStar and KidCanvas. Row-level security is the authorization layer, so the apps talk straight to the database and RLS decides what each query can see.
+- SnapSweep has no backend at all. Apple's Vision framework does the image scoring on the device.
+- Playwright for the web, Maestro driving a real simulator for iOS, and fastlane for everything App Store Connect. Every release is a script.
+- Claude Code as the engineering partner for the unglamorous parts: auditing what my database policies actually allowed, chasing App Store rejections, and turning evenings of work into releases that actually ship.
+
+The thing I did not plan: the same family shows up in all three. Chores in the morning, artwork in the afternoon, and a camera roll that needs rescuing from both. If you have kids, you probably have all three problems too.
+
+If one of these fits your house, try it and tell me what confused you. That is worth more to me than any feature I could build this week.
+
+#showmeyoursaas #buildinpublic #indiedev #iOS #SwiftUI #Supabase #parenting
