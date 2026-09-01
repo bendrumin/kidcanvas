@@ -49,8 +49,8 @@ const BANNED = [
   // the profile entity is an "artist" on every platform; "child" is for real kids
   'child profile',
   'Add Child',
-  // art books are Family-plan; nothing on any plan claims otherwise
-  'included on every plan',
+  // art books are Family-plan; the every-feature version of the claim was the lie
+  'Every feature is included',
 ]
 
 const PUBLIC_PAGES = ['/', '/support', '/privacy', '/terms', '/login', '/signup']
