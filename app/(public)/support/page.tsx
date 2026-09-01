@@ -9,6 +9,34 @@ import { Textarea } from '@/components/ui/textarea'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 
+
+const howTos = [
+  {
+    q: 'Add an artist',
+    a: 'On the web: Artists in the sidebar, then Add Artist. On iPhone: the Profile tab, or the guide that appears on a new account. A name is all that is required; add a birth date if you want their age shown on each piece.',
+  },
+  {
+    q: 'Save a piece of artwork',
+    a: 'On iPhone: the Scan tab. Scan Artwork points the camera at the page and squares it up, or Choose from Photos uses a picture you already took. On the web: Upload, then pick a photo. Give it a title and an artist; the story is optional.',
+  },
+  {
+    q: 'Add the story, now or later',
+    a: 'While saving, write what they said in the story field. Skipped it? Open the artwork any time: the iPhone app shows a No story yet prompt, and the web has an Add Story button. Any length counts.',
+  },
+  {
+    q: 'Invite grandparents and co-parents',
+    a: 'On the web: Family, then Invite Member, and share the code or the link it creates. On iPhone: Profile, then Invite Family. Codes are single use and expire after 7 days. Members can browse everything, react, and comment.',
+  },
+  {
+    q: 'Share one artwork with someone who has no account',
+    a: 'Open the artwork and tap Share to copy a link (the web can also make a QR code). Anyone with the link sees the artwork and its story without signing in, and you can delete the link whenever you like.',
+  },
+  {
+    q: 'Make an art book',
+    a: 'On the web, select artworks in the gallery and choose Create Book to get a print-ready PDF with the stories included. Art books are part of the Family plan.',
+  },
+]
+
 const faqs = [
   {
     q: 'How do I capture artwork and stories?',
@@ -20,7 +48,7 @@ const faqs = [
   },
   {
     q: 'What\'s included free?',
-    a: 'Your first 50 artworks, 1 artist profile, and 1 family group. Every feature is included on every plan. Paid plans only raise those limits.',
+    a: 'Your first 50 artworks, 1 artist profile, and 1 family group, with stories, reactions, comments, collections, and sharing all included. Paid plans raise those limits and add print-ready art books (PDF).',
   },
   {
     q: 'How do I cancel?',
@@ -142,6 +170,21 @@ export default function SupportPage() {
             )}
           </Button>
         </form>
+
+        {/* How-to guides: the concrete steps, before the FAQ */}
+        <div className="mb-12">
+          <h2 className="text-xl font-bold text-foreground mb-6">
+            How do I&hellip;
+          </h2>
+          <div className="space-y-6">
+            {howTos.map((item, i) => (
+              <div key={i}>
+                <p className="font-medium text-foreground mb-1">{item.q}</p>
+                <p className="text-muted-foreground text-sm">{item.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Simple FAQ - No Accordion */}
         <div>

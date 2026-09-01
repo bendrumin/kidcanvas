@@ -113,7 +113,6 @@ export const INCLUDED_IN_ALL_PLANS: string[] = [
   'Family reactions and comments',
   'Collections and albums',
   'Memory timeline view',
-  'Print-ready art books (PDF)',
   'QR codes and public share links',
   'Bulk upload',
   'Insights on your dashboard',

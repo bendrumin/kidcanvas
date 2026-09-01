@@ -646,7 +646,7 @@ export default function LandingPage() {
                 // FUTURE FEATURES
                 {
                   feature: 'Print photo books',
-                  kidcanvas: 'Print-ready PDF art books, with the stories included',
+                  kidcanvas: 'PDF art books with the stories included (Family plan)',
                   others: ['Paid keepsake books', 'Paid keepsake books', 'No'],
                   kidcanvasCheck: true,
                   othersCheck: [true, true, false],
@@ -835,7 +835,7 @@ Your first 50 artworks are free, forever • Family reactions & comments • You
             {[
               {
                 q: "Is it really free?",
-                a: "Yes. Your first 50 artworks are free, with 1 artist profile and every feature. Paid plans only raise the limits. No credit card required, and you only pay if you need more artworks or more children."
+                a: "Yes. Your first 50 artworks are free, with 1 artist profile, stories, reactions, comments, collections, and sharing. Paid plans raise the limits and add print-ready art books. No credit card required."
               },
               {
                 q: "What happens to my photos?",
