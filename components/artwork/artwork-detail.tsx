@@ -146,7 +146,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
       const { error } = await (supabase.from('artworks') as any)
         .update({
           title: editForm.title,
-          story: editForm.story,
+          story: editForm.story.trim() || null,
           child_id: editForm.childId,
           created_date: editForm.createdDate,
           tags: editForm.tags.split(',').map((t: string) => t.trim()).filter(Boolean),
@@ -224,7 +224,7 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
             </Button>
             <Button 
               onClick={handleSave} 
-              disabled={isLoading || !editForm.story || editForm.story.trim().length < 20}
+              disabled={isLoading}
               className="relative z-50"
             >
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
@@ -368,18 +368,15 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
                   <div className="space-y-2">
                     <Label htmlFor="edit-story" className="flex items-center gap-2">
                       <BookOpen className="w-4 h-4" />
-                      Story *
+                      Story (optional)
                     </Label>
                     <Textarea
                       id="edit-story"
                       value={editForm.story}
                       onChange={(e) => setEditForm({ ...editForm, story: e.target.value })}
                       className="min-h-[120px]"
-                      required
+                      placeholder="What did they say about it?"
                     />
-                    <p className="text-xs text-muted-foreground">
-                      {editForm.story.length} characters (minimum 20 required)
-                    </p>
                   </div>
                   <div className="space-y-2">
                     <Label>Title (optional)</Label>

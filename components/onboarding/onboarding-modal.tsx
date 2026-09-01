@@ -29,6 +29,7 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
   const [isOpen, setIsOpen] = useState(false)
   const [step, setStep] = useState(0) // Start at 0 for welcome screen
   const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [childName, setChildName] = useState('')
   const [birthDate, setBirthDate] = useState('')
   const [showLimitDialog, setShowLimitDialog] = useState(false)
@@ -48,9 +49,10 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
   }, [hasChildren, familyId])
 
   const handleAddChild = async () => {
-    if (!childName.trim() || !birthDate || !familyId) return
+    if (!childName.trim() || !familyId) return
     
     setIsLoading(true)
+    setErrorMessage(null)
     try {
       // Check limit first
       const limitResponse = await fetch('/api/limits/check', {
@@ -73,7 +75,7 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
       const { error } = await (supabase.from('children') as any).insert({
         family_id: familyId,
         name: childName.trim(),
-        birth_date: birthDate,
+        birth_date: birthDate || null,
       })
 
       if (error) throw error
@@ -81,7 +83,12 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
       setStep(3)
       router.refresh()
     } catch (error) {
-      console.error('Error adding child:', error)
+      // A silent failure here left people stuck on this step with a button
+      // that appeared to do nothing.
+      console.error('Error adding artist:', error)
+      setErrorMessage(
+        error instanceof Error ? error.message : "Couldn't add the artist. Please try again."
+      )
     } finally {
       setIsLoading(false)
     }
@@ -180,7 +187,7 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="birthDate">Birth Date</Label>
+                <Label htmlFor="birthDate">Birth Date (optional)</Label>
                 <Input
                   id="birthDate"
                   type="date"
@@ -193,13 +200,17 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
               </div>
             </div>
 
+            {errorMessage && (
+              <p className="text-sm text-destructive" role="alert">{errorMessage}</p>
+            )}
+
             <div className="flex gap-3">
               <Button variant="ghost" onClick={handleSkip} className="flex-1">
                 Skip for Now
               </Button>
               <Button 
                 onClick={handleAddChild}
-                disabled={!childName.trim() || !birthDate || isLoading}
+                disabled={!childName.trim() || isLoading}
                 className="flex-1 bg-gradient-to-r from-crayon-pink to-crayon-purple hover:opacity-90"
               >
                 {isLoading ? (
