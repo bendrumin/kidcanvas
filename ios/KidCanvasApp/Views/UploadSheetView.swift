@@ -219,7 +219,7 @@ struct UploadSheetView: View {
     }
 
     private var canUpload: Bool {
-        !title.isEmpty && selectedChild != nil && story.trimmed.count >= StoryRules.minimumLength
+        !title.isEmpty && selectedChild != nil
     }
 
     private func uploadArtwork() {
@@ -271,7 +271,9 @@ struct UploadSheetView: View {
                     imageUrl: imageURL,
                     thumbnailUrl: thumbURL,
                     title: title,
-                    story: story.trimmed,
+                    // Empty means no story, and the detail screen's "No story
+                    // yet" prompt should show -- so store NULL, not "".
+                    story: story.trimmed.isEmpty ? nil : story.trimmed,
                     createdDate: dateFormatter.string(from: createdDate),
                     uploadedBy: authManager.currentUser?.id.uuidString
                 )
@@ -333,7 +335,7 @@ struct NewArtworkPayload: Encodable {
     let imageUrl: String
     let thumbnailUrl: String
     let title: String
-    let story: String
+    let story: String?
     let createdDate: String
     let uploadedBy: String?
 
@@ -350,11 +352,6 @@ struct NewArtworkPayload: Encodable {
     }
 }
 
-enum StoryRules {
-    /// Matches the web app's requirement; short enough not to feel like a form,
-    /// long enough to be an actual sentence.
-    static let minimumLength = 20
-}
 
 extension String {
     var trimmed: String { trimmingCharacters(in: .whitespacesAndNewlines) }

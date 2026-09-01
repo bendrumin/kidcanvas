@@ -7,15 +7,14 @@ struct StoryField: View {
     let childName: String?
     let onBrowseTemplates: () -> Void
 
-    private var remaining: Int {
-        max(0, StoryRules.minimumLength - story.trimmed.count)
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("The story")
                     .font(.subheadline.bold())
+                    .foregroundColor(.secondary)
+                Text("optional")
+                    .font(.caption2)
                     .foregroundColor(.secondary)
                 Spacer()
                 Button(action: onBrowseTemplates) {
@@ -32,11 +31,9 @@ struct StoryField: View {
                 .cornerRadius(12)
                 .accessibilityLabel("The story behind this artwork")
 
-            Text(remaining > 0
-                 ? "A sentence or two. \(remaining) more character\(remaining == 1 ? "" : "s")"
-                 : "This is what you'll be glad you wrote down.")
+            Text("A sentence or two. It's the part you'll be glad you wrote down.")
                 .font(.caption2)
-                .foregroundColor(remaining > 0 ? .secondary : .green)
+                .foregroundColor(.secondary)
         }
     }
 

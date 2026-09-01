@@ -1,15 +1,14 @@
 NEW IN THIS BUILD:
 
-• Every button and label now uses the same capitalization, and the person you
-  file artwork under is called an artist everywhere (it was "child" in a few
-  places and "artist" in others).
-• Artwork detail: the story card no longer runs under the tab bar, so the
-  reactions and comments are reachable without hunting for them.
-• Settings: choose Light, Dark, or System appearance, and turn on story
-  nudges (a reminder when it has been a week, and before each birthday).
-• Rename or delete your family from Settings (owner only).
+• The story is optional. Save artwork with just a title and an artist, and add
+  what they said later from the artwork screen, at any length. The 20-character
+  minimum is gone everywhere.
+• Adding an artist: the birth date is a compact picker now. The full-screen
+  calendar could push the Add Artist button out of reach.
+• Every button and label uses the same capitalization, and the person you file
+  artwork under is called an artist everywhere.
+• Artwork detail: reactions and comments no longer hide under the tab bar.
 
 Worth trying:
-• Open an artwork with a long story and scroll to the comments.
-• Flip appearance in Settings and check every tab.
-• Turn on story nudges; the app will ask for notification permission once.
+• Save an artwork with no story, then add one later from its screen.
+• Add an artist with a birth date.

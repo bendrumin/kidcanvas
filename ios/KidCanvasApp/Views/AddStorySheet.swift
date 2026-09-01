@@ -82,7 +82,7 @@ struct AddStorySheet: View {
     }
 
     private var canSave: Bool {
-        story.trimmed.count >= StoryRules.minimumLength
+        !story.trimmed.isEmpty
     }
 
     private func save() {

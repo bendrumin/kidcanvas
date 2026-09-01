@@ -44,6 +44,7 @@ struct AddChildView: View {
                                 .foregroundColor(.secondary)
                             
                             TextField("Artist's name", text: $name)
+                                .submitLabel(.done)
                                 .padding()
                                 .background(Color.cardSurface)
                                 .cornerRadius(12)
@@ -59,12 +60,17 @@ struct AddChildView: View {
                             .tint(.pink)
                             
                             if hasBirthDate {
+                                // Compact, like the upload sheet's Date Created.
+                                // The graphical calendar expanded to ~350pt here
+                                // and, inside a ScrollView, swallowed vertical
+                                // drags -- with the keyboard up, the Add Artist
+                                // button was below the fold and unreachable.
                                 DatePicker(
                                     "Birth Date",
                                     selection: $birthDate,
                                     displayedComponents: .date
                                 )
-                                .datePickerStyle(.graphical)
+                                .datePickerStyle(.compact)
                                 .padding()
                                 .background(Color.cardSurface)
                                 .cornerRadius(12)
