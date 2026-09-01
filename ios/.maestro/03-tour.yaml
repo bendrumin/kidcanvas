@@ -59,9 +59,9 @@ appId: Siegel.KidCanvas
 # Gallery: grid renders, an artwork opens, detail shows the essentials.
 - tapOn: "Gallery"
 - extendedWaitUntil:
-    visible: ".*Rainbow.*"
+    visible: ".*(Rainbow|Sunny Day|Spaceship).*"
     timeout: 15000
-- tapOn: ".*Rainbow.*"
+- tapOn: ".*(Rainbow|Sunny Day|Spaceship).*"
 # The story card fills the first screen now, so Comments sits below the fold.
 - extendedWaitUntil:
     visible: ".*The story.*"
