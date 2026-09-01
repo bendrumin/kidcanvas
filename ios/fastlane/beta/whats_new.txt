@@ -1,14 +1,11 @@
 NEW IN THIS BUILD:
 
-• The story is optional. Save artwork with just a title and an artist, and add
-  what they said later from the artwork screen, at any length. The 20-character
-  minimum is gone everywhere.
-• Adding an artist: the birth date is a compact picker now. The full-screen
-  calendar could push the Add Artist button out of reach.
-• Every button and label uses the same capitalization, and the person you file
-  artwork under is called an artist everywhere.
-• Artwork detail: reactions and comments no longer hide under the tab bar.
+• Scan several drawings in one session. Keep tapping Keep Scan in the camera;
+  every page is saved in turn ("Drawing 2 of 5"), instead of only the first one
+  making it through.
+• After saving, the app asks whether you are done: Scan Another jumps straight
+  back to the camera.
 
 Worth trying:
-• Save an artwork with no story, then add one later from its screen.
-• Add an artist with a birth date.
+• Scan three drawings in one camera session and save each as it appears.
+• Save one drawing, then tap Scan Another on the confirmation.
