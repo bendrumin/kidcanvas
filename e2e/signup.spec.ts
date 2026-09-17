@@ -16,8 +16,10 @@ import { test, expect } from '@playwright/test'
  * every web signup silently dead-ended for three weeks. The API calls all
  * returned 200, so nothing server-side ever looked wrong.
  */
-test('signing up lands in the dashboard', async ({ page }) => {
+test('signing up lands in the dashboard', async ({ page, browserName }) => {
   test.skip(!process.env.RUN_SIGNUP_E2E, 'creates a real account; opt in with RUN_SIGNUP_E2E=1')
+  // one account per run, not one per browser project
+  test.skip(browserName !== 'chromium', 'account-creating test runs once')
 
   await page.goto('/signup')
   await page.fill('input[type="email"]', `maestro-web-${Date.now()}@example.com`)
