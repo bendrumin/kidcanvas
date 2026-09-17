@@ -1,0 +1,41 @@
+# Daily proof that production actually works, from outside.
+#
+# Exists because web signup was silently broken for three weeks: every API call
+# returned 200, no error surfaced anywhere, and nothing was watching the one
+# thing that mattered -- whether a new visitor could actually get in. This runs
+# the real signup journey and the SEO/copy guards against the live site every
+# morning; a failure emails the repo owner via GitHub's default notification.
+#
+# No secrets: everything checked is public-facing. The signup test creates one
+# maestro-web-*@example.com account per run; the iOS suite's cleanup sweep
+# deletes those.
+name: prod-smoke
+on:
+  schedule:
+    - cron: "23 13 * * *"   # daily, 13:23 UTC (morning US Central)
+  workflow_dispatch: {}
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Signup journey, SEO, and copy guards against production
+        env:
+          PLAYWRIGHT_BASE_URL: https://kidcanvas.app
+          RUN_SIGNUP_E2E: "1"
+        run: npx playwright test e2e/signup.spec.ts e2e/seo.spec.ts e2e/honest-copy.spec.ts
+      - name: Keep the failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
