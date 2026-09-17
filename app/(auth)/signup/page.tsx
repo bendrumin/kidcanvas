@@ -88,8 +88,12 @@ function SignupForm() {
             })
           }
 
-          router.push('/dashboard')
-          router.refresh()
+          // A hard navigation, deliberately. router.push('/dashboard')
+          // followed by router.refresh() races: the refresh can cancel the
+          // in-flight push and re-render /signup instead, so the account was
+          // created but the page never moved -- no error, no redirect. That
+          // ate every web signup for three weeks.
+          window.location.assign('/dashboard')
           return
         }
       }

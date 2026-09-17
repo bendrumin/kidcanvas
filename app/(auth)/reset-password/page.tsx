@@ -80,7 +80,7 @@ export default function ResetPasswordPage() {
 
       // Redirect after a short delay
       setTimeout(() => {
-        router.push('/dashboard')
+        window.location.assign('/dashboard')
       }, 2000)
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to update password'

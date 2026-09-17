@@ -40,8 +40,11 @@ function LoginContent() {
 
       if (error) throw error
 
-      router.push(redirect)
-      router.refresh()
+      // Hard navigation: push-then-refresh races and can cancel the redirect
+      // (see the signup page, where it silently ate signups). The redirect
+      // param is caller-supplied, so only same-site paths are honoured.
+      const target = redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/dashboard'
+      window.location.assign(target)
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to sign in'
       toast({
