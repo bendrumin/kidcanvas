@@ -123,6 +123,38 @@ Count the testers in each TestFlight group -- the number the public
 
 link exists to move.
 
+### ios release_audit
+
+```sh
+[bundle exec] fastlane ios release_audit
+```
+
+Everything App Review will ask for that TestFlight never did: version
+
+state, build, categories, age rating, pricing, and privacy labels.
+
+### ios release_prep
+
+```sh
+[bundle exec] fastlane ios release_prep
+```
+
+One-time App Store setup TestFlight never required: age rating (4+),
+
+free pricing, worldwide availability, and the content rights declaration.
+
+### ios privacy_labels
+
+```sh
+[bundle exec] fastlane ios privacy_labels
+```
+
+Publish the App Privacy nutrition labels from app_privacy_details.json.
+
+Honest and short: account email, name, photos, stories, and the user id,
+
+all for app functionality, linked to the account, nothing for tracking.
+
 ### ios metadata
 
 ```sh

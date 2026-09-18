@@ -366,6 +366,185 @@ platform :ios do
     end
   end
 
+
+  desc "Everything App Review will ask for that TestFlight never did: version"
+  desc "state, build, categories, age rating, pricing, and privacy labels."
+  lane :release_audit do
+    token = Spaceship::ConnectAPI::Token.create(**asc_api_key)
+    Spaceship::ConnectAPI.token = token
+    app = Spaceship::ConnectAPI::App.find(
+      CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+    )
+
+    require "net/http"
+    require "json"
+    asc = lambda do |path|
+      uri = URI("https://api.appstoreconnect.apple.com/v1/#{path}")
+      req = Net::HTTP::Get.new(uri)
+      req["Authorization"] = "Bearer #{token.text}"
+      res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(req) }
+      parsed = JSON.parse(res.body)
+      UI.error("GET #{path} -> #{res.code}") unless res.code.to_i.between?(200, 299)
+      parsed
+    end
+
+    v = app.get_edit_app_store_version
+    UI.important("Version: #{v.version_string} (#{v.app_store_state})")
+    build = asc.call("appStoreVersions/#{v.id}/build")["data"]
+    UI.message("  attached build: #{build ? build.dig('attributes', 'version') : 'NONE (the release lane attaches one)'}")
+
+    infos = asc.call("apps/#{app.id}/appInfos?include=primaryCategory,secondaryCategory")
+    editable = (infos["data"] || []).find { |i| i.dig("attributes", "appStoreState") != "READY_FOR_SALE" } || (infos["data"] || []).first
+    prim = editable&.dig("relationships", "primaryCategory", "data", "id")
+    sec = editable&.dig("relationships", "secondaryCategory", "data", "id")
+    UI.important("Categories: #{prim || 'NONE SET'}#{sec ? " + #{sec}" : ''}")
+
+    infos_a = asc.call("apps/#{app.id}/appInfos")["data"] || []
+    info_a = infos_a.find { |i| i.dig("attributes", "appStoreState") != "READY_FOR_SALE" } || infos_a.first
+    decl = asc.call("appInfos/#{info_a['id']}/ageRatingDeclaration")["data"]
+    if decl.nil?
+      UI.important("Age rating: MISSING")
+    else
+      set = decl["attributes"].reject { |_, val| val.nil? || val == false || val == "NONE" }
+      UI.important("Age rating: #{set.empty? ? 'all NONE (4+)' : set.inspect}")
+    end
+
+    prices = asc.call("appPriceSchedules/#{app.id}/manualPrices?include=appPricePoint&limit=3")
+    if (prices["data"] || []).empty?
+      UI.important("Pricing: NOT SET")
+    else
+      pts = (prices["included"] || []).map { |x| x.dig("attributes", "customerPrice") }.compact.uniq
+      UI.important("Pricing: set (#{pts.join(', ')})")
+    end
+
+    avail = asc.call("apps/#{app.id}/appAvailabilityV2?include=territoryAvailabilities&limit[territoryAvailabilities]=1")
+    UI.important("Availability: #{avail['data'] ? 'configured' : 'NOT SET'}")
+
+    usages = asc.call("apps/#{app.id}/dataUsages?limit=200")
+    n = (usages["data"] || []).count
+    UI.important("Privacy labels: #{n.zero? ? 'MISSING (blocks submission)' : "#{n} declaration(s)"}")
+  end
+
+
+  desc "One-time App Store setup TestFlight never required: age rating (4+),"
+  desc "free pricing, worldwide availability, and the content rights declaration."
+  lane :release_prep do
+    token = Spaceship::ConnectAPI::Token.create(**asc_api_key)
+    Spaceship::ConnectAPI.token = token
+    app = Spaceship::ConnectAPI::App.find(
+      CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+    )
+
+    require "net/http"
+    require "json"
+    call = lambda do |method, path, body = nil, version: "v1"|
+      uri = URI("https://api.appstoreconnect.apple.com/#{version}/#{path}")
+      req = { "GET" => Net::HTTP::Get, "POST" => Net::HTTP::Post, "PATCH" => Net::HTTP::Patch }[method].new(uri)
+      req["Authorization"] = "Bearer #{token.text}"
+      if body
+        req["Content-Type"] = "application/json"
+        req.body = JSON.dump(body)
+      end
+      res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(req) }
+      parsed = res.body.to_s.empty? ? {} : JSON.parse(res.body)
+      unless res.code.to_i.between?(200, 299)
+        raise "#{method} #{path} -> #{res.code}: #{(parsed['errors'] || []).map { |e| e['detail'] || e['title'] }.join('; ')[0, 300]}"
+      end
+      parsed
+    end
+
+    # 1. Age rating: everything NONE/false, which is a 4+ rating. The
+    # declaration moved from appStoreVersions to appInfos in the current API.
+    infos = call.call("GET", "apps/#{app.id}/appInfos")
+    info = (infos["data"] || []).find { |i| i.dig("attributes", "appStoreState") != "READY_FOR_SALE" } || infos["data"].first
+    decl = call.call("GET", "appInfos/#{info['id']}/ageRatingDeclaration")
+    decl_id = decl.dig("data", "id")
+    UI.user_error!("no ageRatingDeclaration id found") unless decl_id
+    call.call("PATCH", "ageRatingDeclarations/#{decl_id}", {
+      data: { type: "ageRatingDeclarations", id: decl_id, attributes: {
+        alcoholTobaccoOrDrugUseOrReferences: "NONE", contests: "NONE",
+        gamblingSimulated: "NONE", horrorOrFearThemes: "NONE",
+        matureOrSuggestiveThemes: "NONE", medicalOrTreatmentInformation: "NONE",
+        profanityOrCrudeHumor: "NONE", sexualContentGraphicAndNudity: "NONE",
+        sexualContentOrNudity: "NONE", violenceCartoonOrFantasy: "NONE",
+        violenceRealistic: "NONE", violenceRealisticProlongedGraphicOrSadistic: "NONE",
+        gambling: false, unrestrictedWebAccess: false, kidsAgeBand: nil,
+        # newer questionnaire fields the API now requires
+        gunsOrOtherWeapons: "NONE", lootBox: false, parentalControls: false,
+        # families post artwork and comments to each other; moderation exists
+        # (delete any comment, remove members), which review checks against this
+        userGeneratedContent: true,
+        # comments on family artwork are UGC above, not a messaging feature
+        advertising: false, healthOrWellnessTopics: false,
+        messagingAndChat: false, ageAssurance: false
+      } }
+    })
+    UI.success("Age rating: declared, all NONE (4+)")
+
+    # 2. Pricing: free, USD base.
+    pts = call.call("GET", "apps/#{app.id}/appPricePoints?filter[territory]=USA&limit=8")
+    zero = (pts["data"] || []).find { |x| x.dig("attributes", "customerPrice").to_f.zero? }
+    UI.user_error!("no zero price point found") unless zero
+    call.call("POST", "appPriceSchedules", {
+      data: { type: "appPriceSchedules", relationships: {
+        app: { data: { type: "apps", id: app.id } },
+        baseTerritory: { data: { type: "territories", id: "USA" } },
+        manualPrices: { data: [{ type: "appPrices", id: "${price-free}" }] }
+      } },
+      included: [{ type: "appPrices", id: "${price-free}",
+        attributes: { startDate: nil },
+        relationships: { appPricePoint: { data: { type: "appPricePoints", id: zero["id"] } } } }]
+    })
+    UI.success("Pricing: free (USD 0.00 base, all territories follow)")
+
+    # 3. Availability: every territory, and new ones as Apple adds them.
+    territories = []
+    path = "territories?limit=200"
+    loop do
+      page = call.call("GET", path)
+      territories += (page["data"] || []).map { |t| t["id"] }
+      nxt = page.dig("links", "next")
+      break unless nxt
+      path = nxt.split("/v1/").last
+    end
+    call.call("POST", "appAvailabilities", {
+      data: { type: "appAvailabilities",
+        attributes: { availableInNewTerritories: true },
+        relationships: {
+          app: { data: { type: "apps", id: app.id } },
+          territoryAvailabilities: { data: territories.map { |t| { type: "territoryAvailabilities", id: "${#{t}}" } } }
+        } },
+      included: territories.map { |t|
+        { type: "territoryAvailabilities", id: "${#{t}}",
+          attributes: { available: true },
+          relationships: { territory: { data: { type: "territories", id: t } } } }
+      }
+    }, version: "v2")
+    UI.success("Availability: #{territories.count} territories, new ones included")
+
+    # 4. Content rights: no third-party content.
+    call.call("PATCH", "apps/#{app.id}", {
+      data: { type: "apps", id: app.id,
+              attributes: { contentRightsDeclaration: "DOES_NOT_USE_THIRD_PARTY_CONTENT" } }
+    })
+    UI.success("Content rights: does not use third-party content")
+  end
+
+
+  desc "Publish the App Privacy nutrition labels from app_privacy_details.json."
+  desc "Honest and short: account email, name, photos, stories, and the user id,"
+  desc "all for app functionality, linked to the account, nothing for tracking."
+  lane :privacy_labels do
+    UI.user_error!(
+      "Apple has no API for privacy nutrition labels: every candidate REST " \
+      "path 404s, and fastlane's uploader needs an interactive Apple ID login. " \
+      "Enter them once in App Store Connect -> App Privacy, using " \
+      "fastlane/app_privacy_details.json as the answer sheet."
+    )
+  end
+
+
+
   desc "Upload metadata and screenshots to App Store Connect. No binary."
   desc "Options: force:true skips the HTML preview; skip_screenshots:true for text only."
   lane :metadata do |options|
