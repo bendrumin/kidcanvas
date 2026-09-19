@@ -41,7 +41,14 @@ const SEEDS = [
         <line x1="12" y1="-85" x2="42" y2="-150" stroke="#B0A8A0" stroke-width="9" stroke-linecap="round"/>
       </g>
       ${['#E53935','#FB8C00','#FDD835','#66BB6A','#42A5F5','#9575CD']
-        .map((c, i) => `<path d="M 90 850 A ${310 - i * 42} ${310 - i * 42} 0 0 1 710 850" fill="none" stroke="${c}" stroke-width="40" stroke-linecap="round" transform="translate(0,${-i * 0})"/>`)
+        .map((c, i) => {
+          // Endpoints must sit exactly one radius from the center, or the SVG
+          // spec scales every too-small arc up to the same size and the last
+          // color paints over the rest -- which is how the demo rainbow
+          // rendered as a single purple arch.
+          const r = 310 - i * 42
+          return `<path d="M ${400 - r} 850 A ${r} ${r} 0 0 1 ${400 + r} 850" fill="none" stroke="${c}" stroke-width="40" stroke-linecap="round"/>`
+        })
         .join('')}
     </svg>`,
   },
