@@ -1,0 +1,60 @@
+# Drives the demo account through the five App Store screenshot scenes.
+# Lives in tools/, not .maestro/, so the test suite never runs it.
+# Usage: maestro --device <6.9" sim UDID> test ios/tools/shoot.yaml
+appId: Siegel.KidCanvas
+---
+- launchApp:
+    clearState: true
+- runFlow:
+    when:
+      visible: "I'll do this later"
+    commands:
+      - tapOn: "I'll do this later"
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "kidcanvas.appreview@gmail.com"
+      - pressKey: Enter
+      - inputText: "ReviewDemo!2026"
+      - pressKey: Enter
+      - extendedWaitUntil:
+          visible: ".*(Save Password|Recently).*"
+          timeout: 25000
+      - runFlow:
+          when:
+            visible: "Save Password?"
+          commands:
+            - tapOn: "Not Now"
+      - runFlow:
+          when:
+            visible: "I'll do this later"
+          commands:
+            - tapOn: "I'll do this later"
+- tapOn: "Recently"
+- extendedWaitUntil:
+    visible: "Recently"
+    timeout: 15000
+- takeScreenshot: raw_feed
+- tapOn: "Gallery"
+- extendedWaitUntil:
+    visible: ".*Rainbow.*"
+    timeout: 15000
+- takeScreenshot: raw_gallery
+- tapOn: ".*Rainbow.*"
+- extendedWaitUntil:
+    visible: ".*The story.*"
+    timeout: 15000
+- takeScreenshot: raw_detail
+- back
+- tapOn: "Scan"
+- extendedWaitUntil:
+    visible: ".*(Scan|Photos).*"
+    timeout: 15000
+- takeScreenshot: raw_scan
+- tapOn: "Profile"
+- extendedWaitUntil:
+    visible: "The Demo Family"
+    timeout: 15000
+- takeScreenshot: raw_profile
