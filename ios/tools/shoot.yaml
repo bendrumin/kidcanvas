@@ -21,7 +21,8 @@ appId: Siegel.KidCanvas
       - pressKey: Enter
       - extendedWaitUntil:
           visible: ".*(Save Password|Recently).*"
-          timeout: 25000
+          # a cold simulator's first sign-in can crawl; 25s was not enough on iPad
+          timeout: 60000
       - runFlow:
           when:
             visible: "Save Password?"
@@ -32,6 +33,13 @@ appId: Siegel.KidCanvas
             visible: "I'll do this later"
           commands:
             - tapOn: "I'll do this later"
+# The Save Password sheet can arrive late, after the sign-in block already
+# checked for it, and it swallows the next tap. Ask again here.
+- runFlow:
+    when:
+      visible: "Save Password?"
+    commands:
+      - tapOn: "Not Now"
 - tapOn: "Recently"
 - extendedWaitUntil:
     visible: "Recently"
