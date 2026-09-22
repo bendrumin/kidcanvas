@@ -56,3 +56,11 @@ ios/fastlane/metadata/review_information/email_address.txt
 
 # fastlane rewrites this on every lane run
 ios/fastlane/report.xml
+
+# Android
+android/local.properties
+android/supabase.properties
+android/.gradle/
+android/build/
+android/app/build/
+android/.idea/

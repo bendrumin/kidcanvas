@@ -1,0 +1,3 @@
+-keep class io.github.jan.supabase.** { *; }
+-keepattributes *Annotation*, InnerClasses
+-dontwarn kotlinx.serialization.**

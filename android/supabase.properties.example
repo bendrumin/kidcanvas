@@ -1,0 +1,4 @@
+# Copy to supabase.properties. Both values are public client config (the anon
+# key is designed to be shipped); RLS is what protects the data.
+SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+SUPABASE_ANON_KEY=YOUR-ANON-KEY
