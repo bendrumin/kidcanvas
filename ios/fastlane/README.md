@@ -155,6 +155,16 @@ Honest and short: account email, name, photos, stories, and the user id,
 
 all for app functionality, linked to the account, nothing for tracking.
 
+### ios promo_text
+
+```sh
+[bundle exec] fastlane ios promo_text
+```
+
+Update the live listing's promotional text. This is the one store field
+
+Apple lets you change without shipping a new version or a review.
+
 ### ios metadata
 
 ```sh

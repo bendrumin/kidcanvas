@@ -545,6 +545,43 @@ platform :ios do
 
 
 
+
+  desc "Update the live listing's promotional text. This is the one store field"
+  desc "Apple lets you change without shipping a new version or a review."
+  lane :promo_text do
+    token = Spaceship::ConnectAPI::Token.create(**asc_api_key)
+    Spaceship::ConnectAPI.token = token
+    app = Spaceship::ConnectAPI::App.find(
+      CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+    )
+    require "net/http"
+    require "json"
+    call = lambda do |method, path, body = nil|
+      uri = URI("https://api.appstoreconnect.apple.com/v1/#{path}")
+      req = { "GET" => Net::HTTP::Get, "PATCH" => Net::HTTP::Patch }[method].new(uri)
+      req["Authorization"] = "Bearer #{token.text}"
+      if body
+        req["Content-Type"] = "application/json"
+        req.body = JSON.dump(body)
+      end
+      res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(req) }
+      parsed = res.body.to_s.empty? ? {} : JSON.parse(res.body)
+      raise "#{method} #{path} -> #{res.code}: #{(parsed['errors'] || []).map { |e| e['detail'] }.join('; ')[0, 250]}" unless res.code.to_i.between?(200, 299)
+      parsed
+    end
+
+    text = File.read(File.join(File.dirname(__FILE__), "metadata/en-US/promotional_text.txt")).strip
+    versions = call.call("GET", "apps/#{app.id}/appStoreVersions?limit=5")["data"]
+    live = versions.find { |v| %w[READY_FOR_SALE PENDING_DEVELOPER_RELEASE].include?(v.dig("attributes", "appStoreState")) } || versions.first
+    locs = call.call("GET", "appStoreVersions/#{live['id']}/appStoreVersionLocalizations")["data"]
+    en = locs.find { |l| l.dig("attributes", "locale") == "en-US" } || locs.first
+    call.call("PATCH", "appStoreVersionLocalizations/#{en['id']}", {
+      data: { type: "appStoreVersionLocalizations", id: en["id"],
+              attributes: { promotionalText: text } }
+    })
+    UI.success("Promotional text updated on #{live.dig('attributes', 'versionString')} (#{live.dig('attributes', 'appStoreState')})")
+  end
+
   desc "Upload metadata and screenshots to App Store Connect. No binary."
   desc "Options: force:true skips the HTML preview; skip_screenshots:true for text only."
   lane :metadata do |options|

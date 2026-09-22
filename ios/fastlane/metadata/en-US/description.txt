@@ -1,22 +1,29 @@
-The fridge is full. The backpack keeps producing more. And you can't bring yourself to throw away a single crayon sunrise.
+Your kid hands you a drawing and says "it's a rainbow dinosaur that eats sunshine." The drawing survives on the fridge. The sentence is gone by next week.
 
-KidCanvas turns the pile into a keepsake: scan your children's artwork in seconds and build one beautiful, private family gallery you'll actually look back on.
+KidCanvas saves both. Scan the artwork, write down what they said about it, and share the two together with the people who actually want to hear it.
 
 HOW IT WORKS
 • Scan it. The built-in document scanner finds the page, crops it, and squares it up automatically. Or pick any photo from your library.
-• File it. Every piece is saved to its artist, with the date and your child's age at creation calculated automatically.
-• Treasure it. Write down the story while you remember it ("it's a rainbow that ate a dinosaur"), with prompts to help when you're not sure what to ask. Heart the frame-worthy ones into Favorites, and browse the gallery by child or by time.
+• Write down what they said. A sentence is enough, with prompts if you are not sure what to ask. Skip it and add it later; the artwork waits.
+• Share it. Every new piece and its story lands in your family's feed.
 
-MADE FOR FAMILIES
-• One shared gallery for the whole family.
-• Invite grandparents and co-parents with a short code. They see the stories, and can react and leave comments.
-• A family feed of the newest artwork and what was said about it.
-• Kids never need accounts. Parents create simple artist profiles (a name, and a birth date if you want age labels).
-• Private by default: your gallery, the stories, and your children's names are readable only by your family, enforced by row-level security in the database. Artwork images are served from unlisted addresses that cannot be browsed or guessed.
+THE PART OTHER APPS SKIP
+Most artwork apps are a filing cabinet: scan, sort, store. KidCanvas keeps the words that made the drawing matter, and searches them. Look up "dinosaur" a year from now and find the piece by what your child said about it.
+
+A FEED, NOT A VAULT
+• Grandparents and co-parents see each new piece the moment it is saved.
+• They react and leave comments, so the artwork starts a conversation instead of sitting in storage.
+• Kids never need accounts. Parents create simple artist profiles, and everything stays inside your family.
+• Invite by short code. There is no public feed and no strangers.
+
+ALSO IN THE APP
+• Every piece filed to its artist, dated, with your child's age worked out for you.
+• Favorites, search across titles, stories, and artists, and a gallery you can browse by child or by time.
+• A nudge when it has been a quiet week, and before each birthday.
 
 NO NONSENSE
-• No ads, no analytics, no trackers.
+• No ads, no trackers, no analytics in the app.
 • No selling your data, ever.
 • No AI processing of your children's artwork.
 
-Their art grows up fast too. Keep it.
+Free for your first 50 artworks. Their art grows up fast. Keep the words too.
