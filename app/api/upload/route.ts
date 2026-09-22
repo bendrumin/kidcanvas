@@ -117,6 +117,7 @@ export async function POST(request: NextRequest) {
     const createdDate = formData.get('createdDate') as string
     const userId = formData.get('userId') as string // This is UNTRUSTED - validate against authenticated user
     const description = formData.get('description') as string | null
+    const story = formData.get('story') as string | null
     const tagsString = formData.get('tags') as string | null
 
     // SECURITY: Validate userId from form data matches authenticated user
@@ -309,6 +310,7 @@ export async function POST(request: NextRequest) {
       created_date: string
       uploaded_by: string
       description?: string
+      story?: string
       tags?: string[]
     } = {
       family_id: familyId,
@@ -320,7 +322,15 @@ export async function POST(request: NextRequest) {
       uploaded_by: verifiedUserId, // Use verified user ID, not form data
     }
     
-    // Add description if provided (legacy field, might be used by AI)
+    // The story is the product: what the child said about the piece. The web
+    // form collected only `description`, a column nothing renders, while the
+    // eight views that show a story read `story` -- so every web upload
+    // arrived storyless no matter what the parent typed.
+    if (story && story.trim()) {
+      insertData.story = story.trim()
+    }
+
+    // Legacy column, kept for rows written before the story field existed.
     if (description && description.trim()) {
       insertData.description = description.trim()
     }
@@ -334,7 +344,7 @@ export async function POST(request: NextRequest) {
       family_id: insertData.family_id,
       child_id: insertData.child_id,
       title: insertData.title,
-      hasDescription: !!insertData.description,
+      hasStory: !!insertData.story,
       hasTags: !!insertData.tags
     })
     

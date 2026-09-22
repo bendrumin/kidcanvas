@@ -49,7 +49,7 @@ interface FilePreview {
   file: File
   preview: string
   title: string
-  description: string
+  story: string
   childId: string
   createdDate: string
   tags: string
@@ -80,7 +80,7 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
       file,
       preview: URL.createObjectURL(file),
       title: file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '),
-      description: '',
+      story: '',
       childId: children[0]?.id || '',
       createdDate: new Date().toISOString().split('T')[0],
       tags: '',
@@ -172,11 +172,9 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
         formData.append('familyId', familyId)
         formData.append('childId', fileData.childId)
         formData.append('title', fileData.title || 'Untitled Artwork')
+        formData.append('story', fileData.story)
         formData.append('createdDate', fileData.createdDate)
         formData.append('userId', userId)
-        if (fileData.description && fileData.description.trim()) {
-          formData.append('description', fileData.description)
-        }
         if (fileData.tags && fileData.tags.trim()) {
           formData.append('tags', fileData.tags)
         }
@@ -231,14 +229,14 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
 
       // Calculate aggregate stats for all uploaded files
       const filesWithTags = files.filter(f => f.tags?.trim()).length
-      const filesWithDescription = files.filter(f => f.description?.trim()).length
+      const filesWithStory = files.filter(f => f.story?.trim()).length
 
       track('upload_completed', {
         fileCount: files.length,
         uploadDurationMs,
         apiDurationMs,
         filesWithTags,
-        filesWithDescription,
+        filesWithStory,
         userId,
         familyId,
       })
@@ -464,14 +462,24 @@ export function UploadForm({ familyId, children, userId }: UploadFormProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="description">Description (optional)</Label>
+                  <Label htmlFor="story" className="flex items-center gap-2">
+                    The story
+                    <span className="text-xs font-normal text-muted-foreground">optional</span>
+                  </Label>
                   <Textarea
-                    id="description"
-                    value={currentFile.description}
-                    onChange={(e) => updateFile(currentFileIndex, { description: e.target.value })}
-                    placeholder="Add any notes about this artwork..."
+                    id="story"
+                    value={currentFile.story}
+                    onChange={(e) => updateFile(currentFileIndex, { story: e.target.value })}
+                    placeholder={
+                      children.find((c) => c.id === currentFile.childId)?.name
+                        ? `What did ${children.find((c) => c.id === currentFile.childId)?.name} say about this?`
+                        : 'What did they say about this?'
+                    }
                     className="min-h-[80px] sm:min-h-[100px] resize-y"
                   />
+                  <p className="text-xs text-muted-foreground">
+                    A sentence or two. It&apos;s the part you&apos;ll be glad you wrote down.
+                  </p>
                 </div>
 
                 <div className="space-y-2">

@@ -86,7 +86,8 @@ export default function LandingPage() {
 
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
             Scan the drawing, write down what they said about it, and share both with
-            the family who actually wants to hear it.
+            the family who actually wants to hear it. Grandparents react and comment,
+            so it starts a conversation instead of filling a folder.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -235,7 +236,7 @@ export default function LandingPage() {
             
             <div className="mt-8 pt-8 border-t border-amber-100 dark:border-border">
               <p className="text-center text-sm text-muted-foreground mb-2">
-                <span className="font-semibold text-foreground">The key difference?</span> On Instagram, photos are everything. On KidCanvas, <span className="font-semibold text-foreground">stories are everything.</span>
+                <span className="font-semibold text-foreground">The key difference?</span> On Instagram, photos are everything. On KidCanvas, <span className="font-semibold text-foreground">stories are everything.</span> And unlike an artwork archive, the family can answer back.
               </p>
               <p className="text-center text-sm text-muted-foreground">
                 Because the artwork is just paper. The <span className="font-semibold text-foreground">story</span> is what makes it precious.
@@ -413,7 +414,7 @@ export default function LandingPage() {
             How KidCanvas compares to other solutions
           </h2>
           <p className="text-center text-muted-foreground mb-8 text-sm max-w-2xl mx-auto">
-            How KidCanvas compares with Instagram, artwork storage apps, and cloud storage
+            Most artwork apps are storage with better lighting. This is what changes when the story and the family come with it.
           </p>
 
           {/* Key Differentiator Callout */}
