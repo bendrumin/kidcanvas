@@ -165,6 +165,16 @@ Update the live listing's promotional text. This is the one store field
 
 Apple lets you change without shipping a new version or a review.
 
+### ios first_use
+
+```sh
+[bundle exec] fastlane ios first_use
+```
+
+Apple's own timestamps for this app: when the record was created and
+
+when each early build was uploaded. Evidence of first use of the name.
+
 ### ios metadata
 
 ```sh

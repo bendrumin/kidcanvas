@@ -582,6 +582,36 @@ platform :ios do
     UI.success("Promotional text updated on #{live.dig('attributes', 'versionString')} (#{live.dig('attributes', 'appStoreState')})")
   end
 
+
+  desc "Apple's own timestamps for this app: when the record was created and"
+  desc "when each early build was uploaded. Evidence of first use of the name."
+  lane :first_use do
+    token = Spaceship::ConnectAPI::Token.create(**asc_api_key)
+    Spaceship::ConnectAPI.token = token
+    app = Spaceship::ConnectAPI::App.find(
+      CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+    )
+    require "net/http"
+    require "json"
+    get = lambda do |path|
+      uri = URI("https://api.appstoreconnect.apple.com/v1/#{path}")
+      req = Net::HTTP::Get.new(uri)
+      req["Authorization"] = "Bearer #{token.text}"
+      JSON.parse(Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(req) }.body)
+    end
+    UI.important("App id #{app.id} (#{app.bundle_id})")
+    builds = get.call("apps/#{app.id}/builds?limit=200&fields[builds]=version,uploadedDate,expired")["data"] || []
+    sorted = builds.sort_by { |b| b.dig("attributes", "uploadedDate").to_s }
+    sorted.first(4).each do |b|
+      UI.message("  build #{b.dig('attributes','version')}  uploaded #{b.dig('attributes','uploadedDate')}")
+    end
+    UI.message("  ... #{builds.count} builds total")
+    vers = get.call("apps/#{app.id}/appStoreVersions?limit=20&fields[appStoreVersions]=versionString,createdDate,appStoreState")["data"] || []
+    vers.sort_by { |v| v.dig("attributes","createdDate").to_s }.first(2).each do |v|
+      UI.message("  version #{v.dig('attributes','versionString')} record created #{v.dig('attributes','createdDate')}")
+    end
+  end
+
   desc "Upload metadata and screenshots to App Store Connect. No binary."
   desc "Options: force:true skips the HTML preview; skip_screenshots:true for text only."
   lane :metadata do |options|
