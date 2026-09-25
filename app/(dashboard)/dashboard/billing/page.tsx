@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Check, Sparkles, Crown, Zap, AlertCircle } from 'lucide-react'
 import { BillingActions } from '@/components/billing/billing-actions'
 import { PLANS, INCLUDED_IN_ALL_PLANS } from '@/lib/stripe'
+import { getUserSubscriptionLimits } from '@/lib/subscription'
 import { cookies } from 'next/headers'
 
 // Presentation only. Names, descriptions, features and limits come from
@@ -75,7 +76,7 @@ async function getSubscriptionData(userId: string, supabase: any) {
     .eq('user_id', userId)
 
   return {
-    subscription: subscription || { plan_id: 'free', status: 'active' },
+    subscription: subscription || { tier: 'free', status: 'active' },
     usage: {
       artworks: artworkCount,
       children: childrenCount,
@@ -92,8 +93,16 @@ export default async function BillingPage() {
     return null
   }
 
-  const { subscription, usage } = await getSubscriptionData(user.id, supabase)
-  const currentPlan = subscription.plan_id || 'free'
+  const [{ subscription, usage }, resolved] = await Promise.all([
+    getSubscriptionData(user.id, supabase),
+    getUserSubscriptionLimits(user.id),
+  ])
+  // The plan shown is the resolved one (Stripe or App Store, whichever is
+  // better), the same answer the limits use. Reading the Stripe row alone
+  // showed App Store subscribers as free and offered them a second
+  // subscription.
+  const currentPlan = resolved.planId
+  const billedByAppStore = resolved.source === 'app_store'
   const isActive = subscription.status === 'active' || subscription.status === 'trialing'
 
   // Plan limits based on current plan
@@ -126,8 +135,13 @@ export default async function BillingPage() {
               <CardTitle className="text-lg">Current Plan</CardTitle>
               <CardDescription>
                 You're currently on the {plans.find(p => p.id === currentPlan)?.name || 'Free'} plan
-                {subscription.cancel_at_period_end && ' (cancels at period end)'}
+                {!billedByAppStore && subscription.cancel_at_period_end && ' (cancels at period end)'}
               </CardDescription>
+              {billedByAppStore && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  Billed through the App Store. To change or cancel it, open Settings on your iPhone, tap your name, then Subscriptions.
+                </p>
+              )}
             </div>
             <div className="flex items-center gap-2">
               {subscription.status === 'past_due' && (
@@ -163,9 +177,11 @@ export default async function BillingPage() {
               </p>
             </div>
             <div>
-              <p className="text-muted-foreground">Next Billing</p>
+              <p className="text-muted-foreground">{billedByAppStore ? 'Renews or ends' : 'Next Billing'}</p>
               <p className="text-fluid-2xl font-bold">
-                {subscription.current_period_end
+                {billedByAppStore && resolved.expiresAt
+                  ? new Date(resolved.expiresAt).toLocaleDateString()
+                  : subscription.current_period_end
                   ? new Date(subscription.current_period_end).toLocaleDateString()
                   : '—'}
               </p>
@@ -242,6 +258,13 @@ export default async function BillingPage() {
                 </CardContent>
                 
                 <CardFooter>
+                  {billedByAppStore ? (
+                    // Checkout here would start a second, separate subscription
+                    // on top of the App Store one.
+                    <p className="text-sm text-muted-foreground">
+                      {isCurrent ? 'Your current plan, billed through the App Store' : 'Change plans in the KidCanvas iPhone app'}
+                    </p>
+                  ) : (
                   <BillingActions
                     planId={plan.id}
                     priceId={plan.priceId?.month}
@@ -251,6 +274,7 @@ export default async function BillingPage() {
                     isPopular={plan.popular}
                     hasSubscription={!!subscription.stripe_subscription_id}
                   />
+                  )}
                 </CardFooter>
               </Card>
             )

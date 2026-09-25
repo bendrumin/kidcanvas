@@ -3,6 +3,7 @@ import Supabase
 
 struct UploadSheetView: View {
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var store: StoreManager
     let image: UIImage
     let onComplete: () -> Void
 
@@ -15,6 +16,7 @@ struct UploadSheetView: View {
     @State private var errorMessage: String?
     @State private var showSuccess = false
     @State private var showTemplates = false
+    @State private var paywallBlock: LimitBlock?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -209,6 +211,11 @@ struct UploadSheetView: View {
             .sheet(isPresented: $showAddChild) {
                 AddChildView()
                     .environmentObject(authManager)
+                    .environmentObject(store)
+            }
+            .sheet(item: $paywallBlock) { block in
+                PaywallView(block: block)
+                    .environmentObject(store)
             }
             .onChange(of: authManager.children.count) { _, _ in
                 // Preselect the artist they just created so Save enables without
@@ -229,6 +236,17 @@ struct UploadSheetView: View {
         Task {
             isUploading = true
             errorMessage = nil
+
+            // The authoritative check, the same one the web's /api/upload
+            // makes. The Scan tab checks earlier, but a second device or a
+            // family member may have filled the gallery since. Everything
+            // typed here stays on screen, so after upgrading one more tap on
+            // Save finishes the job.
+            if let block = await store.limitBlock(for: .artwork, familyId: familyId) {
+                paywallBlock = block
+                isUploading = false
+                return
+            }
 
             do {
                 // The bucket caps uploads at 10MB; shrink first so a big scan
@@ -424,4 +442,5 @@ struct SuccessOverlay: View {
 #Preview {
     UploadSheetView(image: UIImage(systemName: "photo")!) {}
         .environmentObject(AuthManager.shared)
+        .environmentObject(StoreManager.shared)
 }

@@ -1,0 +1,132 @@
+{
+  "identifier" : "4B1D0C2A",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "4B1D0C2B",
+      "localizations" : [
+
+      ],
+      "name" : "KidCanvas",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "11.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "4B1D0C31",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Unlimited artworks, artists and families",
+              "displayName" : "Pro Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "kidcanvas.pro.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Pro Monthly",
+          "subscriptionGroupID" : "4B1D0C2B",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "119.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "4B1D0C32",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Unlimited artworks, artists and families",
+              "displayName" : "Pro Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "kidcanvas.pro.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Pro Yearly",
+          "subscriptionGroupID" : "4B1D0C2B",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "5.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "4B1D0C21",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Unlimited artworks and artists for one family",
+              "displayName" : "Family Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "kidcanvas.family.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Family Monthly",
+          "subscriptionGroupID" : "4B1D0C2B",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "59.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "4B1D0C22",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Unlimited artworks and artists for one family",
+              "displayName" : "Family Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "kidcanvas.family.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Family Yearly",
+          "subscriptionGroupID" : "4B1D0C2B",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

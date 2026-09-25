@@ -88,5 +88,8 @@ children are superseded and misleading. Paid tiers were designed as **Family
 $4.99/mo or $49.99/yr** and **Pro $9.99/mo or $99.99/yr**. Physical-goods math
 existed too (photo book at $34.99 on ~$15.50 cost).
 
-Nothing enforces any limit in the iOS app today, and the app ships free during
-beta, so this is a decision to make later — not a thing to half-build now.
+iOS subscriptions (StoreKit 2) and iOS limit enforcement are built on
+`feature/ios-subscriptions`: migration `014` adds `app_store_subscriptions` and
+`get_user_plan()`, which both platforms now read. iOS prices are set higher
+than the web's to cover Apple's commission (Family $5.99/mo or $59.99/yr, Pro
+$11.99/mo or $119.99/yr). Setup steps are in `ios/README.md`.

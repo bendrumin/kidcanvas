@@ -2,9 +2,14 @@ import { createClient } from '@/lib/supabase/server'
 import { PLANS } from '@/lib/stripe'
 import type { PlanId } from '@/lib/stripe'
 
+export type PlanSource = 'stripe' | 'app_store' | 'none'
+
 export interface SubscriptionLimits {
   planId: PlanId
+  /** Where the plan comes from. 'none' means free, nothing purchased. */
+  source: PlanSource
   status: string
+  expiresAt: string | null
   artworkLimit: number
   familyLimit: number
   childrenLimit: number
@@ -25,24 +30,44 @@ export interface LimitCheckResult {
  */
 export async function getUserSubscriptionLimits(userId: string): Promise<SubscriptionLimits> {
   const supabase = await createClient()
-  
-  // Get subscription using the database function
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: subscriptionData } = await (supabase as any)
-    .rpc('get_user_subscription', { target_user_id: userId })
-    .single() as { data: {
-      plan_id: PlanId
-      status: string
-      artwork_limit: number
-      family_limit: number
-      children_limit: number
-    } | null }
 
-  const planId = subscriptionData?.plan_id || 'free'
-  const status = subscriptionData?.status || 'active'
-  const artworkLimit = subscriptionData?.artwork_limit ?? PLANS.free.limits.artworks
-  const familyLimit = subscriptionData?.family_limit ?? PLANS.free.limits.families
-  const childrenLimit = subscriptionData?.children_limit ?? PLANS.free.limits.children
+  // get_user_plan (migration 014) resolves the best active entitlement across
+  // Stripe and the App Store. The iOS app calls the same function, which is
+  // what keeps the two platforms agreeing on limits.
+  //
+  // This used to call get_user_subscription and read plan_id/artwork_limit off
+  // it, but the live function returns only `tier`, so every account resolved
+  // to free no matter what it had paid for.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: planData, error: planError } = await (supabase as any)
+    .rpc('get_user_plan', { target_user_id: userId })
+    .maybeSingle() as {
+      data: {
+        plan_id: PlanId
+        source: PlanSource
+        status: string
+        expires_at: string | null
+        artwork_limit: number
+        family_limit: number
+        children_limit: number
+      } | null
+      error: { message: string } | null
+    }
+
+  if (planError) {
+    // Fall back to free rather than failing the request, so a database that
+    // does not have migration 014 yet behaves exactly as it did before.
+    console.error('get_user_plan failed, treating as free:', planError.message)
+  }
+
+  const planId: PlanId =
+    planData?.plan_id && planData.plan_id in PLANS ? planData.plan_id : 'free'
+  const source: PlanSource = planData?.source || 'none'
+  const status = planData?.status || 'active'
+  const expiresAt = planData?.expires_at ?? null
+  const artworkLimit = planData?.artwork_limit ?? PLANS[planId].limits.artworks
+  const familyLimit = planData?.family_limit ?? PLANS[planId].limits.families
+  const childrenLimit = planData?.children_limit ?? PLANS[planId].limits.children
 
   // Get current usage
   // Get user's families
@@ -67,7 +92,9 @@ export async function getUserSubscriptionLimits(userId: string): Promise<Subscri
 
   return {
     planId,
+    source,
     status,
+    expiresAt,
     artworkLimit,
     familyLimit,
     childrenLimit,
