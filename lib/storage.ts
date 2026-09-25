@@ -6,7 +6,22 @@
  * uploads are authorized by the caller's own Supabase session.
  */
 export const ARTWORK_BUCKET = 'artworks'
+
+/**
+ * Private bucket (migration 013): nothing in it has a public address. Reads go
+ * through RLS and play from short-lived signed URLs, because a recording of a
+ * child's voice is more sensitive than a picture of their drawing.
+ */
 export const VOICE_BUCKET = 'voice-notes'
+
+/**
+ * The only key a voice note may have. The database CHECK and the upload
+ * policy both insist on it, so cleanup can derive the key from an artwork's
+ * ids instead of trusting a stored value. Postgres renders uuids in lowercase.
+ */
+export function voiceNoteKey(familyId: string, artworkId: string): string {
+  return `${familyId.toLowerCase()}/${artworkId.toLowerCase()}.m4a`
+}
 
 /**
  * Just the storage surface these helpers touch. Structural typing keeps them
@@ -73,5 +88,49 @@ export async function deleteFromStorage(
   const { error } = await supabase.storage.from(bucket).remove(keys)
   if (error) {
     console.error(`Storage delete failed for ${bucket}:`, error.message)
+  }
+}
+
+type FolderClient = {
+  storage: {
+    from(bucket: string): {
+      list(
+        path: string,
+        options?: { limit?: number; offset?: number }
+      ): Promise<{ data: { name: string }[] | null; error: { message: string } | null }>
+      remove(paths: string[]): Promise<{ error: { message: string } | null }>
+    }
+  }
+}
+
+/**
+ * Empties one family's folder in a bucket. Row deletes cascade in Postgres but
+ * never reach storage, so whole-family deletion has to clear files itself.
+ * Pages through the listing because list() returns at most `limit` names.
+ */
+export async function removeStorageFolder(
+  supabase: FolderClient,
+  bucket: string,
+  folder: string
+): Promise<void> {
+  const bucketApi = supabase.storage.from(bucket)
+  const pageSize = 100
+
+  // Removing shrinks the listing, so always read from offset 0 until empty.
+  // The guard stops a remove that keeps failing from looping forever.
+  for (let attempt = 0; attempt < 1000; attempt++) {
+    const { data, error } = await bucketApi.list(folder, { limit: pageSize })
+    if (error) {
+      console.error(`Storage list failed for ${bucket}/${folder}:`, error.message)
+      return
+    }
+    if (!data || data.length === 0) return
+
+    const { error: removeError } = await bucketApi.remove(data.map((file) => `${folder}/${file.name}`))
+    if (removeError) {
+      console.error(`Storage folder delete failed for ${bucket}/${folder}:`, removeError.message)
+      return
+    }
+    if (data.length < pageSize) return
   }
 }

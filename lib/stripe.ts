@@ -104,7 +104,8 @@ export const PLANS: Record<PlanId, {
  * actually ships in the web app today -- verified, not aspirational.
  *
  * Deliberately absent: AI auto-tagging (the AI route was deleted), voice notes
- * (removed; there is no voice-notes bucket), video capture (never existed),
+ * (recorded on iOS only; the web plays them but cannot record one), video
+ * capture (never existed),
  * API access and white-label sharing (never built), and story templates (they
  * exist on iOS only -- the web selector was removed as dead code).
  */

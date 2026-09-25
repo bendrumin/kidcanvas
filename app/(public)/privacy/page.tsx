@@ -23,7 +23,7 @@ export default function PrivacyPage() {
         </h1>
         
         <p className="text-muted-foreground mb-8">
-          Last updated: August 26, 2026
+          Last updated: September 24, 2026
         </p>
 
         <div className="prose prose-gray max-w-none space-y-8">
@@ -50,6 +50,9 @@ export default function PrivacyPage() {
               <li>Child names and birth dates (to organize artwork by age)</li>
               <li>Family group names</li>
               <li>Artwork images and metadata (titles, dates, tags)</li>
+              <li>Voice recordings of your child describing their artwork, only if
+                you choose to make one. The iOS app uses the microphone only while
+                you are recording, after you tap record.</li>
             </ul>
 
             <h3 className="text-xl font-medium text-foreground mt-4">Usage Information</h3>
@@ -87,6 +90,7 @@ export default function PrivacyPage() {
               <li><strong>Database:</strong> Supabase (PostgreSQL with Row Level Security)</li>
               <li><strong>Image Storage:</strong> Supabase Storage (encrypted at rest)</li>
               <li><strong>Image addresses:</strong> each artwork image is served from its own address containing two random identifiers. The address cannot be listed or guessed, but anyone you send it to can open that image without signing in. Expiring signed links are in progress.</li>
+              <li><strong>Voice recordings:</strong> kept in private storage with no public address. Only signed-in members of your family can play them, through links that expire after an hour. They never appear on public share links. We never transcribe or analyze them, by person or by machine. Deleting the artwork, your family, or your account deletes its recordings too.</li>
               <li><strong>Payments:</strong> Stripe (PCI-compliant, we never see your full card number)</li>
               <li><strong>Encryption:</strong> All data transmitted via HTTPS/TLS</li>
             </ul>
@@ -96,7 +100,7 @@ export default function PrivacyPage() {
             <h2 className="text-fluid-2xl font-semibold text-foreground">Third-Party Services</h2>
             <p className="text-muted-foreground leading-relaxed">We use the following third-party services:</p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2 mt-4">
-              <li><strong>Supabase:</strong> Authentication, database, and image storage</li>
+              <li><strong>Supabase:</strong> Authentication, database, and storage for images and voice recordings</li>
               <li><strong>Stripe:</strong> Payment processing</li>
               <li><strong>Vercel:</strong> Web hosting</li>
             </ul>
@@ -112,6 +116,11 @@ export default function PrivacyPage() {
             <p className="text-muted-foreground leading-relaxed mt-4">
               We collect only the minimum information necessary: child's name (or nickname) and 
               birth date to calculate their age when artwork was created.
+            </p>
+            <p className="text-muted-foreground leading-relaxed mt-4">
+              A voice recording is made by a parent, on the parent&apos;s device, and is
+              optional. It is shared only with your family and is never used for
+              anything other than playing it back to you.
             </p>
           </section>
 

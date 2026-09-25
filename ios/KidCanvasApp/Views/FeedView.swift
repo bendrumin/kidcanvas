@@ -95,6 +95,19 @@ struct FeedCard: View {
             }
             .buttonStyle(.plain)
 
+            // Outside the NavigationLink so tapping play plays, rather than
+            // opening the detail screen.
+            if let path = artwork.voiceNotePath {
+                VoiceNotePlaybackView(
+                    path: path,
+                    durationSeconds: artwork.voiceDurationSeconds,
+                    childName: artwork.child?.name,
+                    compact: true
+                )
+                .padding(.horizontal, 14)
+                .padding(.bottom, 12)
+            }
+
             Divider()
 
             ReactionBar(artworkId: artwork.id, service: service)

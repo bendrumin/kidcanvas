@@ -15,6 +15,11 @@ struct UploadSheetView: View {
     @State private var errorMessage: String?
     @State private var showSuccess = false
     @State private var showTemplates = false
+    @StateObject private var recorder = VoiceRecorder()
+    /// Only owners and parents may attach a recording (storage policy in
+    /// migration 013); members can still add artwork, so hide the control
+    /// rather than let them record something that cannot be saved.
+    @State private var canRecord = false
 
     @Environment(\.dismiss) private var dismiss
 
@@ -144,6 +149,10 @@ struct UploadSheetView: View {
                                 childName: selectedChild?.name,
                                 onBrowseTemplates: { showTemplates = true }
                             )
+
+                            if canRecord {
+                                VoiceRecorderControl(recorder: recorder, childName: selectedChild?.name)
+                            }
                         }
                         .padding(.horizontal)
 
@@ -210,6 +219,13 @@ struct UploadSheetView: View {
                 AddChildView()
                     .environmentObject(authManager)
             }
+            .task(id: authManager.currentFamily?.id) {
+                guard let familyId = authManager.currentFamily?.id else { return }
+                let role = await ArtworkService(client: authManager.client).familyRole(familyId: familyId)
+                canRecord = role == "owner" || role == "parent"
+            }
+            // Cancel, or swipe away: no child's voice left in the temp folder.
+            .onDisappear { recorder.cleanUpUnsaved() }
             .onChange(of: authManager.children.count) { _, _ in
                 // Preselect the artist they just created so Save enables without
                 // another tap.
@@ -297,6 +313,14 @@ struct UploadSheetView: View {
                     ),
                     imageData: thumbnailData
                 )
+
+                // The artwork is saved; the recording follows on its own.
+                // It uploads only now because the storage policy accepts a
+                // key only for an artwork row that exists.
+                if let take = recorder.takeRecording() {
+                    ArtworkService(client: authManager.client)
+                        .attachVoiceNoteInBackground(take, familyId: familyId, artworkId: artworkId)
+                }
 
                 showSuccess = true
 

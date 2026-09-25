@@ -142,6 +142,9 @@ class AuthManager: ObservableObject {
         if let files = try? await storage.list(path: folder), !files.isEmpty {
             _ = try? await storage.remove(paths: files.map { "\(folder)/\($0.name)" })
         }
+        // Recordings of the children go too. Paged, since a family can have
+        // more than the 100 names one list() call returns.
+        await supabase.removeStorageFolder(bucket: VoiceNote.bucket, folder: folder)
 
         try await supabase
             .from("families")
@@ -178,6 +181,26 @@ class AuthManager: ObservableObject {
             if let files = try? await storage.list(path: folder), !files.isEmpty {
                 let paths = files.map { "\(folder)/\($0.name)" }
                 _ = try? await storage.remove(paths: paths)
+            }
+        }
+
+        // delete_my_account removes every family this user OWNS, so clear the
+        // voice folder of each of those, and only those: a grandparent leaving
+        // someone else's family must not take that family's recordings along.
+        if let userId = currentUser?.id {
+            struct Owned: Decodable { let family_id: UUID }
+            let owned: [Owned] = (try? await supabase
+                .from("family_members")
+                .select("family_id")
+                .eq("user_id", value: userId.uuidString)
+                .eq("role", value: "owner")
+                .execute()
+                .value) ?? []
+            for family in owned {
+                await supabase.removeStorageFolder(
+                    bucket: VoiceNote.bucket,
+                    folder: family.family_id.uuidString.lowercased()
+                )
             }
         }
 

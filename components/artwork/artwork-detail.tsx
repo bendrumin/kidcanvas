@@ -48,6 +48,8 @@ import type { ArtworkWithChild, Child } from '@/lib/supabase/types'
 import { QRCodeDialog } from './qr-code-dialog'
 import { ArtworkReactions } from './artwork-reactions'
 import { ArtworkComments } from './artwork-comments'
+import { VoiceNotePlayer } from './voice-note-player'
+import { VOICE_BUCKET, voiceNoteKey } from '@/lib/storage'
 
 interface ArtworkDetailProps {
   artwork: ArtworkWithChild
@@ -170,6 +172,14 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
     setIsLoading(true)
 
     try {
+      // The recording goes first: if the row delete then fails, the worst case
+      // is a player with nothing to play, not a child's voice left in storage
+      // with no row pointing at it. Removing a key that does not exist is a
+      // no-op, so this runs whether or not a note was ever recorded.
+      await supabase.storage
+        .from(VOICE_BUCKET)
+        .remove([voiceNoteKey(artwork.family_id, artwork.id)])
+
       const { error } = await supabase
         .from('artworks')
         .delete()
@@ -261,7 +271,32 @@ export function ArtworkDetail({ artwork, children, canEdit }: ArtworkDetailProps
                 {artwork.story}
               </p>
             </div>
+
+            {artwork.voice_note_path && (
+              <div className="mt-6">
+                <VoiceNotePlayer
+                  path={artwork.voice_note_path}
+                  durationSeconds={artwork.voice_duration_seconds}
+                  childName={artwork.child?.name}
+                />
+              </div>
+            )}
           </div>
+        </div>
+      ) : artwork.voice_note_path ? (
+        // Told out loud but never written down: the recording is the story.
+        <div className="rounded-3xl border-2 border-pink-200/50 dark:border-pink-900/30 bg-gradient-to-br from-pink-50/80 via-purple-50/60 to-blue-50/40 dark:from-pink-950/20 dark:via-purple-950/10 dark:to-blue-950/10 p-8 md:p-10 shadow-xl">
+          <h2 className="text-2xl font-display font-bold text-foreground mb-2">
+            The story
+          </h2>
+          <p className="text-sm text-muted-foreground font-medium mb-6">
+            {artwork.child?.name} • {formatDate(artwork.created_date)}
+          </p>
+          <VoiceNotePlayer
+            path={artwork.voice_note_path}
+            durationSeconds={artwork.voice_duration_seconds}
+            childName={artwork.child?.name}
+          />
         </div>
       ) : (
         <div className="relative overflow-hidden rounded-3xl border-2 border-amber-200/50 dark:border-amber-900/30 bg-gradient-to-br from-amber-50/60 via-orange-50/40 to-yellow-50/30 dark:from-amber-950/15 dark:via-orange-950/10 dark:to-yellow-950/10 p-8 md:p-10 shadow-lg">

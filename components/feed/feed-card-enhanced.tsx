@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { createClient } from '@/lib/supabase/client'
 import { useToast } from '@/components/ui/use-toast'
+import { VoiceNotePlayer } from '@/components/artwork/voice-note-player'
 
 interface FeedCardEnhancedProps {
   artwork: ArtworkWithChild
@@ -218,6 +219,16 @@ export function FeedCardEnhanced({
         <p className="text-foreground leading-relaxed text-base">
           {storyText}
         </p>
+        {artwork.voice_note_path && (
+          <div className="mt-3">
+            <VoiceNotePlayer
+              path={artwork.voice_note_path}
+              durationSeconds={artwork.voice_duration_seconds}
+              childName={artwork.child?.name}
+              compact
+            />
+          </div>
+        )}
       </div>
 
       {/* Main artwork image */}

@@ -88,6 +88,12 @@ struct Artwork: Codable, Identifiable {
     let uploadedAt: Date
     let uploadedBy: UUID?
 
+    /// Key in the private voice-notes bucket, never a URL. `var` with a default
+    /// so rows from before migration 013, and existing memberwise call sites,
+    /// both decode and compile without it.
+    var voiceNotePath: String? = nil
+    var voiceDurationSeconds: Int? = nil
+
     // Joined child data
     var child: Child?
 
@@ -106,6 +112,8 @@ struct Artwork: Codable, Identifiable {
         case isFavorite = "is_favorite"
         case uploadedAt = "uploaded_at"
         case uploadedBy = "uploaded_by"
+        case voiceNotePath = "voice_note_path"
+        case voiceDurationSeconds = "voice_duration_seconds"
         case child = "children"
     }
 }

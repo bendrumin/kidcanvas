@@ -2,6 +2,7 @@ import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { checkRateLimit, getClientIdentifier } from '@/lib/rate-limit'
 import { verifyCsrfProtection } from '@/lib/csrf-protection'
+import { deleteFromStorage, removeStorageFolder, VOICE_BUCKET, voiceNoteKey } from '@/lib/storage'
 
 export async function POST(request: Request) {
   try {
@@ -103,10 +104,20 @@ export async function POST(request: Request) {
     // 1. Get artwork IDs for this user
     const { data: artworks } = await serviceClient
       .from('artworks')
-      .select('id')
+      .select('id, family_id')
       .eq('uploaded_by', userId)
 
     const artworkIds = artworks?.map((a: any) => a.id) || []
+
+    // Voice recordings of their children go before the rows, since no cascade
+    // reaches storage. Keys come from the ids, never from voice_note_path.
+    if (artworks && artworks.length > 0) {
+      await deleteFromStorage(
+        serviceClient,
+        VOICE_BUCKET,
+        artworks.map((a: any) => voiceNoteKey(a.family_id, a.id))
+      )
+    }
 
     // 2. Delete shared artwork links
     if (artworkIds.length > 0) {
@@ -149,6 +160,11 @@ export async function POST(request: Request) {
         .eq('family_id', familyId)
 
       if (!remainingMembers || remainingMembers.length === 0) {
+        // Other members' artwork in this family is about to cascade away with
+        // it, so clear the family's whole voice folder rather than only the
+        // files this user recorded.
+        await removeStorageFolder(serviceClient, VOICE_BUCKET, familyId)
+
         // Delete children in this family
         await serviceClient
           .from('children')
