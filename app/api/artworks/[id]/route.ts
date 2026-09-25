@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { deleteFromStorage, ARTWORK_BUCKET } from '@/lib/storage'
+import { deleteFromStorage, ARTWORK_BUCKET, VOICE_BUCKET, voiceNoteKey } from '@/lib/storage'
 import type { Database } from '@/lib/supabase/types'
 
 export async function DELETE(
@@ -132,6 +132,13 @@ export async function DELETE(
         { status: 403 }
       )
     }
+
+    // The voice recording goes before the row, unlike the images below: a
+    // child's voice orphaned in storage is worse than a row whose player comes
+    // up empty. The key is derived from the ids rather than read from the row,
+    // so a tampered voice_note_path can never aim this service-role delete at
+    // another family's file. A key that was never recorded is a no-op.
+    await deleteFromStorage(supabase, VOICE_BUCKET, [voiceNoteKey(artwork.family_id, artwork.id)])
 
     // Delete from database first (if this fails, we haven't deleted files yet)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

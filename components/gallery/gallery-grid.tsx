@@ -12,6 +12,7 @@ import { useMobile } from '@/lib/use-mobile'
 import { useToast } from '@/components/ui/use-toast'
 import { celebrateSubtle } from '@/lib/celebrations'
 import { createClient } from '@/lib/supabase/client'
+import { VOICE_BUCKET, voiceNoteKey } from '@/lib/storage'
 import {
   Dialog,
   DialogContent,
@@ -132,6 +133,15 @@ export function GalleryGrid({ artworks, onCountChange, canEdit = false, planId =
     const idsToDelete = Array.from(selectedIds)
     
     try {
+      // Recordings first, so a failed row delete cannot strand a child's voice
+      // in storage. Keys that were never recorded are ignored by remove().
+      const voiceKeys = artworks
+        .filter(a => selectedIds.has(a.id))
+        .map(a => voiceNoteKey(a.family_id, a.id))
+      if (voiceKeys.length > 0) {
+        await supabase.storage.from(VOICE_BUCKET).remove(voiceKeys)
+      }
+
       // Delete all selected artworks
       const deletePromises = idsToDelete.map(id =>
         supabase.from('artworks').delete().eq('id', id)

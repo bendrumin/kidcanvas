@@ -23,6 +23,7 @@ import { formatDate, calculateAge } from '@/lib/utils'
 import type { ArtworkWithChild } from '@/lib/supabase/types'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { VOICE_BUCKET, voiceNoteKey } from '@/lib/storage'
 import { useToast } from '@/components/ui/use-toast'
 import {
   Dialog,
@@ -106,6 +107,12 @@ export function ArtworkLightbox({
 
     setIsDeleting(true)
     try {
+      // Recording first, so a failed row delete cannot strand a child's voice
+      // in storage. A missing key is a no-op.
+      await supabase.storage
+        .from(VOICE_BUCKET)
+        .remove([voiceNoteKey(artwork.family_id, artwork.id)])
+
       const { error } = await supabase
         .from('artworks')
         .delete()

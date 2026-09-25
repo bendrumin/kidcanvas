@@ -66,10 +66,10 @@ work only.
 
 - **AI anything.** Removed from the product; the old auto-tagging route burned
   CPU for little value.
-- **Voice-note transcription.** Dropped — it was only ever a doc, never code.
-  (Voice *recording* itself is a maybe-later: the web app can play notes but
-  was never able to record one, and iOS would be a from-scratch
-  `AVAudioRecorder` build.)
+- **Voice-note transcription.** Dropped, and staying dropped. Recording
+  itself shipped in migration 013: iOS records up to 60 seconds, both clients
+  play it, and the audio lives in a private bucket behind signed access.
+  Nothing listens to it but the family.
 - **Collections, PDF art books, print marketplace, referrals, analytics
   dashboards.** All spec'd in the archive, none close to worth it yet.
 - **Teacher/classroom product.** The outreach materials are genuinely good (10

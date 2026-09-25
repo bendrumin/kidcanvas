@@ -97,6 +97,8 @@ export type Database = {
           title: string
           uploaded_at: string | null
           uploaded_by: string | null
+          voice_duration_seconds: number | null
+          voice_note_path: string | null
         }
         Insert: {
           child_age_months?: number | null
@@ -113,6 +115,8 @@ export type Database = {
           title: string
           uploaded_at?: string | null
           uploaded_by?: string | null
+          voice_duration_seconds?: number | null
+          voice_note_path?: string | null
         }
         Update: {
           child_age_months?: number | null
@@ -129,6 +133,8 @@ export type Database = {
           title?: string
           uploaded_at?: string | null
           uploaded_by?: string | null
+          voice_duration_seconds?: number | null
+          voice_note_path?: string | null
         }
         Relationships: [
           {

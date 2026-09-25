@@ -1,16 +1,20 @@
 import SwiftUI
 
 /// Adds a story to artwork saved before the story field existed — the app has
-/// months of images with no context attached.
+/// months of images with no context attached. The story can be written, told
+/// out loud, or both.
 struct AddStorySheet: View {
     let artwork: Artwork
     let service: ArtworkService
+    /// Reports what was saved so the detail screen can show it without a reload.
+    var onSaved: (_ story: String?, _ voice: (path: String, durationSeconds: Int)?) -> Void = { _, _ in }
 
     @Environment(\.dismiss) private var dismiss
     @State private var story = ""
     @State private var showTemplates = false
     @State private var isSaving = false
     @State private var errorMessage: String?
+    @StateObject private var recorder = VoiceRecorder()
 
     var body: some View {
         NavigationStack {
@@ -32,6 +36,8 @@ struct AddStorySheet: View {
                             childName: artwork.child?.name,
                             onBrowseTemplates: { showTemplates = true }
                         )
+
+                        VoiceRecorderControl(recorder: recorder, childName: artwork.child?.name)
 
                         if let errorMessage {
                             Text(errorMessage)
@@ -78,11 +84,12 @@ struct AddStorySheet: View {
                     showTemplates = false
                 }
             }
+            .onDisappear { recorder.cleanUpUnsaved() }
         }
     }
 
     private var canSave: Bool {
-        !story.trimmed.isEmpty
+        !story.trimmed.isEmpty || recorder.recording != nil
     }
 
     private func save() {
@@ -90,7 +97,20 @@ struct AddStorySheet: View {
         errorMessage = nil
         Task {
             do {
-                try await service.updateStory(story.trimmed, artworkId: artwork.id)
+                let text = story.trimmed
+                if !text.isEmpty {
+                    try await service.updateStory(text, artworkId: artwork.id)
+                }
+                // The artwork already exists here, so the recording is the
+                // save, not an extra riding along; wait for it and report
+                // failure instead of dropping it quietly.
+                var voice: (path: String, durationSeconds: Int)?
+                if let take = recorder.recording {
+                    try await service.attachVoiceNote(take, familyId: artwork.familyId, artworkId: artwork.id)
+                    _ = recorder.takeRecording()
+                    voice = (VoiceNote.key(familyId: artwork.familyId, artworkId: artwork.id), take.durationSeconds)
+                }
+                onSaved(text.isEmpty ? nil : text, voice)
                 dismiss()
             } catch {
                 errorMessage = error.localizedDescription
