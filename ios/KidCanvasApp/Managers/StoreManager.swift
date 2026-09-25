@@ -133,6 +133,9 @@ final class StoreManager: ObservableObject {
     @Published private(set) var storeKitTier: PlanTier = .free
     @Published private(set) var isPurchasing = false
     @Published var lastError: String?
+    /// True only while the store round-trip is in flight, so the paywall can
+    /// tell "still asking" apart from "asked, and there is nothing there".
+    @Published var isLoadingProducts = false
 
     private var updatesTask: Task<Void, Never>?
     private var syncedUserID: UUID?
@@ -263,8 +266,18 @@ final class StoreManager: ObservableObject {
     // MARK: - StoreKit
 
     func loadProducts() async {
+        isLoadingProducts = true
+        defer { isLoadingProducts = false }
         do {
             let loaded = try await Product.products(for: Self.productIDs)
+            // StoreKit does NOT throw for ids the store has never heard of; it
+            // just leaves them out. With no subscriptions configured yet, that
+            // is an empty array and a successful call, which the paywall used
+            // to render as a spinner that never stopped.
+            if loaded.isEmpty {
+                lastError = "Plans aren't available from the App Store right now. "
+                    + "Please try again in a moment."
+            }
             // Family before Pro, monthly before yearly.
             products = loaded.sorted { a, b in
                 let ta = Self.tier(forProductID: a.id) ?? .free

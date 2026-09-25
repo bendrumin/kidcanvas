@@ -97,7 +97,18 @@ struct PaywallView: View {
 
     @ViewBuilder
     private var loadingOrError: some View {
-        if let error = store.lastError {
+        // Spin only while a request is genuinely in flight. StoreKit returns an
+        // empty array rather than throwing for product ids the store does not
+        // know, so "no products and no error" used to spin forever.
+        if store.isLoadingProducts && store.lastError == nil {
+            VStack(spacing: 12) {
+                ProgressView()
+                Text("Loading plans\u{2026}")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.vertical, 24)
+        } else if let error = store.lastError {
             VStack(spacing: 12) {
                 Text(error)
                     .font(.subheadline)
@@ -112,8 +123,16 @@ struct PaywallView: View {
             }
             .padding(.vertical, 24)
         } else {
-            ProgressView()
-                .padding(.vertical, 40)
+            VStack(spacing: 12) {
+                Text("No plans are available right now. Please try again in a moment.")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                Button("Try again") {
+                    Task { await store.loadProducts() }
+                }
+            }
+            .padding(.vertical, 24)
         }
     }
 
