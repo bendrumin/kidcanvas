@@ -1,0 +1,479 @@
+/*
+ * Landing page only. The dashboard keeps the app's shadcn tokens; this page
+ * has its own small palette so the marketing site can look like the product's
+ * subject (a drawing, and the note a parent writes about it) instead of a
+ * generic SaaS template.
+ */
+.page {
+  --paper: #ffffff;
+  --ink: #1f2340;
+  --ink-soft: #545a78;
+  --rule: #d6e2f3;
+  --margin: #ee8c8c;
+  --tape: #efe3b4;
+  --action: #e91e63;
+  --action-hover: #c2185b;
+  --card: #ffffff;
+  --line: #e4e7f0;
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-atkinson), system-ui, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+:global(.dark) .page {
+  --paper: #151829;
+  --ink: #eef0f8;
+  --ink-soft: #a9aecb;
+  --rule: #2e3552;
+  --margin: #9c4b57;
+  --tape: #5d5638;
+  --action: #f0457f;
+  --action-hover: #f76b9a;
+  --card: #1e2238;
+  --line: #2a2f4a;
+}
+
+.wrap {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* Headings and the kids' words: a marker-handwriting face, so the page reads
+   like the note a parent writes on the back of a drawing. */
+.serif {
+  font-family: var(--font-shantell), 'Comic Neue', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- nav ---------- */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+}
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.navLink {
+  color: var(--ink);
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+@media (max-width: 420px) {
+  .navLink {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.9375rem;
+  }
+}
+.navLink {
+  white-space: nowrap;
+}
+.navLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- buttons ---------- */
+.primary {
+  display: inline-flex;
+  align-items: center;
+  background: var(--action);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  padding: 0.8rem 1.4rem;
+  border-radius: 0.75rem;
+  transition: background-color 120ms;
+}
+.primary:hover {
+  background: var(--action-hover);
+}
+.textLink {
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--action);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.page a:focus-visible,
+.page summary:focus-visible {
+  outline: 3px solid var(--action);
+  outline-offset: 3px;
+  border-radius: 0.5rem;
+}
+
+/* ---------- hero ---------- */
+.hero {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+  /* Block padding only: .wrap supplies the side gutter on the same element. */
+  padding-block: 3rem 5rem;
+}
+@media (min-width: 900px) {
+  .hero {
+    grid-template-columns: 1.05fr 1fr;
+    padding-block: 4.5rem 6.5rem;
+  }
+}
+.h1 {
+  font-size: clamp(2.75rem, 1.6rem + 4.4vw, 4.5rem);
+  line-height: 1.02;
+  margin: 0 0 1.5rem;
+}
+.lede {
+  font-size: 1.3125rem;
+  color: var(--ink-soft);
+  max-width: 32rem;
+  margin: 0 0 2rem;
+}
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+}
+.fine {
+  margin-top: 1.25rem;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+}
+
+/* The one decorative device: the drawing, taped up, with the note beside it. */
+.board {
+  position: relative;
+  max-width: 30rem;
+  margin: 0 auto;
+}
+.drawing {
+  position: relative;
+  background: #fff;
+  padding: 0.75rem;
+  box-shadow: 0 1px 2px rgba(31, 35, 64, 0.12), 0 12px 28px -12px rgba(31, 35, 64, 0.35);
+  transform: rotate(-2.5deg);
+}
+.drawing img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.tape {
+  position: absolute;
+  width: 6.5rem;
+  height: 1.6rem;
+  background: var(--tape);
+  opacity: 0.92;
+}
+.tapeLeft {
+  top: -0.7rem;
+  left: -1.2rem;
+  transform: rotate(-32deg);
+}
+.tapeRight {
+  top: -0.7rem;
+  right: -1.2rem;
+  transform: rotate(28deg);
+}
+.card {
+  /* In flow under the drawing, pulled up so it overlaps only the bottom edge. */
+  position: relative;
+  margin: -2.5rem -0.75rem 0 auto;
+  width: min(20rem, 82%);
+  background-color: var(--card);
+  /* Ruled index card: a margin line, then blue rules on the text baseline. */
+  background-image:
+    linear-gradient(to right, transparent 2.1rem, var(--margin) 2.1rem, var(--margin) calc(2.1rem + 1.5px), transparent calc(2.1rem + 1.5px)),
+    repeating-linear-gradient(to bottom, transparent 0, transparent calc(1.75rem - 1px), var(--rule) calc(1.75rem - 1px), var(--rule) 1.75rem);
+  background-position: 0 0, 0 1.1rem;
+  padding: 1.1rem 1.25rem 1rem 2.75rem;
+  box-shadow: 0 1px 2px rgba(31, 35, 64, 0.12), 0 14px 30px -14px rgba(31, 35, 64, 0.4);
+  transform: rotate(1.5deg);
+}
+.quote {
+  font-family: var(--font-shantell), 'Comic Neue', system-ui, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  margin: 0;
+}
+.attribution {
+  font-size: 0.875rem;
+  line-height: 1.75rem;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.reply {
+  margin-top: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  border-top: 1px solid var(--line);
+  padding-top: 0.6rem;
+}
+.reply b {
+  font-weight: 700;
+}
+
+/* ---------- sections ---------- */
+.section {
+  padding: 4.5rem 0;
+  border-top: 1px solid var(--line);
+}
+.h2 {
+  font-size: clamp(2rem, 1.4rem + 2vw, 2.75rem);
+  line-height: 1.1;
+  margin: 0 0 1rem;
+  max-width: 34rem;
+}
+.intro {
+  color: var(--ink-soft);
+  max-width: 36rem;
+  margin: 0 0 3rem;
+}
+
+/* How it works: a real sequence, so it is numbered. */
+.steps {
+  display: grid;
+  gap: 2.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: step;
+}
+@media (min-width: 760px) {
+  .steps {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+.step {
+  counter-increment: step;
+}
+.step::before {
+  content: counter(step);
+  display: block;
+  font-family: var(--font-shantell), 'Comic Neue', system-ui, sans-serif;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--action);
+  margin-bottom: 0.75rem;
+}
+.h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+}
+.step p {
+  color: var(--ink-soft);
+  margin: 0;
+  max-width: 22rem;
+}
+
+/* Feed: copy beside the real screenshot. */
+.split {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+}
+@media (min-width: 860px) {
+  .split {
+    grid-template-columns: 1fr 22rem;
+    gap: 5rem;
+  }
+}
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1.25rem;
+  max-width: 34rem;
+}
+.list li {
+  padding-left: 1.25rem;
+  border-left: 3px solid var(--rule);
+}
+.list b {
+  display: block;
+  font-weight: 700;
+}
+.list span {
+  color: var(--ink-soft);
+}
+.phone {
+  width: 100%;
+  max-width: 22rem;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 2rem;
+  border: 1px solid var(--line);
+  box-shadow: 0 20px 40px -24px rgba(31, 35, 64, 0.45);
+}
+.phone img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* What it is not: two-column definition list. */
+.nots {
+  display: grid;
+  gap: 2rem 3rem;
+  margin: 0;
+}
+@media (min-width: 760px) {
+  .nots {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.nots dt {
+  font-family: var(--font-shantell), 'Comic Neue', system-ui, sans-serif;
+  font-size: 1.375rem;
+  line-height: 1.25;
+  margin-bottom: 0.4rem;
+}
+.nots dd {
+  margin: 0;
+  color: var(--ink-soft);
+  max-width: 30rem;
+}
+
+/* Pricing */
+.plans {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 48rem;
+}
+@media (min-width: 700px) {
+  .plans {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.plan {
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  background: var(--card);
+}
+.planFeatured {
+  border: 2px solid var(--action);
+}
+.planName {
+  font-weight: 700;
+  margin: 0;
+}
+.price {
+  font-family: var(--font-shantell), 'Comic Neue', system-ui, sans-serif;
+  font-size: 2.5rem;
+  line-height: 1.1;
+  margin: 0.25rem 0 0.25rem;
+}
+.price small {
+  font-family: var(--font-atkinson), system-ui, sans-serif;
+  font-size: 1rem;
+  color: var(--ink-soft);
+}
+.planNote {
+  color: var(--ink-soft);
+  font-size: 1rem;
+  margin: 0 0 1.25rem;
+}
+.planList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 1rem;
+}
+.planList li::before {
+  content: '';
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--action);
+  margin-right: 0.65rem;
+  vertical-align: 0.15em;
+}
+
+/* FAQ */
+.faq {
+  max-width: 44rem;
+}
+.faq details {
+  border-bottom: 1px solid var(--line);
+}
+.faq summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  padding: 1.1rem 2rem 1.1rem 0;
+  position: relative;
+}
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq summary::after {
+  content: '+';
+  position: absolute;
+  right: 0.25rem;
+  top: 0.9rem;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--ink-soft);
+}
+.faq details[open] summary::after {
+  content: '\2212';
+}
+.faq details p {
+  margin: 0 0 1.25rem;
+  color: var(--ink-soft);
+}
+
+/* Closing */
+.closing {
+  padding: 5rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.footer {
+  border-top: 1px solid var(--line);
+  padding: 2rem 0 2.5rem;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+}
+.footerRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+.footer a {
+  color: var(--ink-soft);
+}
+.footer a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary {
+    transition: none;
+  }
+}

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Fredoka, Nunito } from 'next/font/google'
 import './globals.css'
+import { APP_STORE_ID } from '@/lib/app-links'
 
 // Self-hosted at build time. These used to be pulled in with an @import in
 // globals.css, which the Content-Security-Policy blocked -- so in production the
@@ -34,7 +35,13 @@ export const metadata: Metadata = {
     template: '%s | KidCanvas',
   },
   description: 'Capture and share the stories behind your children\'s artwork. Remember what they said, share the moment with family, and keep those memories alive. Free for up to 50 artworks.',
-  keywords: ['kids artwork', 'children art', 'family gallery', 'artwork stories', 'kids art stories', 'family sharing', 'children drawings', 'artwork memories', 'family moments', 'artwork social'],
+  keywords: ['KidCanvas', 'KidCanvas app', 'kids artwork app', 'kids art stories', 'save kids artwork', 'share kids art with grandparents', 'family art feed', 'children drawings', 'artwork memories', 'kids art scanner'],
+  // Smart App Banner: Safari on iPhone shows "Open" / "Get" for the real app
+  // at the top of every page, so an iPhone visitor lands on this listing
+  // instead of searching the store and finding a similarly named one.
+  itunes: {
+    appId: APP_STORE_ID,
+  },
   authors: [{ name: 'KidCanvas' }],
   creator: 'KidCanvas',
   openGraph: {

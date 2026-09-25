@@ -40,7 +40,7 @@ const howTos = [
 const faqs = [
   {
     q: 'How do I capture artwork and stories?',
-    a: 'Upload a photo of the artwork, then open it and add the story. Write what your child said, what was special about it, or any context. On iPhone the app asks while you upload; the beta is open at https://testflight.apple.com/join/7nT5CzWQ',
+    a: 'Upload a photo of the artwork, then open it and add the story. Write what your child said, what was special about it, or any context. On iPhone the app asks while you upload. Get it at https://apps.apple.com/us/app/kidcanvas/id6757280447',
   },
   {
     q: 'Can grandparents see the stories and react?',

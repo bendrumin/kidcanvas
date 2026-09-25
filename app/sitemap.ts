@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // A real date, bumped when page content meaningfully changes. new Date()
   // stamped every request as "modified now", which teaches crawlers that this
   // sitemap's lastmod means nothing and to ignore it.
-  const lastContentChange = new Date('2026-09-17')
+  const lastContentChange = new Date('2026-09-24')
 
   return [
     {

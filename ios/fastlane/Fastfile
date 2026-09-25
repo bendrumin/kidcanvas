@@ -613,13 +613,15 @@ platform :ios do
   end
 
   desc "Upload metadata and screenshots to App Store Connect. No binary."
-  desc "Options: force:true skips the HTML preview; skip_screenshots:true for text only."
+  desc "Options: force:true skips the HTML preview; skip_screenshots:true for text only;"
+  desc "app_version:1.0.1 creates that version on App Store Connect if it does not exist."
   lane :metadata do |options|
     skip_screenshots = options.fetch(:skip_screenshots, false)
     deliver(
       api_key: asc_api_key,
       skip_binary_upload: true,
-      skip_app_version_update: true,
+      app_version: options[:app_version],
+      skip_app_version_update: options[:app_version].nil?,
       skip_screenshots: skip_screenshots,
       overwrite_screenshots: true,
       force: options.fetch(:force, false),

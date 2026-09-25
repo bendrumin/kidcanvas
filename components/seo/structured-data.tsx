@@ -13,6 +13,8 @@
  * strand anyone who used it.
  */
 
+import { APP_STORE_URL } from '@/lib/app-links'
+
 function JsonLd({ data }: { data: Record<string, unknown> }) {
   return (
     <script
@@ -34,6 +36,9 @@ export function OrganizationSchema() {
         logo: 'https://kidcanvas.app/logo.png',
         description:
           "A private family gallery for children's artwork and the stories behind it.",
+        // Ties the site and the store listing to one entity, so a search for
+        // the name resolves to this app rather than a similarly named one.
+        sameAs: [APP_STORE_URL],
       }}
     />
   )
@@ -43,11 +48,13 @@ export function SoftwareApplicationSchema() {
   return (
     <JsonLd
       data={{
-        '@type': 'SoftwareApplication',
+        '@type': 'MobileApplication',
         name: 'KidCanvas',
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'iOS, Web',
         url: 'https://kidcanvas.app',
+        downloadUrl: APP_STORE_URL,
+        installUrl: APP_STORE_URL,
         description:
           "Scan children's artwork, write down the story in their words, and share both with family who can react and comment.",
         offers: {
@@ -67,6 +74,21 @@ export function WebSiteSchema() {
         '@type': 'WebSite',
         name: 'KidCanvas',
         url: 'https://kidcanvas.app',
+      }}
+    />
+  )
+}
+
+export function FAQSchema({ faqs }: { faqs: { q: string; a: string }[] }) {
+  return (
+    <JsonLd
+      data={{
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: f.a },
+        })),
       }}
     />
   )
