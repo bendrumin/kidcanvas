@@ -32,4 +32,16 @@ test('signing up lands in the dashboard', async ({ page, browserName }) => {
   // the whole bug: this navigation must actually happen
   await page.waitForURL(/\/dashboard/, { timeout: 30000 })
   await expect(page).toHaveURL(/\/dashboard/)
+
+  // Clean up after ourselves. This ran nightly for a week and left an account
+  // and an orphaned family behind every time, because account deletion did not
+  // work until today. Deleting here also exercises that path nightly, which is
+  // the other thing Apple and Google require to actually work.
+  // The Origin header is required: /api/account/delete refuses cross-origin
+  // posts, and page.request does not set one on its own.
+  const origin = new URL(page.url()).origin
+  const deleted = await page.request.post('/api/account/delete', {
+    headers: { Origin: origin },
+  })
+  expect(deleted.ok(), `could not delete the probe account: ${deleted.status()}`).toBe(true)
 })

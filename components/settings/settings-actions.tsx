@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useToast } from '@/components/ui/use-toast'
 import { Download, Loader2 } from 'lucide-react'
 import { useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,6 +28,7 @@ export function SettingsActions({ action, planId, userId }: SettingsActionsProps
   const router = useRouter()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
+  const supabase = createClient()
 
   if (action === 'upgrade') {
     return (
@@ -70,19 +72,23 @@ export function SettingsActions({ action, planId, userId }: SettingsActionsProps
               onClick={async () => {
                 setIsLoading(true)
                 try {
-                  // TODO: Implement delete account API endpoint
-                  toast({
-                    title: 'Coming soon!',
-                    description: 'Account deletion is in development. Please contact support if you need immediate deletion.',
-                    variant: 'destructive',
-                  })
+                  const response = await fetch('/api/account/delete', { method: 'POST' })
+                  const body = await response.json().catch(() => ({}))
+                  if (!response.ok) throw new Error(body.error || 'Deletion failed')
+
+                  // The auth row is gone, so a server sign-out would fail.
+                  await supabase.auth.signOut().catch(() => {})
+                  toast({ title: 'Your account has been deleted.' })
+                  window.location.assign('/')
                 } catch (error) {
                   toast({
-                    title: 'Error',
-                    description: 'Failed to delete account. Please try again later.',
+                    title: "Couldn't delete the account",
+                    description:
+                      error instanceof Error
+                        ? error.message
+                        : 'Email support@kidcanvas.app and we will do it by hand.',
                     variant: 'destructive',
                   })
-                } finally {
                   setIsLoading(false)
                 }
               }}
