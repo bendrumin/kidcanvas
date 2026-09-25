@@ -2,12 +2,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    <!--
+      No CAMERA permission: the ML Kit document scanner runs its own camera UI
+      inside Google Play services and hands back a finished image, and the photo
+      picker needs no storage permission. Fewer permissions is a shorter Play
+      Data safety form and one less prompt for a grandparent to puzzle over.
+    -->
 
+    <!--
+      Backups off, and the extraction rules exclude everything: the Supabase
+      session lives in app storage, and restoring it onto another phone would
+      sign that phone in without a password.
+    -->
     <application
         android:name=".KidCanvasApp"
-        android:allowBackup="true"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.KidCanvas">
