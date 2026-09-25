@@ -72,8 +72,15 @@ test('the landing page still says the true things', async ({ page }) => {
   await page.goto('/')
   const text = await page.locator('body').innerText()
 
-  // The product's actual proposition, and the actual free limit.
-  expect(text).toContain('Remember what they said')
+  // The hero wording moves (it is "Their art, in their words." since the
+  // rename), so pinning one sentence just cries wolf after every redesign.
+  // What must not change: the page still sells the story rather than storage,
+  // and still states the real free limit.
+  const promise = ['in their words', 'what they said', 'what your kid said']
+  expect(
+    promise.some((p) => text.toLowerCase().includes(p)),
+    `the page no longer promises the story: none of ${promise.join(' / ')}`
+  ).toBe(true)
   expect(text).toMatch(/50 artworks/)
 })
 

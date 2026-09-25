@@ -45,7 +45,12 @@ test('structured data is in the server HTML, and honest', async ({ request }) =>
 
   const types = blocks.map((b) => b['@type'])
   expect(types).toContain('Organization')
-  expect(types).toContain('SoftwareApplication')
+  // MobileApplication since the iOS app shipped; SoftwareApplication was the
+  // pre-launch type. Either one makes the "this is an app" claim to Google.
+  expect(
+    types.some((t) => t === 'MobileApplication' || t === 'SoftwareApplication'),
+    `no app schema type, got ${types.join(', ')}`
+  ).toBe(true)
   expect(types).toContain('WebSite')
 
   // No invented reviews, ever. Google issues manual actions for this.
@@ -73,12 +78,13 @@ test('the sitemap lists every public page', async ({ request }) => {
   }
 })
 
-test('the open-beta TestFlight link is on the homepage', async ({ request }) => {
-  // The CTA that converts. It appears in the hero and in the FAQ; if a copy
-  // edit drops it, the site stops recruiting testers and nothing else notices.
+test('the homepage links somewhere you can actually get the app', async ({ request }) => {
+  // This pinned the TestFlight beta link. 1.0 is on the App Store now, so the
+  // invariant is that some download path exists, not which one it is.
   const html = await (await request.get('/')).text()
-  const hits = html.match(/testflight\.apple\.com\/join\/7nT5CzWQ/g) ?? []
-  expect(hits.length).toBeGreaterThanOrEqual(2)
+  const appStore = (html.match(/apps\.apple\.com/g) ?? []).length
+  const testFlight = (html.match(/testflight\.apple\.com/g) ?? []).length
+  expect(appStore + testFlight, 'no App Store or TestFlight link on the homepage').toBeGreaterThanOrEqual(1)
 })
 
 test('every public page serves the Google Analytics tag', async ({ request, baseURL }) => {
