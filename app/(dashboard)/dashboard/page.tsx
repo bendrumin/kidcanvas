@@ -14,6 +14,9 @@ import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import type { FamilyMember, ArtworkWithChild, Child } from '@/lib/supabase/types'
 import { getUserSubscriptionLimits } from '@/lib/subscription'
+import { SubjectChips } from '@/components/then-and-now/subject-chips'
+import { matchesSubject, pluralize, suggestSubjects } from '@/lib/then-and-now'
+import { Sparkles } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Gallery',
@@ -115,17 +118,44 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     })
   }
 
-  // Parallelize independent queries: children and subscription limits
-  const [childrenResult, limits] = await Promise.all([
+  const selectedChildId = childFilter && childFilter !== 'all' ? childFilter : undefined
+
+  // Parallelize independent queries: children, subscription limits, and the
+  // selected child's words for subject suggestions. That last one ignores the
+  // search and favorites filters on purpose, so the chips describe the child,
+  // not whatever happens to be on screen.
+  const [childrenResult, limits, subjectSource] = await Promise.all([
     supabase
       .from('children')
       .select('*')
       .eq('family_id', membership.family_id)
       .order('name'),
     getUserSubscriptionLimits(user.id),
+    selectedChildId
+      ? supabase
+          .from('artworks')
+          .select('title, story')
+          .eq('family_id', membership.family_id)
+          .eq('child_id', selectedChildId)
+      : Promise.resolve({ data: null }),
   ])
   
   const { data: children } = childrenResult as { data: Child[] | null }
+  const selectedChild = children?.find(c => c.id === selectedChildId)
+  const subjects = selectedChild
+    ? suggestSubjects((subjectSource.data || []) as Pick<ArtworkWithChild, 'title' | 'story'>[], selectedChild)
+    : []
+
+  // A search is the natural way into "Then and now". Offer it for each artist
+  // whose own titles or stories mention the term: the gallery search also
+  // matches artist names and tags, which would offer "Emma's emmas". The view
+  // itself explains when one match is not enough.
+  const thenAndNowChildren = searchQuery
+    ? (children || []).filter(c =>
+        (!selectedChildId || c.id === selectedChildId)
+          && artworks?.some(a => a.child_id === c.id && matchesSubject(a, searchQuery))
+      )
+    : []
 
   // Get last upload date for memory prompts
   const lastUploadDate = artworks && artworks.length > 0
@@ -166,6 +196,28 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <GalleryFilters children={children || []} />
         </Suspense>
       </div>
+
+      {searchQuery && thenAndNowChildren.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="flex items-center gap-1.5 text-sm text-muted-foreground mr-1">
+            <Sparkles className="w-4 h-4 text-crayon-purple" aria-hidden />
+            Then and now:
+          </span>
+          {thenAndNowChildren.map(c => (
+            <Link
+              key={c.id}
+              href={`/dashboard/then-and-now?child=${c.id}&q=${encodeURIComponent(searchQuery)}`}
+              className="rounded-full px-3 py-1.5 text-sm font-medium bg-muted text-foreground hover:bg-primary/10 transition-colors"
+            >
+              {`${c.name}'s ${pluralize(searchQuery)}`}
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {!searchQuery && selectedChild && (
+        <SubjectChips childId={selectedChild.id} childName={selectedChild.name} subjects={subjects} />
+      )}
 
       {/* Gallery */}
       <Suspense fallback={<GallerySkeleton count={8} />}>

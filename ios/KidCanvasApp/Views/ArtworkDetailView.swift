@@ -119,6 +119,10 @@ struct ArtworkDetailView: View {
                         AddStoryPrompt { isAddingStory = true }
                     }
 
+                    if let child = artworkChild {
+                        MoreLikeThis(artwork: artwork, child: child)
+                    }
+
                     ReactionBar(artworkId: artwork.id, service: service)
 
                     CommentsSection(artworkId: artwork.id, familyId: artwork.familyId, service: service)
@@ -197,6 +201,11 @@ struct ArtworkDetailView: View {
         }
     }
     
+    /// The joined child, or the family's copy when the row came without one.
+    private var artworkChild: Child? {
+        artwork.child ?? authManager.children.first { $0.id == artwork.childId }
+    }
+
     private func ageText(months: Int) -> String {
         if months >= 12 {
             let years = months / 12
@@ -241,6 +250,39 @@ struct ArtworkDetailView: View {
                 dismiss()
             } catch {
                 print("Error deleting artwork: \(error)")
+            }
+        }
+    }
+}
+
+/// "More like this": the subjects in this piece, each opening the child's
+/// other drawings of it. The words come from this artwork alone, so a subject
+/// with no other matches lands on the "only one so far" state, which is still
+/// worth seeing.
+private struct MoreLikeThis: View {
+    let artwork: Artwork
+    let child: Child
+
+    var body: some View {
+        let subjects = ThenAndNow.subjects(in: artwork, childName: child.name)
+        if !subjects.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                Label("More like this", systemImage: "sparkles")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.secondary)
+                FlowLayout(spacing: 8) {
+                    ForEach(subjects, id: \.self) { subject in
+                        NavigationLink(destination: ThenAndNowView(child: child, term: subject)) {
+                            Text("\(child.name)'s \(ThenAndNow.pluralize(subject))")
+                                .font(.caption.weight(.medium))
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(Color.pink.opacity(0.1))
+                                .foregroundColor(.pink)
+                                .cornerRadius(20)
+                        }
+                    }
+                }
             }
         }
     }

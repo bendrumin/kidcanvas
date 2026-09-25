@@ -57,6 +57,13 @@ struct GalleryView: View {
                             .padding(.top, 4)
                         }
 
+                        ThenAndNowEntryPoints(
+                            artworks: artworks,
+                            children: authManager.children,
+                            selectedChild: selectedChild,
+                            searchText: searchText.trimmed
+                        )
+
                         LazyVGrid(columns: columns, spacing: 20) {
                             ForEach(filteredArtworks) { artwork in
                                 NavigationLink(destination: ArtworkDetailView(artwork: artwork)) {
@@ -155,6 +162,74 @@ struct GalleryView: View {
         }
         
         isLoading = false
+    }
+}
+
+/// Ways into "Then and now" from the gallery. A search offers it for each
+/// artist whose titles or stories mention the term; picking an artist with no
+/// search shows that child's most frequent subjects instead.
+private struct ThenAndNowEntryPoints: View {
+    let artworks: [Artwork]
+    let children: [Child]
+    let selectedChild: Child?
+    let searchText: String
+
+    var body: some View {
+        if !searchText.isEmpty {
+            // The gallery search also matches artist names and tags, which
+            // would offer "Emma's emmas". Only offer children whose own words
+            // mention the term.
+            let candidates = children.filter { child in
+                (selectedChild == nil || selectedChild?.id == child.id)
+                    && artworks.contains { $0.childId == child.id && ThenAndNow.matches($0, term: searchText) }
+            }
+            if !candidates.isEmpty {
+                chipRow(label: "Then and now") {
+                    ForEach(candidates) { child in
+                        chip("\(child.name)'s \(ThenAndNow.pluralize(searchText))", child: child, term: searchText)
+                    }
+                }
+            }
+        } else if let child = selectedChild {
+            let subjects = ThenAndNow.suggestedSubjects(
+                artworks.filter { $0.childId == child.id },
+                childName: child.name
+            )
+            if !subjects.isEmpty {
+                chipRow(label: "\(child.name) then and now") {
+                    ForEach(subjects, id: \.self) { subject in
+                        chip(subject, child: child, term: subject)
+                    }
+                }
+            }
+        }
+    }
+
+    private func chipRow<Content: View>(label: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label(label, systemImage: "sparkles")
+                .font(.footnote.weight(.semibold))
+                .foregroundColor(.secondary)
+                .padding(.horizontal)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    content()
+                }
+                .padding(.horizontal)
+            }
+        }
+        .padding(.top, 8)
+    }
+
+    private func chip(_ text: String, child: Child, term: String) -> some View {
+        NavigationLink(destination: ThenAndNowView(child: child, term: term, artworks: artworks)) {
+            Text(text)
+                .font(.subheadline.weight(.medium))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(Color.pink.opacity(0.1), in: Capsule())
+                .foregroundColor(.pink)
+        }
     }
 }
 
