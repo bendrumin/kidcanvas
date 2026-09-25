@@ -4,10 +4,15 @@ import PhotosUI
 
 struct ScannerView: View {
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var store: StoreManager
     @State private var showScanner = false
     @State private var pendingArtwork: PendingArtwork?
     @State private var selectedItem: PhotosPickerItem?
-    
+    /// Checked when the tab appears, so someone at the free limit learns it
+    /// before scanning and writing a story, not after.
+    @State private var limitBlock: LimitBlock?
+    @State private var paywallBlock: LimitBlock?
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -59,7 +64,17 @@ struct ScannerView: View {
                     
                     // Action buttons
                     VStack(spacing: 16) {
-                        Button(action: { showScanner = true }) {
+                        if let block = limitBlock {
+                            LimitNotice(block: block) { paywallBlock = block }
+                        }
+
+                        Button(action: {
+                            if let block = limitBlock {
+                                paywallBlock = block
+                            } else {
+                                showScanner = true
+                            }
+                        }) {
                             HStack {
                                 Image(systemName: "camera.fill")
                                 Text("Scan Document")
@@ -79,18 +94,14 @@ struct ScannerView: View {
                             .shadow(color: .pink.opacity(0.4), radius: 10, y: 5)
                         }
                         
-                        PhotosPicker(selection: $selectedItem, matching: .images) {
-                            HStack {
-                                Image(systemName: "photo.on.rectangle")
-                                Text("Choose from Photos")
+                        // PhotosPicker opens on tap with no hook to intercept,
+                        // so at the limit it is swapped for a plain button.
+                        if let block = limitBlock {
+                            Button { paywallBlock = block } label: { photosLabel }
+                        } else {
+                            PhotosPicker(selection: $selectedItem, matching: .images) {
+                                photosLabel
                             }
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 56)
-                            .background(Color.cardSurface)
-                            .foregroundColor(.pink)
-                            .cornerRadius(16)
-                            .shadow(color: .black.opacity(0.08), radius: 8, y: 4)
                         }
                     }
                     .padding(.horizontal, 24)
@@ -125,7 +136,57 @@ struct ScannerView: View {
                     pendingArtwork = nil
                 }
             }
+            .sheet(item: $paywallBlock) { block in
+                PaywallView(block: block)
+            }
+            .task(id: store.effectiveTier) { await checkLimit() }
+            .onChange(of: pendingArtwork == nil) { _, closed in
+                // A save just finished; the count may have reached the limit.
+                if closed { Task { await checkLimit() } }
+            }
         }
+    }
+
+    private var photosLabel: some View {
+        HStack {
+            Image(systemName: "photo.on.rectangle")
+            Text("Choose from Photos")
+        }
+        .font(.headline)
+        .frame(maxWidth: .infinity)
+        .frame(height: 56)
+        .background(Color.cardSurface)
+        .foregroundColor(.pink)
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.08), radius: 8, y: 4)
+    }
+
+    private func checkLimit() async {
+        limitBlock = await store.limitBlock(for: .artwork, familyId: authManager.currentFamily?.id)
+    }
+}
+
+/// Inline explanation of a reached limit, with the way forward. Shown where the
+/// blocked action lives, so nobody has to guess why a button does nothing.
+struct LimitNotice: View {
+    let block: LimitBlock
+    let onUpgrade: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(block.title)
+                .font(.subheadline.bold())
+            Text(block.message)
+                .font(.footnote)
+                .foregroundColor(.secondary)
+            Button("See plans", action: onUpgrade)
+                .font(.subheadline.bold())
+                .foregroundColor(.pink)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.cardSurface)
+        .cornerRadius(16)
     }
 }
 
@@ -182,5 +243,6 @@ struct DocumentScannerView: UIViewControllerRepresentable {
 #Preview {
     ScannerView()
         .environmentObject(AuthManager.shared)
+        .environmentObject(StoreManager.shared)
 }
 

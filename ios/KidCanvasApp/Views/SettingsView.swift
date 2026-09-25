@@ -1,5 +1,6 @@
 import SwiftUI
 import UserNotifications
+import StoreKit
 
 /// App settings, reached from the gear on the Profile tab.
 ///
@@ -8,6 +9,7 @@ import UserNotifications
 /// destructive actions, so Profile can stay about the family itself.
 struct SettingsView: View {
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var store: StoreManager
 
     /// "system" | "light" | "dark", applied at the app root.
     @AppStorage("appearance") private var appearance = "system"
@@ -21,6 +23,10 @@ struct SettingsView: View {
     @State private var showDeleteFamily = false
     @State private var familyActionError: String?
     @State private var myRole: String?
+    @State private var showPaywall = false
+    @State private var showManageSubscription = false
+    @State private var isRestoring = false
+    @State private var restoreMessage: String?
 
     private var isOwner: Bool { myRole == "owner" }
 
@@ -57,6 +63,58 @@ struct SettingsView: View {
     private func refreshPushPermission() async {
         let settings = await UNUserNotificationCenter.current().notificationSettings()
         pushDenied = settings.authorizationStatus == .denied
+    }
+
+    private var planSection: some View {
+        Section {
+            HStack {
+                Text("Plan")
+                Spacer()
+                Text(store.effectiveTier.displayName)
+                    .foregroundColor(.secondary)
+            }
+
+            if store.billedByStripe {
+                // Nothing to buy or manage here; a second, App Store
+                // subscription on top of the web one would bill twice.
+                EmptyView()
+            } else if store.effectiveTier == .free {
+                Button("See plans") { showPaywall = true }
+            } else {
+                Button("Manage subscription") { showManageSubscription = true }
+            }
+
+            if !store.billedByStripe {
+                Button {
+                    Task {
+                        isRestoring = true
+                        await store.restore()
+                        isRestoring = false
+                        restoreMessage = store.lastError
+                            ?? "Your \(store.effectiveTier.displayName) plan is active on this account."
+                    }
+                } label: {
+                    HStack {
+                        Text("Restore purchases")
+                        if isRestoring {
+                            Spacer()
+                            ProgressView()
+                        }
+                    }
+                }
+                .disabled(isRestoring)
+            }
+        } header: {
+            Text("Plan")
+        } footer: {
+            if store.billedByStripe {
+                Text("Billed through kidcanvas.app. Change or cancel it there.")
+            } else if store.effectiveTier == .free {
+                Text("The free plan holds 50 artworks and 1 artist. Nothing you've saved is ever removed.")
+            } else {
+                Text("Billed through the App Store. Your plan also applies when you sign in at kidcanvas.app.")
+            }
+        }
     }
 
     var body: some View {
@@ -149,6 +207,8 @@ struct SettingsView: View {
                 }
             }
 
+            planSection
+
             Section("Support") {
                 Link(destination: Config.privacyPolicyURL) {
                     SettingsRow(icon: "lock.fill", title: "Privacy Policy", color: .blue)
@@ -182,6 +242,16 @@ struct SettingsView: View {
                     .familyRole(familyId: family.id)
             }
         }
+        .task { await store.refreshPlan() }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView()
+                .environmentObject(store)
+        }
+        .manageSubscriptionsSheet(isPresented: $showManageSubscription)
+        .alert("Restore purchases",
+               isPresented: .constant(restoreMessage != nil),
+               actions: { Button("OK") { restoreMessage = nil } },
+               message: { Text(restoreMessage ?? "") })
         .alert("Sign Out", isPresented: $showSignOutAlert) {
             Button("Cancel", role: .cancel) {}
             Button("Sign Out", role: .destructive) {
@@ -224,5 +294,6 @@ struct SettingsView: View {
     NavigationStack {
         SettingsView()
             .environmentObject(AuthManager.shared)
+            .environmentObject(StoreManager.shared)
     }
 }

@@ -59,11 +59,9 @@ export async function POST(request: NextRequest) {
           await (supabase
             .from('subscriptions') as any)
             .update({
-              plan_id: 'free',
+              tier: 'free',
               status: 'canceled',
               stripe_subscription_id: null,
-              billing_interval: null,
-              current_period_start: null,
               current_period_end: null,
               cancel_at_period_end: false,
             })
@@ -118,7 +116,6 @@ async function handleSubscriptionChange(
   // without our metadata -- created in the Stripe dashboard, or by an older
   // client -- silently granted a paid plan.
   const planId = subscription.metadata.plan_id || 'free'
-  const interval = subscription.items.data[0]?.plan?.interval || 'month'
 
   // Get user from metadata or customer ID
   let userId = subscription.metadata.supabase_user_id
@@ -141,21 +138,33 @@ async function handleSubscriptionChange(
   const status = mapStripeStatus(subscription.status)
 
   const sub = subscription as any
-  await (supabase
+  // Newer Stripe API versions moved the period onto the subscription item.
+  const periodEnd: number | undefined =
+    sub.current_period_end ?? sub.items?.data?.[0]?.current_period_end
+
+  // The live table's plan column is `tier` (see supabase/schema_baseline.sql).
+  // This wrote `plan_id`, `billing_interval` and `current_period_start`, none of
+  // which exist, and never checked the result, so every paid Stripe upgrade
+  // failed silently and the account stayed on free.
+  const { error } = await (supabase
     .from('subscriptions') as any)
     .upsert({
       user_id: userId,
       stripe_customer_id: customerId,
       stripe_subscription_id: subscription.id,
-      plan_id: status === 'active' || status === 'trialing' ? planId : 'free',
+      tier: status === 'active' || status === 'trialing' ? planId : 'free',
       status: status,
-      billing_interval: interval,
-      current_period_start: sub.current_period_start ? new Date(sub.current_period_start * 1000).toISOString() : null,
-      current_period_end: sub.current_period_end ? new Date(sub.current_period_end * 1000).toISOString() : null,
+      current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
       cancel_at_period_end: sub.cancel_at_period_end ?? false,
     }, {
       onConflict: 'user_id',
     })
+
+  if (error) {
+    // Throwing turns this into a 500, so Stripe retries instead of the upgrade
+    // being lost.
+    throw new Error(`subscriptions upsert failed: ${error.message}`)
+  }
 }
 
 function mapStripeStatus(stripeStatus: Stripe.Subscription.Status): string {

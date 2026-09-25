@@ -86,6 +86,7 @@ struct OnboardingView: View {
         .sheet(isPresented: $showAddChild) {
             AddChildView()
                 .environmentObject(authManager)
+                .environmentObject(StoreManager.shared)
         }
         // Once they have an artist the guide has done its job.
         .onChange(of: authManager.children.count) { _, count in
@@ -126,4 +127,5 @@ private struct OnboardingStep: View {
 #Preview {
     OnboardingView()
         .environmentObject(AuthManager.shared)
+        .environmentObject(StoreManager.shared)
 }

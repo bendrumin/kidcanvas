@@ -6,6 +6,9 @@ struct KidCanvasApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var authManager = AuthManager.shared
     @StateObject private var deepLinks = DeepLinkRouter()
+    /// Created at launch, not on first use, so its Transaction.updates
+    /// listener is running before any renewal or approval can arrive.
+    @StateObject private var store = StoreManager.shared
     /// "system" | "light" | "dark", set from Settings.
     @AppStorage("appearance") private var appearance = "system"
 
@@ -16,6 +19,7 @@ struct KidCanvasApp: App {
                 .environmentObject(deepLinks)
                 // Widget taps: kidcanvas://artwork/<id> and kidcanvas://scan.
                 .onOpenURL { deepLinks.handle($0) }
+                .environmentObject(store)
                 .preferredColorScheme(
                     appearance == "light" ? .light :
                     appearance == "dark" ? .dark : nil
@@ -26,6 +30,7 @@ struct KidCanvasApp: App {
 
 struct ContentView: View {
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var store: StoreManager
     
     var body: some View {
         Group {
@@ -39,6 +44,17 @@ struct ContentView: View {
         }
         .task {
             await authManager.checkSession()
+        }
+        // Plan and entitlements follow the signed-in account, so switching
+        // accounts never carries one person's plan over to the next.
+        .onChange(of: authManager.currentUser?.id) { _, userID in
+            Task {
+                if userID != nil {
+                    await store.start()
+                } else {
+                    store.reset()
+                }
+            }
         }
     }
 }
@@ -75,5 +91,6 @@ struct LoadingView: View {
     ContentView()
         .environmentObject(AuthManager.shared)
         .environmentObject(DeepLinkRouter())
+        .environmentObject(StoreManager.shared)
 }
 

@@ -2,8 +2,12 @@ import SwiftUI
 
 struct AddChildView: View {
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var store: StoreManager
     @Environment(\.dismiss) private var dismiss
-    
+    /// Checked on appear so nobody types a name only to be turned away.
+    @State private var limitBlock: LimitBlock?
+    @State private var paywallBlock: LimitBlock?
+
     @State private var name = ""
     @State private var birthDate = Date()
     @State private var hasBirthDate = false
@@ -84,7 +88,12 @@ struct AddChildView: View {
                             .font(.caption)
                             .foregroundColor(.red)
                     }
-                    
+
+                    if let block = limitBlock {
+                        LimitNotice(block: block) { paywallBlock = block }
+                            .padding(.horizontal)
+                    }
+
                     Spacer()
                     
                     // Save Button
@@ -122,15 +131,31 @@ struct AddChildView: View {
         }
         .navigationTitle("Add Artist")
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $paywallBlock) { block in
+            PaywallView(block: block)
+                .environmentObject(store)
+        }
+        .task(id: store.effectiveTier) {
+            limitBlock = await store.limitBlock(for: .child, familyId: authManager.currentFamily?.id)
+        }
     }
-    
+
     private func saveChild() {
         guard let familyId = authManager.currentFamily?.id else { return }
-        
+
         Task {
             isLoading = true
             errorMessage = nil
-            
+
+            // Same rule as the web's add-child button, which asks
+            // /api/limits/check first. Existing artists are never affected.
+            if let block = await store.limitBlock(for: .child, familyId: familyId) {
+                limitBlock = block
+                paywallBlock = block
+                isLoading = false
+                return
+            }
+
             do {
                 var birthDateString: String?
                 if hasBirthDate {
@@ -182,6 +207,7 @@ struct NewChildPayload: Encodable {
     NavigationStack {
         AddChildView()
             .environmentObject(AuthManager.shared)
+            .environmentObject(StoreManager.shared)
     }
 }
 

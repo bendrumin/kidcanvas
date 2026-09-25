@@ -9,6 +9,12 @@ enum Config {
     /// Public storage bucket that artwork images upload into.
     static let artworkBucket = "artworks"
 
+    /// The Next.js app. The app calls it only to hand StoreKit transactions to
+    /// /api/app-store/verify, where Apple's signature is checked server side.
+    static let apiBaseURL = URL(string: "https://kidcanvas.app")!
+
     static let privacyPolicyURL = URL(string: "https://kidcanvas.app/privacy")!
+    /// Linked from the paywall; App Review 3.1.2 requires Terms of Use there.
+    static let termsURL = URL(string: "https://kidcanvas.app/terms")!
     static let supportURL = URL(string: "https://kidcanvas.app/support")!
 }

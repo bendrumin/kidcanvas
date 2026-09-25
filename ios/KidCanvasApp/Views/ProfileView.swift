@@ -313,6 +313,7 @@ struct SettingsRow: View {
 #Preview {
     ProfileView()
         .environmentObject(AuthManager.shared)
+        .environmentObject(StoreManager.shared)
 }
 
 /// Who else is in this family, and a way to remove them.
