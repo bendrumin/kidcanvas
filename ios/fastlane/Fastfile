@@ -388,8 +388,19 @@ platform :ios do
       parsed
     end
 
+    # get_edit_app_store_version returns nil once a version is locked for
+    # review, so fall back to whatever the newest version record is.
     v = app.get_edit_app_store_version
-    UI.important("Version: #{v.version_string} (#{v.app_store_state})")
+    if v.nil?
+      newest = asc.call("apps/#{app.id}/appStoreVersions?limit=3")["data"]&.first
+      UI.important("Version: #{newest&.dig('attributes','versionString')} (#{newest&.dig('attributes','appStoreState')}) — locked, not editable")
+      UI.message("  release type: #{newest&.dig('attributes','releaseType')}")
+      v = Struct.new(:id).new(newest&.dig("id"))
+    else
+      UI.important("Version: #{v.version_string} (#{v.app_store_state})")
+      rt = asc.call("appStoreVersions/#{v.id}")&.dig("data","attributes","releaseType")
+      UI.message("  release type: #{rt}")
+    end
     build = asc.call("appStoreVersions/#{v.id}/build")["data"]
     UI.message("  attached build: #{build ? build.dig('attributes', 'version') : 'NONE (the release lane attaches one)'}")
 
@@ -420,9 +431,10 @@ platform :ios do
     avail = asc.call("apps/#{app.id}/appAvailabilityV2?include=territoryAvailabilities&limit[territoryAvailabilities]=1")
     UI.important("Availability: #{avail['data'] ? 'configured' : 'NOT SET'}")
 
-    usages = asc.call("apps/#{app.id}/dataUsages?limit=200")
-    n = (usages["data"] || []).count
-    UI.important("Privacy labels: #{n.zero? ? 'MISSING (blocks submission)' : "#{n} declaration(s)"}")
+    # Apple exposes no REST path for privacy nutrition labels (every candidate
+    # 404s), so this cannot be read back. It is set by hand in App Store
+    # Connect once; app_privacy_details.json is the answer sheet.
+    UI.important("Privacy labels: not readable via API — check App Store Connect > App Privacy")
   end
 
 
