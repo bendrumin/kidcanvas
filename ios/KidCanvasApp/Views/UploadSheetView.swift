@@ -283,6 +283,21 @@ struct UploadSheetView: View {
                     .insert(payload)
                     .execute()
 
+                // The feed may not reload for a while after a scan, so the new
+                // drawing goes on the widget now, from the thumbnail in hand.
+                WidgetSnapshotWriter.saveLatest(
+                    WidgetArtwork(
+                        id: artworkId,
+                        title: title,
+                        story: payload.story,
+                        childName: child.name,
+                        ageLabel: AgeLabel.text(storedMonths: nil, birthDate: child.birthDate, madeOn: createdDate),
+                        createdDate: createdDate,
+                        isFavorite: false
+                    ),
+                    imageData: thumbnailData
+                )
+
                 showSuccess = true
 
             } catch {

@@ -32,6 +32,19 @@ struct ArtworkService {
             .value
     }
 
+    /// One artwork by id, for opening the app from the widget. RLS limits this
+    /// to families the user belongs to, so a stale link from a previous
+    /// account fails instead of leaking.
+    func artwork(id: UUID) async throws -> Artwork {
+        try await client
+            .from("artworks")
+            .select("*, children(*)")
+            .eq("id", value: id.uuidString)
+            .single()
+            .execute()
+            .value
+    }
+
     // MARK: - Reactions
 
     func reactionCounts(artworkId: UUID) async throws -> [ReactionCount] {

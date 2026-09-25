@@ -4,6 +4,7 @@ import Supabase
 @main
 struct KidCanvasApp: App {
     @StateObject private var authManager = AuthManager.shared
+    @StateObject private var deepLinks = DeepLinkRouter()
     /// "system" | "light" | "dark", set from Settings.
     @AppStorage("appearance") private var appearance = "system"
 
@@ -11,6 +12,9 @@ struct KidCanvasApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(authManager)
+                .environmentObject(deepLinks)
+                // Widget taps: kidcanvas://artwork/<id> and kidcanvas://scan.
+                .onOpenURL { deepLinks.handle($0) }
                 .preferredColorScheme(
                     appearance == "light" ? .light :
                     appearance == "dark" ? .dark : nil
@@ -69,5 +73,6 @@ struct LoadingView: View {
 #Preview {
     ContentView()
         .environmentObject(AuthManager.shared)
+        .environmentObject(DeepLinkRouter())
 }
 

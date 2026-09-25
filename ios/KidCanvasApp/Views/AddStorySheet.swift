@@ -91,6 +91,7 @@ struct AddStorySheet: View {
         Task {
             do {
                 try await service.updateStory(story.trimmed, artworkId: artwork.id)
+                WidgetSnapshotWriter.updateStory(story.trimmed, artworkId: artwork.id)
                 dismiss()
             } catch {
                 errorMessage = error.localizedDescription
