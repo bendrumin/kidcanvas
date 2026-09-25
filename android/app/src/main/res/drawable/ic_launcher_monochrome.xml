@@ -1,0 +1,20 @@
+<!--
+  Themed-icon layer (Android 13+). The launcher tints it and reads only alpha,
+  so a filled card would erase everything drawn on it: the card is an outline
+  here and the marks inside are solid.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="1024" android:viewportHeight="1024">
+    <group android:pivotX="512" android:pivotY="512" android:scaleX="0.66" android:scaleY="0.66" android:rotation="3.5">
+        <path android:strokeColor="#FFFFFF" android:strokeWidth="30"
+            android:pathData="M258,212H766A56,56 0,0 1,822 268V756A56,56 0,0 1,766 812H258A56,56 0,0 1,202 756V268A56,56 0,0 1,258 212Z" />
+        <path android:fillColor="#FFFFFF" android:pathData="M690,345m-64,0a64,64 0,1 1,128 0a64,64 0,1 1,-128 0" />
+        <path android:strokeColor="#FFFFFF" android:strokeWidth="22" android:strokeLineCap="round"
+            android:pathData="M690,255L690,220M626.4,281.4L601.6,256.6M753.6,281.4L778.4,256.6M600,345L565,345M780,345L812,345" />
+        <path android:strokeColor="#FFFFFF" android:strokeWidth="30" android:strokeLineCap="round" android:strokeLineJoin="round"
+            android:pathData="M257,578C290,535 320,515 355,528S420,585 452,586S520,522 556,518S650,598 700,604S745,596 758,583" />
+        <path android:strokeColor="#FFFFFF" android:strokeWidth="30" android:strokeLineCap="round" android:strokeLineJoin="round"
+            android:pathData="M250,697C300,655 362,640 440,714C500,662 562,650 640,718" />
+    </group>
+</vector>
