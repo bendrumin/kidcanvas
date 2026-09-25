@@ -11,7 +11,8 @@ struct MainTabView: View {
     /// empty gallery, which is at least honest, and the upload sheet now explains
     /// itself too.
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
-    
+    @ObservedObject private var push = PushNotifications.shared
+
     var body: some View {
         TabView(selection: $selectedTab) {
             FeedView()
@@ -70,6 +71,25 @@ struct MainTabView: View {
                 showOnboarding = true
                 hasSeenOnboarding = true
             }
+            await push.registerIfAuthorized()
+            // A tap that cold-launched the app landed before this view existed.
+            await openPendingArtwork()
+        }
+        .onChange(of: push.pendingArtworkID) { _, _ in
+            Task { await openPendingArtwork() }
+        }
+    }
+
+    /// Opens the artwork from a tapped family notification as a sheet over
+    /// whichever tab is showing, so the tap lands on the drawing itself rather
+    /// than on a feed the user then has to scroll.
+    private func openPendingArtwork() async {
+        guard let id = push.pendingArtworkID else { return }
+        push.pendingArtworkID = nil
+        let service = ArtworkService(client: authManager.client)
+        if let artwork = try? await service.artwork(id: id) {
+            showOnboarding = false
+            linkedArtwork = artwork
         }
     }
 
@@ -83,7 +103,7 @@ struct MainTabView: View {
             selectedTab = 0
             // A deleted artwork or one from another family just leaves the
             // user on the feed, which is where the widget's content lives.
-            linkedArtwork = try? await ArtworkService(client: authManager.client).artwork(id: id)
+            linkedArtwork = (try? await ArtworkService(client: authManager.client).artwork(id: id)) ?? nil
         }
         // Cleared only after the fetch: pending is this task's id, so
         // clearing it first would cancel the request it is waiting on.

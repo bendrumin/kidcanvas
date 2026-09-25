@@ -98,6 +98,9 @@ struct FamilyInviteView: View {
                 await authManager.loadFamily()
                 joinMessage = "You're in! Pull down on the gallery to refresh."
                 joinCode = ""
+                // Someone who just joined a family is exactly who wants to
+                // hear when the next drawing arrives, so this is when to ask.
+                await PushNotifications.shared.requestPermissionAndRegister()
             } catch {
                 joinMessage = error.localizedDescription
             }

@@ -41,3 +41,81 @@ ios/
 - Uploads write a full-size JPEG plus a 500px thumbnail.
 - The document scanner (VisionKit) requires a real device — the simulator has
   no camera. The photo-picker path works everywhere.
+
+## Family push notifications
+
+Family members get a push when someone adds artwork, and the uploader (plus
+the family's owners and parents) get one when someone comments or reacts. The
+person who acted never gets one. Each user can switch either kind off in
+Settings, under Family notifications.
+
+How it flows:
+
+1. The app asks for permission after the first saved artwork or after joining
+   a family, never at launch, then sends its APNs token to the
+   `register_push_device` function (`push_devices` table).
+2. An `AFTER INSERT` trigger on `artworks`, `artwork_comments`, and
+   `artwork_reactions` posts `{table, id}` to `/api/notify` through `pg_net`.
+   A trigger rather than client calls because iOS writes straight to Postgres
+   and the web writes comments and reactions from the browser; the trigger
+   covers every write path.
+3. `/api/notify` checks the shared secret, re-reads the row with the service
+   role, works out the family and recipients from the database, and sends via
+   APNs HTTP/2 (`lib/push/apns.ts`). Tokens Apple reports as dead are deleted.
+4. Tapping a notification opens that artwork as a sheet.
+
+Nothing is sent until every step below is done. Until then the trigger and the
+route both quietly do nothing.
+
+### Owner checklist
+
+1. **APNs key.** Apple Developer portal, Certificates, Identifiers & Profiles,
+   Keys, add a key with "Apple Push Notifications service (APNs)" enabled.
+   Download the `.p8` (it can only be downloaded once) and note its Key ID.
+2. **App ID capability.** In Xcode, open the KidCanvas target's Signing &
+   Capabilities tab and confirm Push Notifications is listed (the project now
+   points at `KidCanvas.entitlements`). With automatic signing, the next
+   device build or archive adds the capability to the `Siegel.KidCanvas` App
+   ID and refreshes the profile. If it complains, enable Push Notifications on
+   the App ID in the portal by hand.
+3. **Vercel env vars** on the project that serves the Next.js app (Production,
+   and Preview if you test there):
+   - `APNS_KEY_ID`: the Key ID from step 1
+   - `APNS_TEAM_ID`: `5ANRA6JZC2`
+   - `APNS_KEY`: the full contents of the `.p8`, including the BEGIN and END
+     lines
+   - `APNS_BUNDLE_ID`: `Siegel.KidCanvas`
+   - `PUSH_NOTIFY_SECRET`: a long random string, for example from
+     `openssl rand -hex 32`
+   - `SUPABASE_SERVICE_ROLE_KEY` and `NEXT_PUBLIC_SUPABASE_URL` are already
+     required by other routes; confirm they are set.
+
+   Redeploy so the route picks them up. The route must be reachable at
+   `https://<your domain>/api/notify`. This README says the web app is
+   offline, so check that the Next.js app is still deployed somewhere; if
+   only the static `site/` is live, deploy the repo root as its own Vercel
+   project for the API.
+4. **Apply migration 012** (`supabase/migrations/012_push_devices.sql`) in the
+   SQL editor. It enables `pg_net`, creates the tables, the RLS policies,
+   the registration function, and the triggers.
+5. **Point the trigger at the route** by storing two Vault secrets, in the SQL
+   editor:
+
+   ```sql
+   select vault.create_secret('https://<your domain>/api/notify', 'push_notify_url');
+   select vault.create_secret('<same value as PUSH_NOTIFY_SECRET>', 'push_notify_secret');
+   ```
+
+   No dashboard Database Webhook is needed; the trigger in 012 is the
+   webhook, and keeping it in a migration means the repo shows it exists.
+6. **Verify.** Install a Debug build on a real device (the simulator cannot
+   receive remote pushes from APNs), sign in, save an artwork, and allow
+   notifications. Then run
+   `select user_id, environment from push_devices;` and expect a `sandbox`
+   row. Have a second account in the same family comment on it. If nothing
+   arrives, `select status_code, content from net._http_response order by
+   created desc limit 5;` shows what `/api/notify` answered, and the Vercel
+   function log shows APNs errors.
+
+Debug builds register as `sandbox` and TestFlight/App Store builds as
+`production`; the server picks the matching APNs host per device.

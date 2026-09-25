@@ -363,6 +363,54 @@ export type Database = {
           },
         ]
       }
+      notification_preferences: {
+        Row: {
+          comments_reactions: boolean
+          new_artwork: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comments_reactions?: boolean
+          new_artwork?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comments_reactions?: boolean
+          new_artwork?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      push_devices: {
+        Row: {
+          created_at: string
+          environment: string
+          id: string
+          token: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          environment: string
+          id?: string
+          token: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          environment?: string
+          id?: string
+          token?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       share_links: {
         Row: {
           code: string

@@ -3,6 +3,7 @@ import Supabase
 
 @main
 struct KidCanvasApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var authManager = AuthManager.shared
     @StateObject private var deepLinks = DeepLinkRouter()
     /// "system" | "light" | "dark", set from Settings.

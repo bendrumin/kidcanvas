@@ -183,7 +183,9 @@ when each early build was uploaded. Evidence of first use of the name.
 
 Upload metadata and screenshots to App Store Connect. No binary.
 
-Options: force:true skips the HTML preview; skip_screenshots:true for text only.
+Options: force:true skips the HTML preview; skip_screenshots:true for text only;
+
+app_version:1.0.1 creates that version on App Store Connect if it does not exist.
 
 ----
 

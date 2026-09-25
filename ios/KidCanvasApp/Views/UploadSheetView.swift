@@ -324,6 +324,12 @@ struct UploadSheetView: View {
 
                 showSuccess = true
 
+                // After the first save the ask makes sense on its own: they
+                // just shared something and will want to know when family
+                // reacts. Later saves find permission already decided, and
+                // this only refreshes the token.
+                Task { await PushNotifications.shared.requestPermissionAndRegister() }
+
             } catch {
                 errorMessage = error.localizedDescription
             }

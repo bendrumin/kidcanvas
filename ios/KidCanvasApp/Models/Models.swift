@@ -167,3 +167,16 @@ struct ArtworkComment: Codable, Identifiable {
     }
 }
 
+/// Per-user switches for family push notifications (notification_preferences).
+struct NotificationPreferences: Codable, Equatable {
+    var newArtwork: Bool
+    var commentsReactions: Bool
+
+    static let defaults = NotificationPreferences(newArtwork: true, commentsReactions: true)
+
+    enum CodingKeys: String, CodingKey {
+        case newArtwork = "new_artwork"
+        case commentsReactions = "comments_reactions"
+    }
+}
+
