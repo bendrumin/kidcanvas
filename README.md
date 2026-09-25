@@ -87,6 +87,14 @@ SMTP_PASSWORD=
 
 # Optional: gates the /dashboard/admin page and the admin delete endpoint
 ADMIN_EMAIL=
+
+# Optional: family push notifications (/api/notify). Setup steps are in
+# ios/README.md under "Family push notifications".
+APNS_KEY_ID=
+APNS_TEAM_ID=
+APNS_KEY=
+APNS_BUNDLE_ID=Siegel.KidCanvas
+PUSH_NOTIFY_SECRET=
 ```
 
 ## Project Structure

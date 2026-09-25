@@ -32,6 +32,54 @@ struct ArtworkService {
             .value
     }
 
+    /// One artwork by id, for opening a tapped notification. RLS returns
+    /// nothing if the user has since left that family, which is the right
+    /// answer: the tap then just opens the app.
+    func artwork(id: UUID) async throws -> Artwork? {
+        let rows: [Artwork] = try await client
+            .from("artworks")
+            .select("*, children(*)")
+            .eq("id", value: id.uuidString)
+            .limit(1)
+            .execute()
+            .value
+        return rows.first
+    }
+
+    // MARK: - Notification preferences
+
+    /// The signed-in user's push switches. No row means both are on, matching
+    /// the server's default, so a new user never has to save before hearing
+    /// from their family.
+    func notificationPreferences() async -> NotificationPreferences {
+        guard let userId = currentUserID else { return .defaults }
+        let rows: [NotificationPreferences]? = try? await client
+            .from("notification_preferences")
+            .select("new_artwork, comments_reactions")
+            .eq("user_id", value: userId.uuidString)
+            .limit(1)
+            .execute()
+            .value
+        return rows?.first ?? .defaults
+    }
+
+    func saveNotificationPreferences(_ prefs: NotificationPreferences) async throws {
+        guard let userId = currentUserID else { return }
+        struct Row: Encodable {
+            let user_id: String
+            let new_artwork: Bool
+            let comments_reactions: Bool
+        }
+        try await client
+            .from("notification_preferences")
+            .upsert(Row(
+                user_id: userId.uuidString,
+                new_artwork: prefs.newArtwork,
+                comments_reactions: prefs.commentsReactions
+            ), onConflict: "user_id")
+            .execute()
+    }
+
     // MARK: - Reactions
 
     func reactionCounts(artworkId: UUID) async throws -> [ReactionCount] {

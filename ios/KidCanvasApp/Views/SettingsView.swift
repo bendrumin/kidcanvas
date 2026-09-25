@@ -1,4 +1,5 @@
 import SwiftUI
+import UserNotifications
 
 /// App settings, reached from the gear on the Profile tab.
 ///
@@ -22,6 +23,41 @@ struct SettingsView: View {
     @State private var myRole: String?
 
     private var isOwner: Bool { myRole == "owner" }
+
+    /// Family push switches. Stored in Supabase rather than AppStorage because
+    /// the server decides who to notify; a device-local flag could not stop it.
+    @State private var pushPrefs = NotificationPreferences.defaults
+    /// True when iOS-level permission was refused, so the switches cannot help.
+    @State private var pushDenied = false
+
+    /// Saves on every flip. Turning a switch on is also a clear moment to ask
+    /// for permission if it was never requested.
+    private func preferenceBinding(_ keyPath: WritableKeyPath<NotificationPreferences, Bool>) -> Binding<Bool> {
+        Binding(
+            get: { pushPrefs[keyPath: keyPath] },
+            set: { newValue in
+                let previous = pushPrefs
+                pushPrefs[keyPath: keyPath] = newValue
+                let toSave = pushPrefs
+                Task {
+                    do {
+                        try await ArtworkService(client: authManager.client)
+                            .saveNotificationPreferences(toSave)
+                        if newValue { await PushNotifications.shared.requestPermissionAndRegister() }
+                        await refreshPushPermission()
+                    } catch {
+                        pushPrefs = previous
+                        familyActionError = error.localizedDescription
+                    }
+                }
+            }
+        )
+    }
+
+    private func refreshPushPermission() async {
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        pushDenied = settings.authorizationStatus == .denied
+    }
 
     var body: some View {
         List {
@@ -55,6 +91,26 @@ struct SettingsView: View {
                 Text("Reminders")
             } footer: {
                 Text("A nudge if it's been a week since the last artwork, and one before each child's birthday. Scheduled on this device; nothing leaves your phone.")
+            }
+
+            Section {
+                Toggle("New artwork", isOn: preferenceBinding(\.newArtwork))
+                Toggle("Comments and reactions", isOn: preferenceBinding(\.commentsReactions))
+                if pushDenied {
+                    Button("Turn on notifications in iOS Settings") {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(url)
+                        }
+                    }
+                }
+            } header: {
+                Text("Family notifications")
+            } footer: {
+                if pushDenied {
+                    Text("Notifications are off for KidCanvas, so these switches have no effect until you turn them on.")
+                } else {
+                    Text("New artwork tells you when someone in your family adds a drawing. Comments and reactions tells you when someone responds to artwork you added.")
+                }
             }
 
             if let family = authManager.currentFamily {
@@ -119,6 +175,8 @@ struct SettingsView: View {
         .scrollContentBackground(.hidden)
         .background(Color.paperBackground.ignoresSafeArea())
         .task {
+            pushPrefs = await ArtworkService(client: authManager.client).notificationPreferences()
+            await refreshPushPermission()
             if let family = authManager.currentFamily {
                 myRole = await ArtworkService(client: authManager.client)
                     .familyRole(familyId: family.id)

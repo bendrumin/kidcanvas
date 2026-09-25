@@ -8,7 +8,9 @@ struct MainTabView: View {
     /// empty gallery, which is at least honest, and the upload sheet now explains
     /// itself too.
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
-    
+    @ObservedObject private var push = PushNotifications.shared
+    @State private var notificationArtwork: Artwork?
+
     var body: some View {
         TabView(selection: $selectedTab) {
             FeedView()
@@ -46,6 +48,17 @@ struct MainTabView: View {
             OnboardingView()
                 .environmentObject(authManager)
         }
+        .sheet(item: $notificationArtwork) { artwork in
+            NavigationStack {
+                ArtworkDetailView(artwork: artwork)
+                    .environmentObject(authManager)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button("Done") { notificationArtwork = nil }
+                        }
+                    }
+            }
+        }
         .task {
             // children is loaded by AuthManager after sign-in; a family with none
             // has nothing to look at and cannot upload yet.
@@ -53,6 +66,25 @@ struct MainTabView: View {
                 showOnboarding = true
                 hasSeenOnboarding = true
             }
+            await push.registerIfAuthorized()
+            // A tap that cold-launched the app landed before this view existed.
+            await openPendingArtwork()
+        }
+        .onChange(of: push.pendingArtworkID) { _, _ in
+            Task { await openPendingArtwork() }
+        }
+    }
+
+    /// Opens the artwork from a tapped family notification as a sheet over
+    /// whichever tab is showing, so the tap lands on the drawing itself rather
+    /// than on a feed the user then has to scroll.
+    private func openPendingArtwork() async {
+        guard let id = push.pendingArtworkID else { return }
+        push.pendingArtworkID = nil
+        let service = ArtworkService(client: authManager.client)
+        if let artwork = try? await service.artwork(id: id) {
+            showOnboarding = false
+            notificationArtwork = artwork
         }
     }
 }

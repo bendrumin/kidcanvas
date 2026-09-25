@@ -154,6 +154,8 @@ class AuthManager: ObservableObject {
     }
 
     func signOut() async throws {
+        // Before signOut, while RLS still recognises this user as the owner.
+        await PushNotifications.shared.unregisterCurrentDevice(client: supabase)
         try await supabase.auth.signOut()
         isAuthenticated = false
         currentUser = nil

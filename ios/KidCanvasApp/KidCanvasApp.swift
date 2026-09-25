@@ -3,6 +3,7 @@ import Supabase
 
 @main
 struct KidCanvasApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var authManager = AuthManager.shared
     /// "system" | "light" | "dark", set from Settings.
     @AppStorage("appearance") private var appearance = "system"
