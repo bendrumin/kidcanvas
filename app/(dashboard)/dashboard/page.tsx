@@ -138,6 +138,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       <GalleryHeader
         initialCount={artworks?.length || 0}
         canEdit={membership.role === 'owner' || membership.role === 'parent'}
+        childrenList={children || []}
+        planId={limits.planId}
       />
 
       {/* Usage Warnings */}

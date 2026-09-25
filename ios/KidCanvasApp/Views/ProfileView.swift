@@ -79,6 +79,25 @@ struct ProfileView: View {
 
                                 Divider()
 
+                                // Sits beside the artists because a quote book is
+                                // one child's words; the view asks which child.
+                                if !authManager.children.isEmpty {
+                                    NavigationLink(destination: QuoteBookView()) {
+                                        HStack {
+                                            Image(systemName: "quote.opening")
+                                            Text("Quote book")
+                                            Spacer()
+                                            Image(systemName: "chevron.right")
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        }
+                                        .font(.subheadline.bold())
+                                        .foregroundColor(.pink)
+                                    }
+
+                                    Divider()
+                                }
+
                                 NavigationLink(destination: FamilyInviteView()) {
                                     HStack {
                                         Image(systemName: "person.2.badge.plus")

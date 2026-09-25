@@ -35,6 +35,10 @@ const howTos = [
     q: 'Make an art book',
     a: 'On the web, select artworks in the gallery and choose Create Book to get a print-ready PDF with the stories included. Art books are part of the Family plan.',
   },
+  {
+    q: 'Make a quote book',
+    a: 'On the web, choose Quote book at the top of the gallery, then pick an artist and a year. You get a PDF with one page for each story, their words set large with the drawing underneath. Only artwork with a story goes in. On iPhone: Profile, then Quote book, and share or print it from there. Quote books on the web are part of the Family plan.',
+  },
 ]
 
 const faqs = [
