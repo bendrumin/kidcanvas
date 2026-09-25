@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     // request. Previously both priceId and planId came straight off the body:
     // priceId was handed to Stripe unchecked, and planId was written into
     // subscription metadata, which the webhook reads to set subscriptions
-    // .plan_id and therefore the account's limits. A caller could pick any
+    // .tier and therefore the account's limits. A caller could pick any
     // price in this Stripe account -- it also holds ChoreStar's products and
     // several $15 test prices -- and pair it with planId 'pro' to buy Pro
     // entitlements at someone else's price.
@@ -79,7 +79,8 @@ export async function POST(request: NextRequest) {
         .upsert({
           user_id: user.id,
           stripe_customer_id: customerId,
-          plan_id: 'free',
+          // The live column is `tier`; `plan_id` does not exist.
+          tier: 'free',
           status: 'active',
         }, {
           onConflict: 'user_id',
