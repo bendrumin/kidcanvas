@@ -2,7 +2,10 @@ import SwiftUI
 
 struct MainTabView: View {
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var deepLinks: DeepLinkRouter
     @State private var selectedTab = 0
+    /// The artwork a widget tap asked for, shown over whichever tab is open.
+    @State private var linkedArtwork: Artwork?
     @State private var showOnboarding = false
     /// Only nag once per install. Someone who taps "I'll do this later" gets an
     /// empty gallery, which is at least honest, and the upload sheet now explains
@@ -46,6 +49,20 @@ struct MainTabView: View {
             OnboardingView()
                 .environmentObject(authManager)
         }
+        .sheet(item: $linkedArtwork) { artwork in
+            NavigationStack {
+                ArtworkDetailView(artwork: artwork)
+                    .environmentObject(authManager)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button("Done") { linkedArtwork = nil }
+                        }
+                    }
+            }
+        }
+        // task(id:) rather than onChange: it also runs on first appearance,
+        // which is when a link from a cold launch is waiting.
+        .task(id: deepLinks.pending) { await openPendingLink() }
         .task {
             // children is loaded by AuthManager after sign-in; a family with none
             // has nothing to look at and cannot upload yet.
@@ -55,10 +72,28 @@ struct MainTabView: View {
             }
         }
     }
+
+    private func openPendingLink() async {
+        guard let destination = deepLinks.pending else { return }
+        switch destination {
+        case .scan:
+            linkedArtwork = nil
+            selectedTab = 1
+        case .artwork(let id):
+            selectedTab = 0
+            // A deleted artwork or one from another family just leaves the
+            // user on the feed, which is where the widget's content lives.
+            linkedArtwork = try? await ArtworkService(client: authManager.client).artwork(id: id)
+        }
+        // Cleared only after the fetch: pending is this task's id, so
+        // clearing it first would cancel the request it is waiting on.
+        deepLinks.pending = nil
+    }
 }
 
 #Preview {
     MainTabView()
         .environmentObject(AuthManager.shared)
+        .environmentObject(DeepLinkRouter())
 }
 

@@ -45,8 +45,18 @@ struct FeedView: View {
             isLoading = false
             return
         }
-        artworks = (try? await service.artworks(familyId: familyId)) ?? []
+        guard let loaded = try? await service.artworks(familyId: familyId) else {
+            isLoading = false
+            return
+        }
+        artworks = loaded
         isLoading = false
+
+        // Unstructured so pull-to-refresh ends when the feed is ready, not
+        // after the widget's images have downloaded. A failed load returns
+        // above, so a network blip never blanks the widget.
+        let service = service
+        Task { await WidgetSnapshotWriter.update(from: loaded, service: service) }
     }
 }
 

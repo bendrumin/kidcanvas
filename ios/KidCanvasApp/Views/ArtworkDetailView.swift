@@ -197,16 +197,10 @@ struct ArtworkDetailView: View {
         }
     }
     
+    /// Shared with the widget so the home screen and this screen word ages the
+    /// same way.
     private func ageText(months: Int) -> String {
-        if months >= 12 {
-            let years = months / 12
-            let remainingMonths = months % 12
-            if remainingMonths > 0 {
-                return "\(years)y \(remainingMonths)m"
-            }
-            return "\(years) year\(years == 1 ? "" : "s")"
-        }
-        return "\(months) month\(months == 1 ? "" : "s")"
+        AgeLabel.text(months: months)
     }
     
     private func toggleFavorite() {

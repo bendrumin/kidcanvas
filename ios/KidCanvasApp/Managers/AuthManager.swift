@@ -78,6 +78,9 @@ class AuthManager: ObservableObject {
             try? await supabase.auth.signOut()
             isAuthenticated = false
             currentUser = nil
+            // The widget would otherwise keep showing a family this phone is
+            // no longer signed in to.
+            WidgetSnapshotWriter.clear()
         }
 
         isLoading = false
@@ -148,6 +151,7 @@ class AuthManager: ObservableObject {
 
         currentFamily = nil
         children = []
+        WidgetSnapshotWriter.clear()
         // Let the first-run guide reappear for the fresh family.
         UserDefaults.standard.removeObject(forKey: "hasSeenOnboarding")
         await loadFamily()
@@ -159,6 +163,9 @@ class AuthManager: ObservableObject {
         currentUser = nil
         currentFamily = nil
         children = []
+        // A shared family iPad should not keep the last family's drawings on
+        // its home screen after they sign out.
+        WidgetSnapshotWriter.clear()
     }
 
     /// Permanently deletes the account and everything it owns
@@ -182,6 +189,7 @@ class AuthManager: ObservableObject {
         currentUser = nil
         currentFamily = nil
         children = []
+        WidgetSnapshotWriter.clear()
     }
 
     func loadFamily() async {
