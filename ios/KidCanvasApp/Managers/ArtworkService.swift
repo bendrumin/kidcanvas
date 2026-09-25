@@ -45,6 +45,20 @@ struct ArtworkService {
             .value
     }
 
+    /// Every artwork of one child that has a story, oldest first, for the quote
+    /// book. Ordered by created_date (when it was drawn), not uploaded_at, so a
+    /// batch of old drawings scanned in December still lands in the right month.
+    func storiedArtworks(childId: UUID) async throws -> [Artwork] {
+        try await client
+            .from("artworks")
+            .select("*, children(*)")
+            .eq("child_id", value: childId.uuidString)
+            .not("story", operator: .is, value: "null")
+            .order("created_date", ascending: true)
+            .execute()
+            .value
+    }
+
     // MARK: - Reactions
 
     func reactionCounts(artworkId: UUID) async throws -> [ReactionCount] {
