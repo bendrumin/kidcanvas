@@ -203,6 +203,18 @@ Attach the newest processed build to the internal tester groups.
 
 Internal testers need no beta review, so this is the fast path to a device.
 
+### ios subscriptions
+
+```sh
+[bundle exec] fastlane ios subscriptions
+```
+
+Mirror KidCanvas.storekit into App Store Connect: the subscription group,
+
+four products, en-US copy, prices in every territory, availability, and
+
+the Server Notifications V2 URL. Idempotent; safe to re-run.
+
 ### ios metadata
 
 ```sh
