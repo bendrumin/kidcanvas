@@ -624,6 +624,132 @@ platform :ios do
     end
   end
 
+
+
+
+  desc "Turn on the Developer Portal capabilities the widget and push need."
+  desc "Additive and idempotent; prints what it changed."
+  lane :enable_capabilities do
+    token = Spaceship::ConnectAPI::Token.create(**asc_api_key)
+    require "net/http"
+    require "json"
+    call = lambda do |method, path, body = nil|
+      uri = URI("https://api.appstoreconnect.apple.com/v1/#{path}")
+      klass = { "GET" => Net::HTTP::Get, "POST" => Net::HTTP::Post, "PATCH" => Net::HTTP::Patch }[method]
+      req = klass.new(uri)
+      req["Authorization"] = "Bearer #{token.text}"
+      if body
+        req["Content-Type"] = "application/json"
+        req.body = JSON.dump(body)
+      end
+      res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(req) }
+      parsed = res.body.to_s.empty? ? {} : JSON.parse(res.body)
+      [res.code.to_i, parsed]
+    end
+
+    want = {
+      "Siegel.KidCanvas" => %w[PUSH_NOTIFICATIONS APP_GROUPS],
+      "Siegel.KidCanvas.Widget" => %w[APP_GROUPS],
+    }
+
+    want.each do |identifier, capabilities|
+      code, body = call.call("GET", "bundleIds?filter[identifier]=#{identifier}&include=bundleIdCapabilities&limit=5")
+      entry = (body["data"] || []).find { |b| b.dig("attributes", "identifier") == identifier }
+
+      if entry.nil?
+        UI.important("#{identifier}: not registered, creating")
+        code, body = call.call("POST", "bundleIds", {
+          data: { type: "bundleIds", attributes: {
+            identifier: identifier,
+            name: identifier.tr(".", " "),
+            platform: "IOS",
+          } }
+        })
+        if code.between?(200, 299)
+          entry = body["data"]
+          UI.success("  created #{identifier}")
+        else
+          UI.error("  create failed: #{(body['errors'] || []).map { |e| e['detail'] }.join('; ')[0, 200]}")
+          next
+        end
+      end
+
+      existing = (body["included"] || []).map { |c| c.dig("attributes", "capabilityType") }.compact
+      UI.message("#{identifier}: has #{existing.empty? ? 'none' : existing.uniq.join(', ')}")
+
+      capabilities.each do |cap|
+        if existing.include?(cap)
+          UI.message("  #{cap} already on")
+          next
+        end
+        c, b = call.call("POST", "bundleIdCapabilities", {
+          data: { type: "bundleIdCapabilities",
+                  attributes: { capabilityType: cap },
+                  relationships: { bundleId: { data: { type: "bundleIds", id: entry["id"] } } } }
+        })
+        if c.between?(200, 299)
+          UI.success("  enabled #{cap}")
+        else
+          UI.error("  #{cap} failed (#{c}): #{(b['errors'] || []).map { |e| e['detail'] || e['title'] }.join('; ')[0, 220]}")
+        end
+      end
+    end
+  end
+
+
+  desc "What can this API key see and do for signing?"
+  lane :signing_probe do
+    token = Spaceship::ConnectAPI::Token.create(**asc_api_key)
+    require "net/http"
+    require "json"
+    get = lambda do |path|
+      uri = URI("https://api.appstoreconnect.apple.com/v1/#{path}")
+      req = Net::HTTP::Get.new(uri)
+      req["Authorization"] = "Bearer #{token.text}"
+      res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(req) }
+      [res.code.to_i, (res.body.to_s.empty? ? {} : JSON.parse(res.body))]
+    end
+    [["certificates?limit=10", "certificates"],
+     ["profiles?limit=20&include=bundleId", "profiles"],
+     ["devices?limit=5", "devices"]].each do |path, label|
+      code, body = get.call(path)
+      if code == 200
+        rows = body["data"] || []
+        UI.important("#{label}: #{rows.count}")
+        rows.first(8).each do |r|
+          a = r["attributes"] || {}
+          UI.message("  #{a['name'] || a['certificateType'] || r['id']}  #{a['profileType'] || a['certificateType'] || ''}  #{a['profileState'] || ''}")
+        end
+      else
+        UI.error("#{label}: HTTP #{code} #{(body['errors'] || []).map { |e| e['detail'] }.join('; ')[0,150]}")
+      end
+    end
+  end
+
+
+
+
+  desc "Attach the newest processed build to the internal tester groups."
+  desc "Internal testers need no beta review, so this is the fast path to a device."
+  lane :internal_build do
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(**asc_api_key)
+    app = Spaceship::ConnectAPI::App.find(
+      CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+    )
+    build = Spaceship::ConnectAPI::Build.all(app_id: app.id, sort: "-version", limit: 5)
+                                        .find { |b| b.processing_state == "VALID" }
+    UI.user_error!("no processed build") if build.nil?
+    app.get_beta_groups.select(&:is_internal_group).each do |group|
+      already = build.get_beta_groups.map(&:id).include?(group.id) rescue false
+      if already
+        UI.message("#{group.name}: build #{build.version} already attached")
+      else
+        build.add_beta_groups(beta_groups: [group])
+        UI.success("#{group.name}: attached build #{build.version}")
+      end
+    end
+  end
+
   desc "Upload metadata and screenshots to App Store Connect. No binary."
   desc "Options: force:true skips the HTML preview; skip_screenshots:true for text only;"
   desc "app_version:1.0.1 creates that version on App Store Connect if it does not exist."

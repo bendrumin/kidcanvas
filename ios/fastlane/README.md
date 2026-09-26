@@ -175,6 +175,50 @@ Apple's own timestamps for this app: when the record was created and
 
 when each early build was uploaded. Evidence of first use of the name.
 
+### ios capabilities
+
+```sh
+[bundle exec] fastlane ios capabilities
+```
+
+Read the app's Developer Portal bundle id and its capabilities.
+
+### ios enable_capabilities
+
+```sh
+[bundle exec] fastlane ios enable_capabilities
+```
+
+Turn on the Developer Portal capabilities the widget and push need.
+
+Additive and idempotent; prints what it changed.
+
+### ios signing_probe
+
+```sh
+[bundle exec] fastlane ios signing_probe
+```
+
+What can this API key see and do for signing?
+
+### ios app_groups
+
+```sh
+[bundle exec] fastlane ios app_groups
+```
+
+Probe and, if the API allows, create the App Group the widget needs.
+
+### ios internal_build
+
+```sh
+[bundle exec] fastlane ios internal_build
+```
+
+Attach the newest processed build to the internal tester groups.
+
+Internal testers need no beta review, so this is the fast path to a device.
+
 ### ios metadata
 
 ```sh

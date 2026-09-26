@@ -1,11 +1,22 @@
-NEW IN THIS BUILD:
+BUILD 22 (1.0.2) — the seven-feature branch, for internal testing.
 
-• Scan several drawings in one session. Keep tapping Keep Scan in the camera;
-  every page is saved in turn ("Drawing 2 of 5"), instead of only the first one
-  making it through.
-• After saving, the app asks whether you are done: Scan Another jumps straight
-  back to the camera.
+WORKS IN THIS BUILD:
+• Quote book. Profile, then Quote book. Pick an artist and a year, make the
+  book, then Share or print. It produces a real PDF, one story per page.
+• Then and now. In Gallery, search a word two of one artist's drawings share
+  (try "rainbow"); a chip appears to line them up oldest first.
+• Voice notes. Open an artwork and record what they said, then play it back.
+• Plans. Settings, then See plans. The App Store has no subscriptions
+  configured yet, so it should say plans are unavailable and offer Try again.
+  It should NOT spin forever; that was the bug this build fixes.
+• Everything from 1.0.1: scanning, stories, the family feed, comments.
 
-Worth trying:
-• Scan three drawings in one camera session and save each as it appears.
-• Save one drawing, then tap Scan Another on the confirmation.
+KNOWINGLY NOT WORKING:
+• The home-screen widget. It needs an App Group that has to be created by hand
+  in the Apple Developer portal; the API cannot make one. The widget is in this
+  build but will not show artwork.
+• Push notifications. The build is signed for push, but the server keys are not
+  set up yet, so nothing will arrive. The switches in Settings are safe to
+  toggle.
+
+Please report anything that looks wrong, especially in the quote book PDF.
