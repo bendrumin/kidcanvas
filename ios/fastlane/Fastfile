@@ -750,6 +750,151 @@ platform :ios do
     end
   end
 
+
+  desc "Mirror KidCanvas.storekit into App Store Connect: the subscription group,"
+  desc "four products, en-US copy, prices in every territory, availability, and"
+  desc "the Server Notifications V2 URL. Idempotent; safe to re-run."
+  lane :subscriptions do
+    token = Spaceship::ConnectAPI::Token.create(**asc_api_key)
+    Spaceship::ConnectAPI.token = token
+    app = Spaceship::ConnectAPI::App.find(
+      CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+    )
+    require "net/http"
+    require "json"
+    call = lambda do |method, path, body = nil|
+      uri = path.start_with?("http") ? URI(path) : URI("https://api.appstoreconnect.apple.com/v1/#{path}")
+      klass = { "GET" => Net::HTTP::Get, "POST" => Net::HTTP::Post, "PATCH" => Net::HTTP::Patch }[method]
+      req = klass.new(uri)
+      req["Authorization"] = "Bearer #{token.text}"
+      if body
+        req["Content-Type"] = "application/json"
+        req.body = JSON.dump(body)
+      end
+      res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(req) }
+      [res.code.to_i, (res.body.to_s.empty? ? {} : JSON.parse(res.body))]
+    end
+    errs = ->(b) { (b["errors"] || []).map { |e| e["detail"] || e["title"] }.join("; ")[0, 240] }
+    all_pages = lambda do |path|
+      out = []
+      nxt = path
+      while nxt
+        c, b = call.call("GET", nxt)
+        raise "GET #{nxt} -> #{c}: #{errs.(b)}" unless c == 200
+        out.concat(b["data"] || [])
+        nxt = b.dig("links", "next")
+      end
+      out
+    end
+
+    # Pro is level 1 (higher), Family level 2, matching the .storekit file.
+    catalogue = [
+      { pid: "kidcanvas.pro.monthly",    name: "Pro Monthly",    period: "ONE_MONTH", level: 1, price: "11.99",  shown: "Pro",    desc: "Unlimited artworks, artists, and families" },
+      { pid: "kidcanvas.pro.yearly",     name: "Pro Yearly",     period: "ONE_YEAR",  level: 1, price: "119.99", shown: "Pro",    desc: "Unlimited artworks, artists, and families" },
+      { pid: "kidcanvas.family.monthly", name: "Family Monthly", period: "ONE_MONTH", level: 2, price: "5.99",   shown: "Family", desc: "Unlimited artworks and artists for one family" },
+      { pid: "kidcanvas.family.yearly",  name: "Family Yearly",  period: "ONE_YEAR",  level: 2, price: "59.99",  shown: "Family", desc: "Unlimited artworks and artists for one family" },
+    ]
+
+    # --- group ---
+    groups = all_pages.("apps/#{app.id}/subscriptionGroups?limit=50")
+    group = groups.find { |g| g.dig("attributes", "referenceName") == "KidCanvas" }
+    unless group
+      c, b = call.call("POST", "subscriptionGroups", { data: { type: "subscriptionGroups",
+        attributes: { referenceName: "KidCanvas" },
+        relationships: { app: { data: { type: "apps", id: app.id } } } } })
+      UI.user_error!("group create -> #{c}: #{errs.(b)}") unless c.between?(200, 299)
+      group = b["data"]
+      UI.success("group KidCanvas created")
+    else
+      UI.message("group KidCanvas exists")
+    end
+    gid = group["id"]
+    glocs = all_pages.("subscriptionGroups/#{gid}/subscriptionGroupLocalizations?limit=50")
+    unless glocs.any? { |l| l.dig("attributes", "locale") == "en-US" }
+      c, b = call.call("POST", "subscriptionGroupLocalizations", { data: { type: "subscriptionGroupLocalizations",
+        attributes: { name: "KidCanvas", locale: "en-US" },
+        relationships: { subscriptionGroup: { data: { type: "subscriptionGroups", id: gid } } } } })
+      UI.message("  group en-US name: #{c.between?(200,299) ? 'set' : errs.(b)}")
+    end
+
+    territories = all_pages.("territories?limit=200").map { |t| t["id"] }
+    existing = all_pages.("subscriptionGroups/#{gid}/subscriptions?limit=50")
+
+    catalogue.each do |item|
+      sub = existing.find { |x| x.dig("attributes", "productId") == item[:pid] }
+      unless sub
+        c, b = call.call("POST", "subscriptions", { data: { type: "subscriptions",
+          attributes: { name: item[:name], productId: item[:pid], subscriptionPeriod: item[:period],
+                        groupLevel: item[:level], familySharable: false },
+          relationships: { group: { data: { type: "subscriptionGroups", id: gid } } } } })
+        if !c.between?(200, 299)
+          UI.error("#{item[:pid]}: create -> #{c}: #{errs.(b)}")
+          next
+        end
+        sub = b["data"]
+        UI.success("#{item[:pid]}: created")
+      else
+        UI.message("#{item[:pid]}: exists")
+      end
+      sid = sub["id"]
+
+      locs = all_pages.("subscriptions/#{sid}/subscriptionLocalizations?limit=50")
+      unless locs.any? { |l| l.dig("attributes", "locale") == "en-US" }
+        c, b = call.call("POST", "subscriptionLocalizations", { data: { type: "subscriptionLocalizations",
+          attributes: { name: item[:shown], description: item[:desc], locale: "en-US" },
+          relationships: { subscription: { data: { type: "subscriptions", id: sid } } } } })
+        UI.message("  en-US copy: #{c.between?(200,299) ? 'set' : errs.(b)}")
+      end
+
+      # A price needs its territory named explicitly; without it Apple refuses
+      # the whole request. Fill any territory that has no price yet, so a
+      # partial earlier run is completed rather than skipped.
+      priced = all_pages.("subscriptions/#{sid}/prices?include=territory&limit=200")
+                 .map { |pr| pr.dig("relationships", "territory", "data", "id") }.compact.uniq
+      points = all_pages.("subscriptions/#{sid}/pricePoints?filter[territory]=USA&limit=200")
+      usa = points.find { |pp| pp.dig("attributes", "customerPrice") == item[:price] }
+      if usa.nil?
+        UI.error("  no USA price point at $#{item[:price]}")
+      else
+        pairs = [[usa["id"], "USA"]] +
+          all_pages.("subscriptionPricePoints/#{usa['id']}/equalizations?include=territory&limit=200")
+            .map { |pp| [pp["id"], pp.dig("relationships", "territory", "data", "id")] }
+        todo = pairs.reject { |_, terr| terr.nil? || priced.include?(terr) }
+        ok = 0
+        first_error = nil
+        todo.each do |ppid, terr|
+          c, b = call.call("POST", "subscriptionPrices", { data: { type: "subscriptionPrices",
+            attributes: { startDate: nil, preserveCurrentPrice: false },
+            relationships: { subscription: { data: { type: "subscriptions", id: sid } },
+                             subscriptionPricePoint: { data: { type: "subscriptionPricePoints", id: ppid } },
+                             territory: { data: { type: "territories", id: terr } } } } })
+          if c.between?(200, 299) then ok += 1 else first_error ||= "#{terr} -> #{c}: #{errs.(b)}" end
+        end
+        UI.message("  prices: $#{item[:price]} USA base; #{priced.size} already, #{ok}/#{todo.size} added")
+        UI.error("  first price failure: #{first_error}") if first_error
+      end
+
+      c, b = call.call("GET", "subscriptions/#{sid}/subscriptionAvailability")
+      if c != 200 || b["data"].nil?
+        c, b = call.call("POST", "subscriptionAvailabilities", { data: { type: "subscriptionAvailabilities",
+          attributes: { availableInNewTerritories: true },
+          relationships: { subscription: { data: { type: "subscriptions", id: sid } },
+                           availableTerritories: { data: territories.map { |t| { type: "territories", id: t } } } } } })
+        UI.message("  availability: #{c.between?(200,299) ? "#{territories.size} territories" : errs.(b)}")
+      else
+        UI.message("  availability: already set")
+      end
+    end
+
+    url = "https://kidcanvas.app/api/app-store/notifications"
+    c, b = call.call("PATCH", "apps/#{app.id}", { data: { type: "apps", id: app.id, attributes: {
+      subscriptionStatusUrl: url, subscriptionStatusUrlVersion: "V2",
+      subscriptionStatusUrlForSandbox: url, subscriptionStatusUrlVersionForSandbox: "V2" } } })
+    UI.message("server notifications V2: #{c.between?(200,299) ? url : errs.(b)}")
+  end
+
+
+
   desc "Upload metadata and screenshots to App Store Connect. No binary."
   desc "Options: force:true skips the HTML preview; skip_screenshots:true for text only;"
   desc "app_version:1.0.1 creates that version on App Store Connect if it does not exist."
