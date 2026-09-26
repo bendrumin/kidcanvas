@@ -1,6 +1,8 @@
-BUILD 22 (1.0.2) — the seven-feature branch, for internal testing.
+BUILD 23 (1.0.2) — the seven-feature branch, for internal testing.
 
 WORKS IN THIS BUILD:
+• The home-screen widget. Long-press the home screen, tap +, search KidCanvas,
+  and add it. It shows your family's newest artwork; tapping it opens that piece.
 • Quote book. Profile, then Quote book. Pick an artist and a year, make the
   book, then Share or print. It produces a real PDF, one story per page.
 • Then and now. In Gallery, search a word two of one artist's drawings share
@@ -12,9 +14,6 @@ WORKS IN THIS BUILD:
 • Everything from 1.0.1: scanning, stories, the family feed, comments.
 
 KNOWINGLY NOT WORKING:
-• The home-screen widget. It needs an App Group that has to be created by hand
-  in the Apple Developer portal; the API cannot make one. The widget is in this
-  build but will not show artwork.
 • Push notifications. The build is signed for push, but the server keys are not
   set up yet, so nothing will arrive. The switches in Settings are safe to
   toggle.

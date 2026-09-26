@@ -175,14 +175,6 @@ Apple's own timestamps for this app: when the record was created and
 
 when each early build was uploaded. Evidence of first use of the name.
 
-### ios capabilities
-
-```sh
-[bundle exec] fastlane ios capabilities
-```
-
-Read the app's Developer Portal bundle id and its capabilities.
-
 ### ios enable_capabilities
 
 ```sh
@@ -200,14 +192,6 @@ Additive and idempotent; prints what it changed.
 ```
 
 What can this API key see and do for signing?
-
-### ios app_groups
-
-```sh
-[bundle exec] fastlane ios app_groups
-```
-
-Probe and, if the API allows, create the App Group the widget needs.
 
 ### ios internal_build
 
