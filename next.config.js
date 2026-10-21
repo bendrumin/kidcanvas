@@ -66,6 +66,21 @@ const nextConfig = {
           },
         ],
       },
+      // Share links and invite codes are unlisted, not private: anyone who is
+      // sent one can open it, and a parent can post one anywhere. A public post
+      // is enough for a crawler to follow it and index a child's artwork, first
+      // name and story, because these pages inherited the site-wide `index,
+      // follow`. A header covers every URL under the path, including the ones
+      // that 404. Deliberately NOT in robots.txt: a disallowed URL can still be
+      // indexed by address alone, and the crawler would never see this header.
+      {
+        source: '/share/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }],
+      },
+      {
+        source: '/invite/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }],
+      },
     ]
   },
 }

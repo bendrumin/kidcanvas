@@ -117,3 +117,22 @@ for (const path of PAGES) {
     expect((await page.title()).length, `${path} title too long`).toBeLessThanOrEqual(60)
   })
 }
+
+test('share links and invites tell search engines to stay away', async ({ request }) => {
+  // A share link carries a child's artwork, first name and story. It is
+  // unlisted, not private, so one posted anywhere public could be indexed.
+  // The header applies to every URL under the path, so a made-up code is a
+  // fair probe and no real data is needed.
+  for (const path of ['/share/not-a-real-code', '/invite/not-a-real-code']) {
+    const response = await request.get(path)
+    const header = response.headers()['x-robots-tag'] ?? ''
+    expect(header, `${path} is indexable`).toContain('noindex')
+    expect(header, `${path} can be cached by search engines`).toContain('noarchive')
+  }
+
+  // And these paths must NOT be disallowed in robots.txt: a blocked URL can
+  // still be indexed by address alone, and the crawler would never see the
+  // noindex above.
+  const robots = await (await request.get('/robots.txt')).text()
+  expect(robots).not.toMatch(/Disallow:\s*\/(share|invite)/)
+})
