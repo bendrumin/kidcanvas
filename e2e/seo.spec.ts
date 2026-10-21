@@ -10,7 +10,7 @@ import { test, expect } from '@playwright/test'
  *   the HTML saw none of it -- and what it would have injected included a
  *   fabricated 5-star aggregateRating and a logo URL that 404ed
  */
-const PAGES = ['/', '/support', '/privacy', '/terms', '/login', '/signup']
+const PAGES = ['/', '/support', '/privacy', '/terms', '/login', '/signup', '/delete-account']
 
 for (const path of PAGES) {
   test(`${path} has its own canonical`, async ({ page }) => {
@@ -98,3 +98,22 @@ test('every public page serves the Google Analytics tag', async ({ request, base
     expect(html, `${path} is missing the GA tag`).toContain('googletagmanager.com/gtag/js?id=G-DCH53W5VJT')
   }
 })
+
+for (const path of PAGES) {
+  test(`${path} has the on-page basics search engines look for`, async ({ page }) => {
+    await page.goto(path)
+
+    // One h1, always. /login and /signup had none for months because their
+    // heading came from CardTitle, which renders an h3.
+    expect(await page.locator('h1').count(), `${path} needs exactly one h1`).toBe(1)
+
+    // Google truncates around 160 characters of description and 60 of title.
+    // The homepage description sat at 175 and was getting cut mid-sentence.
+    const description = await page.locator('meta[name="description"]').getAttribute('content')
+    expect(description, `${path} has no meta description`).toBeTruthy()
+    expect(description!.length, `${path} description is ${description!.length} chars`).toBeGreaterThanOrEqual(50)
+    expect(description!.length, `${path} description is ${description!.length} chars`).toBeLessThanOrEqual(160)
+
+    expect((await page.title()).length, `${path} title too long`).toBeLessThanOrEqual(60)
+  })
+}

@@ -103,7 +103,7 @@ function LoginContent() {
 
         <Card className="border-2 shadow-xl">
           <CardHeader className="text-center pb-2">
-            <CardTitle id="login-heading" className="text-fluid-2xl font-display">Welcome Back!</CardTitle>
+            <h1 id="login-heading" className="font-semibold leading-none tracking-tight text-fluid-2xl font-display">Welcome Back!</h1>
             <CardDescription>Sign in to access your family's artwork gallery</CardDescription>
           </CardHeader>
           <CardContent>

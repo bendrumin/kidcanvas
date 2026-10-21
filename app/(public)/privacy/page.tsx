@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react'
 
 export const metadata = {
   title: 'Privacy Policy',
-  description: 'KidCanvas privacy policy - how we protect your family\'s data',
+  description: 'How KidCanvas collects, stores and protects your family\'s data, including your children\'s names, birth dates and artwork.',
 }
 
 export default function PrivacyPage() {

@@ -3,7 +3,6 @@ import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { DashboardNav } from '@/components/dashboard/nav'
 import { DashboardHeader } from '@/components/dashboard/header'
-import { WhatsNewModal } from '@/components/changelog/whats-new-modal'
 import { OnboardingModal } from '@/components/onboarding/onboarding-modal'
 import { getUserSubscriptionLimits } from '@/lib/subscription'
 import type { FamilyMemberWithFamily, Family } from '@/lib/supabase/types'
@@ -90,7 +89,6 @@ export default async function DashboardLayout({
       </div>
       
       {/* Modals */}
-      <WhatsNewModal />
       <OnboardingModal 
         hasChildren={hasChildren} 
         hasArtwork={hasArtwork} 

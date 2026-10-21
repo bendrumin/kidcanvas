@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     default: 'KidCanvas - Capture the Stories Behind Your Kids\' Art',
     template: '%s | KidCanvas',
   },
-  description: 'Capture and share the stories behind your children\'s artwork. Remember what they said, share the moment with family, and keep those memories alive. Free for up to 50 artworks.',
+  description: 'Scan your kid\'s drawing, write down what they said about it, and share both with family. Grandparents react and comment. Free for your first 50 artworks.',
   keywords: ['KidCanvas', 'KidCanvas app', 'kids artwork app', 'kids art stories', 'save kids artwork', 'share kids art with grandparents', 'family art feed', 'children drawings', 'artwork memories', 'kids art scanner'],
   // Smart App Banner: Safari on iPhone shows "Open" / "Get" for the real app
   // at the top of every page, so an iPhone visitor lands on this listing
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   creator: 'KidCanvas',
   openGraph: {
     title: 'KidCanvas - Capture the Stories Behind Your Kids\' Art',
-    description: 'Capture and share the stories behind your children\'s artwork. Remember what they said, share the moment with family. Free for up to 50 artworks.',
+    description: 'Scan your kid\'s drawing, write down what they said about it, and share both with family. Grandparents react and comment. Free for your first 50 artworks.',
     url: 'https://kidcanvas.app',
     siteName: 'KidCanvas',
     locale: 'en_US',

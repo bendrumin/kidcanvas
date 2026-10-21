@@ -33,15 +33,30 @@ test('signing up lands in the dashboard', async ({ page, browserName }) => {
   await page.waitForURL(/\/dashboard/, { timeout: 30000 })
   await expect(page).toHaveURL(/\/dashboard/)
 
-  // Clean up after ourselves. This ran nightly for a week and left an account
-  // and an orphaned family behind every time, because account deletion did not
-  // work until today. Deleting here also exercises that path nightly, which is
-  // the other thing Apple and Google require to actually work.
-  // The Origin header is required: /api/account/delete refuses cross-origin
-  // posts, and page.request does not set one on its own.
-  const origin = new URL(page.url()).origin
-  const deleted = await page.request.post('/api/account/delete', {
-    headers: { Origin: origin },
-  })
-  expect(deleted.ok(), `could not delete the probe account: ${deleted.status()}`).toBe(true)
+  try {
+    // First-run: exactly one dialog. A second "welcome" (a changelog headed
+    // "Welcome to KidCanvas!", dated January 2025, pitching Family Plans) used to
+    // open 1.5s after the real onboarding at 0.5s, stacking the two into an
+    // unreadable pile on a new user's very first screen. Wait past both timers.
+    await page.waitForTimeout(3000)
+    // Count by CSS, not getByRole: Radix marks the lower of two stacked modals
+    // aria-hidden, so the role query reports 1 while the screen shows a pile of
+    // 2. This test originally used getByRole and passed against the broken site.
+    const dialogs = page.locator('[role="dialog"]:visible')
+    await expect(dialogs, 'a new user should see exactly one dialog on screen').toHaveCount(1)
+    await expect(dialogs.first()).toContainText('Welcome to KidCanvas')
+
+  } finally {
+    // Clean up after ourselves. This ran nightly for a week and left an account
+    // and an orphaned family behind every time, because account deletion did not
+    // work until today. Deleting here also exercises that path nightly, which is
+    // the other thing Apple and Google require to actually work.
+    // The Origin header is required: /api/account/delete refuses cross-origin
+    // posts, and page.request does not set one on its own.
+    const origin = new URL(page.url()).origin
+    const deleted = await page.request.post('/api/account/delete', {
+      headers: { Origin: origin },
+    })
+    expect(deleted.ok(), `could not delete the probe account: ${deleted.status()}`).toBe(true)
+  }
 })

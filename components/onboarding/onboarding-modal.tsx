@@ -121,7 +121,7 @@ export function OnboardingModal({ hasChildren, hasArtwork, familyId }: Onboardin
                 Welcome to KidCanvas!
               </DialogTitle>
               <DialogDescription className="text-center">
-                More than just storage - capture the stories behind every masterpiece
+                More than storage. Capture the stories behind every masterpiece.
               </DialogDescription>
             </DialogHeader>
 

@@ -126,9 +126,9 @@ function SignupForm() {
 
         <Card className="border-2 shadow-xl">
           <CardHeader className="text-center pb-2">
-            <CardTitle className="text-fluid-2xl font-display">
+            <h1 className="font-semibold leading-none tracking-tight text-fluid-2xl font-display">
               Create Your Gallery
-            </CardTitle>
+            </h1>
             <CardDescription>
               Start preserving your children&apos;s artwork today
             </CardDescription>
